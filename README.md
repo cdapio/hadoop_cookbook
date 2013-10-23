@@ -1,4 +1,4 @@
-# hadoop_cookbook cookbook
+# hadoop cookbook
 
 # Requirements
 
