@@ -30,11 +30,11 @@ when 'hdp'
     yum_base_url = 'http://public-repo-1.hortonworks.com/HDP'
     os = "centos#{major_platform_version}"
     key = "RPM-GPG-KEY"
-    yum_repo_key = node['hadoop']['yum_repo_key'] ? node['hadoop']['yum_repo_key'] : "#{yum_base_url}/#{os}/#{key}/#{key}-Jenkins"
     yum_repo_url = node['hadoop']['yum_repo_url'] ? node['hadoop']['yum_repo_url'] : "#{yum_base_url}/#{os}/2.x/GA"
+    yum_repo_key_url = node['hadoop']['yum_repo_key_url'] ? node['hadoop']['yum_repo_key_url'] : "#{yum_base_url}/#{os}/#{key}/#{key}-Jenkins"
 
     yum_key "#{key}-HDP" do
-      url yum_repo_key
+      url yum_repo_key_url
       action :add
     end
     yum_repository "hdp" do
