@@ -1,25 +1,50 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
-Vagrant.configure("2") do |config|
+# Vagrantfile API/syntax version. Don't touch unless you know what you're doing!
+VAGRANTFILE_API_VERSION = "2"
+
+Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # All Vagrant configuration is done here. The most common configuration
   # options are documented and commented below. For a complete reference,
   # please see the online documentation at vagrantup.com.
 
-  config.vm.hostname = "hadoop-cookbook-berkshelf"
+  # We *need* vagrant-omnibus for these box images
+  config.omnibus.chef_version = :latest
+
+  # Enable berkshelf plugin
+  config.berkshelf.enabled = true
+
+  # config.vm.hostname = "hadoop-cookbook-berkshelf"
+
+  # Run Multi-Machine environment to test both OSs
+  # http://docs.vagrantup.com/v2/multi-machine/index.html
+  config.vm.define :centos do |centos|
+    centos.vm.box       = "opscode-centos-6.4"
+    centos.vm.box_url   = "https://opscode-vm-bento.s3.amazonaws.com/vagrant/opscode_centos-6.4_provisionerless.box"
+    centos.vm.host_name = "hadoop-centos6-berkshelf"
+    centos.vm.network :private_network, ip: "33.33.33.10"
+  end
+
+  config.vm.define :ubuntu do |ubuntu|
+    ubuntu.vm.box       = "opscode-ubuntu-12.04"
+    ubuntu.vm.box_url   = "https://opscode-vm-bento.s3.amazonaws.com/vagrant/opscode_ubuntu-12.04_provisionerless.box"
+    ubuntu.vm.host_name = "hadoop-ubuntu12-berkshelf"
+    ubuntu.vm.network :private_network, ip: "33.33.33.11"
+  end
 
   # Every Vagrant virtual environment requires a box to build off of.
-  config.vm.box = "Berkshelf-CentOS-6.3-x86_64-minimal"
+  # config.vm.box = "Berkshelf-CentOS-6.3-x86_64-minimal"
 
   # The url from where the 'config.vm.box' box will be fetched if it
   # doesn't already exist on the user's system.
-  config.vm.box_url = "https://dl.dropbox.com/u/31081437/Berkshelf-CentOS-6.3-x86_64-minimal.box"
+  # config.vm.box_url = "https://dl.dropbox.com/u/31081437/Berkshelf-CentOS-6.3-x86_64-minimal.box"
 
   # Assign this VM to a host-only network IP, allowing you to access it
   # via the IP. Host-only networks can talk to the host machine as well as
   # any other machines on the same network, but cannot be accessed (through this
   # network interface) by any external networks.
-  config.vm.network :private_network, ip: "33.33.33.10"
+  # config.vm.network :private_network, ip: "33.33.33.10"
 
   # Create a public network, which generally matched to bridged network.
   # Bridged networks make the machine appear as another physical device on
