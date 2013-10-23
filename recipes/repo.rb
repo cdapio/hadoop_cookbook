@@ -23,6 +23,7 @@ case node['hadoop']['distribution']
 when 'hdp'
   # We only support HDP 2.0 (2.0.6.0) at this time
   hdp_version = "2.0.6.0"
+  hdp_utils_version = "1.1.0.16"
   # HDP only supports platform_family = rhel
   case node['platform_family']
   when 'rhel'
@@ -47,6 +48,13 @@ when 'hdp'
       name "Updates-HDP-2.x"
       description "Updates for Hortonworks Data Platform Version - HDP-2.x"
       url "#{yum_base_url}/#{os}/2.x/updates/#{hdp_version}"
+      key "#{key}-HDP"
+      action :add
+    end
+    yum_repository "hdp-utils" do
+      name "HDP-UTILS-#{hdp_utils_version}"
+      description "Hortonworks Data Platform Utils Version - HDP-UTILS-#{hdp_utils_version}"
+      url "#{yum_base_url}-UTILS/repos/#{os}"
       key "#{key}-HDP"
       action :add
     end
