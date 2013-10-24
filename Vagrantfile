@@ -101,11 +101,19 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
         :server_root_password => 'rootpass',
         :server_debian_password => 'debpass',
         :server_repl_password => 'replpass'
+      },
+      :java => {
+        :install_flavor => 'oracle',
+        :jdk_version => "6",
+        :oracle => {
+          :accept_oracle_download_terms => true
+        }
       }
     }
 
     chef.run_list = [
         "recipe[minitest-handler::default]",
+        "recipe[java]",
         "recipe[hadoop::default]",
         "recipe[hadoop::repo]"
     ]
