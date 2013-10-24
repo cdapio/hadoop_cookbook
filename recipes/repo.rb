@@ -54,7 +54,7 @@ when 'hdp'
     yum_repository "hdp-utils" do
       name "HDP-UTILS-#{hdp_utils_version}"
       description "Hortonworks Data Platform Utils Version - HDP-UTILS-#{hdp_utils_version}"
-      url "#{yum_base_url}-UTILS/repos/#{os}"
+      url "#{yum_base_url}-UTILS-#{hdp_utils_version}/repos/#{os}"
       key "#{key}-HDP"
       action :add
     end
