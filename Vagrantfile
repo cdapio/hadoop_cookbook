@@ -77,8 +77,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # View the documentation for the provider you're using for more
   # information on available options.
 
-  config.ssh.max_tries = 40
-  config.ssh.timeout   = 120
+  #config.ssh.max_tries = 40
+  #config.ssh.timeout   = 120
 
   # The path to the Berksfile to use with Vagrant Berkshelf
   # config.berkshelf.berksfile_path = "./Berksfile"
@@ -106,7 +106,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
     chef.run_list = [
         "recipe[minitest-handler::default]",
-        "recipe[hadoop_cookbook::default]"
+        "recipe[hadoop::default]",
+        "recipe[hadoop::repo]"
     ]
   end
 end
