@@ -18,3 +18,7 @@
 #
 
 include_recipe 'hadoop::repo'
+
+package "hadoop-client" do
+  action :install
+end
