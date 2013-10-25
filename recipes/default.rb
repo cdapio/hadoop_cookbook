@@ -23,9 +23,9 @@ package "hadoop-client" do
   action :install
 end
 
-chef_conf_dir = "/etc/hadoop/#{node[:hadoop][:conf_dir]}"
+hadoop_conf_dir = "/etc/hadoop/#{node[:hadoop][:conf_dir]}"
 
-directory chef_conf_dir do
+directory hadoop_conf_dir do
   mode 0755
   owner "root"
   group "root"
