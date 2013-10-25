@@ -32,3 +32,8 @@ directory hadoop_conf_dir do
   action :create
   recursive true
 end
+
+execute "update hadoop-conf alternatives" do
+  command "update-alternatives --install /etc/hadoop/conf hadoop-conf /etc/hadoop/#{node[:hadoop][:conf_dir]} 50"
+  not_if "update-alternatives --query hadoop-conf | grep Best | cut -d' ' -f2- | grep /etc/hadoop/#{node[:hadoop][:conf_dir]}"
+end
