@@ -22,3 +22,13 @@ include_recipe 'hadoop::repo'
 package "hadoop-client" do
   action :install
 end
+
+chef_conf_dir = "/etc/hadoop/#{node[:hadoop][:conf_dir]}"
+
+directory chef_conf_dir do
+  mode 0755
+  owner "root"
+  group "root"
+  action :create
+  recursive true
+end
