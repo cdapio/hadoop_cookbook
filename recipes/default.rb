@@ -33,6 +33,18 @@ directory hadoop_conf_dir do
   recursive true
 end
 
+# Setup core-site.xml
+core_site_vars = { :options => node[:hadoop][:core_site] }
+
+template "#{hadoop_conf_dir}/core-site.xml" do
+  source "generic-site.xml.erb"
+  mode 0644
+  owner "hdfs"
+  group "hdfs"
+  action :create
+  variables core_site_vars
+end
+
 # Update alternatives to point to our configuration
 execute "update hadoop-conf alternatives" do
   command "update-alternatives --install /etc/hadoop/conf hadoop-conf /etc/hadoop/#{node[:hadoop][:conf_dir]} 50"
