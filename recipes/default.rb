@@ -76,6 +76,18 @@ elsif (node['hadoop'].has_key? 'yarn_site' \
   Chef::Application.fatal!("Set YARN scheduler to fair-scheduler without configuring it, first")
 end # End fair-scheduler.xml
 
+# Setup hadoop-env.sh
+if node['hadoop'].has_key? 'hadoop_env'
+  myVars = { :options => node['hadoop']['hadoop_env'] }
+
+  template "#{hadoop_conf_dir}/hadoop-env.sh" do
+    mode 0755
+    owner "hdfs"
+    group "hdfs"
+    action :create
+    variables myVars
+  end
+end # End hadoop-env.sh
 # Update alternatives to point to our configuration
 execute "update hadoop-conf alternatives" do
   command "update-alternatives --install /etc/hadoop/conf hadoop-conf /etc/hadoop/#{node[:hadoop][:conf_dir]} 50"
