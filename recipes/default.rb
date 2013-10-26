@@ -47,7 +47,7 @@ end
       variables myVars
     end
   end
-end
+end # End core-site.xml hadoop-policy.xml hdfs-site.xml mapred-site.xml yarn-site.xml
 
 # Setup fair-scheduler.xml
 fair_scheduler_file =
@@ -74,7 +74,7 @@ elsif (node['hadoop'].has_key? 'yarn_site' \
   and node['hadoop']['yarn_site']['yarn.resourcemanager.scheduler.class'] == \
   'org.apache.hadoop.yarn.server.resourcemanager.scheduler.fair.FairScheduler')
   Chef::Application.fatal!("Set YARN scheduler to fair-scheduler without configuring it, first")
-end
+end # End fair-scheduler.xml
 
 # Update alternatives to point to our configuration
 execute "update hadoop-conf alternatives" do
