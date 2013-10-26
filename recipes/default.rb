@@ -115,6 +115,19 @@ end # End hadoop-env.sh
   end
 end # End hadoop-metrics.properties log4j.properties
 
+# Set hadoop.tmp.dir
+hadoop_tmp_dir =
+  if (node['hadoop'].has_key 'core_site' and node['hadoop']['core_site'].has_key? 'hadoop.tmp.dir')
+    node['hadoop']['core_site']['hadoop.tmp.dir']
+  else
+    "/tmp"
+  end
+
+directory hadoop_tmp_dir do
+  mode 1777
+  action :create
+end # End hadoop.tmp.dir
+
 # Update alternatives to point to our configuration
 execute "update hadoop-conf alternatives" do
   command "update-alternatives --install /etc/hadoop/conf hadoop-conf /etc/hadoop/#{node['hadoop']['conf_dir']} 50"
