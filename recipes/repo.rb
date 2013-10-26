@@ -18,6 +18,13 @@
 #
 
 major_platform_version = node['platform_version'].to_i
+# Ensure that we have the proper LWRPs available
+case node['platform_family']
+when 'rhel'
+  include_recipe 'yum'
+when 'debian'
+  include_recipe 'apt'
+end
 
 case node['hadoop']['distribution']
 when 'hdp'
