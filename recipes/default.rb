@@ -26,7 +26,7 @@ end
 hadoop_conf_dir = "/etc/hadoop/#{node['hadoop']['conf_dir']}"
 
 directory hadoop_conf_dir do
-  mode 0755
+  mode "0755"
   owner "root"
   group "root"
   action :create
@@ -40,7 +40,7 @@ end
 
     template "#{hadoop_conf_dir}/#{sitefile.gsub('-','_')}.xml" do
       source "generic-site.xml.erb"
-      mode 0644
+      mode "0644"
       owner "hdfs"
       group "hdfs"
       action :create
@@ -64,7 +64,7 @@ if node['hadoop'].has_key? 'fair_scheduler'
   myVars = { :options => node['hadoop']['fair_scheduler'] }
 
   directory fair_scheduler_dir do
-    mode 0755
+    mode "0755"
     owner "hdfs"
     group "hdfs"
     action :create
@@ -73,7 +73,7 @@ if node['hadoop'].has_key? 'fair_scheduler'
 
   template fair_scheduler_file do
     source "fair-scheduler.xml.erb"
-    mode 0644
+    mode "0644"
     owner "hdfs"
     group "hdfs"
     action :create
@@ -91,7 +91,7 @@ if node['hadoop'].has_key? 'hadoop_env'
   myVars = { :options => node['hadoop']['hadoop_env'] }
 
   template "#{hadoop_conf_dir}/hadoop-env.sh" do
-    mode 0755
+    mode "0755"
     owner "hdfs"
     group "hdfs"
     action :create
@@ -106,7 +106,7 @@ end # End hadoop-env.sh
 
     template "#{hadoop_conf_dir}/#{propfile.gsub('-','_')}.properties" do
       source "generic.properties.erb"
-      mode 0644
+      mode "0644"
       owner "hdfs"
       group "hdfs"
       action :create
@@ -124,7 +124,7 @@ hadoop_tmp_dir =
   end
 
 directory hadoop_tmp_dir do
-  mode 1777
+  mode "1777"
   action :create
 end # End hadoop.tmp.dir
 
