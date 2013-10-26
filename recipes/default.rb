@@ -49,6 +49,33 @@ end
   end
 end
 
+# Setup fair-scheduler.xml
+fair_scheduler_file =
+  if (node['hadoop'].has_key? 'yarn_site' \
+    and node['hadoop']['yarn_site'].has_key? 'yarn.scheduler.fair.allocation.file')
+    node['hadoop']['yarn_site']['yarn.scheduler.fair.allocation.file']
+  else
+    "#{hadoop_conf_dir}/fair-scheduler.xml"
+  end
+
+if node['hadoop'].has_key? 'fair_scheduler'
+  myVars = { :options => node['hadoop']['fair_scheduler'] }
+
+  template fair_scheduler_file do
+    source "fair-scheduler.xml.erb"
+    mode 0644
+    owner "hdfs"
+    group "hdfs"
+    action :create
+    variables myVars
+  end
+elsif (node['hadoop'].has_key? 'yarn_site' \
+  and node['hadoop']['yarn_site'].has_key? 'yarn.resourcemanager.scheduler.class' \
+  and node['hadoop']['yarn_site']['yarn.resourcemanager.scheduler.class'] == \
+  'org.apache.hadoop.yarn.server.resourcemanager.scheduler.fair.FairScheduler')
+  Chef::Application.fatal!("Set YARN scheduler to fair-scheduler without configuring it, first")
+end
+
 # Update alternatives to point to our configuration
 execute "update hadoop-conf alternatives" do
   command "update-alternatives --install /etc/hadoop/conf hadoop-conf /etc/hadoop/#{node[:hadoop][:conf_dir]} 50"
