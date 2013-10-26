@@ -23,7 +23,7 @@ package "hadoop-client" do
   action :install
 end
 
-hadoop_conf_dir = "/etc/hadoop/#{node[:hadoop][:conf_dir]}"
+hadoop_conf_dir = "/etc/hadoop/#{node['hadoop']['conf_dir']}"
 
 directory hadoop_conf_dir do
   mode 0755
@@ -35,7 +35,7 @@ end
 
 # Setup core-site.xml hadoop-policy.xml hdfs-site.xml mapred-site.xml yarn-site.xml
 %w[ core_site hadoop_policy hdfs_site mapred_site yarn_site ].each do |sitefile|
-  if node['hadoop'].has_key? "#{sitefile}"
+  if node['hadoop'].has_key? sitefile
     myVars = { :options => node['hadoop'][sitefile] }
 
     template "#{hadoop_conf_dir}/#{sitefile.gsub('-','_')}.xml" do
@@ -101,7 +101,7 @@ end # End hadoop-env.sh
 
 # Setup hadoop-metrics.properties log4j.properties
 %w[ hadoop_metrics log4j ].each do |propfile|
-  if node['hadoop'].has_key? "#{propfile}"
+  if node['hadoop'].has_key? propfile
     myVars = { :properties => node['hadoop'][propfile] }
 
     template "#{hadoop_conf_dir}/#{propfile.gsub('-','_')}.properties" do
@@ -117,6 +117,6 @@ end # End hadoop-metrics.properties log4j.properties
 
 # Update alternatives to point to our configuration
 execute "update hadoop-conf alternatives" do
-  command "update-alternatives --install /etc/hadoop/conf hadoop-conf /etc/hadoop/#{node[:hadoop][:conf_dir]} 50"
-  not_if "update-alternatives --display hadoop-conf | grep best | awk '{print $5}' | grep /etc/hadoop/#{node[:hadoop][:conf_dir]}"
+  command "update-alternatives --install /etc/hadoop/conf hadoop-conf /etc/hadoop/#{node['hadoop']['conf_dir']} 50"
+  not_if "update-alternatives --display hadoop-conf | grep best | awk '{print $5}' | grep /etc/hadoop/#{node['hadoop']['conf_dir']}"
 end
