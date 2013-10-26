@@ -33,16 +33,20 @@ directory hadoop_conf_dir do
   recursive true
 end
 
-# Setup core-site.xml
-core_site_vars = { :options => node[:hadoop][:core_site] }
+# Setup core-site.xml hdfs-site.xml mapred-site.xml yarn-site.xml
+%w[ core_site hdfs_site mapred_site yarn_site ].each do |sitefile|
+  if node['hadoop'].has_key? "#{sitefile}"
+    myVars = { :options => node['hadoop'][sitefile] }
 
-template "#{hadoop_conf_dir}/core-site.xml" do
-  source "generic-site.xml.erb"
-  mode 0644
-  owner "hdfs"
-  group "hdfs"
-  action :create
-  variables core_site_vars
+    template "#{hadoop_conf_dir}/#{sitefile.gsub('-','_')}.xml" do
+      source "generic-site.xml.erb"
+      mode 0644
+      owner "hdfs"
+      group "hdfs"
+      action :create
+      variables myVars
+    end
+  end
 end
 
 # Update alternatives to point to our configuration
