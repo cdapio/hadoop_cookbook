@@ -88,6 +88,23 @@ if node['hadoop'].has_key? 'hadoop_env'
     variables myVars
   end
 end # End hadoop-env.sh
+
+# Setup hadoop-metrics.properties log4j.properties
+%w[ hadoop_metrics log4j ].each do |propfile|
+  if node['hadoop'].has_key? "#{propfile}"
+    myVars = { :properties => node['hadoop'][propfile] }
+
+    template "#{hadoop_conf_dir}/#{propfile.gsub('-','_')}.properties" do
+      source "generic.properties.erb"
+      mode 0644
+      owner "hdfs"
+      group "hdfs"
+      action :create
+      variables myVars
+    end
+  end
+end # End hadoop-metrics.properties log4j.properties
+
 # Update alternatives to point to our configuration
 execute "update hadoop-conf alternatives" do
   command "update-alternatives --install /etc/hadoop/conf hadoop-conf /etc/hadoop/#{node[:hadoop][:conf_dir]} 50"
