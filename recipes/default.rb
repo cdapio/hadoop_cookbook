@@ -58,8 +58,18 @@ fair_scheduler_file =
     "#{hadoop_conf_dir}/fair-scheduler.xml"
   end
 
+fair_scheduler_dir = File.dirname(fair_scheduler_file)
+
 if node['hadoop'].has_key? 'fair_scheduler'
   myVars = { :options => node['hadoop']['fair_scheduler'] }
+
+  directory fair_scheduler_dir do
+    mode 0755
+    owner "hdfs"
+    group "hdfs"
+    action :create
+    recursive true
+  end
 
   template fair_scheduler_file do
     source "fair-scheduler.xml.erb"
