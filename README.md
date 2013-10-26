@@ -18,6 +18,10 @@
 
 # Recipes
 
+* `default.rb` - Sets up configuration and `hadoop-client` packages.
+* `hadoop_hdfs_datanode` - Sets up an HDFS datanode.
+* `repo` - Sets up package manager repositories for specified `node['hadoop']['distribution']`
+
 # Author
 
 Author:: Chris Gianelloni (<chris@continuuity.com>)
