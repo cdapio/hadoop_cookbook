@@ -18,6 +18,8 @@
 #
 
 major_platform_version = node['platform_version'].to_i
+key = "RPM-GPG-KEY"
+
 # Ensure that we have the proper LWRPs available
 case node['platform_family']
 when 'rhel'
@@ -36,7 +38,6 @@ when 'hdp'
   when 'rhel'
     yum_base_url = 'http://public-repo-1.hortonworks.com/HDP'
     os = "centos#{major_platform_version}"
-    key = "RPM-GPG-KEY"
     yum_repo_url = node['hadoop']['yum_repo_url'] ? node['hadoop']['yum_repo_url'] : "#{yum_base_url}/#{os}/2.x/GA"
     yum_repo_key_url = node['hadoop']['yum_repo_key_url'] ? node['hadoop']['yum_repo_key_url'] : "#{yum_base_url}/#{os}/#{key}/#{key}-Jenkins"
 
