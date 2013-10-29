@@ -28,6 +28,7 @@
 * `hbase` - Sets up configuration and `hbase` packages.
 * `hbase_master` - Sets up an HBase Master.
 * `hbase_regionserver` - Sets up an HBase regionserver.
+* `hbase_thrift` - Sets up an HBase Thrift interface.
 * `repo` - Sets up package manager repositories for specified `node['hadoop']['distribution']`
 
 # Author
