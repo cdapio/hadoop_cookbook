@@ -24,6 +24,7 @@
 * `hadoop_hdfs_secondarynamenode` - Sets up an HDFS secondary namenode.
 * `hadoop_yarn_nodemanager` - Sets up a YARN nodemanager.
 * `hadoop_yarn_resourcemanager` - Sets up a YARN resourcemanager.
+* `hbase` - Sets up configuration and `hbase` packages.
 * `repo` - Sets up package manager repositories for specified `node['hadoop']['distribution']`
 
 # Author
