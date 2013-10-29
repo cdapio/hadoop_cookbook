@@ -15,6 +15,7 @@
 ## Global Configuration Attributes
 
 * `['hadoop']['conf_dir']` - The directory used inside `/etc/hadoop` and used via the alternatives system. Default `conf.chef`
+* `['hbase']['conf_dir']` - The directory used inside `/etc/hbase` and used via the alternatives system. Default `conf.chef`
 
 # Recipes
 
