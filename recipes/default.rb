@@ -91,6 +91,7 @@ if node['hadoop'].has_key? 'hadoop_env'
   myVars = { :options => node['hadoop']['hadoop_env'] }
 
   template "#{hadoop_conf_dir}/hadoop-env.sh" do
+    source "generic-env.sh.erb"
     mode "0755"
     owner "hdfs"
     group "hdfs"
