@@ -1,7 +1,11 @@
+###
+# cookbook settings
+###
 # Supported: hdp
 default['hadoop']['distribution'] = 'hdp'
 # Default: conf.chef
 default['hadoop']['conf_dir'] = 'conf.chef'
+default['hbase']['conf_dir'] = node['hadoop']['conf_dir']
 
 ###
 # core-site.xml settings
