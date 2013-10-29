@@ -27,6 +27,7 @@
 * `hadoop_yarn_resourcemanager` - Sets up a YARN resourcemanager.
 * `hbase` - Sets up configuration and `hbase` packages.
 * `hbase_master` - Sets up an HBase Master.
+* `hbase_regionserver` - Sets up an HBase regionserver.
 * `repo` - Sets up package manager repositories for specified `node['hadoop']['distribution']`
 
 # Author
