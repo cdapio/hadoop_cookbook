@@ -71,33 +71,34 @@ when 'hdp'
   end # End hdp
 
 when 'cdh'
+  cdh_release = node['hadoop']['distribution']['version'].to_i
   case node['platform_family']
   when 'rhel'
-    yum_base_url = 'http://archive.cloudera.com/cdh4/redhat'
-    yum_repo_url = node['hadoop']['yum_repo_url'] ? node['hadoop']['yum_repo_url'] : "#{yum_base_url}/#{major_platform_version}/#{node['kernel']['machine']}/cdh/4"
+    yum_base_url = "http://archive.cloudera.com/cdh#{cdh_release}/redhat"
+    yum_repo_url = node['hadoop']['yum_repo_url'] ? node['hadoop']['yum_repo_url'] : "#{yum_base_url}/#{major_platform_version}/#{node['kernel']['machine']}/cdh/#{node['hadoop']['distribution']['version']}"
     yum_repo_key_url = node['hadoop']['yum_repo_key_url'] ? node['hadoop']['yum_repo_key_url'] : "#{yum_base_url}/#{major_platform_version}/#{node['kernel']['machine']}/cdh/#{key}-cloudera"
 
     yum_key "#{key}-cloudera" do
       url yum_repo_key_url
       action :add
     end
-    yum_repository "cloudera-cdh4" do
-      name "cloudera-cdh4"
-      description "Cloudera's Distribution for Hadoop, Version 4"
+    yum_repository "cloudera-cdh#{cdh_release}" do
+      name "cloudera-cdh#{cdh_release}"
+      description "Cloudera's Distribution for Hadoop, Version #{cdh_release}"
       url yum_repo_url
       key "#{key}-cloudera"
       action :add
     end
   when 'debian'
     codename = node['lsb']['codename']
-    apt_base_url = "http://archive.cloudera.com/cdh4/#{node['platform']}"
+    apt_base_url = "http://archive.cloudera.com/cdh#{cdh_release}/#{node['platform']}"
     apt_repo_url = node['hadoop']['apt_repo_url'] ? node['hadoop']['apt_repo_url'] : "#{apt_base_url}/#{codename}/amd64/cdh"
     apt_repo_key_url = node['hadoop']['apt_repo_key_url'] ? node['hadoop']['apt_repo_key_url'] : "#{apt_base_url}/#{codename}/amd64/cdh/archive.key"
 
-    apt_repository "cloudera-cdh4" do
+    apt_repository "cloudera-cdh#{cdh_release}" do
       uri apt_repo_url
       key apt_repo_key_url
-      distribution "#{codename}-cdh4"
+      distribution "#{codename}-cdh#{cdh_release}"
       components [ "contrib" ]
       action :add
     end
