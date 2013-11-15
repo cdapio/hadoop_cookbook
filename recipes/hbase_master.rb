@@ -23,3 +23,7 @@ include_recipe 'hadoop::hbase_checkconfig'
 package "hbase-master" do
   action :install
 end
+
+service "hbase-master" do
+  action :nothing
+end

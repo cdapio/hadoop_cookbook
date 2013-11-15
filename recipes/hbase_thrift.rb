@@ -23,3 +23,7 @@ include_recipe 'hadoop::hbase_checkconfig'
 package "hbase-thrift" do
   action :install
 end
+
+service "hbase-thrift" do
+  action :nothing
+end
