@@ -18,6 +18,7 @@
 #
 
 include_recipe 'hadoop::repo'
+include_recipe 'hadoop::zookeeper'
 
 package "hbase" do
   action :install
