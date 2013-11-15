@@ -17,7 +17,8 @@
 # limitations under the License.
 #
 
-include_recipe 'hadoop'
+include_recipe 'hadoop::default'
+include_recipe 'hadoop::hadoop_hdfs_checkconfig'
 
 package "hadoop-yarn-resourcemanager" do
   action :install
