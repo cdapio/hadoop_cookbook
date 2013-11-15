@@ -16,6 +16,7 @@
 
 * `['hadoop']['conf_dir']` - The directory used inside `/etc/hadoop` and used via the alternatives system. Default `conf.chef`
 * `['hbase']['conf_dir']` - The directory used inside `/etc/hbase` and used via the alternatives system. Default `conf.chef`
+* `['zookeeper']['conf_dir']` - The directory used inside `/etc/zookeeper` and used via the alternatives system. Default `conf.chef`
 
 # Recipes
 
@@ -30,6 +31,8 @@
 * `hbase_regionserver` - Sets up an HBase regionserver.
 * `hbase_thrift` - Sets up an HBase Thrift interface.
 * `repo` - Sets up package manager repositories for specified `node['hadoop']['distribution']`
+* `zookeeper` - Sets up `zookeeper` package.
+* `zookeeper_server` - Sets up a Zookeeper server.
 
 # Author
 
