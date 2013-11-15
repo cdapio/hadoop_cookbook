@@ -18,6 +18,7 @@
 #
 
 include_recipe 'hadoop::hbase'
+include_recipe 'hadoop::hbase_checkconfig'
 
 package "hbase-regionserver" do
   action :install
