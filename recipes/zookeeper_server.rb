@@ -61,17 +61,16 @@ if node['zookeeper'].has_key? 'zoocfg'
 end # End zoo.cfg
 
 # Setup log4j.properties
-  if node['hbase'].has_key? 'log4j'
-    myVars = { :properties => node['zookeeper']['log4j'] }
+if node['hbase'].has_key? 'log4j'
+  myVars = { :properties => node['zookeeper']['log4j'] }
 
-    template "#{zookeeper_conf_dir}/log4j.properties" do
-      source "generic.properties.erb"
-      mode "0644"
-      owner "root"
-      group "root"
-      action :create
-      variables myVars
-    end
+  template "#{zookeeper_conf_dir}/log4j.properties" do
+    source "generic.properties.erb"
+    mode "0644"
+    owner "root"
+    group "root"
+    action :create
+    variables myVars
   end
 end # End log4j.properties
 
