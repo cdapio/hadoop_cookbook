@@ -76,3 +76,13 @@ if (node['hadoop']['hdfs_site'].has_key? 'dfs.ha.fencing.methods')
 else
   Chef::Application.fatal!("You must specify a fencing method for node['hadoop']['hdfs_site']['dfs.ha.fencing.methods']")
 end # End fencing check
+
+# Start Automatic HA check
+if (node['hadoop']['hdfs_site'].has_key? 'dfs.ha.automatic-failover.enabled' \
+  and node['hadoop']['hdfs_site']['dfs.ha.automatic-failover.enabled'] == true)
+  if (node['hadoop']['core_site'].has_key? 'ha.zookeeper.quorum')
+    ha_zk_quorum = node['hadoop']['core_site']['ha.zookeeper.quorum'].split(',')
+  else
+    Chef::Application.fatal!("Automatic HA failover requires node['hadoop']['core_site']['ha.zookeeper.quorum'] to be set"
+  end
+end # End Automatic HA check
