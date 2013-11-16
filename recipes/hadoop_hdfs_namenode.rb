@@ -41,6 +41,13 @@ dfs_name_dirs.split(',').each do |dir|
   end
 end
 
+# Are we HA?
+if (node['hadoop'].has_key? 'hdfs_site' and node['hadoop']['hdfs_site'].has_key? 'dfs.ha.automatic-failover.enabled' \
+  and node['hadoop']['hdfs_site']['dfs.ha.automatic-failover.enabled'] == true)
+  include_recipe 'hadoop::hadoop_hdfs_ha_checkconfig'
+  include_recipe 'hadoop::hadoop_hdfs_zkfc'
+end
+
 service "hadoop-hdfs-namenode" do
   action :nothing
 end
