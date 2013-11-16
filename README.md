@@ -22,21 +22,21 @@
 
 * `default.rb` - Sets up configuration and `hadoop-client` packages.
 * `hadoop_hdfs_checkconfig` - Ensures the HDFS configuration meets required parameters.
-* `hadoop_hdfs_datanode` - Sets up an HDFS datanode.
+* `hadoop_hdfs_datanode` - Sets up an HDFS DataNode.
 * `hadoop_hdfs_ha_checkconfig` - Ensures the HDFS configuration meets required parameters for High Availability.
-* `hadoop_hdfs_journalnode` - Sets up an HDFS journalnode.
-* `hadoop_hdfs_namenode` - Sets up an HDFS namenode.
-* `hadoop_hdfs_secondarynamenode` - Sets up an HDFS secondary namenode.
-* `hadoop_yarn_nodemanager` - Sets up a YARN nodemanager.
-* `hadoop_yarn_resourcemanager` - Sets up a YARN resourcemanager.
+* `hadoop_hdfs_journalnode` - Sets up an HDFS JournalNode.
+* `hadoop_hdfs_namenode` - Sets up an HDFS NameNode.
+* `hadoop_hdfs_secondarynamenode` - Sets up an HDFS Secondary NameNode.
+* `hadoop_yarn_nodemanager` - Sets up a YARN NodeManager.
+* `hadoop_yarn_resourcemanager` - Sets up a YARN ResourceManager.
 * `hbase` - Sets up configuration and `hbase` packages.
 * `hbase_checkconfig` - Ensures the HBase configuration meets required parameters.
 * `hbase_master` - Sets up an HBase Master.
-* `hbase_regionserver` - Sets up an HBase regionserver.
+* `hbase_regionserver` - Sets up an HBase RegionServer.
 * `hbase_thrift` - Sets up an HBase Thrift interface.
 * `repo` - Sets up package manager repositories for specified `node['hadoop']['distribution']`
 * `zookeeper` - Sets up `zookeeper` package.
-* `zookeeper_server` - Sets up a Zookeeper server.
+* `zookeeper_server` - Sets up a ZooKeeper server.
 
 # Author
 
