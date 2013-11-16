@@ -46,6 +46,8 @@ if node['zookeeper'].has_key? 'zoocfg'
       recursive true
       action :create
     end
+  else
+    Chef::Application.fatal!("ZooKeeper requires node['zookeeper']['zoocfg']['dataDir'] to be set")
   end
 
   template "#{zookeeper_conf_dir}/zoo.cfg" do
