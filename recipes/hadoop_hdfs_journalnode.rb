@@ -26,6 +26,23 @@ package "hadoop-hdfs-journalnode" do
   action :install
 end
 
+dfs_jn_edits_dirs =
+  if (node['hadoop']['hdfs_site'].has_key? 'dfs.journalnode.edits.dir')
+    node['hadoop']['hdfs_site']['dfs.journalnode.edits.dir']
+  else
+    Chef::Application.fatal!("JournalNode requires node['hadoop']['hdfs_site']['dfs.journalnode.edits.dir'] to be set")
+  end
+
+dfs_jn_edits_dirs.split(',').each do |dir|
+  directory dir do
+    mode 0755
+    owner "hdfs"
+    group "hdfs"
+    action :create
+    recursive true
+  end
+end
+
 service "hadoop-hdfs-journalnode" do
   action :nothing
 end
