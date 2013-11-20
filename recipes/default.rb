@@ -90,6 +90,17 @@ end # End fair-scheduler.xml
 if node['hadoop'].has_key? 'hadoop_env'
   myVars = { :options => node['hadoop']['hadoop_env'] }
 
+  if (node['hadoop']['hadoop_env'].has_key? 'hadoop_log_dir')
+    node['hadoop']['hadoop_env']['hadoop_log_dir'].each do |dir|
+      directory dir do
+        owner "hdfs"
+        group "hdfs"
+        mode "0755"
+        action :create
+      end
+    end
+  end
+
   template "#{hadoop_conf_dir}/hadoop-env.sh" do
     source "generic-env.sh.erb"
     mode "0755"
