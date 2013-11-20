@@ -49,7 +49,7 @@ dfs_nameservices.each do |ns|
     Chef::Log.info("Using #{node['hadoop']['hdfs_site']['dfs.client.failover.proxy.provider.#{ns}']} for node['hadoop']['hdfs_site']['dfs.client.failover.proxy.provider.#{ns}']")
   else
     node.default['hadoop']['hdfs_site']["dfs\.client\.failover\.proxy\.provider\.#{ns}"] = \
-      'org.apache.hadoop.hdfs.server.namenode.ha.ConfiguredFailoverProxyProvider')
+      'org.apache.hadoop.hdfs.server.namenode.ha.ConfiguredFailoverProxyProvider'
   end # End proxy provider check
   # Start fs.defaultFS check
   if (node['hadoop']['hdfs_site']['fs.defaultFS'] != "hdfs://#{ns}")
@@ -90,6 +90,6 @@ if (node['hadoop']['hdfs_site'].has_key? 'dfs.ha.automatic-failover.enabled' \
   if (node['hadoop']['core_site'].has_key? 'ha.zookeeper.quorum')
     ha_zk_quorum = node['hadoop']['core_site']['ha.zookeeper.quorum'].split(',')
   else
-    Chef::Application.fatal!("Automatic HA failover requires node['hadoop']['core_site']['ha.zookeeper.quorum'] to be set"
+    Chef::Application.fatal!("Automatic HA failover requires node['hadoop']['core_site']['ha.zookeeper.quorum'] to be set")
   end
 end # End Automatic HA check
