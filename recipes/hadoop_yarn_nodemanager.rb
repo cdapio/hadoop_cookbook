@@ -31,6 +31,18 @@ end
 
 # yarn.app.mapreduce.am.staging-dir = /tmp/hadoop-yarn/staging
 
+%w[ yarn.nodemanager.local-dirs yarn.nodemanager.log-dirs ].each do |dir|
+  if (node['hadoop'].has_key? 'yarn_site' \
+    and node['hadoop']['yarn_site'].has_key? dir)
+    directory dir do
+      owner "yarn"
+      group "yarn"
+      mode "0755"
+      action :create
+    end
+  end
+end
+
 service "hadoop-yarn-nodemanager" do
   action :nothing
 end
