@@ -1,0 +1,11 @@
+# Defaults, as shipped with HDP 2.0
+default['hadoop']['capacity_scheduler']['yarn.scheduler.capacity.maximum-applications'] = '10000'
+default['hadoop']['capacity_scheduler']['yarn.scheduler.capacity.maximum-am-resource-percent'] = '0.1'
+default['hadoop']['capacity_scheduler']['yarn.scheduler.capacity.root.queues'] = 'default'
+default['hadoop']['capacity_scheduler']['yarn.scheduler.capacity.root.default.capacity'] = '100'
+default['hadoop']['capacity_scheduler']['yarn.scheduler.capacity.root.default.user-limit-factor'] = '1'
+default['hadoop']['capacity_scheduler']['yarn.scheduler.capacity.root.default.maximum-capacity'] = '100'
+default['hadoop']['capacity_scheduler']['yarn.scheduler.capacity.root.default.state'] = 'RUNNING'
+default['hadoop']['capacity_scheduler']['yarn.scheduler.capacity.root.default.acl_submit_applications'] = '*'
+default['hadoop']['capacity_scheduler']['yarn.scheduler.capacity.root.default.acl_administer_queue'] = '*'
+default['hadoop']['capacity_scheduler']['yarn.scheduler.capacity.node-locality-delay'] = '-1'
