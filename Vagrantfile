@@ -122,7 +122,10 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
         "recipe[hadoop::hadoop_hdfs_namenode]",
         "recipe[hadoop::hadoop_hdfs_datanode]",
         "recipe[hadoop::hadoop_yarn_resourcemanager]",
-        "recipe[hadoop::hadoop_yarn_nodemanager]"
+        "recipe[hadoop::hadoop_yarn_nodemanager]",
+        "recipe[hadoop::zookeeper_server]",
+        "recipe[hadoop::hbase_master]",
+        "recipe[hadoop::hbase_regionserver]"
     ]
   end
 end
