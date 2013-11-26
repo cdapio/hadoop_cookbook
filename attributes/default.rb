@@ -3,7 +3,7 @@
 ###
 # Supported: cdh, hdp
 default['hadoop']['distribution'] = 'hdp'
-default['hadoop']['distribution']['version'] = 2
+default['hadoop']['distribution_version'] = '2'
 # Default: conf.chef
 default['hadoop']['conf_dir'] = 'conf.chef'
 default['hbase']['conf_dir'] = node['hadoop']['conf_dir']
