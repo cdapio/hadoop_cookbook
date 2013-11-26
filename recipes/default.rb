@@ -142,15 +142,27 @@ hadoop_tmp_dir =
   if (node['hadoop'].has_key? 'core_site' and node['hadoop']['core_site'].has_key? 'hadoop.tmp.dir')
     node['hadoop']['core_site']['hadoop.tmp.dir']
   else
-    "/tmp"
+    '/tmp/hadoop-${user}'
   end
 
 node.default['hadoop']['core_site']['hadoop.tmp.dir'] = hadoop_tmp_dir
 
-directory hadoop_tmp_dir do
-  mode "1777"
-  action :create
-  recursive true
+if (node['hadoop']['core_site']['hadoop.tmp.dir'] == '/tmp/hadoop-${user}')
+  %w[ hdfs mapreduce yarn ].each do |dir|
+    directory "/tmp/hadoop-#{dir}" do
+      mode "1777"
+      owner dir
+      group dir
+      action :create
+      recursive true
+    end
+  end
+else
+  directory hadoop_tmp_dir do
+    mode "1777"
+    action :create
+    recursive true
+  end
 end # End hadoop.tmp.dir
 
 # Update alternatives to point to our configuration
