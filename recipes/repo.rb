@@ -71,7 +71,7 @@ when 'hdp'
   end # End hdp
 
 when 'cdh'
-  cdh_release = node['hadoop']['distribution']['version'].to_i
+  cdh_release = node['hadoop']['distribution_version'].to_i
   case node['platform_family']
   when 'rhel'
     yum_base_url = "http://archive.cloudera.com/cdh#{cdh_release}/redhat"
