@@ -139,7 +139,7 @@ end # End hadoop-metrics.properties log4j.properties
 
 # Set hadoop.tmp.dir
 hadoop_tmp_dir =
-  if (node['hadoop'].has_key 'core_site' and node['hadoop']['core_site'].has_key? 'hadoop.tmp.dir')
+  if (node['hadoop'].has_key? 'core_site' and node['hadoop']['core_site'].has_key? 'hadoop.tmp.dir')
     node['hadoop']['core_site']['hadoop.tmp.dir']
   else
     "/tmp"
