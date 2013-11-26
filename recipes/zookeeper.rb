@@ -22,3 +22,8 @@ include_recipe 'hadoop::repo'
 package "zookeeper" do
   action :install
 end
+
+# HDP 2.0 zookeeper package doesn't create zookeeper group, creates hadoop, instead
+group "zookeeper" do
+  action :create
+end
