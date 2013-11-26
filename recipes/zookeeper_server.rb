@@ -35,7 +35,6 @@ end
 
 # Setup zoo.cfg
 if node['zookeeper'].has_key? 'zoocfg'
-  myVars = { :properties => node['zookeeper']['zoocfg'] }
 
   # We need to create a data directory, if it exists
   zookeeper_data_dir =
@@ -46,6 +45,7 @@ if node['zookeeper'].has_key? 'zoocfg'
     end
 
   node.default['zookeeper']['zoocfg']['dataDir'] = zookeeper_data_dir
+  myVars = { :properties => node['zookeeper']['zoocfg'] }
 
   directory node['zookeeper']['zoocfg']['dataDir'] do
     owner "zookeeper"
