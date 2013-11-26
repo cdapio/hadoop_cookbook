@@ -151,8 +151,14 @@ if (node['hadoop']['core_site']['hadoop.tmp.dir'] == '/tmp/hadoop-${user}')
   %w[ hdfs mapreduce yarn ].each do |dir|
     directory "/tmp/hadoop-#{dir}" do
       mode "1777"
-      owner dir
-      group dir
+      myUser =
+        if (dir == "mapreduce")
+          "mapred"
+        else
+          dir
+        end
+      owner myUser
+      group myUser
       action :create
       recursive true
     end
