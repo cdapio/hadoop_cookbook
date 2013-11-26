@@ -39,6 +39,7 @@ end
       group "yarn"
       mode "0755"
       action :create
+      recursive true
     end
   end
 end

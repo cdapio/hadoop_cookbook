@@ -148,6 +148,7 @@ hadoop_tmp_dir =
 directory hadoop_tmp_dir do
   mode "1777"
   action :create
+  recursive true
 end # End hadoop.tmp.dir
 
 # Update alternatives to point to our configuration

@@ -61,6 +61,7 @@ if node['hbase'].has_key? 'hbase_env'
         group "hbase"
         mode "0755"
         action :create
+        recursive true
       end
     end
   end
