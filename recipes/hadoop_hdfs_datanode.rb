@@ -28,7 +28,7 @@ dfs_data_dirs =
   if (node['hadoop'].has_key? 'hdfs_site' and node['hadoop']['hdfs_site'].has_key? 'dfs.data.dir')
     node['hadoop']['hdfs_site']['dfs.data.dir']
   else
-    "#{node['hadoop']['core_site']['hadoop.tmp.dir']}/dfs/data"
+    "#{node['hadoop']['core_site']['hadoop.tmp.dir']}/hadoop-hdfs/dfs/data"
   end
 
 dfs_data_dirs.split(',').each do |dir|
