@@ -2,6 +2,10 @@
 
 # Requirements
 
+* Chef 11.4.0+
+* CentOS 6.4+
+* Ubuntu 12.04+
+
 # Usage
 
 # Attributes
@@ -23,7 +27,7 @@
 * `default.rb` - Sets up configuration and `hadoop-client` packages.
 * `hadoop_hdfs_checkconfig` - Ensures the HDFS configuration meets required parameters.
 * `hadoop_hdfs_datanode` - Sets up an HDFS DataNode.
-* `hadoop_hdfs_ha_checkconfig` - Ensures the HDFS configuration meets required parameters for High Availability.
+* `hadoop_hdfs_ha_checkconfig` - Ensures the HDFS configuration meets requirements for High Availability.
 * `hadoop_hdfs_journalnode` - Sets up an HDFS JournalNode.
 * `hadoop_hdfs_namenode` - Sets up an HDFS NameNode.
 * `hadoop_hdfs_secondarynamenode` - Sets up an HDFS Secondary NameNode.
