@@ -93,19 +93,17 @@ end # End fair-scheduler.xml
 
     %w[ hadoop yarn ].each do |svc|
       if (node['hadoop'][envfile].has_key? "#{svc}_log_dir")
-        node['hadoop'][envfile]["#{svc}_log_dir"].each do |dir|
-          directory dir do
-            log_dir_owner =
-              if (svc == "yarn")
-                'yarn'
-              else
-                'hdfs'
-              end
-            owner log_dir_owner
-            group log_dir_owner
-            mode "0755"
-            action :create
-          end
+        directory node['hadoop'][envfile]["#{svc}_log_dir"] do
+          log_dir_owner =
+            if (svc == "yarn")
+              'yarn'
+            else
+              'hdfs'
+            end
+          owner log_dir_owner
+          group log_dir_owner
+          mode "0755"
+          action :create
         end
       end
     end
