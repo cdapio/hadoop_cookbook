@@ -51,3 +51,10 @@ end
 service "hadoop-hdfs-namenode" do
   action :nothing
 end
+
+execute "hdfs-namenode-format" do
+  command "hdfs namenode -format"
+  action :nothing
+  group "hdfs"
+  user "hdfs"
+end
