@@ -145,6 +145,8 @@ hadoop_tmp_dir =
     "/tmp"
   end
 
+node.default['hadoop']['core_site']['hadoop.tmp.dir'] = hadoop_tmp_dir
+
 directory hadoop_tmp_dir do
   mode "1777"
   action :create
