@@ -28,7 +28,7 @@ fs_checkpoint_dirs =
   if (node['hadoop'].has_key? 'hdfs_site' and node['hadoop']['hdfs_site'].has_key? 'fs.checkpoint.dir')
     node['hadoop']['hdfs_site']['fs.checkpoint.dir']
   else
-    "#{hadoop_tmp_dir}/dfs/namesecondary"
+    "#{node['hadoop']['core_site']['hadoop.tmp.dir']}/dfs/namesecondary"
   end
 
 fs_checkpoint_edits_dirs =
