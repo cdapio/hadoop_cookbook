@@ -104,6 +104,7 @@ end # End fair-scheduler.xml
           group log_dir_owner
           mode "0755"
           action :create
+          recursive true
         end
       end
     end
