@@ -19,7 +19,7 @@
 
 include_recipe 'hadoop::repo'
 
-package "hadoop-zookeeper-server" do
+package "zookeeper-server" do
   action :install
 end
 
