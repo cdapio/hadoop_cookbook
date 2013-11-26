@@ -38,16 +38,21 @@ if node['zookeeper'].has_key? 'zoocfg'
   myVars = { :properties => node['zookeeper']['zoocfg'] }
 
   # We need to create a data directory, if it exists
-  if node['zookeeper']['zoocfg'].has_key? 'dataDir'
-    directory node['zookeeper']['zoocfg']['dataDir'] do
-      owner "zookeeper"
-      group "zookeeper"
-      mode "0755"
-      recursive true
-      action :create
+  zookeeper_data_dir =
+    if node['zookeeper']['zoocfg'].has_key? 'dataDir'
+      node['zookeeper']['zoocfg']['dataDir']
+    else
+      "/var/lib/zookeeper"
     end
-  else
-    Chef::Application.fatal!("ZooKeeper requires node['zookeeper']['zoocfg']['dataDir'] to be set")
+
+  node.default['zookeeper']['zoocfg']['dataDir'] = zookeeper_data_dir
+
+  directory node['zookeeper']['zoocfg']['dataDir'] do
+    owner "zookeeper"
+    group "zookeeper"
+    mode "0755"
+    recursive true
+    action :create
   end
 
   template "#{zookeeper_conf_dir}/zoo.cfg" do
