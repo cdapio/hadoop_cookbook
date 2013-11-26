@@ -39,7 +39,7 @@ end
   if node['hbase'].has_key? sitefile
     myVars = { :options => node['hbase'][sitefile] }
 
-    template "#{hbase_conf_dir}/#{sitefile.gsub('-','_')}.xml" do
+    template "#{hbase_conf_dir}/#{sitefile.gsub('_','-')}.xml" do
       source "generic-site.xml.erb"
       mode "0644"
       owner "hbase"
@@ -81,7 +81,7 @@ end # End hbase-env.sh
   if node['hbase'].has_key? propfile
     myVars = { :properties => node['hbase'][propfile] }
 
-    template "#{hbase_conf_dir}/#{propfile.gsub('-','_')}.properties" do
+    template "#{hbase_conf_dir}/#{propfile.gsub('_','-')}.properties" do
       source "generic.properties.erb"
       mode "0644"
       owner "hbase"

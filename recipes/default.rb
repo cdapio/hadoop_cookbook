@@ -38,7 +38,7 @@ end
   if node['hadoop'].has_key? sitefile
     myVars = { :options => node['hadoop'][sitefile] }
 
-    template "#{hadoop_conf_dir}/#{sitefile.gsub('-','_')}.xml" do
+    template "#{hadoop_conf_dir}/#{sitefile.gsub('_','-')}.xml" do
       source "generic-site.xml.erb"
       mode "0644"
       owner "hdfs"
@@ -126,7 +126,7 @@ end # End hadoop-env.sh yarn-env.sh
   if node['hadoop'].has_key? propfile
     myVars = { :properties => node['hadoop'][propfile] }
 
-    template "#{hadoop_conf_dir}/#{propfile.gsub('-','_')}.properties" do
+    template "#{hadoop_conf_dir}/#{propfile.gsub('_','-')}.properties" do
       source "generic.properties.erb"
       mode "0644"
       owner "hdfs"
