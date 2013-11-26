@@ -117,8 +117,12 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
     chef.run_list = [
         "recipe[minitest-handler::default]",
-        "recipe[java]",
-        "recipe[hadoop::default]"
+        "recipe[java::default]",
+        "recipe[hadoop::default]",
+        "recipe[hadoop::hadoop_hdfs_namenode]",
+        "recipe[hadoop::hadoop_hdfs_datanode]",
+        "recipe[hadoop::hadoop_yarn_resourcemanager]",
+        "recipe[hadoop::hadoop_yarn_nodemanager]"
     ]
   end
 end
