@@ -42,8 +42,8 @@ end
     template "#{hbase_conf_dir}/#{sitefile.gsub('-','_')}.xml" do
       source "generic-site.xml.erb"
       mode "0644"
-      owner "hdfs"
-      group "hdfs"
+      owner "hbase"
+      group "hbase"
       action :create
       variables myVars
     end
@@ -57,8 +57,8 @@ if node['hbase'].has_key? 'hbase_env'
   if node['hbase']['hbase_env'].has_key? 'hbase_log_dir'
     node['hbase']['hbase_env']['hbase_log_dir'].each do |dir|
       directory dir do
-        owner "hdfs"
-        group "hdfs"
+        owner "hbase"
+        group "hbase"
         mode "0755"
         action :create
       end
@@ -83,8 +83,8 @@ end # End hbase-env.sh
     template "#{hbase_conf_dir}/#{propfile.gsub('-','_')}.properties" do
       source "generic.properties.erb"
       mode "0644"
-      owner "hdfs"
-      group "hdfs"
+      owner "hbase"
+      group "hbase"
       action :create
       variables myVars
     end
