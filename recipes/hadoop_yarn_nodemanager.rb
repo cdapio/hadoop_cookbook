@@ -32,13 +32,15 @@ end
 # yarn.app.mapreduce.am.staging-dir = /tmp/hadoop-yarn/staging
 
 %w[ yarn.nodemanager.local-dirs yarn.nodemanager.log-dirs ].each do |dir|
-  directory node['hadoop']['yarn_site'][dir] do
-    owner "yarn"
-    group "yarn"
-    mode "0755"
-    action :create
-    recursive true
-    only_if { node['hadoop'].has_key? 'yarn_site' and node['hadoop']['yarn_site'].has_key? dir }
+  if (node['hadoop'].has_key? 'yarn_site' \
+    and node['hadoop']['yarn_site'].has_key? dir)
+    directory node['hadoop']['yarn_site'][dir] do
+      owner "yarn"
+      group "yarn"
+      mode "0755"
+      action :create
+      recursive true
+    end
   end
 end
 
