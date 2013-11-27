@@ -31,6 +31,8 @@ dfs_name_dirs =
     "#{node['hadoop']['core_site']['hadoop.tmp.dir']}/hadoop-hdfs/dfs/name"
   end
 
+node.default['hadoop']['hdfs_site']['dfs.name.dir'] = dfs_name_dirs
+
 dfs_name_dirs.split(',').each do |dir|
   directory dir do
     mode 0755
