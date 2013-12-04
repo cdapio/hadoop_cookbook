@@ -87,6 +87,10 @@ if node['hbase'].has_key? 'log4j'
   end
 end # End log4j.properties
 
+service "zookeeper-server" do
+  action :nothing
+end
+
 # Update alternatives to point to our configuration
 execute "update zookeeper-conf alternatives" do
   command "update-alternatives --install /etc/zookeeper/conf zookeeper-conf /etc/zookeeper/#{node['zookeeper']['conf_dir']} 50"
