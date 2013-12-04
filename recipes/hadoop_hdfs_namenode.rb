@@ -28,7 +28,7 @@ dfs_name_dirs =
   if (node['hadoop'].has_key? 'hdfs_site' and node['hadoop']['hdfs_site'].has_key? 'dfs.name.dir')
     node['hadoop']['hdfs_site']['dfs.name.dir']
   else
-    "#{node['hadoop']['core_site']['hadoop.tmp.dir']}/hadoop-hdfs/dfs/name"
+    "/tmp/hadoop-hdfs/dfs/name"
   end
 
 node.default['hadoop']['hdfs_site']['dfs.name.dir'] = dfs_name_dirs
