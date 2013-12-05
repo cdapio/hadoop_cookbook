@@ -61,7 +61,8 @@ fair_scheduler_file =
 fair_scheduler_dir = File.dirname(fair_scheduler_file)
 
 if node['hadoop'].has_key? 'fair_scheduler'
-  myVars = { :options => node['hadoop']['fair_scheduler'] }
+  # myVars = { :options => node['hadoop']['fair_scheduler'] }
+  myVars = node['hadoop']['fair_scheduler']
 
   directory fair_scheduler_dir do
     mode "0755"
