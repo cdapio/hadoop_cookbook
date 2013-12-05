@@ -31,11 +31,11 @@ end
 
 # yarn.app.mapreduce.am.staging-dir = /tmp/hadoop-yarn/staging
 
-%w[ yarn.nodemanager.local-dirs yarn.nodemanager.log-dirs ].each do |dirs|
+%w[ yarn.nodemanager.local-dirs yarn.nodemanager.log-dirs ].each do |opt|
   if (node['hadoop'].has_key? 'yarn_site' \
-    and node['hadoop']['yarn_site'].has_key? dirs)
-    dirs.split(',').each do |dir|
-      directory node['hadoop']['yarn_site'][dir] do
+    and node['hadoop']['yarn_site'].has_key? opt)
+    node['hadoop']['yarn_site'][opt].split(',').each do |dir|
+      directory dir do
         owner "yarn"
         group "yarn"
         mode "0755"
