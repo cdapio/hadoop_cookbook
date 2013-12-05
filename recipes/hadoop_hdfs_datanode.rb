@@ -35,7 +35,7 @@ node.default['hadoop']['hdfs_site']['dfs.data.dir'] = dfs_data_dirs
 
 dfs_data_dirs.split(',').each do |dir|
   directory dir do
-    mode 0755
+    mode 0700
     owner "hdfs"
     group "hdfs"
     action :create
