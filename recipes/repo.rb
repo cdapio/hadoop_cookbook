@@ -33,7 +33,6 @@ when 'hdp'
   # We only support HDP 2.0 (2.0.6.0) at this time
   hdp_version = "2.0.6.0"
   hdp_utils_version = "1.1.0.16"
-  # HDP only supports platform_family = rhel
   case node['platform_family']
   when 'rhel'
     yum_base_url = 'http://public-repo-1.hortonworks.com/HDP'
@@ -66,8 +65,24 @@ when 'hdp'
       key "#{key}-HDP"
       action :add
     end
-  else
-    Chef::Application.fatal!("Hortonworks currently only supports node['platform_family'] = rhel")
+
+  when 'debian'
+    apt_base_url = 'http://public-repo-1.hortonworks.com/HDP'
+    os = "ubuntu#{major_platform_version}"
+    apt_repo_url = node['hadoop']['apt_repo_url'] ? node['hadoop']['apt_repo_url'] : "#{apt_base_url}/#{os}/2.x"
+
+    apt_repository "hdp" do
+      uri apt_repo_url
+      distribution "HDP"
+      components [ "main" ]
+      action :add
+    end
+    apt_repository "hdp-utils" do
+      uri "#{apt_base_url}-UTILS-#{hdp_utils_version}/repos/#{os}"
+      distribution "HDP-UTILS"
+      components [ "main" ]
+      action :add
+    end
   end # End hdp
 
 when 'cdh'
@@ -89,6 +104,7 @@ when 'cdh'
       key "#{key}-cloudera"
       action :add
     end
+
   when 'debian'
     codename = node['lsb']['codename']
     apt_base_url = "http://archive.cloudera.com/cdh#{cdh_release}/#{node['platform']}"
@@ -102,5 +118,5 @@ when 'cdh'
       components [ "contrib" ]
       action :add
     end
-  end
+  end # End cdh
 end
