@@ -54,14 +54,13 @@ end # End hbase-policy.xml hbase-site.xml
 if node['hbase'].has_key? 'hbase_env'
   myVars = { :options => node['hbase']['hbase_env'] }
 
-  if node['hbase']['hbase_env'].has_key? 'hbase_log_dir'
-    directory node['hbase']['hbase_env']['hbase_log_dir'] do
-      owner "hbase"
-      group "hbase"
-      mode "0755"
-      action :create
-      recursive true
-    end
+  directory node['hbase']['hbase_env']['hbase_log_dir'] do
+    owner "hbase"
+    group "hbase"
+    mode "0755"
+    action :create
+    recursive true
+    only_if { node['hbase']['hbase_env'].has_key? 'hbase_log_dir' }
   end
 
   template "#{hbase_conf_dir}/hbase-env.sh" do
