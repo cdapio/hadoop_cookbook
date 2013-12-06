@@ -118,7 +118,7 @@ when 'cdh'
     apt_repository "cloudera-cdh#{cdh_release}" do
       uri apt_repo_url
       key apt_repo_key_url
-      distribution "#{codename}-cdh#{cdh_release}"
+      distribution "#{codename}-cdh#{node['hadoop']['distribution_version']}"
       components [ "contrib" ]
       arch "amd64"
       action :add
