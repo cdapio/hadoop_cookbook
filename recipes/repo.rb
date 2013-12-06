@@ -120,6 +120,7 @@ when 'cdh'
       key apt_repo_key_url
       distribution "#{codename}-cdh#{cdh_release}"
       components [ "contrib" ]
+      arch "amd64"
       action :add
     end
   end # End cdh
