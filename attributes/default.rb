@@ -13,3 +13,8 @@ default['zookeeper']['conf_dir'] = node['hadoop']['conf_dir']
 # core-site.xml settings
 ###
 default['hadoop']['core_site']['fs.defaultFS'] = 'hdfs://localhost'
+
+###
+# yarn-site.xml settings
+###
+default['hadoop']['yarn_site']['yarn.resourcemanager.hostname'] = 'localhost'
