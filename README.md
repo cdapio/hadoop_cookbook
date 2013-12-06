@@ -51,6 +51,7 @@ Attributes for this cookbook define the configuration files for Hadoop and its v
 * `hadoop_hdfs_journalnode` - Sets up an HDFS JournalNode.
 * `hadoop_hdfs_namenode` - Sets up an HDFS NameNode.
 * `hadoop_hdfs_secondarynamenode` - Sets up an HDFS Secondary NameNode.
+* `hadoop_hdfs_zkfc` - Sets up HDFS Failover Controller, required for automated NameNode failover.
 * `hadoop_yarn_nodemanager` - Sets up a YARN NodeManager.
 * `hadoop_yarn_resourcemanager` - Sets up a YARN ResourceManager.
 * `hbase` - Sets up configuration and `hbase` packages.
