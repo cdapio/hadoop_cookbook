@@ -31,11 +31,18 @@ dfs_data_dirs =
     "/tmp/hadoop-hdfs/dfs/data"
   end
 
+dfs_data_dir_perm =
+  if (node['hadoop'].has_key? 'hdfs_site' and node['hadoop']['hdfs_site'].has_key? 'dfs.datanode.data.dir.perm')
+    node['hadoop']['hdfs_site']['dfs.datanode.data.dir.perm']
+  else
+    "0700"
+  end
+
 node.default['hadoop']['hdfs_site']['dfs.data.dir'] = dfs_data_dirs
 
 dfs_data_dirs.split(',').each do |dir|
   directory dir do
-    mode 0700
+    mode dfs_data_dir_perm
     owner "hdfs"
     group "hdfs"
     action :create
