@@ -61,6 +61,8 @@ Attributes for this cookbook define the configuration files for Hadoop and its v
 * `hbase_regionserver` - Sets up an HBase RegionServer.
 * `hbase_thrift` - Sets up an HBase Thrift interface.
 * `hive` - Sets up configuration and `hive` packages.
+* `hive_metastore` - Sets up Hive Metastore metadata repository.
+* `hive_server` - Sets up a Hive Thrift service.
 * `pig` - Installs pig interpreter.
 * `repo` - Sets up package manager repositories for specified `node['hadoop']['distribution']`
 * `zookeeper` - Sets up `zookeeper` package.
