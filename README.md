@@ -35,6 +35,7 @@ Attributes for this cookbook define the configuration files for Hadoop and its v
 
 * `['hadoop']['conf_dir']` - The directory used inside `/etc/hadoop` and used via the alternatives system. Default `conf.chef`
 * `['hbase']['conf_dir']` - The directory used inside `/etc/hbase` and used via the alternatives system. Default `conf.chef`
+* `['hive']['conf_dir']` - The directory used inside `/etc/hive` and used via the alternatives system. Default `conf.chef`
 * `['zookeeper']['conf_dir']` - The directory used inside `/etc/zookeeper` and used via the alternatives system. Default `conf.chef`
 
 ## Default Attributes
@@ -59,6 +60,7 @@ Attributes for this cookbook define the configuration files for Hadoop and its v
 * `hbase_master` - Sets up an HBase Master.
 * `hbase_regionserver` - Sets up an HBase RegionServer.
 * `hbase_thrift` - Sets up an HBase Thrift interface.
+* `hive` - Sets up configuration and `hive` packages.
 * `pig` - Installs pig interpreter.
 * `repo` - Sets up package manager repositories for specified `node['hadoop']['distribution']`
 * `zookeeper` - Sets up `zookeeper` package.
