@@ -1,6 +1,6 @@
 require File.expand_path('../support/helpers', __FILE__)
 
-describe 'hadoop::hbase_regionserver' do
+describe 'hadoop::hbase_thrift' do
 
   include Helpers::Hadoop
 
