@@ -125,7 +125,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       "recipe[hadoop::hadoop_yarn_nodemanager]",
       "recipe[hadoop::zookeeper_server]",
       "recipe[hadoop::hbase_master]",
-      "recipe[hadoop::hbase_regionserver]"
+      "recipe[hadoop::hbase_regionserver]",
+      "recipe[hadoop::hive_server]",
+      "recipe[hadoop::hive_metastore]"
     ]
   end
 end
