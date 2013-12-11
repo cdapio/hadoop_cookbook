@@ -18,7 +18,6 @@
 #
 
 include_recipe 'hadoop::repo'
-include_recipe 'hadoop::zookeeper'
 
 package "hive" do
   action :install
