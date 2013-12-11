@@ -33,6 +33,13 @@ directory hive_conf_dir do
   recursive true
 end
 
+directory "/var/lib/hive" do
+  mode "0755"
+  owner "hive"
+  group "hive"
+  action :create
+end
+
 # Setup hive-site.xml
 if node['hive'].has_key? 'hive_site'
   myVars = { :options => node['hive']['hive_site'] }
