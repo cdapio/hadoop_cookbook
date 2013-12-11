@@ -8,7 +8,7 @@ This cookbook may work on earlier versions, but these are the minimal tested ver
 * CentOS 6.4+
 * Ubuntu 12.04+
 
-This cookbook assumes that you have a working Java installation. It has been tested using version 1.13.0 of the java cookbook, using Oracle Java 6.
+This cookbook assumes that you have a working Java installation. It has been tested using version 1.13.0 of the java cookbook, using Oracle Java 6. If you plan on using Hive with a database other than the embedded Derby, you will need to provide it and set it up prior to starting Hive Metastore service.
 
 # Usage
 
@@ -42,6 +42,8 @@ Attributes for this cookbook define the configuration files for Hadoop and its v
 
 * `['hadoop']['core_site']['fs.defaultFS']` - Sets URI to HDFS NameNode. Default `hdfs://localhost`
 * `['hadoop']['yarn_site']['yarn.resourcemanager.hostname']` - Sets hostname of YARN ResourceManager. Default `localhost`
+* `['hive']['hive_site']['javax.jdo.option.ConnectionURL']` - Sets JDBC URL. Default `jdbc:derby:;databaseName=/var/lib/hive/metastore/metastore_db;create=true`
+* `['hive']['hive_site']['javax.jdo.option.ConnectionDriverName']` - Sets JDBC Driver. Default `org.apache.derby.jdbc.EmbeddedDriver`
 
 # Recipes
 
