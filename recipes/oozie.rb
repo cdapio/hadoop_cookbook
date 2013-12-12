@@ -50,3 +50,9 @@ end
 service "oozie" do
   action :nothing
 end
+
+# Update alternatives to point to our configuration
+execute "update oozie-conf alternatives" do
+  command "update-alternatives --install /etc/oozie/conf oozie-conf /etc/oozie/#{node['oozie']['conf_dir']} 50"
+  not_if "update-alternatives --display oozie-conf | grep best | awk '{print $5}' | grep /etc/oozie/#{node['oozie']['conf_dir']}"
+end
