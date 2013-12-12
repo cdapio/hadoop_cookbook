@@ -65,6 +65,7 @@ Attributes for this cookbook define the configuration files for Hadoop and its v
 * `hive` - Sets up configuration and `hive` packages.
 * `hive_metastore` - Sets up Hive Metastore metadata repository.
 * `hive_server` - Sets up a Hive Thrift service.
+* `hive_server2` - Sets up a Hive Thrift service with Kerberos and multi-client concurrency support.
 * `pig` - Installs pig interpreter.
 * `repo` - Sets up package manager repositories for specified `node['hadoop']['distribution']`
 * `zookeeper` - Sets up `zookeeper` package.
