@@ -35,6 +35,7 @@ Attributes for this cookbook define the configuration files for Hadoop and its v
 
 * `['hadoop']['conf_dir']` - The directory used inside `/etc/hadoop` and used via the alternatives system. Default `conf.chef`
 * `['hbase']['conf_dir']` - The directory used inside `/etc/hbase` and used via the alternatives system. Default `conf.chef`
+* `['oozie']['conf_dir']` - The directory used inside `/etc/oozie` and used via the alternatives system. Default `conf.chef`
 * `['zookeeper']['conf_dir']` - The directory used inside `/etc/zookeeper` and used via the alternatives system. Default `conf.chef`
 
 ## Default Attributes
