@@ -25,6 +25,43 @@ package "oozie" do
 end
 
 oozie_conf_dir = "/etc/oozie/#{node['oozie']['conf_dir']}"
+oozie_lib_dir = node['oozie']['oozie_env']['oozie_data_dir'] ? "#{node['oozie']['oozie_env']['oozie_data_dir']}/lib" : "/var/lib/oozie/lib"
+java_share_dir = "/usr/share/java"
+
+case node['platform_family']
+when 'debian'
+  pkgs = %w[
+    libmysql-java,
+    libpostgresql-jdbc-java
+  ]
+  jars = %w[
+    libmysql-java,
+    postgresql-jdbc4
+  ]
+when 'rhel'
+  case node['platform_version'].to_i
+  when '6'
+    pkgs = %w[
+      mysql-connector-java,
+      postgresql-jdbc
+    ]
+    jars = pkgs
+  else
+    Chef::Log.warn("You must download and install JDBC connectors")
+  end
+end
+
+pkgs.each do |pkg|
+  package pkg do
+    action :install
+  end
+end
+
+jars.each do |jar|
+  link "#{oozie_lib_dir}/#{jar}.jar" do
+    to "#{java_share_dir}/#{jar}.jar"
+  end
+end
 
 directory oozie_conf_dir do
   mode "0755"
