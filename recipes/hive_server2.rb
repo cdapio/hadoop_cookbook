@@ -18,6 +18,7 @@
 #
 
 include_recipe 'hadoop::hive'
+include_recipe 'hadoop::zookeeper'
 
 package "hive-server2" do
   action :install
