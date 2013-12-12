@@ -60,6 +60,8 @@ Attributes for this cookbook define the configuration files for Hadoop and its v
 * `hbase_master` - Sets up an HBase Master.
 * `hbase_regionserver` - Sets up an HBase RegionServer.
 * `hbase_thrift` - Sets up an HBase Thrift interface.
+* `oozie` - Sets up an Oozie server.
+* `oozie_client` - Sets up an Oozie client.
 * `pig` - Installs pig interpreter.
 * `repo` - Sets up package manager repositories for specified `node['hadoop']['distribution']`
 * `zookeeper` - Sets up `zookeeper` package.
