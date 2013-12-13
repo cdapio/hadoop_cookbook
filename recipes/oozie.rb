@@ -25,7 +25,8 @@ package "oozie" do
 end
 
 oozie_conf_dir = "/etc/oozie/#{node['oozie']['conf_dir']}"
-oozie_lib_dir = node['oozie']['oozie_env']['oozie_data_dir'] ? "#{node['oozie']['oozie_env']['oozie_data_dir']}/lib" : "/var/lib/oozie"
+# oozie_data_dir = node['oozie']['oozie_env']['oozie_data_dir'] ? node['oozie']['oozie_env']['oozie_data_dir'] : "/var/lib/oozie"
+oozie_data_dir = "/var/lib/oozie"
 java_share_dir = "/usr/share/java"
 
 case node['platform_family']
@@ -58,7 +59,7 @@ pkgs.each do |pkg|
 end
 
 jars.each do |jar|
-  link "#{oozie_lib_dir}/#{jar}.jar" do
+  link "#{oozie_data_dir}/#{jar}.jar" do
     to "#{java_share_dir}/#{jar}.jar"
   end
 end
