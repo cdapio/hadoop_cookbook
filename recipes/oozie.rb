@@ -63,6 +63,23 @@ jars.each do |jar|
   end
 end
 
+extjs = "ext-2.2.zip"
+remote_file "#{Chef::Config[:file_cache_path]}/#{extjs}" do
+  source "http://extjs.com/deploy/#{extjs}"
+  mode "0644"
+  action :create_if_missing
+end
+
+package "unzip"
+
+script "extract extjs into Oozie data directory" do
+  interpreter "bash"
+  user "root"
+  action :nothing
+  code "unzip -o -d #{oozie_data_dir} #{Chef::Config[:file_cache_path]}/#{extjs}"
+  subscribes :run, "remote_file[#{Chef::Config[:file_cache_path]}/#{extjs}", :immediately
+end
+
 directory oozie_conf_dir do
   mode "0755"
   owner "root"
