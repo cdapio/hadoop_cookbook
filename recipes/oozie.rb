@@ -35,7 +35,7 @@ when 'debian'
     libpostgresql-jdbc-java
   ]
   jars = %w[
-    libmysql-java
+    mysql-connector-java
     postgresql-jdbc4
   ]
 when 'rhel'
