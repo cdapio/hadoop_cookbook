@@ -99,6 +99,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # to skip installing and copying to Vagrant's shelf.
   # config.berkshelf.except = []
 
+  # Ubuntu needs this, but global provisioners run first
+  config.vm.provision  :shell, :inline => 'test -x /usr/bin/apt-get && sudo apt-get update ; exit 0'
+
   config.vm.provision :chef_solo do |chef|
     chef.json = {
       :mysql => {
@@ -125,7 +128,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       "recipe[hadoop::hadoop_yarn_nodemanager]",
       "recipe[hadoop::zookeeper_server]",
       "recipe[hadoop::hbase_master]",
-      "recipe[hadoop::hbase_regionserver]"
+      "recipe[hadoop::hbase_regionserver]",
+      "recipe[hadoop::hive_server]",
+      "recipe[hadoop::hive_metastore]"
     ]
   end
 end
