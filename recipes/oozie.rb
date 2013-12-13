@@ -25,7 +25,6 @@ package "oozie" do
 end
 
 oozie_conf_dir = "/etc/oozie/#{node['oozie']['conf_dir']}"
-# oozie_data_dir = node['oozie']['oozie_env']['oozie_data_dir'] ? node['oozie']['oozie_env']['oozie_data_dir'] : "/var/lib/oozie"
 oozie_data_dir = "/var/lib/oozie"
 java_share_dir = "/usr/share/java"
 
