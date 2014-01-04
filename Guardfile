@@ -11,7 +11,7 @@ guard 'kitchen' do
   watch(%r{^resources/(.+)\.rb})
 end
 
-guard "foodcritic" do
+guard "foodcritic", :cookbook_paths => ".", :all_on_start => false do
   watch(%r{attributes/.+\.rb$})
   watch(%r{providers/.+\.rb$})
   watch(%r{recipes/.+\.rb$})
