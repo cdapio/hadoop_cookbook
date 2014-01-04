@@ -10,3 +10,10 @@ guard 'kitchen' do
   watch(%r{^providers/(.+)\.rb})
   watch(%r{^resources/(.+)\.rb})
 end
+
+guard "foodcritic" do
+  watch(%r{attributes/.+\.rb$})
+  watch(%r{providers/.+\.rb$})
+  watch(%r{recipes/.+\.rb$})
+  watch(%r{resources/.+\.rb$})
+end
