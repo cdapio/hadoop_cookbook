@@ -16,4 +16,6 @@ guard "foodcritic" do
   watch(%r{providers/.+\.rb$})
   watch(%r{recipes/.+\.rb$})
   watch(%r{resources/.+\.rb$})
+  watch(%r{^templates/(.+)})
+  watch('metadata.rb')
 end
