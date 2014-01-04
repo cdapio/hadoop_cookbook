@@ -8,4 +8,6 @@ group :development do
   gem 'kitchen-vagrant'
   gem 'guard'
   gem 'guard-kitchen'
+  gem 'foodcritic'
+  gem 'guard-foodcritic'
 end
