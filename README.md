@@ -76,8 +76,6 @@ Attributes for this cookbook define the configuration files for Hadoop and its v
 
 # Author
 
-Author:: Chris Gianelloni (<chris@continuuity.com>)
-
 Author:: Continuuity, Inc. (<ops@continuuity.com>)
 
 # Testing
