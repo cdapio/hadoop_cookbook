@@ -95,6 +95,15 @@ end # End hive-site.xml
 if node['hive'].has_key? 'hive_env'
   myVars = { :options => node['hive']['hive_env'] }
 
+  directory node['hive']['hive_env']['hive_log_dir'] do
+    owner "hive"
+    group "hive"
+    mode "0755"
+    action :create
+    recursive true
+    only_if { node['hive']['hive_env'].has_key? 'hive_log_dir' }
+  end
+
   template "#{hive_conf_dir}/hive-env.sh" do
     source "generic-env.sh.erb"
     mode "0755"
