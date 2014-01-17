@@ -25,7 +25,6 @@ package "oozie" do
 end
 
 oozie_conf_dir = "/etc/oozie/#{node['oozie']['conf_dir']}"
-# oozie_data_dir = node['oozie']['oozie_env']['oozie_data_dir'] ? node['oozie']['oozie_env']['oozie_data_dir'] : "/var/lib/oozie"
 oozie_data_dir = "/var/lib/oozie"
 java_share_dir = "/usr/share/java"
 
@@ -36,7 +35,7 @@ when 'debian'
     libpostgresql-jdbc-java
   ]
   jars = %w[
-    libmysql-java
+    mysql-connector-java
     postgresql-jdbc4
   ]
 when 'rhel'
@@ -62,6 +61,23 @@ jars.each do |jar|
   link "#{oozie_data_dir}/#{jar}.jar" do
     to "#{java_share_dir}/#{jar}.jar"
   end
+end
+
+extjs = "ext-2.2.zip"
+remote_file "#{Chef::Config[:file_cache_path]}/#{extjs}" do
+  source "http://extjs.com/deploy/#{extjs}"
+  mode "0644"
+  action :create_if_missing
+end
+
+package "unzip"
+
+script "extract extjs into Oozie data directory" do
+  interpreter "bash"
+  user "root"
+  action :nothing
+  code "unzip -o -d #{oozie_data_dir} #{Chef::Config[:file_cache_path]}/#{extjs}"
+  subscribes :run, "remote_file[#{Chef::Config[:file_cache_path]}/#{extjs}", :immediately
 end
 
 directory oozie_conf_dir do
