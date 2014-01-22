@@ -60,3 +60,17 @@ execute "hdfs-namenode-format" do
   group "hdfs"
   user "hdfs"
 end
+
+execute "hdfs-namenode-bootstrap-standby" do
+  command "hdfs namenode -bootstrapStandby"
+  action :nothing
+  group "hdfs"
+  user "hdfs"
+end
+
+execute "hdfs-namenode-initialize-sharededits" do
+  command "hdfs -initializeSharedEdits"
+  action :nothing
+  group "hdfs"
+  user "hdfs"
+end
