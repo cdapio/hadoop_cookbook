@@ -41,8 +41,8 @@ end
     template "#{hadoop_conf_dir}/#{sitefile.gsub('_','-')}.xml" do
       source "generic-site.xml.erb"
       mode "0644"
-      owner "hdfs"
-      group "hdfs"
+      owner "root"
+      group "root"
       action :create
       variables myVars
     end
@@ -66,8 +66,8 @@ if node['hadoop'].has_key? 'fair_scheduler'
 
   directory fair_scheduler_dir do
     mode "0755"
-    owner "hdfs"
-    group "hdfs"
+    owner "root"
+    group "root"
     action :create
     recursive true
   end
@@ -75,8 +75,8 @@ if node['hadoop'].has_key? 'fair_scheduler'
   template fair_scheduler_file do
     source "fair-scheduler.xml.erb"
     mode "0644"
-    owner "hdfs"
-    group "hdfs"
+    owner "root"
+    group "root"
     action :create
     variables myVars
   end
@@ -113,8 +113,8 @@ end # End fair-scheduler.xml
     template "#{hadoop_conf_dir}/#{envfile.gsub("_","-")}.sh" do
       source "generic-env.sh.erb"
       mode "0755"
-      owner "hdfs"
-      group "hdfs"
+      owner "root"
+      group "root"
       action :create
       variables myVars
     end
@@ -129,8 +129,8 @@ end # End hadoop-env.sh yarn-env.sh
     template "#{hadoop_conf_dir}/#{propfile.gsub('_','-')}.properties" do
       source "generic.properties.erb"
       mode "0644"
-      owner "hdfs"
-      group "hdfs"
+      owner "root"
+      group "root"
       action :create
       variables myVars
     end
