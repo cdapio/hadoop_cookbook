@@ -20,13 +20,3 @@ default['hadoop']['core_site']['fs.defaultFS'] = "hdfs://#{node['fqdn']}"
 # yarn-site.xml settings
 ###
 default['hadoop']['yarn_site']['yarn.resourcemanager.hostname'] = node['fqdn']
-
-###
-# JAVA_HOME
-###
-if (node.has_key? 'java' and node['java'].has_key? 'java_home')
-  default['hadoop']['hadoop_env']['java_home'] = node['java']['java_home']
-  default['hbase']['hbase_env']['java_home'] = node['java']['java_home']
-  default['hive']['hive_env']['java_home'] = node['java']['java_home']
-  default['oozie']['oozie_env']['java_home'] = node['java']['java_home']
-end
