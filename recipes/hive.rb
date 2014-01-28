@@ -39,7 +39,7 @@ when 'debian'
   ]
 when 'rhel'
   case node['platform_version'].to_i
-  when '6'
+  when 6
     pkgs = %w[
       mysql-connector-java
       postgresql-jdbc
