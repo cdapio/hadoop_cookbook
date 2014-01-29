@@ -40,7 +40,7 @@ when 'debian'
   ]
 when 'rhel'
   case node['platform_version'].to_i
-  when '6'
+  when 6
     pkgs = %w[
       mysql-connector-java
       postgresql-jdbc
@@ -48,6 +48,7 @@ when 'rhel'
     jars = pkgs
   else
     Chef::Log.warn("You must download and install JDBC connectors")
+    pkgs = nil
   end
 end
 
