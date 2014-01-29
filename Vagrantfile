@@ -115,6 +115,18 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
         :oracle => {
           :accept_oracle_download_terms => true
         }
+      },
+      :hadoop => {
+        :hdfs_site => {
+          'dfs.datanode.max.xcievers' => 4096
+        }
+      },
+      :hbase => {
+        :hbase_site => {
+          'hbase.rootdir' => 'hdfs://localhost:8020/hbase',
+          'hbase.zookeeper.quorum' => 'localhost',
+          'hbase.cluster.distributed' => true
+        },
       }
     }
 
