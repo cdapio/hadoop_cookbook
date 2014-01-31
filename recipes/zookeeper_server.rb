@@ -63,6 +63,15 @@ if node['zookeeper'].has_key? 'zoocfg'
     action :create
   end
 
+  directory node['zookeeper']['zoocfg']['dataLogDir'] do
+    owner "zookeeper"
+    group "zookeeper"
+    mode "0755"
+    recursive true
+    action :create
+    only_if { node['zookeeper']['zoocfg'].has_key? 'dataLogDir' }
+  end
+
   template "#{zookeeper_conf_dir}/zoo.cfg" do
     owner "root"
     group "root"
