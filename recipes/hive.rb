@@ -101,7 +101,7 @@ if node['hive'].has_key? 'hive_env'
       node['hive']['hive_env']['hive_log_dir']
     else
       "/var/log/hive"
-    fi
+    end
 
   directory hive_log_dir do
     owner "hive"

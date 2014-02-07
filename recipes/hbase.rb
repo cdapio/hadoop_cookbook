@@ -59,7 +59,7 @@ if node['hbase'].has_key? 'hbase_env'
       node['hbase']['hbase_env']['hbase_log_dir']
     else
       "/var/log/hbase"
-    fi
+    end
 
   directory hbase_log_dir do
     owner "hbase"
