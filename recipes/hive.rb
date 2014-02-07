@@ -96,7 +96,14 @@ end # End hive-site.xml
 if node['hive'].has_key? 'hive_env'
   myVars = { :options => node['hive']['hive_env'] }
 
-  directory node['hive']['hive_env']['hive_log_dir'] do
+  hive_log_dir =
+    if (node['hive']['hive_env'].has_key? 'hive_log_dir')
+      node['hive']['hive_env']['hive_log_dir']
+    else
+      "/var/log/hive"
+    fi
+
+  directory hive_log_dir do
     owner "hive"
     group "hive"
     mode "0755"

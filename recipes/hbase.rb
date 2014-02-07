@@ -54,7 +54,14 @@ end # End hbase-policy.xml hbase-site.xml
 if node['hbase'].has_key? 'hbase_env'
   myVars = { :options => node['hbase']['hbase_env'] }
 
-  directory node['hbase']['hbase_env']['hbase_log_dir'] do
+  hbase_log_dir =
+    if (node['hbase']['hbase_env'].has_key? 'hbase_log_dir')
+      node['hbase']['hbase_env']['hbase_log_dir']
+    else
+      "/var/log/hbase"
+    fi
+
+  directory hbase_log_dir do
     owner "hbase"
     group "hbase"
     mode "0755"
