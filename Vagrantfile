@@ -117,6 +117,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
         }
       },
       :hadoop => {
+        :container_executor => {
+          'banned.users' => 'hdfs,yarn,mapred,bin'
+        },
         :hdfs_site => {
           'dfs.datanode.max.xcievers' => 4096
         }
