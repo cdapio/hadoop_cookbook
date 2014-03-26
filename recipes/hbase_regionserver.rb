@@ -25,5 +25,7 @@ package "hbase-regionserver" do
 end
 
 service "hbase-regionserver" do
+  # cdh4.4 init scripts do not return non-zero exit codes for status
+  status_command "service hbase-regionserver status | grep -v 'not running'"
   action :nothing
 end
