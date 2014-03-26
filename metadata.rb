@@ -8,3 +8,7 @@ version          '1.0.0'
 
 depends 'yum', '>= 3.0'
 depends 'apt'
+
+%w{ centos debian redhat scientific ubuntu }.each do |os|
+  supports os
+end
