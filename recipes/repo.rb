@@ -40,29 +40,25 @@ when 'hdp'
     yum_repo_url = node['hadoop']['yum_repo_url'] ? node['hadoop']['yum_repo_url'] : "#{yum_base_url}/#{os}/2.x/GA"
     yum_repo_key_url = node['hadoop']['yum_repo_key_url'] ? node['hadoop']['yum_repo_key_url'] : "#{yum_base_url}/#{os}/#{key}/#{key}-Jenkins"
 
-    yum_key "#{key}-HDP" do
-      url yum_repo_key_url
-      action :add
-    end
     yum_repository "hdp" do
       name "HDP-2.x"
       description "Hortonworks Data Platform Version - HDP-2.x"
       url yum_repo_url
-      key "#{key}-HDP"
+      gpgkey yum_repo_key_url
       action :add
     end
     yum_repository "hdp-updates" do
       name "Updates-HDP-2.x"
       description "Updates for Hortonworks Data Platform Version - HDP-2.x"
       url "#{yum_base_url}/#{os}/2.x/updates/#{hdp_version}"
-      key "#{key}-HDP"
+      gpgkey yum_repo_key_url
       action :add
     end
     yum_repository "hdp-utils" do
       name "HDP-UTILS-#{hdp_utils_version}"
       description "Hortonworks Data Platform Utils Version - HDP-UTILS-#{hdp_utils_version}"
       url "#{yum_base_url}-UTILS-#{hdp_utils_version}/repos/#{os}"
-      key "#{key}-HDP"
+      gpgkey yum_repo_key_url
       action :add
     end
 
@@ -97,15 +93,11 @@ when 'cdh'
     yum_repo_url = node['hadoop']['yum_repo_url'] ? node['hadoop']['yum_repo_url'] : "#{yum_base_url}/#{major_platform_version}/#{node['kernel']['machine']}/cdh/#{node['hadoop']['distribution_version']}"
     yum_repo_key_url = node['hadoop']['yum_repo_key_url'] ? node['hadoop']['yum_repo_key_url'] : "#{yum_base_url}/#{major_platform_version}/#{node['kernel']['machine']}/cdh/#{key}-cloudera"
 
-    yum_key "#{key}-cloudera" do
-      url yum_repo_key_url
-      action :add
-    end
     yum_repository "cloudera-cdh#{cdh_release}" do
       name "cloudera-cdh#{cdh_release}"
       description "Cloudera's Distribution for Hadoop, Version #{cdh_release}"
       url yum_repo_url
-      key "#{key}-cloudera"
+      gpgkey yum_repo_key_url
       action :add
     end
 
