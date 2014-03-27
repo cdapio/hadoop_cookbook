@@ -129,7 +129,12 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
           'hbase.rootdir' => 'hdfs://localhost:8020/hbase',
           'hbase.zookeeper.quorum' => 'localhost',
           'hbase.cluster.distributed' => true
-        },
+        }
+      },
+      :zookeeper => {
+        :zoocfg => {
+          :dataLogDir => '/tmp/zookeeper/logs'
+        }
       }
     }
 
