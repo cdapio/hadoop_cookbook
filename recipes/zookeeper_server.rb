@@ -44,6 +44,12 @@ if node['zookeeper'].has_key? 'zoocfg'
     else
       "/var/lib/zookeeper"
     end
+  zookeeper_log_dir =
+    if node['zookeeper']['zoocfg'].has_key? 'dataLogDir'
+      node['zookeeper']['zoocfg']['dataLogDir']
+    else
+      "/var/lib/zookeeper"
+    end
   zookeeper_client_port =
     if node['zookeeper']['zoocfg'].has_key? 'clientPort'
       node['zookeeper']['zoocfg']['clientPort']
@@ -52,6 +58,7 @@ if node['zookeeper'].has_key? 'zoocfg'
     end
 
   node.default['zookeeper']['zoocfg']['dataDir'] = zookeeper_data_dir
+  node.default['zookeeper']['zoocfg']['dataLogDir'] = zookeeper_log_dir
   node.default['zookeeper']['zoocfg']['clientPort'] = zookeeper_client_port
   myVars = { :properties => node['zookeeper']['zoocfg'] }
 
