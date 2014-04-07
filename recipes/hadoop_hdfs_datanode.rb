@@ -51,5 +51,6 @@ dfs_data_dirs.split(',').each do |dir|
 end
 
 service "hadoop-hdfs-datanode" do
+  supports { :restart => false, :reload => false, :status => true }
   action :nothing
 end

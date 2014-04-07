@@ -51,5 +51,6 @@ fs_checkpoint_edits_dirs =
 end
 
 service "hadoop-hdfs-secondarynamenode" do
+  supports { :restart => false, :reload => false, :status => true }
   action :nothing
 end

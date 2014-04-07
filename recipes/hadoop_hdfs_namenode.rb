@@ -51,6 +51,7 @@ if (node['hadoop'].has_key? 'hdfs_site' and node['hadoop']['hdfs_site'].has_key?
 end
 
 service "hadoop-hdfs-namenode" do
+  supports { :restart => false, :reload => false, :status => true }
   action :nothing
 end
 
