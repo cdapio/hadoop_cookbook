@@ -26,6 +26,6 @@ package "hadoop-hdfs-zkfc" do
 end
 
 service "hadoop-hdfs-zkfc" do
-  supports { :restart => false, :reload => false, :status => true }
+  supports { :restart => true, :reload => false, :status => true }
   action :nothing
 end

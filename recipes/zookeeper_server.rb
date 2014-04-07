@@ -104,7 +104,7 @@ if node['hbase'].has_key? 'log4j'
 end # End log4j.properties
 
 service "zookeeper-server" do
-  supports { :restart => false, :reload => false, :status => true }
+  supports { :restart => true, :reload => false, :status => true }
   action :nothing
 end
 
