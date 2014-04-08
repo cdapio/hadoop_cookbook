@@ -11,6 +11,7 @@ describe 'hadoop::hadoop_hdfs_datanode' do
       .with(:owner, 'hdfs')
       .and(:group, 'hdfs')
       .and(:mode, node['hadoop']['hdfs_site']['dfs.datanode.data.dir.perm'])
+    end
   end
 
 end
