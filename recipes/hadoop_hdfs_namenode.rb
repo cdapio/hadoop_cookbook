@@ -48,10 +48,20 @@ if (node['hadoop'].has_key? 'hdfs_site' and node['hadoop']['hdfs_site'].has_key?
   and node['hadoop']['hdfs_site']['dfs.ha.automatic-failover.enabled'] == true)
   include_recipe 'hadoop::hadoop_hdfs_ha_checkconfig'
   include_recipe 'hadoop::hadoop_hdfs_zkfc'
-end
 
-service "hadoop-hdfs-namenode" do
-  action :nothing
+  execute "hdfs-namenode-bootstrap-standby" do
+    command "hdfs namenode -bootstrapStandby"
+    action :nothing
+    group "hdfs"
+    user "hdfs"
+  end
+
+  execute "hdfs-namenode-initialize-sharededits" do
+    command "hdfs -initializeSharedEdits"
+    action :nothing
+    group "hdfs"
+    user "hdfs"
+  end
 end
 
 execute "hdfs-namenode-format" do
@@ -61,16 +71,7 @@ execute "hdfs-namenode-format" do
   user "hdfs"
 end
 
-execute "hdfs-namenode-bootstrap-standby" do
-  command "hdfs namenode -bootstrapStandby"
+service "hadoop-hdfs-namenode" do
+  supports [ :restart => true, :reload => false, :status => true ]
   action :nothing
-  group "hdfs"
-  user "hdfs"
-end
-
-execute "hdfs-namenode-initialize-sharededits" do
-  command "hdfs -initializeSharedEdits"
-  action :nothing
-  group "hdfs"
-  user "hdfs"
 end

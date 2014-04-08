@@ -30,5 +30,6 @@ end
 # mapreduce.cluster.temp.dir = #{hadoop_tmp_dir}/mapred/temp
 
 service "hadoop-yarn-resourcemanager" do
+  supports [ :restart => true, :reload => false, :status => true ]
   action :nothing
 end

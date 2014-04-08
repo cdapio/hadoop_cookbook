@@ -25,5 +25,6 @@ package "hbase-thrift" do
 end
 
 service "hbase-thrift" do
+  supports [ :restart => true, :reload => false, :status => true ]
   action :nothing
 end
