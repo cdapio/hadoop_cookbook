@@ -53,6 +53,7 @@ test/*
 features/*
 Guardfile
 Procfile
+Thorfile
 
 # SCM #
 #######
