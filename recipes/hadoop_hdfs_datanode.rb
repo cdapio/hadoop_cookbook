@@ -39,6 +39,7 @@ dfs_data_dir_perm =
   end
 
 node.default['hadoop']['hdfs_site']['dfs.data.dir'] = dfs_data_dirs
+node.default['hadoop']['hdfs_site']['dfs.datanode.data.dir.perm'] = dfs_data_dir_perm
 
 dfs_data_dirs.split(',').each do |dir|
   directory dir do
