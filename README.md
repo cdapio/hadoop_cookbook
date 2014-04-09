@@ -21,7 +21,7 @@ Attributes for this cookbook define the configuration files for Hadoop and its v
 ## Distribution Attributes
 
 * `['hadoop']['distribution']` - Specifies which Hadoop distribution to use, currently supported: cdh, hdp. Default `hdp`
-* `['hadoop']['distribution_version']` - Specifies which version of `['hadoop']['distribution']` to use. Default `2`
+* `['hadoop']['distribution_version']` - Specifies which version of `['hadoop']['distribution']` to use. Default `2.0` if `['hadoop']['distribution']` is `hdp` and `4` if `['hadoop']['distribution']` is `cdh`
 
 ### APT-specific settings
 
