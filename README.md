@@ -16,7 +16,22 @@ This cookbook is designed to be used with a wrapper cookbook or a role with sett
 
 # Attributes
 
-Attributes for this cookbook define the configuration files for Hadoop and its various services. Hadoop configuration files are XML files, with name/value property pairs. The attribute name determines which file the property is placed and the property name. The attribute value is the property value. The attribute `['hadoop']['core_site']['fs.defaultFS']` will configure a property named `fs.defaultFS` in `core-site.xml` in `node['hadoop']['conf_dir']`. All attribute values are taken as-is and only minimal configuration checking is done on values. It is up to the user to provide a valid configuration for your cluster.
+Attributes for this cookbook define the configuration files for Hadoop and its various services. Hadoop configuration files are XML files, with name/value property pairs. The attribute name determines which file the property is placed and the property name. The attribute value is the property value. The attribute `hadoop['core_site']['fs.defaultFS']` will configure a property named `fs.defaultFS` in `core-site.xml` in `hadoop['conf_dir']`. All attribute values are taken as-is and only minimal configuration checking is done on values. It is up to the user to provide a valid configuration for your cluster.
+
+Attribute Tree | File (in hadoop['conf_dir'])
+-------------- | ----------------------------
+hadoop['capacity_scheduler'] | capacity-scheduler.xml
+hadoop['container_executor'] | container-executor.cfg
+hadoop['core_site'] | core-site.xml
+hadoop['fair_scheduler'] | fair-scheduler.xml
+hadoop['hadoop_env'] | hadoop-env.sh
+hadoop['hadoop_metrics'] | hadoop-metrics.properties
+hadoop['hadoop_policy'] | hadoop-policy.xml
+hadoop['hdfs_site'] | hdfs-site.xml
+hadoop['log4j'] | log4j.properties
+hadoop['mapred_site'] | mapred-site.xml
+hadoop['yarn_env'] | yarn-env.sh
+hadoop['yarn_site'] | yarn-site.xml
 
 ## Distribution Attributes
 
