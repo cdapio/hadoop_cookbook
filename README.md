@@ -41,6 +41,11 @@ hbase['hbase_policy'] | hbase-policy.xml
 hbase['hbase_site'] | hbase-site.xml
 hbase['log4j'] | log4j.properties
 
+Attribute Tree | File (in hive['conf_dir'])
+-------------- | --------------------------
+hive['hive_env'] | hive-env.sh
+hive['hive_site'] | hive-site.xml
+
 ## Distribution Attributes
 
 * `['hadoop']['distribution']` - Specifies which Hadoop distribution to use, currently supported: cdh, hdp. Default `hdp`
