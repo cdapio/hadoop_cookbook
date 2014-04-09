@@ -50,6 +50,11 @@ Attribute Tree | File (in oozie['conf_dir'])
 -------------- | ---------------------------
 oozie['oozie_site'] | oozie-site.xml
 
+Attribute Tree | File (in zookeeper['conf_dir'])
+-------------- | -------------------------------
+zookeeper['log4j'] | log4j.properties
+zookeeper['zoocfg'] | zoo.cfg
+
 ## Distribution Attributes
 
 * `['hadoop']['distribution']` - Specifies which Hadoop distribution to use, currently supported: cdh, hdp. Default `hdp`
