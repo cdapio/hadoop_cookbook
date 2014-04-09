@@ -30,9 +30,15 @@ end
 
 case node['hadoop']['distribution']
 when 'hdp'
-  # We only support HDP 2.0 (2.0.6.0) at this time
-  hdp_version = "2.0.6.0"
-  hdp_utils_version = "1.1.0.16"
+  case node['hadoop']['distribution_version']
+  when '2.0.6.0', '2.0.6.1', '2.0.10.0', '2.0.11.0', '2.0', '2'
+    hdp_version = "2.0.11.0"
+  else
+    # We only support HDP 2.0 (2.0.11.0) at this time
+    Chef::Log.info("Using HDP version 2.0 (2.0.11.0)")
+    hdp_version = "2.0.11.0"
+  end
+  hdp_utils_version = "1.1.0.17"
   case node['platform_family']
   when 'rhel'
     yum_base_url = 'http://public-repo-1.hortonworks.com/HDP'
