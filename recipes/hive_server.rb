@@ -24,5 +24,6 @@ package "hive-server" do
 end
 
 service "hive-server" do
+  supports [ :restart => true, :reload => false, :status => true ]
   action :nothing
 end

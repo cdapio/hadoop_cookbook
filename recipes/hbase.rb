@@ -24,6 +24,18 @@ package "hbase" do
   action :install
 end
 
+# HBase needs snappy
+pkg =
+  case node['platform_family']
+  when 'debian'
+    'libsnappy1'
+  when 'rhel'
+    'snappy'
+  end
+package pkg do
+  action :install
+end
+
 hbase_conf_dir = "/etc/hbase/#{node['hbase']['conf_dir']}"
 
 directory hbase_conf_dir do

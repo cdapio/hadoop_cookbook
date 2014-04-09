@@ -25,5 +25,6 @@ package "hbase-master" do
 end
 
 service "hbase-master" do
+  supports [ :restart => true, :reload => false, :status => true ]
   action :nothing
 end
