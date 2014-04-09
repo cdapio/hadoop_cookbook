@@ -46,6 +46,10 @@ Attribute Tree | File (in hive['conf_dir'])
 hive['hive_env'] | hive-env.sh
 hive['hive_site'] | hive-site.xml
 
+Attribute Tree | File (in oozie['conf_dir'])
+-------------- | ---------------------------
+oozie['oozie_site'] | oozie-site.xml
+
 ## Distribution Attributes
 
 * `['hadoop']['distribution']` - Specifies which Hadoop distribution to use, currently supported: cdh, hdp. Default `hdp`
