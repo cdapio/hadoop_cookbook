@@ -33,6 +33,28 @@ hadoop['mapred_site'] | mapred-site.xml
 hadoop['yarn_env'] | yarn-env.sh
 hadoop['yarn_site'] | yarn-site.xml
 
+Attribute Tree | File (in hbase['conf_dir'])
+-------------- | ---------------------------
+hbase['hadoop_metrics'] | hadoop-metrics.properties
+hbase['hbase_env'] | hbase-env.sh
+hbase['hbase_policy'] | hbase-policy.xml
+hbase['hbase_site'] | hbase-site.xml
+hbase['log4j'] | log4j.properties
+
+Attribute Tree | File (in hive['conf_dir'])
+-------------- | --------------------------
+hive['hive_env'] | hive-env.sh
+hive['hive_site'] | hive-site.xml
+
+Attribute Tree | File (in oozie['conf_dir'])
+-------------- | ---------------------------
+oozie['oozie_site'] | oozie-site.xml
+
+Attribute Tree | File (in zookeeper['conf_dir'])
+-------------- | -------------------------------
+zookeeper['log4j'] | log4j.properties
+zookeeper['zoocfg'] | zoo.cfg
+
 ## Distribution Attributes
 
 * `['hadoop']['distribution']` - Specifies which Hadoop distribution to use, currently supported: cdh, hdp. Default `hdp`
