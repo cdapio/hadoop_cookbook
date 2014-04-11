@@ -84,11 +84,13 @@ zookeeper['zoocfg'] | zoo.cfg | `zookeeper['conf_dir']`
 * `hadoop_hdfs_secondarynamenode` - Sets up an HDFS Secondary NameNode.
 * `hadoop_hdfs_zkfc` - Sets up HDFS Failover Controller, required for automated NameNode failover.
 * `hadoop_yarn_nodemanager` - Sets up a YARN NodeManager.
+* `hadoop_yarn_proxyserver` - Sets up a YARN Web Proxy.
 * `hadoop_yarn_resourcemanager` - Sets up a YARN ResourceManager.
 * `hbase` - Sets up configuration and `hbase` packages.
 * `hbase_checkconfig` - Ensures the HBase configuration meets required parameters.
 * `hbase_master` - Sets up an HBase Master.
 * `hbase_regionserver` - Sets up an HBase RegionServer.
+* `hbase_rest` - Sets up an HBase REST interface.
 * `hbase_thrift` - Sets up an HBase Thrift interface.
 * `hive` - Sets up configuration and `hive` packages.
 * `hive_metastore` - Sets up Hive Metastore metadata repository.
