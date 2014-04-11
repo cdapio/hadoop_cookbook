@@ -18,42 +18,30 @@ This cookbook is designed to be used with a wrapper cookbook or a role with sett
 
 Attributes for this cookbook define the configuration files for Hadoop and its various services. Hadoop configuration files are XML files, with name/value property pairs. The attribute name determines which file the property is placed and the property name. The attribute value is the property value. The attribute `hadoop['core_site']['fs.defaultFS']` will configure a property named `fs.defaultFS` in `core-site.xml` in `hadoop['conf_dir']`. All attribute values are taken as-is and only minimal configuration checking is done on values. It is up to the user to provide a valid configuration for your cluster.
 
-Attribute Tree | File (in hadoop['conf_dir'])
--------------- | ----------------------------
-hadoop['capacity_scheduler'] | capacity-scheduler.xml
-hadoop['container_executor'] | container-executor.cfg
-hadoop['core_site'] | core-site.xml
-hadoop['fair_scheduler'] | fair-scheduler.xml
-hadoop['hadoop_env'] | hadoop-env.sh
-hadoop['hadoop_metrics'] | hadoop-metrics.properties
-hadoop['hadoop_policy'] | hadoop-policy.xml
-hadoop['hdfs_site'] | hdfs-site.xml
-hadoop['log4j'] | log4j.properties
-hadoop['mapred_site'] | mapred-site.xml
-hadoop['yarn_env'] | yarn-env.sh
-hadoop['yarn_site'] | yarn-site.xml
-
-Attribute Tree | File (in hbase['conf_dir'])
--------------- | ---------------------------
-hbase['hadoop_metrics'] | hadoop-metrics.properties
-hbase['hbase_env'] | hbase-env.sh
-hbase['hbase_policy'] | hbase-policy.xml
-hbase['hbase_site'] | hbase-site.xml
-hbase['log4j'] | log4j.properties
-
-Attribute Tree | File (in hive['conf_dir'])
--------------- | --------------------------
-hive['hive_env'] | hive-env.sh
-hive['hive_site'] | hive-site.xml
-
-Attribute Tree | File (in oozie['conf_dir'])
--------------- | ---------------------------
-oozie['oozie_site'] | oozie-site.xml
-
-Attribute Tree | File (in zookeeper['conf_dir'])
--------------- | -------------------------------
-zookeeper['log4j'] | log4j.properties
-zookeeper['zoocfg'] | zoo.cfg
+Attribute Tree | File | Location 
+-------------- | ---- | --------
+hadoop['capacity_scheduler'] | capacity-scheduler.xml | `hadoop['conf_dir']`
+hadoop['container_executor'] | container-executor.cfg | `hadoop['conf_dir']`
+hadoop['core_site'] | core-site.xml | `hadoop['conf_dir']`
+hadoop['fair_scheduler'] | fair-scheduler.xml | `hadoop['conf_dir']`
+hadoop['hadoop_env'] | hadoop-env.sh | `hadoop['conf_dir']`
+hadoop['hadoop_metrics'] | hadoop-metrics.properties | `hadoop['conf_dir']`
+hadoop['hadoop_policy'] | hadoop-policy.xml | `hadoop['conf_dir']`
+hadoop['hdfs_site'] | hdfs-site.xml | `hadoop['conf_dir']`
+hadoop['log4j'] | log4j.properties | `hadoop['conf_dir']`
+hadoop['mapred_site'] | mapred-site.xml | `hadoop['conf_dir']`
+hadoop['yarn_env'] | yarn-env.sh | `hadoop['conf_dir']`
+hadoop['yarn_site'] | yarn-site.xml | `hadoop['conf_dir']`
+hbase['hadoop_metrics'] | hadoop-metrics.properties | `hbase['conf_dir']`
+hbase['hbase_env'] | hbase-env.sh | `hbase['conf_dir']`
+hbase['hbase_policy'] | hbase-policy.xml | `hbase['conf_dir']`
+hbase['hbase_site'] | hbase-site.xml | `hbase['conf_dir']`
+hbase['log4j'] | log4j.properties | `hbase['conf_dir']`
+hive['hive_env'] | hive-env.sh | `hive['conf_dir']`
+hive['hive_site'] | hive-site.xml | `hive['conf_dir']`
+oozie['oozie_site'] | oozie-site.xml | `oozie['conf_dir']`
+zookeeper['log4j'] | log4j.properties | `zookeeper['conf_dir']`
+zookeeper['zoocfg'] | zoo.cfg | `zookeeper['conf_dir']`
 
 ## Distribution Attributes
 
