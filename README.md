@@ -57,33 +57,33 @@ zookeeper['zoocfg'] | zoo.cfg
 
 ## Distribution Attributes
 
-* `['hadoop']['distribution']` - Specifies which Hadoop distribution to use, currently supported: cdh, hdp. Default `hdp`
-* `['hadoop']['distribution_version']` - Specifies which version of `['hadoop']['distribution']` to use. Default `2.0` if `['hadoop']['distribution']` is `hdp` and `4` if `['hadoop']['distribution']` is `cdh`
+* `hadoop['distribution']` - Specifies which Hadoop distribution to use, currently supported: cdh, hdp. Default `hdp`
+* `hadoop['distribution_version']` - Specifies which version of `hadoop['distribution']` to use. Default `2.0` if `hadoop['distribution']` is `hdp` and `4` if `hadoop['distribution']` is `cdh`
 
 ### APT-specific settings
 
-* `['hadoop']['apt_repo_url']` - Provide an alternate apt installation source location. If you change this attribute, you are expected to provide a path to a working repo for the `node['hadoop']['distribution']` used. Default: `nil`
-* `['hadoop']['apt_repo_key_url']` - Provide an alternative apt repository key source location. Default `nil`
+* `hadoop['apt_repo_url']` - Provide an alternate apt installation source location. If you change this attribute, you are expected to provide a path to a working repo for the `hadoop['distribution']` used. Default: `nil`
+* `hadoop['apt_repo_key_url']` - Provide an alternative apt repository key source location. Default `nil`
 
 ### RPM-specific settings
 
-* `['hadoop']['yum_repo_url']` - Provide an alternate yum installation source location. If you change this attribute, you are expected to provide a path to a working repo for the `node['hadoop']['distribution']` used. Default: `nil`
-* `['hadoop']['yum_repo_key_url']` - Provide an alternative yum repository key source location. Default `nil`
+* `hadoop['yum_repo_url']` - Provide an alternate yum installation source location. If you change this attribute, you are expected to provide a path to a working repo for the `hadoop['distribution']` used. Default: `nil`
+* `hadoop['yum_repo_key_url']` - Provide an alternative yum repository key source location. Default `nil`
 
 ## Global Configuration Attributes
 
-* `['hadoop']['conf_dir']` - The directory used inside `/etc/hadoop` and used via the alternatives system. Default `conf.chef`
-* `['hbase']['conf_dir']` - The directory used inside `/etc/hbase` and used via the alternatives system. Default `conf.chef`
-* `['hive']['conf_dir']` - The directory used inside `/etc/hive` and used via the alternatives system. Default `conf.chef`
-* `['oozie']['conf_dir']` - The directory used inside `/etc/oozie` and used via the alternatives system. Default `conf.chef`
-* `['zookeeper']['conf_dir']` - The directory used inside `/etc/zookeeper` and used via the alternatives system. Default `conf.chef`
+* `hadoop['conf_dir']` - The directory used inside `/etc/hadoop` and used via the alternatives system. Default `conf.chef`
+* `hbase['conf_dir']` - The directory used inside `/etc/hbase` and used via the alternatives system. Default `conf.chef`
+* `hive['conf_dir']` - The directory used inside `/etc/hive` and used via the alternatives system. Default `conf.chef`
+* `oozie['conf_dir']` - The directory used inside `/etc/oozie` and used via the alternatives system. Default `conf.chef`
+* `zookeeper['conf_dir']` - The directory used inside `/etc/zookeeper` and used via the alternatives system. Default `conf.chef`
 
 ## Default Attributes
 
-* `['hadoop']['core_site']['fs.defaultFS']` - Sets URI to HDFS NameNode. Default `hdfs://localhost`
-* `['hadoop']['yarn_site']['yarn.resourcemanager.hostname']` - Sets hostname of YARN ResourceManager. Default `localhost`
-* `['hive']['hive_site']['javax.jdo.option.ConnectionURL']` - Sets JDBC URL. Default `jdbc:derby:;databaseName=/var/lib/hive/metastore/metastore_db;create=true`
-* `['hive']['hive_site']['javax.jdo.option.ConnectionDriverName']` - Sets JDBC Driver. Default `org.apache.derby.jdbc.EmbeddedDriver`
+* `hadoop['core_site']['fs.defaultFS']` - Sets URI to HDFS NameNode. Default `hdfs://localhost`
+* `hadoop['yarn_site']['yarn.resourcemanager.hostname']` - Sets hostname of YARN ResourceManager. Default `localhost`
+* `hive['hive_site']['javax.jdo.option.ConnectionURL']` - Sets JDBC URL. Default `jdbc:derby:;databaseName=/var/lib/hive/metastore/metastore_db;create=true`
+* `hive['hive_site']['javax.jdo.option.ConnectionDriverName']` - Sets JDBC Driver. Default `org.apache.derby.jdbc.EmbeddedDriver`
 
 # Recipes
 
@@ -109,7 +109,7 @@ zookeeper['zoocfg'] | zoo.cfg
 * `oozie` - Sets up an Oozie server.
 * `oozie_client` - Sets up an Oozie client.
 * `pig` - Installs pig interpreter.
-* `repo` - Sets up package manager repositories for specified `node['hadoop']['distribution']`
+* `repo` - Sets up package manager repositories for specified `hadoop['distribution']`
 * `zookeeper` - Sets up `zookeeper` package.
 * `zookeeper_server` - Sets up a ZooKeeper server.
 
