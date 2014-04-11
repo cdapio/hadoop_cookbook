@@ -59,7 +59,7 @@ if (node['hadoop'].has_key? 'hdfs_site' and node['hadoop']['hdfs_site'].has_key?
   end
 
   execute "hdfs-namenode-initialize-sharededits" do
-    command "hdfs -initializeSharedEdits"
+    command "hdfs namenode -initializeSharedEdits"
     action :nothing
     group "hdfs"
     user "hdfs"
