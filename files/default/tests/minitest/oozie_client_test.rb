@@ -5,7 +5,5 @@ describe 'hadoop::oozie_client' do
   include Helpers::Hadoop
 
   # Example spec tests can be found at http://git.io/Fahwsw
-  it 'runs no tests by default' do
-  end
 
 end
