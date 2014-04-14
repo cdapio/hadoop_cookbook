@@ -36,7 +36,7 @@ dfs_data_dirs =
 dfs_data_dir_perm =
   if (node['hadoop'].has_key? 'hdfs_site' and node['hadoop']['hdfs_site'].has_key? 'dfs.datanode.data.dir.perm')
     node['hadoop']['hdfs_site']['dfs.datanode.data.dir.perm']
-  elsif ((node['hadoop'].has_key? 'hdfs_site' and node['hadoop']['hdfs_site'].has_key? 'dfs.data.dir.perm')
+  elsif (node['hadoop'].has_key? 'hdfs_site' and node['hadoop']['hdfs_site'].has_key? 'dfs.data.dir.perm')
     node['hadoop']['hdfs_site']['dfs.data.dir.perm']
   else
     "0700"
