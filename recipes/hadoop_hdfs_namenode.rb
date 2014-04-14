@@ -25,10 +25,10 @@ package "hadoop-hdfs-namenode" do
 end
 
 dfs_name_dirs =
-  if (node['hadoop'].has_key? 'hdfs_site' and node['hadoop']['hdfs_site'].has_key? 'dfs.name.dir')
-    node['hadoop']['hdfs_site']['dfs.name.dir']
-  elsif (node['hadoop'].has_key? 'hdfs_site' and node['hadoop']['hdfs_site'].has_key? 'dfs.namenode.name.dir')
+  if (node['hadoop'].has_key? 'hdfs_site' and node['hadoop']['hdfs_site'].has_key? 'dfs.namenode.name.dir')
     node['hadoop']['hdfs_site']['dfs.namenode.name.dir']
+  elsif (node['hadoop'].has_key? 'hdfs_site' and node['hadoop']['hdfs_site'].has_key? 'dfs.name.dir')
+    node['hadoop']['hdfs_site']['dfs.name.dir']
   else
     "/tmp/hadoop-hdfs/dfs/name"
   end
