@@ -20,14 +20,14 @@
 # We need dfs.datanode.max.xcievers >= 4096
 # http://hbase.apache.org/book/configuration.html#hadoop
 if (node['hadoop'].has_key? 'hdfs_site' \
+  and node['hadoop']['hdfs_site'].has_key? 'dfs.datanode.max.transfer.threads' \
+  and node['hadoop']['hdfs_site']['dfs.datanode.max.transfer.threads'].to_i >= 4096)
+  Chef::Log.info("Set dfs.datanode.max.transfer.threads to #{node['hadoop']['hdfs_site']['dfs.datanode.max.transfer.threads']}")
+elsif (node['hadoop'].has_key? 'hdfs_site' \
   and node['hadoop']['hdfs_site'].has_key? 'dfs.datanode.max.xcievers' \
   and node['hadoop']['hdfs_site']['dfs.datanode.max.xcievers'].to_i >= 4096)
   Chef::Log.info("Set dfs.datanode.max.transfer.threads to #{node['hadoop']['hdfs_site']['dfs.datanode.max.xcievers']}")
   node.default['hadoop']['hdfs_site']['dfs.datanode.max.transfer.threads'] = node['hadoop']['hdfs_site']['dfs.datanode.max.xcievers']
-elsif (node['hadoop'].has_key? 'hdfs_site' \
-  and node['hadoop']['hdfs_site'].has_key? 'dfs.datanode.max.transfer.threads' \
-  and node['hadoop']['hdfs_site']['dfs.datanode.max.transfer.threads'].to_i >= 4096)
-  Chef::Log.info("Set dfs.datanode.max.transfer.threads to #{node['hadoop']['hdfs_site']['dfs.datanode.max.transfer.threads']}")
 else
   Chef::Application.fatal!("You *must* set node['hadoop']['hdfs_site']['dfs.datanode.max.transfer.threads'] >= 4096 for HBase")
 end

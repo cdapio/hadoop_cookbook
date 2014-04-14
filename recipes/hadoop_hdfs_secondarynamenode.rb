@@ -25,19 +25,19 @@ package "hadoop-hdfs-secondarynamenode" do
 end
 
 fs_checkpoint_dirs =
-  if (node['hadoop'].has_key? 'hdfs_site' and node['hadoop']['hdfs_site'].has_key? 'fs.checkpoint.dir')
-    node['hadoop']['hdfs_site']['fs.checkpoint.dir']
-  elsif (node['hadoop'].has_key? 'hdfs_site' and node['hadoop']['hdfs_site'].has_key? 'dfs.namenode.checkpoint.dir')
+  if (node['hadoop'].has_key? 'hdfs_site' and node['hadoop']['hdfs_site'].has_key? 'dfs.namenode.checkpoint.dir')
     node['hadoop']['hdfs_site']['dfs.namenode.checkpoint.dir']
+  elsif (node['hadoop'].has_key? 'hdfs_site' and node['hadoop']['hdfs_site'].has_key? 'fs.checkpoint.dir')
+    node['hadoop']['hdfs_site']['fs.checkpoint.dir']
   else
     "/tmp/hadoop-hdfs/dfs/namesecondary"
   end
 
 fs_checkpoint_edits_dirs =
-  if (node['hadoop'].has_key? 'hdfs_site' and node['hadoop']['hdfs_site'].has_key? 'fs.checkpoint.edits.dir')
-    node['hadoop']['hdfs_site']['fs.checkpoint.edits.dir']
-  elsif (node['hadoop'].has_key? 'hdfs_site' and node['hadoop']['hdfs_site'].has_key? 'dfs.namenode.checkpoint.edits.dir')
+  if (node['hadoop'].has_key? 'hdfs_site' and node['hadoop']['hdfs_site'].has_key? 'dfs.namenode.checkpoint.edits.dir')
     node['hadoop']['hdfs_site']['dfs.namenode.checkpoint.edits.dir']
+  elsif (node['hadoop'].has_key? 'hdfs_site' and node['hadoop']['hdfs_site'].has_key? 'fs.checkpoint.edits.dir')
+    node['hadoop']['hdfs_site']['fs.checkpoint.edits.dir']
   else
     fs_checkpoint_dirs
   end

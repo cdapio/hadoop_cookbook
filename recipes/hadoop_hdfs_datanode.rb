@@ -25,10 +25,10 @@ package "hadoop-hdfs-datanode" do
 end
 
 dfs_data_dirs =
-  if (node['hadoop'].has_key? 'hdfs_site' and node['hadoop']['hdfs_site'].has_key? 'dfs.data.dir')
-    node['hadoop']['hdfs_site']['dfs.data.dir']
-  elsif (node['hadoop'].has_key? 'hdfs_site' and node['hadoop']['hdfs_site'].has_key? 'dfs.datanode.data.dir')
+  if (node['hadoop'].has_key? 'hdfs_site' and node['hadoop']['hdfs_site'].has_key? 'dfs.datanode.data.dir')
     node['hadoop']['hdfs_site']['dfs.datanode.data.dir']
+  elsif (node['hadoop'].has_key? 'hdfs_site' and node['hadoop']['hdfs_site'].has_key? 'dfs.data.dir')
+    node['hadoop']['hdfs_site']['dfs.data.dir']
   else
     "/tmp/hadoop-hdfs/dfs/data"
   end
@@ -36,6 +36,8 @@ dfs_data_dirs =
 dfs_data_dir_perm =
   if (node['hadoop'].has_key? 'hdfs_site' and node['hadoop']['hdfs_site'].has_key? 'dfs.datanode.data.dir.perm')
     node['hadoop']['hdfs_site']['dfs.datanode.data.dir.perm']
+  elsif ((node['hadoop'].has_key? 'hdfs_site' and node['hadoop']['hdfs_site'].has_key? 'dfs.data.dir.perm')
+    node['hadoop']['hdfs_site']['dfs.data.dir.perm']
   else
     "0700"
   end
