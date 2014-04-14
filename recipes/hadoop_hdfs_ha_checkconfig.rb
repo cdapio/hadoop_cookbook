@@ -59,14 +59,14 @@ end
 
 # dfs.namenode.shared.edits.dir format: "qjournal://host1:port1;host2:port2;host3:port3/journalId" or "file:///path/to/mount"
 if (node['hadoop']['hdfs_site'].has_key? "dfs.namenode.shared.edits.dir")
-  if (node['hadoop']['hdfs_site']['dfs.namenode.shared.edits.dir'].starts_with('qjournal'))
+  if (node['hadoop']['hdfs_site']['dfs.namenode.shared.edits.dir'].start_with?('qjournal'))
     # Start journalnode checks
     journalnodes = node['hadoop']['hdfs_site']['dfs.namenode.shared.edits.dir'].split(';')
     # We need 3+ JournalNodes
     if (journalnodes.size < 3)
       Chef::Application.fatal!("You must have at least 3 JournalNodes configured for HDFS HA")
     end # End journalnode checks
-  elsif (node['hadoop']['hdfs_site']['dfs.namenode.shared.edits.dir'].starts_with('file'))
+  elsif (node['hadoop']['hdfs_site']['dfs.namenode.shared.edits.dir'].start_with?('file'))
     # Start NFS/Shared-storage checks
     nfsdir = node['hadoop']['hdfs_site']['dfs.namenode.shared.edits.dir']
   else
