@@ -7,7 +7,7 @@ default['hadoop']['distribution_version'] =
   if node['hadoop']['distribution'] == 'hdp'
     '2.0'
   elsif node['hadoop']['distribution'] == 'cdh'
-    '4'
+    '5'
   end
 
 # Default: conf.chef
