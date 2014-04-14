@@ -90,7 +90,7 @@ if node['zookeeper'].has_key? 'zoocfg'
 end # End zoo.cfg
 
 # Setup log4j.properties
-if node['hbase'].has_key? 'log4j'
+if node['zookeeper'].has_key? 'log4j'
   myVars = { :properties => node['zookeeper']['log4j'] }
 
   template "#{zookeeper_conf_dir}/log4j.properties" do
