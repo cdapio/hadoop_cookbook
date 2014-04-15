@@ -79,7 +79,7 @@ directory "/var/lib/hive" do
 end
 
 # Setup hive-site.xml
-if node['hive'].has_key? 'hive_site'
+if node['hive'].key? 'hive_site'
   myVars = { :options => node['hive']['hive_site'] }
 
   template "#{hive_conf_dir}/hive-site.xml" do
@@ -93,11 +93,11 @@ if node['hive'].has_key? 'hive_site'
 end # End hive-site.xml
 
 # Setup hive-env.sh
-if node['hive'].has_key? 'hive_env'
+if node['hive'].key? 'hive_env'
   myVars = { :options => node['hive']['hive_env'] }
 
   hive_log_dir =
-    if node['hive']['hive_env'].has_key? 'hive_log_dir'
+    if node['hive']['hive_env'].key? 'hive_log_dir'
       node['hive']['hive_env']['hive_log_dir']
     else
       "/var/log/hive"
@@ -109,7 +109,7 @@ if node['hive'].has_key? 'hive_env'
     mode "0755"
     action :create
     recursive true
-    only_if { node['hive']['hive_env'].has_key? 'hive_log_dir' }
+    only_if { node['hive']['hive_env'].key? 'hive_log_dir' }
   end
 
   template "#{hive_conf_dir}/hive-env.sh" do

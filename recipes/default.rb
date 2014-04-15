@@ -35,7 +35,7 @@ end
 
 # Setup capacity-scheduler core-site.xml hadoop-policy.xml hdfs-site.xml mapred-site.xml yarn-site.xml
 %w[ capacity_scheduler core_site hadoop_policy hdfs_site mapred_site yarn_site ].each do |sitefile|
-  if node['hadoop'].has_key? sitefile
+  if node['hadoop'].key? sitefile
     myVars = { :options => node['hadoop'][sitefile] }
 
     template "#{hadoop_conf_dir}/#{sitefile.gsub('_','-')}.xml" do
@@ -51,7 +51,7 @@ end # End capacity-scheduler.xml core-site.xml hadoop-policy.xml hdfs-site.xml m
 
 # Setup fair-scheduler.xml
 fair_scheduler_file =
-  if node['hadoop'].has_key? 'yarn_site' && node['hadoop']['yarn_site'].has_key? 'yarn.scheduler.fair.allocation.file'
+  if node['hadoop'].key? 'yarn_site' && node['hadoop']['yarn_site'].key? 'yarn.scheduler.fair.allocation.file'
     node['hadoop']['yarn_site']['yarn.scheduler.fair.allocation.file']
   else
     "#{hadoop_conf_dir}/fair-scheduler.xml"
@@ -59,7 +59,7 @@ fair_scheduler_file =
 
 fair_scheduler_dir = File.dirname(fair_scheduler_file)
 
-if node['hadoop'].has_key? 'fair_scheduler'
+if node['hadoop'].key? 'fair_scheduler'
   # myVars = { :options => node['hadoop']['fair_scheduler'] }
   myVars = node['hadoop']['fair_scheduler']
 
@@ -79,18 +79,18 @@ if node['hadoop'].has_key? 'fair_scheduler'
     action :create
     variables myVars
   end
-elsif node['hadoop'].has_key? 'yarn_site' && node['hadoop']['yarn_site'].has_key? 'yarn.resourcemanager.scheduler.class' &&
+elsif node['hadoop'].key? 'yarn_site' && node['hadoop']['yarn_site'].key? 'yarn.resourcemanager.scheduler.class' &&
   node['hadoop']['yarn_site']['yarn.resourcemanager.scheduler.class'] == 'org.apache.hadoop.yarn.server.resourcemanager.scheduler.fair.FairScheduler'
   Chef::Application.fatal!("Set YARN scheduler to fair-scheduler without configuring it, first")
 end # End fair-scheduler.xml
 
 # Setup hadoop-env.sh yarn-env.sh
 %w[ hadoop_env yarn_env ].each do |envfile|
-  if node['hadoop'].has_key? envfile
+  if node['hadoop'].key? envfile
     myVars = { :options => node['hadoop'][envfile] }
 
     %w[ hadoop yarn ].each do |svc|
-      if node['hadoop'][envfile].has_key? "#{svc}_log_dir"
+      if node['hadoop'][envfile].key? "#{svc}_log_dir"
         directory node['hadoop'][envfile]["#{svc}_log_dir"] do
           log_dir_owner =
             if svc == "yarn"
@@ -120,7 +120,7 @@ end # End hadoop-env.sh yarn-env.sh
 
 # Setup hadoop-metrics.properties log4j.properties
 %w[ hadoop_metrics log4j ].each do |propfile|
-  if node['hadoop'].has_key? propfile
+  if node['hadoop'].key? propfile
     myVars = { :properties => node['hadoop'][propfile] }
 
     template "#{hadoop_conf_dir}/#{propfile.gsub('_','-')}.properties" do
@@ -135,9 +135,9 @@ end # End hadoop-env.sh yarn-env.sh
 end # End hadoop-metrics.properties log4j.properties
 
 # Setup container-executor.cfg
-if node['hadoop'].has_key? 'container_executor'
+if node['hadoop'].key? 'container_executor'
   # Set container-executor.cfg options to match yarn-site.xml, if present
-  if node['hadoop'].has_key? 'yarn_site'
+  if node['hadoop'].key? 'yarn_site'
     merged = node['hadoop']['yarn_site'].merge(node['hadoop']['container_executor'])
     myVars = { :properties => merged }
   else
@@ -156,7 +156,7 @@ end # End container-executor.cfg
 
 # Set hadoop.tmp.dir
 hadoop_tmp_dir =
-  if node['hadoop'].has_key? 'core_site' && node['hadoop']['core_site'].has_key? 'hadoop.tmp.dir'
+  if node['hadoop'].key? 'core_site' && node['hadoop']['core_site'].key? 'hadoop.tmp.dir'
     node['hadoop']['core_site']['hadoop.tmp.dir']
   else
     '/tmp/hadoop-${user}'

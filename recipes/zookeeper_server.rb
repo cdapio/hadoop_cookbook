@@ -35,23 +35,23 @@ directory zookeeper_conf_dir do
 end
 
 # Setup zoo.cfg
-if node['zookeeper'].has_key? 'zoocfg'
+if node['zookeeper'].key? 'zoocfg'
 
   # We need to create a data directory, if it exists
   zookeeper_data_dir =
-    if node['zookeeper']['zoocfg'].has_key? 'dataDir'
+    if node['zookeeper']['zoocfg'].key? 'dataDir'
       node['zookeeper']['zoocfg']['dataDir']
     else
       "/var/lib/zookeeper"
     end
   zookeeper_log_dir =
-    if node['zookeeper']['zoocfg'].has_key? 'dataLogDir'
+    if node['zookeeper']['zoocfg'].key? 'dataLogDir'
       node['zookeeper']['zoocfg']['dataLogDir']
     else
       "/var/lib/zookeeper"
     end
   zookeeper_client_port =
-    if node['zookeeper']['zoocfg'].has_key? 'clientPort'
+    if node['zookeeper']['zoocfg'].key? 'clientPort'
       node['zookeeper']['zoocfg']['clientPort']
     else
       '2181'
@@ -76,7 +76,7 @@ if node['zookeeper'].has_key? 'zoocfg'
     mode "0755"
     recursive true
     action :create
-    only_if { node['zookeeper']['zoocfg'].has_key? 'dataLogDir' }
+    only_if { node['zookeeper']['zoocfg'].key? 'dataLogDir' }
   end
 
   template "#{zookeeper_conf_dir}/zoo.cfg" do
@@ -90,7 +90,7 @@ if node['zookeeper'].has_key? 'zoocfg'
 end # End zoo.cfg
 
 # Setup log4j.properties
-if node['zookeeper'].has_key? 'log4j'
+if node['zookeeper'].key? 'log4j'
   myVars = { :properties => node['zookeeper']['log4j'] }
 
   template "#{zookeeper_conf_dir}/log4j.properties" do

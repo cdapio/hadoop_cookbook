@@ -48,7 +48,7 @@ end
 
 # Setup hbase-policy.xml hbase-site.xml
 %w[ hbase_policy hbase_site ].each do |sitefile|
-  if node['hbase'].has_key? sitefile
+  if node['hbase'].key? sitefile
     myVars = { :options => node['hbase'][sitefile] }
 
     template "#{hbase_conf_dir}/#{sitefile.gsub('_','-')}.xml" do
@@ -63,11 +63,11 @@ end
 end # End hbase-policy.xml hbase-site.xml
 
 # Setup hbase-env.sh
-if node['hbase'].has_key? 'hbase_env'
+if node['hbase'].key? 'hbase_env'
   myVars = { :options => node['hbase']['hbase_env'] }
 
   hbase_log_dir =
-    if node['hbase']['hbase_env'].has_key? 'hbase_log_dir'
+    if node['hbase']['hbase_env'].key? 'hbase_log_dir'
       node['hbase']['hbase_env']['hbase_log_dir']
     else
       "/var/log/hbase"
@@ -79,7 +79,7 @@ if node['hbase'].has_key? 'hbase_env'
     mode "0755"
     action :create
     recursive true
-    only_if { node['hbase']['hbase_env'].has_key? 'hbase_log_dir' }
+    only_if { node['hbase']['hbase_env'].key? 'hbase_log_dir' }
   end
 
   template "#{hbase_conf_dir}/hbase-env.sh" do
@@ -94,7 +94,7 @@ end # End hbase-env.sh
 
 # Setup hadoop-metrics.properties log4j.properties
 %w[ hadoop_metrics log4j ].each do |propfile|
-  if node['hbase'].has_key? propfile
+  if node['hbase'].key? propfile
     myVars = { :properties => node['hbase'][propfile] }
 
     template "#{hbase_conf_dir}/#{propfile.gsub('_','-')}.properties" do

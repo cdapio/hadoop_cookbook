@@ -89,7 +89,7 @@ directory oozie_conf_dir do
   recursive true
 end
 
-if node['oozie'].has_key? 'oozie_site'
+if node['oozie'].key? 'oozie_site'
   myVars = { :options => node['oozie']['oozie_site'] }
 
   template "#{oozie_conf_dir}/oozie-site.xml" do
