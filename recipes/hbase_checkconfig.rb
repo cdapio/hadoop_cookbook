@@ -19,13 +19,11 @@
 
 # We need dfs.datanode.max.xcievers >= 4096
 # http://hbase.apache.org/book/configuration.html#hadoop
-if (node['hadoop'].has_key? 'hdfs_site' \
-  and node['hadoop']['hdfs_site'].has_key? 'dfs.datanode.max.transfer.threads' \
-  and node['hadoop']['hdfs_site']['dfs.datanode.max.transfer.threads'].to_i >= 4096)
+if (node['hadoop'].has_key? 'hdfs_site' && node['hadoop']['hdfs_site'].has_key? 'dfs.datanode.max.transfer.threads' &&
+  node['hadoop']['hdfs_site']['dfs.datanode.max.transfer.threads'].to_i >= 4096)
   Chef::Log.info("Set dfs.datanode.max.transfer.threads to #{node['hadoop']['hdfs_site']['dfs.datanode.max.transfer.threads']}")
-elsif (node['hadoop'].has_key? 'hdfs_site' \
-  and node['hadoop']['hdfs_site'].has_key? 'dfs.datanode.max.xcievers' \
-  and node['hadoop']['hdfs_site']['dfs.datanode.max.xcievers'].to_i >= 4096)
+elsif (node['hadoop'].has_key? 'hdfs_site' && node['hadoop']['hdfs_site'].has_key? 'dfs.datanode.max.xcievers' &&
+  node['hadoop']['hdfs_site']['dfs.datanode.max.xcievers'].to_i >= 4096)
   Chef::Log.info("Set dfs.datanode.max.transfer.threads to #{node['hadoop']['hdfs_site']['dfs.datanode.max.xcievers']}")
   node.default['hadoop']['hdfs_site']['dfs.datanode.max.transfer.threads'] = node['hadoop']['hdfs_site']['dfs.datanode.max.xcievers']
 else
@@ -33,9 +31,7 @@ else
 end
 
 # HBase needs hbase.rootdir and hbase.zookeeper.quorum
-if (node['hbase'].has_key? 'hbase_site' \
-  and node['hbase']['hbase_site'].has_key? 'hbase.rootdir' \
-  and node['hbase']['hbase_site'].has_key? 'hbase.zookeeper.quorum')
+if (node['hbase'].has_key? 'hbase_site' && node['hbase']['hbase_site'].has_key? 'hbase.rootdir' && node['hbase']['hbase_site'].has_key? 'hbase.zookeeper.quorum')
   Chef::Log.info("HBase root: #{node['hbase']['hbase_site']['hbase.rootdir']}")
   Chef::Log.info("ZooKeeper Quorum: #{node['hbase']['hbase_site']['hbase.zookeeper.quorum']}")
 else

@@ -51,8 +51,7 @@ end # End capacity-scheduler.xml core-site.xml hadoop-policy.xml hdfs-site.xml m
 
 # Setup fair-scheduler.xml
 fair_scheduler_file =
-  if (node['hadoop'].has_key? 'yarn_site' \
-    and node['hadoop']['yarn_site'].has_key? 'yarn.scheduler.fair.allocation.file')
+  if (node['hadoop'].has_key? 'yarn_site' && node['hadoop']['yarn_site'].has_key? 'yarn.scheduler.fair.allocation.file')
     node['hadoop']['yarn_site']['yarn.scheduler.fair.allocation.file']
   else
     "#{hadoop_conf_dir}/fair-scheduler.xml"
@@ -80,10 +79,8 @@ if node['hadoop'].has_key? 'fair_scheduler'
     action :create
     variables myVars
   end
-elsif (node['hadoop'].has_key? 'yarn_site' \
-  and node['hadoop']['yarn_site'].has_key? 'yarn.resourcemanager.scheduler.class' \
-  and node['hadoop']['yarn_site']['yarn.resourcemanager.scheduler.class'] == \
-  'org.apache.hadoop.yarn.server.resourcemanager.scheduler.fair.FairScheduler')
+elsif (node['hadoop'].has_key? 'yarn_site' && node['hadoop']['yarn_site'].has_key? 'yarn.resourcemanager.scheduler.class' &&
+  node['hadoop']['yarn_site']['yarn.resourcemanager.scheduler.class'] == 'org.apache.hadoop.yarn.server.resourcemanager.scheduler.fair.FairScheduler')
   Chef::Application.fatal!("Set YARN scheduler to fair-scheduler without configuring it, first")
 end # End fair-scheduler.xml
 
@@ -159,7 +156,7 @@ end # End container-executor.cfg
 
 # Set hadoop.tmp.dir
 hadoop_tmp_dir =
-  if (node['hadoop'].has_key? 'core_site' and node['hadoop']['core_site'].has_key? 'hadoop.tmp.dir')
+  if (node['hadoop'].has_key? 'core_site' && node['hadoop']['core_site'].has_key? 'hadoop.tmp.dir')
     node['hadoop']['core_site']['hadoop.tmp.dir']
   else
     '/tmp/hadoop-${user}'

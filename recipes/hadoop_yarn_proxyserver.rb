@@ -19,7 +19,7 @@
 
 include_recipe 'hadoop::default'
 
-if (node['hadoop'].has_key? 'yarn_site' and node['hadoop']['yarn_site'].has_key? 'yarn.web-proxy.address')
+if (node['hadoop'].has_key? 'yarn_site' && node['hadoop']['yarn_site'].has_key? 'yarn.web-proxy.address')
   Chef::Log.info("Setting up YARN Web Proxy at #{node['hadoop']['yarn_site']['yarn.web-proxy.address']}")
 else
   Chef::Application.fatal!("YARN Web Proxy must be configured! Set default['hadoop']['yarn_site']['yarn.web-proxy.address']}!")
