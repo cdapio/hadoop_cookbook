@@ -35,7 +35,7 @@ dfs_nameservices.each do |ns|
     end
     # Check NameNode-specific entries
     namenodes.each do |nn|
-      %w[ rpc-address http-address ].each do |k|
+      %w(rpc-address http-address).each do |k|
         if node['hadoop']['hdfs_site'].key? "dfs\.namenode\.#{k}\.#{ns}\.#{nn}"
           Chef::Log.info("Set dfs.namenode.#{k}.#{ns}.#{nn} to #{node['hadoop']['hdfs_site']['dfs.namenode.#{k}.#{ns}.#{nn}']}")
         else

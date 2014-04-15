@@ -30,21 +30,21 @@ java_share_dir = "/usr/share/java"
 
 case node['platform_family']
 when 'debian'
-  pkgs = %w[
+  pkgs = %w(
     libmysql-java
     libpostgresql-jdbc-java
-  ]
-  jars = %w[
+  )
+  jars = %w(
     mysql-connector-java
     postgresql-jdbc4
-  ]
+  )
 when 'rhel'
   case node['platform_version'].to_i
   when 6
-    pkgs = %w[
+    pkgs = %w(
       mysql-connector-java
       postgresql-jdbc
-    ]
+    )
     jars = pkgs
   else
     Chef::Log.warn("You must download and install JDBC connectors")

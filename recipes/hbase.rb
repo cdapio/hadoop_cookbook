@@ -47,7 +47,7 @@ directory hbase_conf_dir do
 end
 
 # Setup hbase-policy.xml hbase-site.xml
-%w[ hbase_policy hbase_site ].each do |sitefile|
+%w(hbase_policy hbase_site).each do |sitefile|
   if node['hbase'].key? sitefile
     myVars = { :options => node['hbase'][sitefile] }
 
@@ -93,7 +93,7 @@ if node['hbase'].key? 'hbase_env'
 end # End hbase-env.sh
 
 # Setup hadoop-metrics.properties log4j.properties
-%w[ hadoop_metrics log4j ].each do |propfile|
+%w(hadoop_metrics log4j).each do |propfile|
   if node['hbase'].key? propfile
     myVars = { :properties => node['hbase'][propfile] }
 

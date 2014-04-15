@@ -34,7 +34,7 @@ directory hadoop_conf_dir do
 end
 
 # Setup capacity-scheduler core-site.xml hadoop-policy.xml hdfs-site.xml mapred-site.xml yarn-site.xml
-%w[ capacity_scheduler core_site hadoop_policy hdfs_site mapred_site yarn_site ].each do |sitefile|
+%w(capacity_scheduler core_site hadoop_policy hdfs_site mapred_site yarn_site).each do |sitefile|
   if node['hadoop'].key? sitefile
     myVars = { :options => node['hadoop'][sitefile] }
 
@@ -85,11 +85,11 @@ elsif node['hadoop'].key? 'yarn_site' and node['hadoop']['yarn_site'].key? 'yarn
 end # End fair-scheduler.xml
 
 # Setup hadoop-env.sh yarn-env.sh
-%w[ hadoop_env yarn_env ].each do |envfile|
+%w(hadoop_env yarn_env).each do |envfile|
   if node['hadoop'].key? envfile
     myVars = { :options => node['hadoop'][envfile] }
 
-    %w[ hadoop yarn ].each do |svc|
+    %w(hadoop yarn).each do |svc|
       if node['hadoop'][envfile].key? "#{svc}_log_dir"
         directory node['hadoop'][envfile]["#{svc}_log_dir"] do
           log_dir_owner =
@@ -119,7 +119,7 @@ end # End fair-scheduler.xml
 end # End hadoop-env.sh yarn-env.sh
 
 # Setup hadoop-metrics.properties log4j.properties
-%w[ hadoop_metrics log4j ].each do |propfile|
+%w(hadoop_metrics log4j).each do |propfile|
   if node['hadoop'].key? propfile
     myVars = { :properties => node['hadoop'][propfile] }
 
@@ -165,7 +165,7 @@ hadoop_tmp_dir =
 node.default['hadoop']['core_site']['hadoop.tmp.dir'] = hadoop_tmp_dir
 
 if node['hadoop']['core_site']['hadoop.tmp.dir'] == '/tmp/hadoop-${user}'
-  %w[ hdfs mapreduce yarn ].each do |dir|
+  %w(hdfs mapreduce yarn).each do |dir|
     directory "/tmp/hadoop-#{dir}" do
       mode "1777"
       myUser =
