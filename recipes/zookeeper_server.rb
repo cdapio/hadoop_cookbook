@@ -27,9 +27,9 @@ end
 zookeeper_conf_dir = "/etc/zookeeper/#{node['zookeeper']['conf_dir']}"
 
 directory zookeeper_conf_dir do
-  mode "0755"
-  owner "root"
-  group "root"
+  mode '0755'
+  owner 'root'
+  group 'root'
   action :create
   recursive true
 end

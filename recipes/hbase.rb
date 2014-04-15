@@ -74,9 +74,9 @@ if node['hbase'].key? 'hbase_env'
     end
 
   directory hbase_log_dir do
-    owner "hbase"
-    group "hbase"
-    mode "0755"
+    owner 'hbase'
+    group 'hbase'
+    mode '0755'
     action :create
     recursive true
     only_if { node['hbase']['hbase_env'].key? 'hbase_log_dir' }

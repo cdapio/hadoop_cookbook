@@ -47,7 +47,7 @@ when 'rhel'
     )
     jars = pkgs
   else
-    Chef::Log.warn("You must download and install JDBC connectors")
+    Chef::Log.warn('You must download and install JDBC connectors')
     pkgs = nil
   end
 end
