@@ -1,0 +1,11 @@
+Encoding:
+  Enabled: False
+LineLength:
+  Max: 200
+Documentation:
+  Enabled: False
+HashSyntax:
+  Enabled: False
+FileName:
+  Exclude:
+    - metadata.rb
