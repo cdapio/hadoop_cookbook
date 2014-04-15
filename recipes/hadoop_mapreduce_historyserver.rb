@@ -24,6 +24,6 @@ package "hadoop-mapreduce-historyserver" do
 end
 
 service "hadoop-mapreduce-historyserver" do
-  supports [ :restart => true, :reload => false, :status => true ]
+  supports [:restart => true, :reload => false, :status => true]
   action :nothing
 end

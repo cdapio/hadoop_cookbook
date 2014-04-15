@@ -24,6 +24,6 @@ package "hbase-rest" do
 end
 
 service "hbase-rest" do
-  supports [ :restart => true, :reload => false, :status => true ]
+  supports [:restart => true, :reload => false, :status => true]
   action :nothing
 end

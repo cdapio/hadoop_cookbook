@@ -79,14 +79,14 @@ when 'hdp'
       uri apt_repo_url
       key apt_repo_key_url
       distribution "HDP"
-      components [ "main" ]
+      components ["main"]
       action :add
     end
     apt_repository "hdp-utils" do
       uri "#{apt_base_url}-UTILS-#{hdp_utils_version}/repos/#{os}"
       key apt_repo_key_url
       distribution "HDP-UTILS"
-      components [ "main" ]
+      components ["main"]
       action :add
     end
   end # End hdp
@@ -117,7 +117,7 @@ when 'cdh'
       uri apt_repo_url
       key apt_repo_key_url
       distribution "#{codename}-cdh#{node['hadoop']['distribution_version']}"
-      components [ "contrib" ]
+      components ["contrib"]
       arch "amd64"
       action :add
     end

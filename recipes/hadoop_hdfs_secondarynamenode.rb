@@ -58,6 +58,6 @@ node.default['hadoop']['hdfs_site']['dfs.namenode.checkpoint.edits.dir' ] = fs_c
 end
 
 service "hadoop-hdfs-secondarynamenode" do
-  supports [ :restart => true, :reload => false, :status => true ]
+  supports [:restart => true, :reload => false, :status => true]
   action :nothing
 end
