@@ -25,11 +25,11 @@ else
   Chef::Application.fatal!("YARN Web Proxy must be configured! Set default['hadoop']['yarn_site']['yarn.web-proxy.address']}!")
 end
 
-package "hadoop-yarn-proxyserver" do
+package 'hadoop-yarn-proxyserver' do
   action :install
 end
 
-service "hadoop-yarn-proxyserver" do
+service 'hadoop-yarn-proxyserver' do
   supports [:restart => true, :reload => false, :status => true]
   action :nothing
 end

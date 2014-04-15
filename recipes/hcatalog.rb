@@ -19,6 +19,6 @@
 
 include_recipe 'hadoop::hive'
 
-package "hcatalog" do
+package 'hcatalog' do
   action :install
 end

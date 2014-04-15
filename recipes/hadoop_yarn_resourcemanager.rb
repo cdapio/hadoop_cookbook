@@ -19,7 +19,7 @@
 
 include_recipe 'hadoop::default'
 
-package "hadoop-yarn-resourcemanager" do
+package 'hadoop-yarn-resourcemanager' do
   action :install
 end
 
@@ -29,7 +29,7 @@ end
 # mapreduce.jobtracker.staging.root.dir = #{hadoop_tmp_dir}/mapred/staging
 # mapreduce.cluster.temp.dir = #{hadoop_tmp_dir}/mapred/temp
 
-service "hadoop-yarn-resourcemanager" do
+service 'hadoop-yarn-resourcemanager' do
   supports [:restart => true, :reload => false, :status => true]
   action :nothing
 end

@@ -21,11 +21,11 @@ include_recipe 'hadoop::hive'
 include_recipe 'hadoop::zookeeper'
 include_recipe 'hadoop::hive_checkconfig'
 
-package "hive-server2" do
+package 'hive-server2' do
   action :install
 end
 
-service "hive-server2" do
+service 'hive-server2' do
   supports [:restart => true, :reload => false, :status => true]
   action :nothing
 end

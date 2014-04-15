@@ -19,11 +19,11 @@
 
 include_recipe 'hadoop::hbase'
 
-package "hbase-rest" do
+package 'hbase-rest' do
   action :install
 end
 
-service "hbase-rest" do
+service 'hbase-rest' do
   supports [:restart => true, :reload => false, :status => true]
   action :nothing
 end

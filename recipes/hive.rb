@@ -19,13 +19,13 @@
 
 include_recipe 'hadoop::repo'
 
-package "hive" do
+package 'hive' do
   action :install
 end
 
 hive_conf_dir = "/etc/hive/#{node['hive']['conf_dir']}"
-hive_data_dir = "/usr/lib/hive/lib"
-java_share_dir = "/usr/share/java"
+hive_data_dir = '/usr/lib/hive/lib'
+java_share_dir = '/usr/share/java'
 
 case node['platform_family']
 when 'debian'
@@ -64,17 +64,17 @@ jars.each do |jar|
 end
 
 directory hive_conf_dir do
-  mode "0755"
-  owner "root"
-  group "root"
+  mode '0755'
+  owner 'root'
+  group 'root'
   action :create
   recursive true
 end
 
-directory "/var/lib/hive" do
-  mode "0755"
-  owner "hive"
-  group "hive"
+directory '/var/lib/hive' do
+  mode '0755'
+  owner 'hive'
+  group 'hive'
   action :create
 end
 
@@ -83,10 +83,10 @@ if node['hive'].key? 'hive_site'
   myVars = { :options => node['hive']['hive_site'] }
 
   template "#{hive_conf_dir}/hive-site.xml" do
-    source "generic-site.xml.erb"
-    mode "0644"
-    owner "hive"
-    group "hive"
+    source 'generic-site.xml.erb'
+    mode '0644'
+    owner 'hive'
+    group 'hive'
     action :create
     variables myVars
   end
@@ -100,30 +100,30 @@ if node['hive'].key? 'hive_env'
     if node['hive']['hive_env'].key? 'hive_log_dir'
       node['hive']['hive_env']['hive_log_dir']
     else
-      "/var/log/hive"
+      '/var/log/hive'
     end
 
   directory hive_log_dir do
-    owner "hive"
-    group "hive"
-    mode "0755"
+    owner 'hive'
+    group 'hive'
+    mode '0755'
     action :create
     recursive true
     only_if { node['hive']['hive_env'].key? 'hive_log_dir' }
   end
 
   template "#{hive_conf_dir}/hive-env.sh" do
-    source "generic-env.sh.erb"
-    mode "0755"
-    owner "hive"
-    group "hive"
+    source 'generic-env.sh.erb'
+    mode '0755'
+    owner 'hive'
+    group 'hive'
     action :create
     variables myVars
   end
 end # End hive-env.sh
 
 # Update alternatives to point to our configuration
-execute "update hive-conf alternatives" do
+execute 'update hive-conf alternatives' do
   command "update-alternatives --install /etc/hive/conf hive-conf /etc/hive/#{node['hive']['conf_dir']} 50"
   not_if "update-alternatives --display hive-conf | grep best | awk '{print $5}' | grep /etc/hive/#{node['hive']['conf_dir']}"
 end

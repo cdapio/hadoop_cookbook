@@ -19,11 +19,11 @@
 
 include_recipe 'hadoop::hive'
 
-package "hive-server" do
+package 'hive-server' do
   action :install
 end
 
-service "hive-server" do
+service 'hive-server' do
   supports [:restart => true, :reload => false, :status => true]
   action :nothing
 end

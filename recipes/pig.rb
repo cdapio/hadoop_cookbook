@@ -19,6 +19,6 @@
 
 include_recipe 'hadoop::repo'
 
-package "pig" do
+package 'pig' do
   action :install
 end

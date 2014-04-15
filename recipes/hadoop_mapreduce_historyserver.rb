@@ -19,11 +19,11 @@
 
 include_recipe 'hadoop::default'
 
-package "hadoop-mapreduce-historyserver" do
+package 'hadoop-mapreduce-historyserver' do
   action :install
 end
 
-service "hadoop-mapreduce-historyserver" do
+service 'hadoop-mapreduce-historyserver' do
   supports [:restart => true, :reload => false, :status => true]
   action :nothing
 end

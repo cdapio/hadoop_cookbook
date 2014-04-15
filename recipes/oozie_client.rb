@@ -19,6 +19,6 @@
 
 include_recipe 'hadoop::repo'
 
-package "oozie-client" do
+package 'oozie-client' do
   action :install
 end

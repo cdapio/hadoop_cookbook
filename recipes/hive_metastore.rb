@@ -19,11 +19,11 @@
 
 include_recipe 'hadoop::hive'
 
-package "hive-metastore" do
+package 'hive-metastore' do
   action :install
 end
 
-service "hive-metastore" do
+service 'hive-metastore' do
   supports [:restart => true, :reload => false, :status => true]
   action :nothing
 end

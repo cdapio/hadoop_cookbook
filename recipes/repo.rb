@@ -18,7 +18,7 @@
 #
 
 major_platform_version = node['platform_version'].to_i
-key = "RPM-GPG-KEY"
+key = 'RPM-GPG-KEY'
 
 # Ensure that we have the proper LWRPs available
 case node['platform_family']
@@ -32,13 +32,13 @@ case node['hadoop']['distribution']
 when 'hdp'
   case node['hadoop']['distribution_version']
   when '2.0.6.0', '2.0.6.1', '2.0.10.0', '2.0.11.0', '2.0', '2'
-    hdp_version = "2.0.11.0"
+    hdp_version = '2.0.11.0'
   else
     # We only support HDP 2.0 (2.0.11.0) at this time
-    Chef::Log.info("Using HDP version 2.0 (2.0.11.0)")
-    hdp_version = "2.0.11.0"
+    Chef::Log.info('Using HDP version 2.0 (2.0.11.0)')
+    hdp_version = '2.0.11.0'
   end
-  hdp_utils_version = "1.1.0.17"
+  hdp_utils_version = '1.1.0.17'
   case node['platform_family']
   when 'rhel'
     yum_base_url = 'http://public-repo-1.hortonworks.com/HDP'
@@ -46,21 +46,21 @@ when 'hdp'
     yum_repo_url = node['hadoop']['yum_repo_url'] ? node['hadoop']['yum_repo_url'] : "#{yum_base_url}/#{os}/2.x/GA"
     yum_repo_key_url = node['hadoop']['yum_repo_key_url'] ? node['hadoop']['yum_repo_key_url'] : "#{yum_base_url}/#{os}/#{key}/#{key}-Jenkins"
 
-    yum_repository "hdp" do
-      name "HDP-2.x"
-      description "Hortonworks Data Platform Version - HDP-2.x"
+    yum_repository 'hdp' do
+      name 'HDP-2.x'
+      description 'Hortonworks Data Platform Version - HDP-2.x'
       url yum_repo_url
       gpgkey yum_repo_key_url
       action :add
     end
-    yum_repository "hdp-updates" do
-      name "Updates-HDP-2.x"
-      description "Updates for Hortonworks Data Platform Version - HDP-2.x"
+    yum_repository 'hdp-updates' do
+      name 'Updates-HDP-2.x'
+      description 'Updates for Hortonworks Data Platform Version - HDP-2.x'
       url "#{yum_base_url}/#{os}/2.x/updates/#{hdp_version}"
       gpgkey yum_repo_key_url
       action :add
     end
-    yum_repository "hdp-utils" do
+    yum_repository 'hdp-utils' do
       name "HDP-UTILS-#{hdp_utils_version}"
       description "Hortonworks Data Platform Utils Version - HDP-UTILS-#{hdp_utils_version}"
       url "#{yum_base_url}-UTILS-#{hdp_utils_version}/repos/#{os}"
@@ -75,18 +75,18 @@ when 'hdp'
     # Hortonworks don't know how to provide a key, but we do
     apt_repo_key_url = node['hadoop']['apt_repo_key_url'] ? node['hadoop']['apt_repo_key_url'] : "#{apt_base_url}/centos6/#{key}/#{key}-Jenkins"
 
-    apt_repository "hdp" do
+    apt_repository 'hdp' do
       uri apt_repo_url
       key apt_repo_key_url
-      distribution "HDP"
-      components ["main"]
+      distribution 'HDP'
+      components ['main']
       action :add
     end
-    apt_repository "hdp-utils" do
+    apt_repository 'hdp-utils' do
       uri "#{apt_base_url}-UTILS-#{hdp_utils_version}/repos/#{os}"
       key apt_repo_key_url
-      distribution "HDP-UTILS"
-      components ["main"]
+      distribution 'HDP-UTILS'
+      components ['main']
       action :add
     end
   end # End hdp
@@ -117,8 +117,8 @@ when 'cdh'
       uri apt_repo_url
       key apt_repo_key_url
       distribution "#{codename}-cdh#{node['hadoop']['distribution_version']}"
-      components ["contrib"]
-      arch "amd64"
+      components ['contrib']
+      arch 'amd64'
       action :add
     end
   end # End cdh

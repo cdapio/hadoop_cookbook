@@ -20,7 +20,7 @@
 include_recipe 'hadoop::repo'
 include_recipe 'hadoop::zookeeper'
 
-package "zookeeper-server" do
+package 'zookeeper-server' do
   action :install
 end
 
@@ -42,13 +42,13 @@ if node['zookeeper'].key? 'zoocfg'
     if node['zookeeper']['zoocfg'].key? 'dataDir'
       node['zookeeper']['zoocfg']['dataDir']
     else
-      "/var/lib/zookeeper"
+      '/var/lib/zookeeper'
     end
   zookeeper_log_dir =
     if node['zookeeper']['zoocfg'].key? 'dataLogDir'
       node['zookeeper']['zoocfg']['dataLogDir']
     else
-      "/var/lib/zookeeper"
+      '/var/lib/zookeeper'
     end
   zookeeper_client_port =
     if node['zookeeper']['zoocfg'].key? 'clientPort'
@@ -63,29 +63,29 @@ if node['zookeeper'].key? 'zoocfg'
   myVars = { :properties => node['zookeeper']['zoocfg'] }
 
   directory node['zookeeper']['zoocfg']['dataDir'] do
-    owner "zookeeper"
-    group "zookeeper"
-    mode "0755"
+    owner 'zookeeper'
+    group 'zookeeper'
+    mode '0755'
     recursive true
     action :create
   end
 
   directory node['zookeeper']['zoocfg']['dataLogDir'] do
-    owner "zookeeper"
-    group "zookeeper"
-    mode "0755"
+    owner 'zookeeper'
+    group 'zookeeper'
+    mode '0755'
     recursive true
     action :create
     only_if { node['zookeeper']['zoocfg'].key? 'dataLogDir' }
   end
 
   template "#{zookeeper_conf_dir}/zoo.cfg" do
-    owner "root"
-    group "root"
-    mode "0644"
-    variables myVars
-    source "generic.properties.erb"
+    source 'generic.properties.erb'
+    owner 'root'
+    group 'root'
+    mode '0644'
     action :create
+    variables myVars
   end
 end # End zoo.cfg
 
@@ -94,22 +94,22 @@ if node['zookeeper'].key? 'log4j'
   myVars = { :properties => node['zookeeper']['log4j'] }
 
   template "#{zookeeper_conf_dir}/log4j.properties" do
-    source "generic.properties.erb"
-    mode "0644"
-    owner "root"
-    group "root"
+    source 'generic.properties.erb'
+    mode '0644'
+    owner 'root'
+    group 'root'
     action :create
     variables myVars
   end
 end # End log4j.properties
 
-service "zookeeper-server" do
+service 'zookeeper-server' do
   supports [:restart => true, :reload => false, :status => true]
   action :nothing
 end
 
 # Update alternatives to point to our configuration
-execute "update zookeeper-conf alternatives" do
+execute 'update zookeeper-conf alternatives' do
   command "update-alternatives --install /etc/zookeeper/conf zookeeper-conf /etc/zookeeper/#{node['zookeeper']['conf_dir']} 50"
   not_if "update-alternatives --display zookeeper-conf | grep best | awk '{print $5}' | grep /etc/zookeeper/#{node['zookeeper']['conf_dir']}"
 end

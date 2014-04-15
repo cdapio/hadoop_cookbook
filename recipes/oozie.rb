@@ -20,13 +20,13 @@
 include_recipe 'hadoop::repo'
 include_recipe 'hadoop::oozie_client'
 
-package "oozie" do
+package 'oozie' do
   action :install
 end
 
 oozie_conf_dir = "/etc/oozie/#{node['oozie']['conf_dir']}"
-oozie_data_dir = "/var/lib/oozie"
-java_share_dir = "/usr/share/java"
+oozie_data_dir = '/var/lib/oozie'
+java_share_dir = '/usr/share/java'
 
 case node['platform_family']
 when 'debian'
@@ -64,27 +64,27 @@ jars.each do |jar|
   end
 end
 
-extjs = "ext-2.2.zip"
+extjs = 'ext-2.2.zip'
 remote_file "#{Chef::Config[:file_cache_path]}/#{extjs}" do
   source "http://extjs.com/deploy/#{extjs}"
-  mode "0644"
+  mode '0644'
   action :create_if_missing
 end
 
-package "unzip"
+package 'unzip'
 
-script "extract extjs into Oozie data directory" do
-  interpreter "bash"
-  user "root"
+script 'extract extjs into Oozie data directory' do
+  interpreter 'bash'
+  user 'root'
   action :nothing
   code "unzip -o -d #{oozie_data_dir} #{Chef::Config[:file_cache_path]}/#{extjs}"
   subscribes :run, "remote_file[#{Chef::Config[:file_cache_path]}/#{extjs}", :immediately
 end
 
 directory oozie_conf_dir do
-  mode "0755"
-  owner "root"
-  group "root"
+  mode '0755'
+  owner 'root'
+  group 'root'
   action :create
   recursive true
 end
@@ -93,22 +93,22 @@ if node['oozie'].key? 'oozie_site'
   myVars = { :options => node['oozie']['oozie_site'] }
 
   template "#{oozie_conf_dir}/oozie-site.xml" do
-    source "generic-site.xml.erb"
-    mode "0644"
-    owner "oozie"
-    group "oozie"
+    source 'generic-site.xml.erb'
+    mode '0644'
+    owner 'oozie'
+    group 'oozie'
     action :create
     variables myVars
   end
 end
 
-service "oozie" do
+service 'oozie' do
   supports [:restart => true, :reload => false, :status => true]
   action :nothing
 end
 
 # Update alternatives to point to our configuration
-execute "update oozie-conf alternatives" do
+execute 'update oozie-conf alternatives' do
   command "update-alternatives --install /etc/oozie/conf oozie-conf /etc/oozie/#{node['oozie']['conf_dir']} 50"
   not_if "update-alternatives --display oozie-conf | grep best | awk '{print $5}' | grep /etc/oozie/#{node['oozie']['conf_dir']}"
 end

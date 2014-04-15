@@ -20,11 +20,11 @@
 include_recipe 'hadoop::hbase'
 include_recipe 'hadoop::hbase_checkconfig'
 
-package "hbase-master" do
+package 'hbase-master' do
   action :install
 end
 
-service "hbase-master" do
+service 'hbase-master' do
   supports [:restart => true, :reload => false, :status => true]
   action :nothing
 end

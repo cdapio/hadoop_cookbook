@@ -17,9 +17,9 @@
 # limitations under the License.
 #
 
-include_recipe 'hadoop'
+include_recipe 'hadoop::default'
 
-package "hadoop-yarn-nodemanager" do
+package 'hadoop-yarn-nodemanager' do
   action :install
 end
 
@@ -35,9 +35,9 @@ end
   if node['hadoop'].key? 'yarn_site' and node['hadoop']['yarn_site'].key? opt
     node['hadoop']['yarn_site'][opt].split(',').each do |dir|
       directory dir do
-        owner "yarn"
-        group "yarn"
-        mode "0755"
+        owner 'yarn'
+        group 'yarn'
+        mode '0755'
         action :create
         recursive true
       end
@@ -45,7 +45,7 @@ end
   end
 end
 
-service "hadoop-yarn-nodemanager" do
+service 'hadoop-yarn-nodemanager' do
   supports [:restart => true, :reload => false, :status => true]
   action :nothing
 end

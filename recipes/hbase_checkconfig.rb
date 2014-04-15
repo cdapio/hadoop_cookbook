@@ -17,7 +17,7 @@
 # limitations under the License.
 #
 
-# We need dfs.datanode.max.xcievers >= 4096
+# We need dfs.datanode.max.transfer.threads >= 4096
 # http://hbase.apache.org/book/configuration.html#hadoop
 if node['hadoop'].key? 'hdfs_site' and node['hadoop']['hdfs_site'].key? 'dfs.datanode.max.transfer.threads' &&
   node['hadoop']['hdfs_site']['dfs.datanode.max.transfer.threads'].to_i >= 4096

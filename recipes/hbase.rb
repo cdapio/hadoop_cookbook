@@ -20,7 +20,7 @@
 include_recipe 'hadoop::repo'
 include_recipe 'hadoop::zookeeper'
 
-package "hbase" do
+package 'hbase' do
   action :install
 end
 
@@ -39,9 +39,9 @@ end
 hbase_conf_dir = "/etc/hbase/#{node['hbase']['conf_dir']}"
 
 directory hbase_conf_dir do
-  mode "0755"
-  owner "root"
-  group "root"
+  mode '0755'
+  owner 'root'
+  group 'root'
   action :create
   recursive true
 end
@@ -52,10 +52,10 @@ end
     myVars = { :options => node['hbase'][sitefile] }
 
     template "#{hbase_conf_dir}/#{sitefile.gsub('_','-')}.xml" do
-      source "generic-site.xml.erb"
-      mode "0644"
-      owner "hbase"
-      group "hbase"
+      source 'generic-site.xml.erb'
+      mode '0644'
+      owner 'hbase'
+      group 'hbase'
       action :create
       variables myVars
     end
@@ -70,7 +70,7 @@ if node['hbase'].key? 'hbase_env'
     if node['hbase']['hbase_env'].key? 'hbase_log_dir'
       node['hbase']['hbase_env']['hbase_log_dir']
     else
-      "/var/log/hbase"
+      '/var/log/hbase'
     end
 
   directory hbase_log_dir do
@@ -83,10 +83,10 @@ if node['hbase'].key? 'hbase_env'
   end
 
   template "#{hbase_conf_dir}/hbase-env.sh" do
-    source "generic-env.sh.erb"
-    mode "0755"
-    owner "hdfs"
-    group "hdfs"
+    source 'generic-env.sh.erb'
+    mode '0755'
+    owner 'hdfs'
+    group 'hdfs'
     action :create
     variables myVars
   end
@@ -98,10 +98,10 @@ end # End hbase-env.sh
     myVars = { :properties => node['hbase'][propfile] }
 
     template "#{hbase_conf_dir}/#{propfile.gsub('_','-')}.properties" do
-      source "generic.properties.erb"
-      mode "0644"
-      owner "hbase"
-      group "hbase"
+      source 'generic.properties.erb'
+      mode '0644'
+      owner 'hbase'
+      group 'hbase'
       action :create
       variables myVars
     end
@@ -109,7 +109,7 @@ end # End hbase-env.sh
 end # End hadoop-metrics.properties log4j.properties
 
 # Update alternatives to point to our configuration
-execute "update hbase-conf alternatives" do
+execute 'update hbase-conf alternatives' do
   command "update-alternatives --install /etc/hbase/conf hbase-conf /etc/hbase/#{node['hbase']['conf_dir']} 50"
   not_if "update-alternatives --display hbase-conf | grep best | awk '{print $5}' | grep /etc/hbase/#{node['hbase']['conf_dir']}"
 end
