@@ -60,7 +60,7 @@ if node['zookeeper'].key? 'zoocfg'
   node.default['zookeeper']['zoocfg']['dataDir'] = zookeeper_data_dir
   node.default['zookeeper']['zoocfg']['dataLogDir'] = zookeeper_log_dir
   node.default['zookeeper']['zoocfg']['clientPort'] = zookeeper_client_port
-  myVars = { :properties => node['zookeeper']['zoocfg'] }
+  my_vars = { :properties => node['zookeeper']['zoocfg'] }
 
   directory node['zookeeper']['zoocfg']['dataDir'] do
     owner 'zookeeper'
@@ -85,13 +85,13 @@ if node['zookeeper'].key? 'zoocfg'
     group 'root'
     mode '0644'
     action :create
-    variables myVars
+    variables my_vars
   end
 end # End zoo.cfg
 
 # Setup log4j.properties
 if node['zookeeper'].key? 'log4j'
-  myVars = { :properties => node['zookeeper']['log4j'] }
+  my_vars = { :properties => node['zookeeper']['log4j'] }
 
   template "#{zookeeper_conf_dir}/log4j.properties" do
     source 'generic.properties.erb'
@@ -99,7 +99,7 @@ if node['zookeeper'].key? 'log4j'
     owner 'root'
     group 'root'
     action :create
-    variables myVars
+    variables my_vars
   end
 end # End log4j.properties
 

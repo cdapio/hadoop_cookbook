@@ -49,7 +49,7 @@ end
 # Setup hbase-policy.xml hbase-site.xml
 %w(hbase_policy hbase_site).each do |sitefile|
   if node['hbase'].key? sitefile
-    myVars = { :options => node['hbase'][sitefile] }
+    my_vars = { :options => node['hbase'][sitefile] }
 
     template "#{hbase_conf_dir}/#{sitefile.gsub('_','-')}.xml" do
       source 'generic-site.xml.erb'
@@ -57,14 +57,14 @@ end
       owner 'hbase'
       group 'hbase'
       action :create
-      variables myVars
+      variables my_vars
     end
   end
 end # End hbase-policy.xml hbase-site.xml
 
 # Setup hbase-env.sh
 if node['hbase'].key? 'hbase_env'
-  myVars = { :options => node['hbase']['hbase_env'] }
+  my_vars = { :options => node['hbase']['hbase_env'] }
 
   hbase_log_dir =
     if node['hbase']['hbase_env'].key? 'hbase_log_dir'
@@ -88,14 +88,14 @@ if node['hbase'].key? 'hbase_env'
     owner 'hdfs'
     group 'hdfs'
     action :create
-    variables myVars
+    variables my_vars
   end
 end # End hbase-env.sh
 
 # Setup hadoop-metrics.properties log4j.properties
 %w(hadoop_metrics log4j).each do |propfile|
   if node['hbase'].key? propfile
-    myVars = { :properties => node['hbase'][propfile] }
+    my_vars = { :properties => node['hbase'][propfile] }
 
     template "#{hbase_conf_dir}/#{propfile.gsub('_','-')}.properties" do
       source 'generic.properties.erb'
@@ -103,7 +103,7 @@ end # End hbase-env.sh
       owner 'hbase'
       group 'hbase'
       action :create
-      variables myVars
+      variables my_vars
     end
   end
 end # End hadoop-metrics.properties log4j.properties

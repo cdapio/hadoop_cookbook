@@ -90,7 +90,7 @@ directory oozie_conf_dir do
 end
 
 if node['oozie'].key? 'oozie_site'
-  myVars = { :options => node['oozie']['oozie_site'] }
+  my_vars = { :options => node['oozie']['oozie_site'] }
 
   template "#{oozie_conf_dir}/oozie-site.xml" do
     source 'generic-site.xml.erb'
@@ -98,7 +98,7 @@ if node['oozie'].key? 'oozie_site'
     owner 'oozie'
     group 'oozie'
     action :create
-    variables myVars
+    variables my_vars
   end
 end
 

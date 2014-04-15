@@ -36,7 +36,7 @@ end
 # Setup capacity-scheduler core-site.xml hadoop-policy.xml hdfs-site.xml mapred-site.xml yarn-site.xml
 %w(capacity_scheduler core_site hadoop_policy hdfs_site mapred_site yarn_site).each do |sitefile|
   if node['hadoop'].key? sitefile
-    myVars = { :options => node['hadoop'][sitefile] }
+    my_vars = { :options => node['hadoop'][sitefile] }
 
     template "#{hadoop_conf_dir}/#{sitefile.gsub('_','-')}.xml" do
       source 'generic-site.xml.erb'
@@ -44,7 +44,7 @@ end
       owner 'root'
       group 'root'
       action :create
-      variables myVars
+      variables my_vars
     end
   end
 end # End capacity-scheduler.xml core-site.xml hadoop-policy.xml hdfs-site.xml mapred-site.xml yarn-site.xml
@@ -60,8 +60,8 @@ fair_scheduler_file =
 fair_scheduler_dir = File.dirname(fair_scheduler_file)
 
 if node['hadoop'].key? 'fair_scheduler'
-  # myVars = { :options => node['hadoop']['fair_scheduler'] }
-  myVars = node['hadoop']['fair_scheduler']
+  # my_vars = { :options => node['hadoop']['fair_scheduler'] }
+  my_vars = node['hadoop']['fair_scheduler']
 
   directory fair_scheduler_dir do
     mode '0755'
@@ -77,7 +77,7 @@ if node['hadoop'].key? 'fair_scheduler'
     owner 'root'
     group 'root'
     action :create
-    variables myVars
+    variables my_vars
   end
 elsif node['hadoop'].key? 'yarn_site' and node['hadoop']['yarn_site'].key? 'yarn.resourcemanager.scheduler.class' &&
   node['hadoop']['yarn_site']['yarn.resourcemanager.scheduler.class'] == 'org.apache.hadoop.yarn.server.resourcemanager.scheduler.fair.FairScheduler'
@@ -87,7 +87,7 @@ end # End fair-scheduler.xml
 # Setup hadoop-env.sh yarn-env.sh
 %w(hadoop_env yarn_env).each do |envfile|
   if node['hadoop'].key? envfile
-    myVars = { :options => node['hadoop'][envfile] }
+    my_vars = { :options => node['hadoop'][envfile] }
 
     %w(hadoop yarn).each do |svc|
       if node['hadoop'][envfile].key? "#{svc}_log_dir"
@@ -113,7 +113,7 @@ end # End fair-scheduler.xml
       owner 'root'
       group 'root'
       action :create
-      variables myVars
+      variables my_vars
     end
   end
 end # End hadoop-env.sh yarn-env.sh
@@ -121,7 +121,7 @@ end # End hadoop-env.sh yarn-env.sh
 # Setup hadoop-metrics.properties log4j.properties
 %w(hadoop_metrics log4j).each do |propfile|
   if node['hadoop'].key? propfile
-    myVars = { :properties => node['hadoop'][propfile] }
+    my_vars = { :properties => node['hadoop'][propfile] }
 
     template "#{hadoop_conf_dir}/#{propfile.gsub('_','-')}.properties" do
       source 'generic.properties.erb'
@@ -129,7 +129,7 @@ end # End hadoop-env.sh yarn-env.sh
       owner 'root'
       group 'root'
       action :create
-      variables myVars
+      variables my_vars
     end
   end
 end # End hadoop-metrics.properties log4j.properties
@@ -139,9 +139,9 @@ if node['hadoop'].key? 'container_executor'
   # Set container-executor.cfg options to match yarn-site.xml, if present
   if node['hadoop'].key? 'yarn_site'
     merged = node['hadoop']['yarn_site'].merge(node['hadoop']['container_executor'])
-    myVars = { :properties => merged }
+    my_vars = { :properties => merged }
   else
-    myVars = { :properties => node['hadoop']['container_executor'] }
+    my_vars = { :properties => node['hadoop']['container_executor'] }
   end
 
   template "#{hadoop_conf_dir}/container-executor.cfg" do
@@ -150,7 +150,7 @@ if node['hadoop'].key? 'container_executor'
     owner 'root'
     group 'root'
     action :create
-    variables myVars
+    variables my_vars
   end
 end # End container-executor.cfg
 
@@ -168,14 +168,14 @@ if node['hadoop']['core_site']['hadoop.tmp.dir'] == '/tmp/hadoop-${user}'
   %w(hdfs mapreduce yarn).each do |dir|
     directory "/tmp/hadoop-#{dir}" do
       mode '1777'
-      myUser =
+      my_user =
         if dir == 'mapreduce'
           'mapred'
         else
           dir
         end
-      owner myUser
-      group myUser
+      owner my_user
+      group my_user
       action :create
       recursive true
     end

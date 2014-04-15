@@ -80,7 +80,7 @@ end
 
 # Setup hive-site.xml
 if node['hive'].key? 'hive_site'
-  myVars = { :options => node['hive']['hive_site'] }
+  my_vars = { :options => node['hive']['hive_site'] }
 
   template "#{hive_conf_dir}/hive-site.xml" do
     source 'generic-site.xml.erb'
@@ -88,13 +88,13 @@ if node['hive'].key? 'hive_site'
     owner 'hive'
     group 'hive'
     action :create
-    variables myVars
+    variables my_vars
   end
 end # End hive-site.xml
 
 # Setup hive-env.sh
 if node['hive'].key? 'hive_env'
-  myVars = { :options => node['hive']['hive_env'] }
+  my_vars = { :options => node['hive']['hive_env'] }
 
   hive_log_dir =
     if node['hive']['hive_env'].key? 'hive_log_dir'
@@ -118,7 +118,7 @@ if node['hive'].key? 'hive_env'
     owner 'hive'
     group 'hive'
     action :create
-    variables myVars
+    variables my_vars
   end
 end # End hive-env.sh
 
