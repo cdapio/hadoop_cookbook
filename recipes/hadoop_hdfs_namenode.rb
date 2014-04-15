@@ -25,9 +25,9 @@ package "hadoop-hdfs-namenode" do
 end
 
 dfs_name_dirs =
-  if (node['hadoop'].has_key? 'hdfs_site' && node['hadoop']['hdfs_site'].has_key? 'dfs.namenode.name.dir')
+  if node['hadoop'].has_key? 'hdfs_site' && node['hadoop']['hdfs_site'].has_key? 'dfs.namenode.name.dir'
     node['hadoop']['hdfs_site']['dfs.namenode.name.dir']
-  elsif (node['hadoop'].has_key? 'hdfs_site' && node['hadoop']['hdfs_site'].has_key? 'dfs.name.dir')
+  elsif node['hadoop'].has_key? 'hdfs_site' && node['hadoop']['hdfs_site'].has_key? 'dfs.name.dir'
     node['hadoop']['hdfs_site']['dfs.name.dir']
   else
     "/tmp/hadoop-hdfs/dfs/name"
@@ -46,8 +46,8 @@ dfs_name_dirs.split(',').each do |dir|
 end
 
 # Are we HA?
-if (node['hadoop'].has_key? 'hdfs_site' && node['hadoop']['hdfs_site'].has_key? 'dfs.ha.automatic-failover.enabled' &&
-  node['hadoop']['hdfs_site']['dfs.ha.automatic-failover.enabled'] == true)
+if node['hadoop'].has_key? 'hdfs_site' && node['hadoop']['hdfs_site'].has_key? 'dfs.ha.automatic-failover.enabled' &&
+  node['hadoop']['hdfs_site']['dfs.ha.automatic-failover.enabled'] == true
   include_recipe 'hadoop::hadoop_hdfs_ha_checkconfig'
   include_recipe 'hadoop::hadoop_hdfs_zkfc'
 

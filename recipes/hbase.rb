@@ -67,7 +67,7 @@ if node['hbase'].has_key? 'hbase_env'
   myVars = { :options => node['hbase']['hbase_env'] }
 
   hbase_log_dir =
-    if (node['hbase']['hbase_env'].has_key? 'hbase_log_dir')
+    if node['hbase']['hbase_env'].has_key? 'hbase_log_dir'
       node['hbase']['hbase_env']['hbase_log_dir']
     else
       "/var/log/hbase"

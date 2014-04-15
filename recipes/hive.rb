@@ -97,7 +97,7 @@ if node['hive'].has_key? 'hive_env'
   myVars = { :options => node['hive']['hive_env'] }
 
   hive_log_dir =
-    if (node['hive']['hive_env'].has_key? 'hive_log_dir')
+    if node['hive']['hive_env'].has_key? 'hive_log_dir'
       node['hive']['hive_env']['hive_log_dir']
     else
       "/var/log/hive"

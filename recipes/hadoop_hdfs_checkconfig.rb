@@ -18,7 +18,7 @@
 #
 
 # For HDFS functionality, we require fs.defaultFS property to be set
-if (node['hadoop'].has_key? 'core_site' && node['hadoop']['core_site'].has_key? 'fs.defaultFS')
+if node['hadoop'].has_key? 'core_site' && node['hadoop']['core_site'].has_key? 'fs.defaultFS'
   Chef::Log.info("HDFS NameNode configured at #{node['hadoop']['core_site']['fs.defaultFS']}")
 else
   Chef::Application.fatal!("HDFS NameNode must be configured! Set default['hadoop']['core_site']['fs.defaultFS'] to the NameNode.")

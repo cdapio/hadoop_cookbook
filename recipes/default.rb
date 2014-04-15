@@ -51,7 +51,7 @@ end # End capacity-scheduler.xml core-site.xml hadoop-policy.xml hdfs-site.xml m
 
 # Setup fair-scheduler.xml
 fair_scheduler_file =
-  if (node['hadoop'].has_key? 'yarn_site' && node['hadoop']['yarn_site'].has_key? 'yarn.scheduler.fair.allocation.file')
+  if node['hadoop'].has_key? 'yarn_site' && node['hadoop']['yarn_site'].has_key? 'yarn.scheduler.fair.allocation.file'
     node['hadoop']['yarn_site']['yarn.scheduler.fair.allocation.file']
   else
     "#{hadoop_conf_dir}/fair-scheduler.xml"
@@ -79,21 +79,21 @@ if node['hadoop'].has_key? 'fair_scheduler'
     action :create
     variables myVars
   end
-elsif (node['hadoop'].has_key? 'yarn_site' && node['hadoop']['yarn_site'].has_key? 'yarn.resourcemanager.scheduler.class' &&
-  node['hadoop']['yarn_site']['yarn.resourcemanager.scheduler.class'] == 'org.apache.hadoop.yarn.server.resourcemanager.scheduler.fair.FairScheduler')
+elsif node['hadoop'].has_key? 'yarn_site' && node['hadoop']['yarn_site'].has_key? 'yarn.resourcemanager.scheduler.class' &&
+  node['hadoop']['yarn_site']['yarn.resourcemanager.scheduler.class'] == 'org.apache.hadoop.yarn.server.resourcemanager.scheduler.fair.FairScheduler'
   Chef::Application.fatal!("Set YARN scheduler to fair-scheduler without configuring it, first")
 end # End fair-scheduler.xml
 
 # Setup hadoop-env.sh yarn-env.sh
 %w[ hadoop_env yarn_env ].each do |envfile|
-  if (node['hadoop'].has_key? envfile)
+  if node['hadoop'].has_key? envfile
     myVars = { :options => node['hadoop'][envfile] }
 
     %w[ hadoop yarn ].each do |svc|
-      if (node['hadoop'][envfile].has_key? "#{svc}_log_dir")
+      if node['hadoop'][envfile].has_key? "#{svc}_log_dir"
         directory node['hadoop'][envfile]["#{svc}_log_dir"] do
           log_dir_owner =
-            if (svc == "yarn")
+            if svc == "yarn"
               'yarn'
             else
               'hdfs'
@@ -156,7 +156,7 @@ end # End container-executor.cfg
 
 # Set hadoop.tmp.dir
 hadoop_tmp_dir =
-  if (node['hadoop'].has_key? 'core_site' && node['hadoop']['core_site'].has_key? 'hadoop.tmp.dir')
+  if node['hadoop'].has_key? 'core_site' && node['hadoop']['core_site'].has_key? 'hadoop.tmp.dir'
     node['hadoop']['core_site']['hadoop.tmp.dir']
   else
     '/tmp/hadoop-${user}'
@@ -164,12 +164,12 @@ hadoop_tmp_dir =
 
 node.default['hadoop']['core_site']['hadoop.tmp.dir'] = hadoop_tmp_dir
 
-if (node['hadoop']['core_site']['hadoop.tmp.dir'] == '/tmp/hadoop-${user}')
+if node['hadoop']['core_site']['hadoop.tmp.dir'] == '/tmp/hadoop-${user}'
   %w[ hdfs mapreduce yarn ].each do |dir|
     directory "/tmp/hadoop-#{dir}" do
       mode "1777"
       myUser =
-        if (dir == "mapreduce")
+        if dir == "mapreduce"
           "mapred"
         else
           dir
