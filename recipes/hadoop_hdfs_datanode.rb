@@ -20,7 +20,7 @@
 include_recipe 'hadoop::default'
 include_recipe 'hadoop::hadoop_hdfs_checkconfig'
 
-package "hadoop-hdfs-datanode" do
+package 'hadoop-hdfs-datanode' do
   action :install
 end
 
@@ -30,7 +30,7 @@ dfs_data_dirs =
   elsif node['hadoop'].key? 'hdfs_site' and node['hadoop']['hdfs_site'].key? 'dfs.data.dir'
     node['hadoop']['hdfs_site']['dfs.data.dir']
   else
-    "/tmp/hadoop-hdfs/dfs/data"
+    '/tmp/hadoop-hdfs/dfs/data'
   end
 
 dfs_data_dir_perm =
@@ -39,7 +39,7 @@ dfs_data_dir_perm =
   elsif node['hadoop'].key? 'hdfs_site' and node['hadoop']['hdfs_site'].key? 'dfs.data.dir.perm'
     node['hadoop']['hdfs_site']['dfs.data.dir.perm']
   else
-    "0700"
+    '0700'
   end
 
 node.default['hadoop']['hdfs_site']['dfs.datanode.data.dir'] = dfs_data_dirs
@@ -48,14 +48,14 @@ node.default['hadoop']['hdfs_site']['dfs.datanode.data.dir.perm'] = dfs_data_dir
 dfs_data_dirs.split(',').each do |dir|
   directory dir do
     mode dfs_data_dir_perm
-    owner "hdfs"
-    group "hdfs"
+    owner 'hdfs'
+    group 'hdfs'
     action :create
     recursive true
   end
 end
 
-service "hadoop-hdfs-datanode" do
+service 'hadoop-hdfs-datanode' do
   supports [:restart => true, :reload => false, :status => true]
   action :nothing
 end

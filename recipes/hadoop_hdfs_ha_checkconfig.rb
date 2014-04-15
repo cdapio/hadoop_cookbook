@@ -76,7 +76,7 @@ end
 
 # Start fencing check -- we only check that the key has a value
 if node['hadoop']['hdfs_site'].key? 'dfs.ha.fencing.methods'
-  Chef::Log.info("Using the following HA fencing methods:")
+  Chef::Log.info('Using the following HA fencing methods:')
   node['hadoop']['hdfs_site']['dfs.ha.fencing.methods'].split(',').each do |m|
     Chef::Log.info("  #{m}")
   end

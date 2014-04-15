@@ -21,11 +21,11 @@ include_recipe 'hadoop::default'
 include_recipe 'hadoop::hadoop_hdfs_ha_checkconfig'
 include_recipe 'hadoop::zookeeper'
 
-package "hadoop-hdfs-zkfc" do
+package 'hadoop-hdfs-zkfc' do
   action :install
 end
 
-service "hadoop-hdfs-zkfc" do
+service 'hadoop-hdfs-zkfc' do
   supports [:restart => true, :reload => false, :status => true]
   action :nothing
 end

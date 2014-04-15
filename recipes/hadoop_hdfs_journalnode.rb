@@ -22,7 +22,7 @@
 include_recipe 'hadoop::default'
 include_recipe 'hadoop::hadoop_hdfs_checkconfig'
 
-package "hadoop-hdfs-journalnode" do
+package 'hadoop-hdfs-journalnode' do
   action :install
 end
 
@@ -35,15 +35,15 @@ dfs_jn_edits_dirs =
 
 dfs_jn_edits_dirs.split(',').each do |dir|
   directory dir do
-    mode 0755
-    owner "hdfs"
-    group "hdfs"
+    mode '0755'
+    owner 'hdfs'
+    group 'hdfs'
     action :create
     recursive true
   end
 end
 
-service "hadoop-hdfs-journalnode" do
+service 'hadoop-hdfs-journalnode' do
   supports [:restart => true, :reload => false, :status => true]
   action :nothing
 end

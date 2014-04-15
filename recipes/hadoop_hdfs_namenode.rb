@@ -20,7 +20,7 @@
 include_recipe 'hadoop::default'
 include_recipe 'hadoop::hadoop_hdfs_checkconfig'
 
-package "hadoop-hdfs-namenode" do
+package 'hadoop-hdfs-namenode' do
   action :install
 end
 
@@ -30,16 +30,16 @@ dfs_name_dirs =
   elsif node['hadoop'].key? 'hdfs_site' and node['hadoop']['hdfs_site'].key? 'dfs.name.dir'
     node['hadoop']['hdfs_site']['dfs.name.dir']
   else
-    "/tmp/hadoop-hdfs/dfs/name"
+    '/tmp/hadoop-hdfs/dfs/name'
   end
 
 node.default['hadoop']['hdfs_site']['dfs.namenode.name.dir'] = dfs_name_dirs
 
 dfs_name_dirs.split(',').each do |dir|
   directory dir do
-    mode 0700
-    owner "hdfs"
-    group "hdfs"
+    mode '0700'
+    owner 'hdfs'
+    group 'hdfs'
     action :create
     recursive true
   end
@@ -51,29 +51,29 @@ if node['hadoop'].key? 'hdfs_site' and node['hadoop']['hdfs_site'].key? 'dfs.ha.
   include_recipe 'hadoop::hadoop_hdfs_ha_checkconfig'
   include_recipe 'hadoop::hadoop_hdfs_zkfc'
 
-  execute "hdfs-namenode-bootstrap-standby" do
-    command "hdfs namenode -bootstrapStandby"
+  execute 'hdfs-namenode-bootstrap-standby' do
+    command 'hdfs namenode -bootstrapStandby'
     action :nothing
-    group "hdfs"
-    user "hdfs"
+    group 'hdfs'
+    user 'hdfs'
   end
 
-  execute "hdfs-namenode-initialize-sharededits" do
-    command "hdfs namenode -initializeSharedEdits"
+  execute 'hdfs-namenode-initialize-sharededits' do
+    command 'hdfs namenode -initializeSharedEdits'
     action :nothing
-    group "hdfs"
-    user "hdfs"
+    group 'hdfs'
+    user 'hdfs'
   end
 end
 
-execute "hdfs-namenode-format" do
-  command "hdfs namenode -format"
+execute 'hdfs-namenode-format' do
+  command 'hdfs namenode -format'
   action :nothing
-  group "hdfs"
-  user "hdfs"
+  group 'hdfs'
+  user 'hdfs'
 end
 
-service "hadoop-hdfs-namenode" do
+service 'hadoop-hdfs-namenode' do
   supports [:restart => true, :reload => false, :status => true]
   action :nothing
 end

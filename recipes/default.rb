@@ -19,16 +19,16 @@
 
 include_recipe 'hadoop::repo'
 
-package "hadoop-client" do
+package 'hadoop-client' do
   action :install
 end
 
 hadoop_conf_dir = "/etc/hadoop/#{node['hadoop']['conf_dir']}"
 
 directory hadoop_conf_dir do
-  mode "0755"
-  owner "root"
-  group "root"
+  mode '0755'
+  owner 'root'
+  group 'root'
   action :create
   recursive true
 end
@@ -39,10 +39,10 @@ end
     myVars = { :options => node['hadoop'][sitefile] }
 
     template "#{hadoop_conf_dir}/#{sitefile.gsub('_','-')}.xml" do
-      source "generic-site.xml.erb"
-      mode "0644"
-      owner "root"
-      group "root"
+      source 'generic-site.xml.erb'
+      mode '0644'
+      owner 'root'
+      group 'root'
       action :create
       variables myVars
     end
@@ -64,18 +64,18 @@ if node['hadoop'].key? 'fair_scheduler'
   myVars = node['hadoop']['fair_scheduler']
 
   directory fair_scheduler_dir do
-    mode "0755"
-    owner "root"
-    group "root"
+    mode '0755'
+    owner 'root'
+    group 'root'
     action :create
     recursive true
   end
 
   template fair_scheduler_file do
-    source "fair-scheduler.xml.erb"
-    mode "0644"
-    owner "root"
-    group "root"
+    source 'fair-scheduler.xml.erb'
+    mode '0644'
+    owner 'root'
+    group 'root'
     action :create
     variables myVars
   end
@@ -93,14 +93,14 @@ end # End fair-scheduler.xml
       if node['hadoop'][envfile].key? "#{svc}_log_dir"
         directory node['hadoop'][envfile]["#{svc}_log_dir"] do
           log_dir_owner =
-            if svc == "yarn"
+            if svc == 'yarn'
               'yarn'
             else
               'hdfs'
             end
           owner log_dir_owner
           group log_dir_owner
-          mode "0755"
+          mode '0755'
           action :create
           recursive true
         end
@@ -108,10 +108,10 @@ end # End fair-scheduler.xml
     end
 
     template "#{hadoop_conf_dir}/#{envfile.gsub("_","-")}.sh" do
-      source "generic-env.sh.erb"
-      mode "0755"
-      owner "root"
-      group "root"
+      source 'generic-env.sh.erb'
+      mode '0755'
+      owner 'root'
+      group 'root'
       action :create
       variables myVars
     end
@@ -124,10 +124,10 @@ end # End hadoop-env.sh yarn-env.sh
     myVars = { :properties => node['hadoop'][propfile] }
 
     template "#{hadoop_conf_dir}/#{propfile.gsub('_','-')}.properties" do
-      source "generic.properties.erb"
-      mode "0644"
-      owner "root"
-      group "root"
+      source 'generic.properties.erb'
+      mode '0644'
+      owner 'root'
+      group 'root'
       action :create
       variables myVars
     end
@@ -145,10 +145,10 @@ if node['hadoop'].key? 'container_executor'
   end
 
   template "#{hadoop_conf_dir}/container-executor.cfg" do
-    source "generic.properties.erb"
-    mode "0644"
-    owner "root"
-    group "root"
+    source 'generic.properties.erb'
+    mode '0644'
+    owner 'root'
+    group 'root'
     action :create
     variables myVars
   end
@@ -167,10 +167,10 @@ node.default['hadoop']['core_site']['hadoop.tmp.dir'] = hadoop_tmp_dir
 if node['hadoop']['core_site']['hadoop.tmp.dir'] == '/tmp/hadoop-${user}'
   %w(hdfs mapreduce yarn).each do |dir|
     directory "/tmp/hadoop-#{dir}" do
-      mode "1777"
+      mode '1777'
       myUser =
-        if dir == "mapreduce"
-          "mapred"
+        if dir == 'mapreduce'
+          'mapred'
         else
           dir
         end
@@ -182,14 +182,14 @@ if node['hadoop']['core_site']['hadoop.tmp.dir'] == '/tmp/hadoop-${user}'
   end
 else
   directory hadoop_tmp_dir do
-    mode "1777"
+    mode '1777'
     action :create
     recursive true
   end
 end # End hadoop.tmp.dir
 
 # Update alternatives to point to our configuration
-execute "update hadoop-conf alternatives" do
+execute 'update hadoop-conf alternatives' do
   command "update-alternatives --install /etc/hadoop/conf hadoop-conf /etc/hadoop/#{node['hadoop']['conf_dir']} 50"
   not_if "update-alternatives --display hadoop-conf | grep best | awk '{print $5}' | grep /etc/hadoop/#{node['hadoop']['conf_dir']}"
 end

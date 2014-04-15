@@ -20,7 +20,7 @@
 include_recipe 'hadoop::default'
 include_recipe 'hadoop::hadoop_hdfs_checkconfig'
 
-package "hadoop-hdfs-secondarynamenode" do
+package 'hadoop-hdfs-secondarynamenode' do
   action :install
 end
 
@@ -30,7 +30,7 @@ fs_checkpoint_dirs =
   elsif node['hadoop'].key? 'hdfs_site' and node['hadoop']['hdfs_site'].key? 'fs.checkpoint.dir'
     node['hadoop']['hdfs_site']['fs.checkpoint.dir']
   else
-    "/tmp/hadoop-hdfs/dfs/namesecondary"
+    '/tmp/hadoop-hdfs/dfs/namesecondary'
   end
 
 fs_checkpoint_edits_dirs =
@@ -48,16 +48,16 @@ node.default['hadoop']['hdfs_site']['dfs.namenode.checkpoint.edits.dir' ] = fs_c
 %w(fs_checkpoint_dirs fs_checkpoint_edits_dirs).each do |dirs|
   dirs.split(',').each do |dir|
     directory dir do
-      mode 0755
-      owner "hdfs"
-      group "hdfs"
+      mode '0755'
+      owner 'hdfs'
+      group 'hdfs'
       action :create
       recursive true
     end
   end
 end
 
-service "hadoop-hdfs-secondarynamenode" do
+service 'hadoop-hdfs-secondarynamenode' do
   supports [:restart => true, :reload => false, :status => true]
   action :nothing
 end
