@@ -24,6 +24,17 @@ package 'spark-worker' do
   action :install
 end
 
+if node['spark'].has_key? 'spark_env' and node['spark']['spark_env'].has_key? 'spark_worker_dir'
+  directory node['spark']['spark_env']['spark_worker_dir'] do
+    mode '0755'
+    owner 'spark'
+    group 'spark'
+    action :create
+    recursive true
+    only_if { node['spark']['spark_env'].has_key? 'spark_worker_dir' }
+  end
+end
+
 service 'spark-worker' do
   supports [ :restart => true, :reload => false, :status => true ]
   action :nothing
