@@ -34,7 +34,7 @@ dfs_jn_edits_dirs =
   end
 
 dfs_jn_edits_dirs.split(',').each do |dir|
-  directory dir do
+  directory dir.gsub('file://', '') do
     mode 0755
     owner "hdfs"
     group "hdfs"
