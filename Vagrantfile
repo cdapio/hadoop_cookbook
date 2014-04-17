@@ -144,6 +144,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       "recipe[hadoop::default]",
       "recipe[hadoop::hadoop_hdfs_namenode]",
       "recipe[hadoop::hadoop_hdfs_datanode]",
+      "recipe[hadoop::hadoop_hdfs_secondarynamenode]",
       "recipe[hadoop::hadoop_yarn_resourcemanager]",
       "recipe[hadoop::hadoop_yarn_nodemanager]",
       "recipe[hadoop::zookeeper_server]",
