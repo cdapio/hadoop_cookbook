@@ -45,7 +45,7 @@ fs_checkpoint_edits_dirs =
 node.default['hadoop']['hdfs_site']['dfs.namenode.checkpoint.dir'] = fs_checkpoint_dirs
 node.default['hadoop']['hdfs_site']['dfs.namenode.checkpoint.edits.dir' ] = fs_checkpoint_edits_dirs
 
-%w[ fs_checkpoint_dirs fs_checkpoint_edits_dirs ].each do |dirs|
+[ fs_checkpoint_dirs, fs_checkpoint_edits_dirs ].each do |dirs|
   dirs.split(',').each do |dir|
     directory dir do
       mode 0755
