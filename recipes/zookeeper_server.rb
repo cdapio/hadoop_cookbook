@@ -92,10 +92,11 @@ if node['zookeeper'].has_key? 'zoocfg'
   myid = nil
   for index in 1..255
     server = node['zookeeper']['zoocfg']["server.#{index}"]
- 
-  	if server.start_with?("#{node['fqdn']}:") || server.start_with?("#{node['ipaddress']}:") || server.start_with?("#{node['hostname']}:") then
+ 	unless server.nil? then
+  	  if server.start_with?("#{node['fqdn']}:") || server.start_with?("#{node['ipaddress']}:") || server.start_with?("#{node['hostname']}:") then
   		myid = index
   		break
+  	  end
   	end
   end
   
