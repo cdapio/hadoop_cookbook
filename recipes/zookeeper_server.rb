@@ -87,6 +87,29 @@ if node['zookeeper'].key? 'zoocfg'
     action :create
     variables my_vars
   end
+ 
+  #Try and find the current node in the list of configured servers. If the node was found then write the myid file
+  myid = nil
+  for index in 1..255
+    server = node['zookeeper']['zoocfg']["server.#{index}"]
+ 	unless server.nil? then
+  	  if server.start_with?("#{node['fqdn']}:") || server.start_with?("#{node['ipaddress']}:") || server.start_with?("#{node['hostname']}:") then
+  		myid = index
+  		break
+  	  end
+  	end
+  end
+  
+  template "#{node['zookeeper']['zoocfg']['dataDir']}/myid" do
+	owner "root"
+	group "root"
+	mode "0644"
+	source "zookeeper-myid.erb"
+	action :create
+	variables ({ :myid => myid })
+	only_if { !myid.nil? }
+  end
+  
 end # End zoo.cfg
 
 # Setup log4j.properties
@@ -101,6 +124,8 @@ if node['zookeeper'].key? 'log4j'
     action :create
     variables my_vars
   end
+  
+ 
 end # End log4j.properties
 
 service 'zookeeper-server' do

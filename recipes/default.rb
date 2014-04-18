@@ -57,7 +57,7 @@ fair_scheduler_file =
     "#{hadoop_conf_dir}/fair-scheduler.xml"
   end
 
-fair_scheduler_dir = File.dirname(fair_scheduler_file)
+fair_scheduler_dir = File.dirname(fair_scheduler_file.gsub('file://', ''))
 
 if node['hadoop'].key? 'fair_scheduler'
   # my_vars = { :options => node['hadoop']['fair_scheduler'] }
@@ -71,7 +71,7 @@ if node['hadoop'].key? 'fair_scheduler'
     recursive true
   end
 
-  template fair_scheduler_file do
+  template fair_scheduler_file.gsub('file://', '') do
     source 'fair-scheduler.xml.erb'
     mode '0644'
     owner 'root'
@@ -159,12 +159,12 @@ hadoop_tmp_dir =
   if node['hadoop'].key?('core_site') && node['hadoop']['core_site'].key?('hadoop.tmp.dir')
     node['hadoop']['core_site']['hadoop.tmp.dir']
   else
-    '/tmp/hadoop-${user}'
+    'file:///tmp/hadoop-${user}'
   end
 
 node.default['hadoop']['core_site']['hadoop.tmp.dir'] = hadoop_tmp_dir
 
-if node['hadoop']['core_site']['hadoop.tmp.dir'] == '/tmp/hadoop-${user}'
+if (node['hadoop']['core_site']['hadoop.tmp.dir'] == 'file:///tmp/hadoop-${user}')
   %w(hdfs mapreduce yarn).each do |dir|
     directory "/tmp/hadoop-#{dir}" do
       mode '1777'
@@ -181,7 +181,7 @@ if node['hadoop']['core_site']['hadoop.tmp.dir'] == '/tmp/hadoop-${user}'
     end
   end
 else
-  directory hadoop_tmp_dir do
+  directory hadoop_tmp_dir.gsub('file://', '') do
     mode '1777'
     action :create
     recursive true

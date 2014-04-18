@@ -30,7 +30,7 @@ dfs_data_dirs =
   elsif node['hadoop'].key?('hdfs_site') && node['hadoop']['hdfs_site'].key?('dfs.data.dir')
     node['hadoop']['hdfs_site']['dfs.data.dir']
   else
-    '/tmp/hadoop-hdfs/dfs/data'
+    'file:///tmp/hadoop-hdfs/dfs/data'
   end
 
 dfs_data_dir_perm =
@@ -46,7 +46,7 @@ node.default['hadoop']['hdfs_site']['dfs.datanode.data.dir'] = dfs_data_dirs
 node.default['hadoop']['hdfs_site']['dfs.datanode.data.dir.perm'] = dfs_data_dir_perm
 
 dfs_data_dirs.split(',').each do |dir|
-  directory dir do
+  directory dir.gsub('file://', '') do
     mode dfs_data_dir_perm
     owner 'hdfs'
     group 'hdfs'

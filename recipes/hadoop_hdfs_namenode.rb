@@ -30,13 +30,13 @@ dfs_name_dirs =
   elsif node['hadoop'].key?('hdfs_site') && node['hadoop']['hdfs_site'].key?('dfs.name.dir')
     node['hadoop']['hdfs_site']['dfs.name.dir']
   else
-    '/tmp/hadoop-hdfs/dfs/name'
+    'file:///tmp/hadoop-hdfs/dfs/name'
   end
 
 node.default['hadoop']['hdfs_site']['dfs.namenode.name.dir'] = dfs_name_dirs
 
 dfs_name_dirs.split(',').each do |dir|
-  directory dir do
+  directory dir.gsub('file://', '') do
     mode '0700'
     owner 'hdfs'
     group 'hdfs'
