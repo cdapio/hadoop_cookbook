@@ -1,7 +1,7 @@
 Encoding:
   Enabled: False
 LineLength:
-  Max: 200
+  Max: 250
 Documentation:
   Enabled: False
 HashSyntax:
