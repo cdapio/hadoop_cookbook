@@ -40,15 +40,6 @@ scratch_dir =
     '/tmp/hive-${user.name}'
   end
 
-execute 'hive-hdfs-homedir' do
-  command "hdfs dfs -mkdir -p #{dfs}/user/hive && hdfs dfs -chown hive:hdfs #{dfs}/user/hive"
-  timeout 300
-  user 'hdfs'
-  group 'hdfs'
-  not_if 'hdfs dfs -test -d #{dfs}/user/hive', :user 'hdfs'
-  action :nothing
-end
-
 unless scratch_dir == '/tmp/hive-${user.name}'
   execute 'hive-hdfs-scratchdir' do
     command "hdfs dfs -mkdir -p #{dfs}/#{scratch_dir} && hdfs dfs -chown hive:hdfs #{dfs}/#{scratch_dir} && hdfs dfs -chmod 777 #{dfs}/#{scratch_dir}"

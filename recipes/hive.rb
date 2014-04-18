@@ -137,6 +137,17 @@ if node['hive'].has_key? 'hive_env'
   end
 end # End hive-env.sh
 
+# Create Hive user's home in HDFS
+dfs = node['hadoop']['core_site']['fs.defaultFS']
+execute 'hive-hdfs-homedir' do
+  command "hdfs dfs -mkdir -p #{dfs}/user/hive && hdfs dfs -chown hive:hdfs #{dfs}/user/hive"
+  timeout 300
+  user 'hdfs'
+  group 'hdfs'
+  not_if 'hdfs dfs -test -d #{dfs}/user/hive', :user 'hdfs'
+  action :nothing
+end
+
 # Update alternatives to point to our configuration
 execute "update hive-conf alternatives" do
   command "update-alternatives --install /etc/hive/conf hive-conf /etc/hive/#{node['hive']['conf_dir']} 50"
