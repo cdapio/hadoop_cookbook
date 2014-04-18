@@ -38,7 +38,7 @@ end
   if node['hadoop'].key? sitefile
     my_vars = { :options => node['hadoop'][sitefile] }
 
-    template "#{hadoop_conf_dir}/#{sitefile.gsub('_','-')}.xml" do
+    template "#{hadoop_conf_dir}/#{sitefile.gsub('_', '-')}.xml" do
       source 'generic-site.xml.erb'
       mode '0644'
       owner 'root'
@@ -107,7 +107,7 @@ end # End fair-scheduler.xml
       end
     end
 
-    template "#{hadoop_conf_dir}/#{envfile.gsub("_","-")}.sh" do
+    template "#{hadoop_conf_dir}/#{envfile.gsub("_", "-")}.sh" do
       source 'generic-env.sh.erb'
       mode '0755'
       owner 'root'
@@ -123,7 +123,7 @@ end # End hadoop-env.sh yarn-env.sh
   if node['hadoop'].key? propfile
     my_vars = { :properties => node['hadoop'][propfile] }
 
-    template "#{hadoop_conf_dir}/#{propfile.gsub('_','-')}.properties" do
+    template "#{hadoop_conf_dir}/#{propfile.gsub('_', '-')}.properties" do
       source 'generic.properties.erb'
       mode '0644'
       owner 'root'
