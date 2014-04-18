@@ -17,7 +17,6 @@
 # limitations under the License.
 #
 
-include_recipe 'hadoop::default'
 include_recipe 'hadoop::hive'
 
 package "hive-metastore" do
