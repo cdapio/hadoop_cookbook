@@ -47,7 +47,7 @@ end
 
 # Are we HA?
 if (node['hadoop'].has_key? 'hdfs_site' and node['hadoop']['hdfs_site'].has_key? 'dfs.ha.automatic-failover.enabled' \
-  and node['hadoop']['hdfs_site']['dfs.ha.automatic-failover.enabled'] == true)
+  and node['hadoop']['hdfs_site']['dfs.ha.automatic-failover.enabled'].to_b == true)
   include_recipe 'hadoop::hadoop_hdfs_ha_checkconfig'
   include_recipe 'hadoop::hadoop_hdfs_zkfc'
 
