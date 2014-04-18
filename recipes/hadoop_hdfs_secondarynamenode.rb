@@ -48,7 +48,7 @@ node.default['hadoop']['hdfs_site']['dfs.namenode.checkpoint.edits.dir' ] = fs_c
 [ fs_checkpoint_dirs, fs_checkpoint_edits_dirs ].each do |dirs|
   dirs.split(',').each do |dir|
     directory dir.gsub('file://', '') do
-      mode 0755
+      mode '0700'
       owner "hdfs"
       group "hdfs"
       action :create
