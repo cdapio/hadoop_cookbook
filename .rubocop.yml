@@ -1,6 +1,3 @@
-AllCops:
-  Exclude:
-    - metadata.rb
 Encoding:
   Enabled: False
 LineLength:
@@ -9,3 +6,5 @@ Documentation:
   Enabled: False
 HashSyntax:
   Enabled: False
+SingleSpaceBeforeFirstArg:
+  Enabled: false
