@@ -24,5 +24,5 @@ if node['hive'].key? 'hive_site' && node['hive']['hive_site'].key?('hive.support
   Chef::Log.info('Hive Table Lock Manager enabled')
   Chef::Log.info("Hive ZooKeeper Quorum: #{node['hive']['hive_site']['hive.zookeeper.quorum']}")
 else
-  Chef::Application.fatal!("You *must* set node['hive']['hive_site']['hive.support.concurrency'] && node['hive']['hive_site']['hive.zookeeper.quorum']")
+  Chef::Application.fatal!("You *must* set node['hive']['hive_site']['hive.support.concurrency'] and node['hive']['hive_site']['hive.zookeeper.quorum']")
 end
