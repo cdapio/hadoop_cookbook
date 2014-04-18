@@ -131,6 +131,12 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
           'hbase.cluster.distributed' => true
         }
       },
+      :hive => {
+        :hive_site => {
+          'hive.support.concurrency' => 'true',
+          'hive.zookeeper.quorum' => 'localhost'
+        }
+      },
       :zookeeper => {
         :zoocfg => {
           :dataLogDir => '/tmp/zookeeper/logs'
