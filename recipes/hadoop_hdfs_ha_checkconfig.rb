@@ -18,7 +18,7 @@
 #
 
 # HDFS HA requires dfs.nameservices
-if node['hadoop'].key? 'hdfs_site' && node['hadoop']['hdfs_site'].key?('dfs.nameservices')
+if node['hadoop'].key?('hdfs_site') && node['hadoop']['hdfs_site'].key?('dfs.nameservices')
   dfs_nameservices = node['hadoop']['hdfs_site']['dfs.nameservices'].split(',')
 else
   Chef::Application.fatal!("HDFS NameNode HA requires node['hadoop']['hdfs_site']['dfs.nameservices'] to be set")
@@ -85,7 +85,7 @@ else
 end # End fencing check
 
 # Start Automatic HA check
-if node['hadoop']['hdfs_site'].key? 'dfs.ha.automatic-failover.enabled' && node['hadoop']['hdfs_site']['dfs.ha.automatic-failover.enabled'] == true
+if node['hadoop']['hdfs_site'].key?('dfs.ha.automatic-failover.enabled') && node['hadoop']['hdfs_site']['dfs.ha.automatic-failover.enabled'] == true
   if node['hadoop']['core_site'].key? 'ha.zookeeper.quorum'
     ha_zk_quorum = node['hadoop']['core_site']['ha.zookeeper.quorum'].split(',')
   else
