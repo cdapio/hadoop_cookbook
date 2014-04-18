@@ -40,6 +40,9 @@ scratch_dir =
     '/tmp/hive-${user.name}'
   end
 
+node.default['hive']['hive_site']['hive.exec.scratchdir'] == scratch_dir
+node.default['hive']['hive_site']['hive.metastore.warehouse.dir'] = warehouse_dir
+
 unless scratch_dir == '/tmp/hive-${user.name}'
   execute 'hive-hdfs-scratchdir' do
     command "hdfs dfs -mkdir -p #{dfs}/#{scratch_dir} && hdfs dfs -chown hive:hdfs #{dfs}/#{scratch_dir} && hdfs dfs -chmod 777 #{dfs}/#{scratch_dir}"
