@@ -1,3 +1,6 @@
+AllCops:
+  Exclude:
+    - metadata.rb
 Encoding:
   Enabled: False
 LineLength:
@@ -6,6 +9,3 @@ Documentation:
   Enabled: False
 HashSyntax:
   Enabled: False
-FileName:
-  Exclude:
-    - metadata.rb
