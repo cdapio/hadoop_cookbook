@@ -101,13 +101,13 @@ if node['zookeeper'].has_key? 'zoocfg'
   end
   
   template "#{node['zookeeper']['zoocfg']['dataDir']}/myid" do
-    owner "root"
-    group "root"
-    mode "0644"
     source "zookeeper-myid.erb"
+    owner 'root'
+    group 'root'
+    mode '0644'
     action :create
-    variables ({ :myid => myid })
-    only_if { !myid.nil? }
+    variables { :myid => myid }
+    not_if { myid.nil? }
   end
 end # End zoo.cfg
 
