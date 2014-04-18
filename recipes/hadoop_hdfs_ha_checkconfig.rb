@@ -18,7 +18,7 @@
 #
 
 # HDFS HA requires dfs.nameservices
-if node['hadoop'].key? 'hdfs_site' and node['hadoop']['hdfs_site'].key? 'dfs.nameservices'
+if node['hadoop'].key? 'hdfs_site' and node['hadoop']['hdfs_site'].key?('dfs.nameservices')
   dfs_nameservices = node['hadoop']['hdfs_site']['dfs.nameservices'].split(',')
 else
   Chef::Application.fatal!("HDFS NameNode HA requires node['hadoop']['hdfs_site']['dfs.nameservices'] to be set")
