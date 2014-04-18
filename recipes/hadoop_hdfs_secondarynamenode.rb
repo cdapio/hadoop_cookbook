@@ -30,7 +30,7 @@ fs_checkpoint_dirs =
   elsif (node['hadoop'].has_key? 'hdfs_site' and node['hadoop']['hdfs_site'].has_key? 'fs.checkpoint.dir')
     node['hadoop']['hdfs_site']['fs.checkpoint.dir']
   else
-    "/tmp/hadoop-hdfs/dfs/namesecondary"
+    'file:///tmp/hadoop-hdfs/dfs/namesecondary'
   end
 
 fs_checkpoint_edits_dirs =
@@ -47,8 +47,8 @@ node.default['hadoop']['hdfs_site']['dfs.namenode.checkpoint.edits.dir' ] = fs_c
 
 [ fs_checkpoint_dirs, fs_checkpoint_edits_dirs ].each do |dirs|
   dirs.split(',').each do |dir|
-    directory dir do
-      mode 0755
+    directory dir.gsub('file://', '') do
+      mode '0700'
       owner "hdfs"
       group "hdfs"
       action :create

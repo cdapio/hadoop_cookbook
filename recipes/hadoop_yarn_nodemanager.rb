@@ -35,7 +35,7 @@ end
   if (node['hadoop'].has_key? 'yarn_site' \
     and node['hadoop']['yarn_site'].has_key? opt)
     node['hadoop']['yarn_site'][opt].split(',').each do |dir|
-      directory dir do
+      directory dir.gsub('file://', '') do
         owner "yarn"
         group "yarn"
         mode "0755"
