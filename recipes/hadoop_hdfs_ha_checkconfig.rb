@@ -69,6 +69,9 @@ if node['hadoop']['hdfs_site'].key? 'dfs.namenode.shared.edits.dir'
   elsif node['hadoop']['hdfs_site']['dfs.namenode.shared.edits.dir'].start_with?('file')
     # Start NFS/Shared-storage checks
     nfsdir = node['hadoop']['hdfs_site']['dfs.namenode.shared.edits.dir']
+    unless File.directory?(nfsdir)
+      Chef::Application.fatal!("Directory #{nfsdir} nonexistant! Check node['hadoop']['hdfs_site']['dfs.namenode.shared.edits.dir'] setting!")
+    end
   else
     Chef::Application.fatal!('dfs.namenode.shared.edits.dir supports qjournal or file only')
   end
@@ -88,6 +91,7 @@ end # End fencing check
 if node['hadoop']['hdfs_site'].key?('dfs.ha.automatic-failover.enabled') && node['hadoop']['hdfs_site']['dfs.ha.automatic-failover.enabled'] == true
   if node['hadoop']['core_site'].key? 'ha.zookeeper.quorum'
     ha_zk_quorum = node['hadoop']['core_site']['ha.zookeeper.quorum'].split(',')
+    Chef::Log.info("NameNode HA ZooKeeper Quorum: #{ha_zk_quorum}")
   else
     Chef::Application.fatal!("Automatic HA failover requires node['hadoop']['core_site']['ha.zookeeper.quorum'] to be set")
   end
