@@ -46,6 +46,25 @@ else # Assume hbase.rootdir starts with file://
   end
 end
 
+# https://hbase.apache.org/book/hbase.secure.bulkload.html
+bulkload_dir =
+  if node['hbase']['hbase_site'].key? 'hbase.bulkload.staging.dir'
+    node['hbase']['hbase_site']['hbase.bulkload.staging.dir']
+  else
+    '/tmp/hbase-staging'
+  end
+
+node.default['hbase']['hbase_site']['hbase.bulkload.staging.dir'] = bulkload_dir
+
+execute 'hbase-bulkload-stagingdir' do
+  command "hdfs dfs -mkdir -p #{bulkload_dir} && hdfs dfs -chown hbase:hbase #{bulkload_dir} && hdfs dfs -chmod 711 #{bulkload_dir}"
+  timeout 300
+  user 'hdfs'
+  group 'hdfs'
+  not_if "hdfs dfs -test -d #{bulkload_dir}", :user => 'hdfs'
+  action :nothing
+end
+
 service "hbase-master" do
   supports [ :restart => true, :reload => false, :status => true ]
   action :nothing
