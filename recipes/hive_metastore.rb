@@ -26,14 +26,14 @@ end
 # Hive HDFS directories
 dfs = node['hadoop']['core_site']['fs.defaultFS']
 warehouse_dir =
-  if node['hive'].key? 'hive_site' and node['hive']['hive_site'].key? 'hive.metastore.warehouse.dir'
+  if node['hive'].key?('hive_site') && node['hive']['hive_site'].key?('hive.metastore.warehouse.dir')
     node['hive']['hive_site']['hive.metastore.warehouse.dir']
   else
     '/user/hive/warehouse'
   end
 
 scratch_dir =
-  if node['hive'].key? 'hive_site' and node['hive']['hive_site'].key? 'hive.exec.scratchdir'
+  if node['hive'].key?('hive_site') && node['hive']['hive_site'].key?('hive.exec.scratchdir')
     node['hive']['hive_site']['hive.exec.scratchdir']
   else
     '/tmp/hive-${user.name}'
