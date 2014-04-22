@@ -101,7 +101,7 @@ if node['zookeeper'].has_key? 'zoocfg'
   end
   
   template "#{node['zookeeper']['zoocfg']['dataDir']}/myid" do
-    source "zookeeper-myid.erb"
+    source 'zookeeper-myid.erb'
     owner 'root'
     group 'root'
     mode '0644'
