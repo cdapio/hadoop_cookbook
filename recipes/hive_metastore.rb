@@ -23,6 +23,45 @@ package "hive-metastore" do
   action :install
 end
 
+# Hive HDFS directories
+dfs = node['hadoop']['core_site']['fs.defaultFS']
+warehouse_dir =
+  if node['hive'].key? 'hive_site' and node['hive']['hive_site'].key? 'hive.metastore.warehouse.dir'
+    node['hive']['hive_site']['hive.metastore.warehouse.dir']
+  else
+    '/user/hive/warehouse'
+  end
+
+scratch_dir =
+  if node['hive'].key? 'hive_site' and node['hive']['hive_site'].key? 'hive.exec.scratchdir'
+    node['hive']['hive_site']['hive.exec.scratchdir']
+  else
+    '/tmp/hive-${user.name}'
+  end
+
+node.default['hive']['hive_site']['hive.exec.scratchdir'] == scratch_dir
+node.default['hive']['hive_site']['hive.metastore.warehouse.dir'] = warehouse_dir
+
+unless scratch_dir == '/tmp/hive-${user.name}'
+  execute 'hive-hdfs-scratchdir' do
+    command "hdfs dfs -mkdir -p #{dfs}/#{scratch_dir} && hdfs dfs -chown hive:hdfs #{dfs}/#{scratch_dir} && hdfs dfs -chmod 777 #{dfs}/#{scratch_dir}"
+    timeout 300
+    user 'hdfs'
+    group 'hdfs'
+    not_if "hdfs dfs -test -d #{dfs}/#{scratch_dir}", :user => 'hdfs'
+    action :nothing
+  end
+end
+
+execute 'hive-hdfs-warehousedir' do
+  command "hdfs dfs -mkdir -p #{dfs}/#{warehouse_dir} && hdfs dfs -chown hive:hdfs #{dfs}/#{warehouse_dir}"
+  timeout 300
+  user 'hdfs'
+  group 'hdfs'
+  not_if "hdfs dfs -test -d #{dfs}/#{warehouse_dir}", :user => 'hdfs'
+  action :nothing
+end
+
 service "hive-metastore" do
   supports [ :restart => true, :reload => false, :status => true ]
   action :nothing

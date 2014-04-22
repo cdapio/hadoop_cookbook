@@ -17,7 +17,7 @@
 # limitations under the License.
 #
 
-include_recipe 'hadoop::repo'
+include_recipe 'hadoop::default'
 
 package "hive" do
   action :install
@@ -78,6 +78,21 @@ directory "/var/lib/hive" do
   action :create
 end
 
+local_scratch_dir =
+  if node['hive'].key? 'hive_site' and node['hive']['hive_site'].key? 'hive.exec.local.scratchdir'
+    node['hive']['hive_site']['hive.exec.local.scratchdir']
+  else
+    '/tmp/${user.name}'
+  end
+
+directory local_scratch_dir do
+  mode '1777'
+  owner 'hive'
+  group 'hive'
+  action :create
+  not_if { local_scratch_dir == '/tmp/${user.name}' }
+end
+
 # Setup hive-site.xml
 if node['hive'].has_key? 'hive_site'
   myVars = { :options => node['hive']['hive_site'] }
@@ -121,6 +136,17 @@ if node['hive'].has_key? 'hive_env'
     variables myVars
   end
 end # End hive-env.sh
+
+# Create Hive user's home in HDFS
+dfs = node['hadoop']['core_site']['fs.defaultFS']
+execute 'hive-hdfs-homedir' do
+  command "hdfs dfs -mkdir -p #{dfs}/user/hive && hdfs dfs -chown hive:hdfs #{dfs}/user/hive"
+  timeout 300
+  user 'hdfs'
+  group 'hdfs'
+  not_if 'hdfs dfs -test -d #{dfs}/user/hive', :user => 'hdfs'
+  action :nothing
+end
 
 # Update alternatives to point to our configuration
 execute "update hive-conf alternatives" do
