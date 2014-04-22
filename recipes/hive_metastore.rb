@@ -39,7 +39,7 @@ scratch_dir =
     '/tmp/hive-${user.name}'
   end
 
-node.default['hive']['hive_site']['hive.exec.scratchdir'] == scratch_dir
+node.default['hive']['hive_site']['hive.exec.scratchdir'] = scratch_dir
 node.default['hive']['hive_site']['hive.metastore.warehouse.dir'] = warehouse_dir
 
 unless scratch_dir == '/tmp/hive-${user.name}'
