@@ -24,6 +24,47 @@ package 'hbase-master' do
   action :install
 end
 
+# HBase can use a local directory or an HDFS directory for its rootdir...
+# if HDFS, create execute block with action :nothing
+# else create the local directory when file://
+if node['hbase']['hbase_site']['hbase.rootdir'] =~ /^\/|^hdfs:\/\//i && node['hbase']['hbase_site']['hbase.cluster.distributed'] == 'true'
+  execute 'hbase-hdfs-rootdir' do
+    command "hdfs dfs -mkdir -p #{node['hbase']['hbase_site']['hbase.rootdir']} && hdfs dfs -chown hbase #{node['hbase']['hbase_site']['hbase.rootdir']}"
+    timeout 300
+    user 'hdfs'
+    group 'hdfs'
+    not_if "hdfs dfs -test -d #{node['hbase']['hbase_site']['hbase.rootdir']}", :user => 'hdfs'
+    action :nothing
+  end
+else # Assume hbase.rootdir starts with file://
+  directory node['hbase']['hbase_site']['hbase.rootdir'].gsub('file://', '') do
+    owner 'hbase'
+    group 'hbase'
+    mode '0700'
+    action :create
+    recursive true
+  end
+end
+
+# https://hbase.apache.org/book/hbase.secure.bulkload.html
+bulkload_dir =
+  if node['hbase']['hbase_site'].key? 'hbase.bulkload.staging.dir'
+    node['hbase']['hbase_site']['hbase.bulkload.staging.dir']
+  else
+    '/tmp/hbase-staging'
+  end
+
+node.default['hbase']['hbase_site']['hbase.bulkload.staging.dir'] = bulkload_dir
+
+execute 'hbase-bulkload-stagingdir' do
+  command "hdfs dfs -mkdir -p #{bulkload_dir} && hdfs dfs -chown hbase:hbase #{bulkload_dir} && hdfs dfs -chmod 711 #{bulkload_dir}"
+  timeout 300
+  user 'hdfs'
+  group 'hdfs'
+  not_if "hdfs dfs -test -d #{bulkload_dir}", :user => 'hdfs'
+  action :nothing
+end
+
 service 'hbase-master' do
   supports [:restart => true, :reload => false, :status => true]
   action :nothing
