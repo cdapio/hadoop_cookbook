@@ -79,7 +79,7 @@ directory '/var/lib/hive' do
 end
 
 local_scratch_dir =
-  if node['hive'].key? 'hive_site' and node['hive']['hive_site'].key? 'hive.exec.local.scratchdir'
+  if node['hive'].key?('hive_site') && node['hive']['hive_site'].key?('hive.exec.local.scratchdir')
     node['hive']['hive_site']['hive.exec.local.scratchdir']
   else
     '/tmp/${user.name}'
