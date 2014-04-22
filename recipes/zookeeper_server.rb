@@ -106,7 +106,9 @@ if node['zookeeper'].key? 'zoocfg'
     group 'root'
     mode '0644'
     action :create
-    variables ({ :myid => myid })
+    variables(
+      :myid => myid
+    )
     not_if { myid.nil? }
   end
 end # End zoo.cfg
