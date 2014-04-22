@@ -164,7 +164,7 @@ hadoop_tmp_dir =
 
 node.default['hadoop']['core_site']['hadoop.tmp.dir'] = hadoop_tmp_dir
 
-if (node['hadoop']['core_site']['hadoop.tmp.dir'] == 'file:///tmp/hadoop-${user}')
+if node['hadoop']['core_site']['hadoop.tmp.dir'] == 'file:///tmp/hadoop-${user}'
   %w(hdfs mapreduce yarn).each do |dir|
     directory "/tmp/hadoop-#{dir}" do
       mode '1777'
