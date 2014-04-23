@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe 'hadoop::hadoop_hdfs_datanode' do
+describe 'hadoop::hadoop_hdfs_namenode' do
   context 'on Centos 6.4 x86_64' do
     let(:chef_run) do
       ChefSpec::Runner.new(platform: 'centos', version: 6.4) do |node|
@@ -9,12 +9,12 @@ describe 'hadoop::hadoop_hdfs_datanode' do
       end.converge(described_recipe)
     end
 
-    it 'install hadoop-hdfs-datanode package' do
-      expect(chef_run).to install_package('hadoop-hdfs-datanode')
+    it 'install hadoop-hdfs-namenode package' do
+      expect(chef_run).to install_package('hadoop-hdfs-namenode')
     end
 
-    it 'creates HDFS data dir' do
-      expect(chef_run).to create_directory('/tmp/hadoop-hdfs/dfs/data').with(
+    it 'creates HDFS name dir' do
+      expect(chef_run).to create_directory('/tmp/hadoop-hdfs/dfs/name').with(
         user: 'hdfs',
         group: 'hdfs'
       )
