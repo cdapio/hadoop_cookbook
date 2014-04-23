@@ -90,7 +90,7 @@ if node['zookeeper'].key? 'zoocfg'
 
   # Try and find the current node in the list of configured servers. If the node was found then write the myid file
   myid = nil
-  1..255.each do |index|
+  1.upto(255) do |index|
     server = node['zookeeper']['zoocfg']["server.#{index}"]
     unless server.nil?
       if server.start_with?("#{node['fqdn']}:") || server.start_with?("#{node['ipaddress']}:") || server.start_with?("#{node['hostname']}:")
