@@ -31,19 +31,24 @@ end
 case node['hadoop']['distribution']
 when 'hdp'
   case node['hadoop']['distribution_version']
-  when '2.0.6.0', '2.0.6.1', '2.0.10.0', '2.0.11.0', '2.0', '2'
-    hdp_version = '2.0.11.0'
+  when '2.0.4.0', '2.0.5.0', '2.0.6.0', '2.0.6.1', '2.0.10.0', '2.0.11.0'
+    hdp_version = '2.0.4.0'
+    hdp_update_version = node['hadoop']['distribution_version']
+  when '2.0'
+    hdp_version = '2.0.4.0'
+    hdp_update_version = '2.0.11.0'
+  when '2.1.1.0', '2.1', '2'
+    hdp_version = '2.1.1.0'
+    hdp_update_version = nil
   else
-    # We only support HDP 2.0 (2.0.11.0) at this time
-    Chef::Log.info('Using HDP version 2.0 (2.0.11.0)')
-    hdp_version = '2.0.11.0'
+    Chef::Application.fatal!('This cookbook only supports HDP 2.x')
   end
   hdp_utils_version = '1.1.0.17'
   case node['platform_family']
   when 'rhel'
     yum_base_url = 'http://public-repo-1.hortonworks.com/HDP'
     os = "centos#{major_platform_version}"
-    yum_repo_url = node['hadoop']['yum_repo_url'] ? node['hadoop']['yum_repo_url'] : "#{yum_base_url}/#{os}/2.x/GA"
+    yum_repo_url = node['hadoop']['yum_repo_url'] ? node['hadoop']['yum_repo_url'] : "#{yum_base_url}/#{os}/2.x/GA/#{hdp_version}"
     yum_repo_key_url = node['hadoop']['yum_repo_key_url'] ? node['hadoop']['yum_repo_key_url'] : "#{yum_base_url}/#{os}/#{key}/#{key}-Jenkins"
 
     yum_repository 'hdp' do
@@ -53,12 +58,22 @@ when 'hdp'
       gpgkey yum_repo_key_url
       action :add
     end
-    yum_repository 'hdp-updates' do
-      name 'Updates-HDP-2.x'
-      description 'Updates for Hortonworks Data Platform Version - HDP-2.x'
-      url "#{yum_base_url}/#{os}/2.x/updates/#{hdp_version}"
-      gpgkey yum_repo_key_url
-      action :add
+    if hdp_update_version.nil?
+      yum_repository 'hdp-updates' do
+        name 'Updates-HDP-2.x'
+        description 'Updates for Hortonworks Data Platform Version - HDP-2.x'
+        url "#{yum_base_url}/#{os}/2.x/updates"
+        gpgkey yum_repo_key_url
+        action :add
+      end
+    else
+      yum_repository 'hdp-updates' do
+        name 'Updates-HDP-2.x'
+        description 'Updates for Hortonworks Data Platform Version - HDP-2.x'
+        url "#{yum_base_url}/#{os}/2.x/updates/#{hdp_update_version}"
+        gpgkey yum_repo_key_url
+        action :add
+      end
     end
     yum_repository 'hdp-utils' do
       name "HDP-UTILS-#{hdp_utils_version}"
@@ -69,6 +84,7 @@ when 'hdp'
     end
 
   when 'debian'
+    Chef::Log.warn('HDP only supports version 2.0 on Ubuntu at this time')
     apt_base_url = 'http://public-repo-1.hortonworks.com/HDP'
     os = "ubuntu#{major_platform_version}"
     apt_repo_url = node['hadoop']['apt_repo_url'] ? node['hadoop']['apt_repo_url'] : "#{apt_base_url}/#{os}/2.x"
