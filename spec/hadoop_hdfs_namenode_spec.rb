@@ -19,5 +19,9 @@ describe 'hadoop::hadoop_hdfs_namenode' do
         group: 'hdfs'
       )
     end
+
+    it 'creates hadoop-hdfs-namenode service resource, but does not run it' do
+      expect(chef_run).to_not start_service('hadoop-hdfs-namenode')
+    end
   end
 end
