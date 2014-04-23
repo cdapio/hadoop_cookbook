@@ -26,8 +26,8 @@ describe 'hadoop::default' do
 
   it 'creates hadoop config files' do
     %w(capacity_scheduler core_site hadoop_policy hdfs_site mapred_site yarn_site).each do |sitefile|
-      if node['hadoop'].has_key? sitefile
-        file("/etc/hadoop/#{node['hadoop']['conf_dir']}/#{sitefile.gsub('_','-')}.xml")
+      if node['hadoop'].key? sitefile
+        file("/etc/hadoop/#{node['hadoop']['conf_dir']}/#{sitefile.gsub('_', '-')}.xml")
           .must_exist
           .with(:owner, 'root')
           .and(:group, 'root')

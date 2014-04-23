@@ -3,13 +3,13 @@
 # Recipe:: hbase_master
 #
 # Copyright (C) 2013 Continuuity, Inc.
-# 
+#
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
-# 
+#
 #    http://www.apache.org/licenses/LICENSE-2.0
-# 
+#
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -20,14 +20,14 @@
 include_recipe 'hadoop::hbase'
 include_recipe 'hadoop::hbase_checkconfig'
 
-package "hbase-master" do
+package 'hbase-master' do
   action :install
 end
 
 # HBase can use a local directory or an HDFS directory for its rootdir...
 # if HDFS, create execute block with action :nothing
 # else create the local directory when file://
-if node['hbase']['hbase_site']['hbase.rootdir'] =~ /^\/|^hdfs:\/\//i && node['hbase']['hbase_site']['hbase.cluster.distributed'] == 'true'
+if node['hbase']['hbase_site']['hbase.rootdir'] =~ %r{^/|^hdfs://} && node['hbase']['hbase_site']['hbase.cluster.distributed'] == 'true'
   execute 'hbase-hdfs-rootdir' do
     command "hdfs dfs -mkdir -p #{node['hbase']['hbase_site']['hbase.rootdir']} && hdfs dfs -chown hbase #{node['hbase']['hbase_site']['hbase.rootdir']}"
     timeout 300
@@ -65,7 +65,7 @@ execute 'hbase-bulkload-stagingdir' do
   action :nothing
 end
 
-service "hbase-master" do
-  supports [ :restart => true, :reload => false, :status => true ]
+service 'hbase-master' do
+  supports [:restart => true, :reload => false, :status => true]
   action :nothing
 end
