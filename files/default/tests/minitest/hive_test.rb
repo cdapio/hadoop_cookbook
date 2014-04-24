@@ -13,6 +13,24 @@ describe 'hadoop::hive' do
       .and(:mode, '0755')
   end
 
+  it 'creates /var/lib/hive dir' do
+    directory('/var/lib/hive')
+      .must_exist
+      .with(:owner, 'hive')
+      .and(:group, 'hive')
+      .and(:mode, '0755')
+  end
+
+  if node['hive'].key?('hive_site') && node['hive']['hive_site'].key?('hive.exec.local.scratchdir')
+    it 'creates hive local scratch dir' do
+      directory(node['hive']['hive_site']['hive.exec.local.scratchdir'])
+        .must_exist
+        .with(:owner, 'hive')
+        .and(:group, 'hive')
+        .and(:mode, '1777')
+    end
+  end
+
   it 'ensures alternatives link' do
     link('/etc/hive/conf')
       .must_exist
