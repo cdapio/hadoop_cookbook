@@ -20,6 +20,10 @@ describe 'hadoop::hadoop_hdfs_namenode' do
       )
     end
 
+    it 'creates hdfs-namenode-format execute resource, but does not run it' do
+      expect(chef_run).to_not run_execute('hdfs-namenode-format').with(user: 'hdfs')
+    end
+
     it 'creates hadoop-hdfs-namenode service resource, but does not run it' do
       expect(chef_run).to_not start_service('hadoop-hdfs-namenode')
     end
