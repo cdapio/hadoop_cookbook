@@ -88,7 +88,7 @@ else
 end # End fencing check
 
 # Start Automatic HA check
-if node['hadoop']['hdfs_site'].key?('dfs.ha.automatic-failover.enabled') && node['hadoop']['hdfs_site']['dfs.ha.automatic-failover.enabled'] == 'true'
+if node['hadoop']['hdfs_site'].key?('dfs.ha.automatic-failover.enabled') && node['hadoop']['hdfs_site']['dfs.ha.automatic-failover.enabled'].to_s == 'true'
   if node['hadoop']['core_site'].key? 'ha.zookeeper.quorum'
     ha_zk_quorum = node['hadoop']['core_site']['ha.zookeeper.quorum'].split(',')
     Chef::Log.info("NameNode HA ZooKeeper Quorum: #{ha_zk_quorum}")

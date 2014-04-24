@@ -54,8 +54,8 @@ end
     template "#{hbase_conf_dir}/#{sitefile.gsub('_', '-')}.xml" do
       source 'generic-site.xml.erb'
       mode '0644'
-      owner 'hbase'
-      group 'hbase'
+      owner 'root'
+      group 'root'
       action :create
       variables my_vars
     end
