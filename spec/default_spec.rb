@@ -8,6 +8,9 @@ describe 'hadoop::default' do
         node.default['hadoop']['hdfs_site']['dfs.datanode.max.xcievers'] = '4096'
         node.default['hadoop']['hadoop_policy']['test.property'] = 'blue'
         node.default['hadoop']['mapred_site']['mapreduce.framework.name'] = 'yarn'
+        node.default['hadoop']['fair_scheduler']['test.property'] = 'green'
+        node.default['hadoop']['hadoop_env']['hadoop_log_dir'] = '/var/log/hadoop-hdfs'
+        node.default['hadoop']['yarn_env']['yarn_log_dir'] = '/var/log/hadoop-yarn'
         stub_command('update-alternatives --display hadoop-conf | grep best | awk \'{print $5}\' | grep /etc/hadoop/conf.chef').and_return(false)
       end.converge(described_recipe)
     end
