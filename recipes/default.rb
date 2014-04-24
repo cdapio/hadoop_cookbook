@@ -33,7 +33,7 @@ directory hadoop_conf_dir do
   recursive true
 end
 
-# Setup capacity-scheduler core-site.xml hadoop-policy.xml hdfs-site.xml mapred-site.xml yarn-site.xml
+# Setup capacity-scheduler.xml core-site.xml hadoop-policy.xml hdfs-site.xml mapred-site.xml yarn-site.xml
 %w(capacity_scheduler core_site hadoop_policy hdfs_site mapred_site yarn_site).each do |sitefile|
   if node['hadoop'].key? sitefile
     my_vars = { :options => node['hadoop'][sitefile] }
