@@ -36,7 +36,7 @@ if node['hbase']['hbase_site']['hbase.rootdir'] =~ %r{^/|^hdfs://} && node['hbas
     not_if "hdfs dfs -test -d #{node['hbase']['hbase_site']['hbase.rootdir']}", :user => 'hdfs'
     action :nothing
   end
-else # Assume hbase.rootdir starts with file://
+elsif node['hbase']['hbase_site']['hbase.rootdir'] =~ %r{^/|^file://}
   directory node['hbase']['hbase_site']['hbase.rootdir'].gsub('file://', '') do
     owner 'hbase'
     group 'hbase'
@@ -44,6 +44,8 @@ else # Assume hbase.rootdir starts with file://
     action :create
     recursive true
   end
+else
+  Chef::Application.fatal!("node['hbase']['hbase_site']['hbase.rootdir'] must be set to file:// or hdfs:// locations")
 end
 
 # https://hbase.apache.org/book/hbase.secure.bulkload.html
