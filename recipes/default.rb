@@ -63,12 +63,16 @@ if node['hadoop'].key? 'fair_scheduler'
   # my_vars = { :options => node['hadoop']['fair_scheduler'] }
   my_vars = node['hadoop']['fair_scheduler']
 
-  directory fair_scheduler_dir do
-    mode '0755'
-    owner 'root'
-    group 'root'
-    action :create
-    recursive true
+  # This is a bit redundant, but necessary to pass foodcritic testing without duplicating resources
+  unless fair_scheduler_dir = hadoop_conf_dir
+    directory fair_scheduler_dir do
+      mode '0755'
+      owner 'root'
+      group 'root'
+      action :create
+      recursive true
+      not_if { fair_scheduler_dir = hadoop_conf_dir }
+    end
   end
 
   template fair_scheduler_file.gsub('file://', '') do
