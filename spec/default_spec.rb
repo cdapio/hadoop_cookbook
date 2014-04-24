@@ -52,5 +52,9 @@ describe 'hadoop::default' do
         /dfs.datanode.max.xcievers/
       )
     end
+
+    it 'runs execute[update hadoop-conf alternatives]' do
+      expect(chef_run).to run_execute('update hadoop-conf alternatives')
+    end
   end
 end
