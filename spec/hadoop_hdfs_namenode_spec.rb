@@ -25,7 +25,12 @@ describe 'hadoop::hadoop_hdfs_namenode' do
     end
 
     it 'creates hadoop-hdfs-namenode service resource, but does not run it' do
+      expect(chef_run).to_not disable_service('hadoop-hdfs-namenode')
+      expect(chef_run).to_not enable_service('hadoop-hdfs-namenode')
+      expect(chef_run).to_not reload_service('hadoop-hdfs-namenode')
+      expect(chef_run).to_not restart_service('hadoop-hdfs-namenode')
       expect(chef_run).to_not start_service('hadoop-hdfs-namenode')
+      expect(chef_run).to_not stop_service('hadoop-hdfs-namenode')
     end
   end
 end
