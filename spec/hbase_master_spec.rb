@@ -34,7 +34,7 @@ describe 'hadoop::hbase_master' do
     let(:chef_run) do
       ChefSpec::Runner.new(platform: 'centos', version: 6.4) do |node|
         node.automatic['domain'] = 'example.com'
-        node.default['hadoop']['hdfs_site']['dfs.datanode.max.xcievers'] = '4096'
+        node.default['hadoop']['hdfs_site']['dfs.datanode.max.transfer.threads'] = '4096'
         node.default['hbase']['hbase_site']['hbase.rootdir'] = 'file:///tmp/hbase'
         node.default['hbase']['hbase_site']['hbase.zookeeper.quorum'] = 'localhost'
         node.default['hbase']['hbase_site']['hbase.cluster.distributed'] = 'false'
