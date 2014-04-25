@@ -23,6 +23,17 @@ include_recipe 'hadoop::hive_checkconfig'
 
 package 'hive-server2' do
   action :install
+  # Hortonworks ships this as part of the hive package
+  not_if { node['hadoop']['distribution'] == 'hdp' }
+end
+
+template '/etc/init.d/hive-server2' do
+  source 'hive-server2.erb'
+  mode '0755'
+  owner 'root'
+  group 'root'
+  action :create
+  only_if { node['hadoop']['distribution'] == 'hdp' }
 end
 
 service 'hive-server2' do
