@@ -5,7 +5,7 @@ describe 'hadoop::default' do
     let(:chef_run) do
       ChefSpec::Runner.new(platform: 'centos', version: 6.4) do |node|
         node.automatic['domain'] = 'example.com'
-        node.default['hadoop']['hdfs_site']['dfs.datanode.max.xcievers'] = '4096'
+        node.default['hadoop']['hdfs_site']['dfs.datanode.max.transfer.threads'] = '4096'
         node.default['hadoop']['hadoop_policy']['test.property'] = 'blue'
         node.default['hadoop']['mapred_site']['mapreduce.framework.name'] = 'yarn'
         node.default['hadoop']['fair_scheduler']['test.property'] = 'green'
@@ -27,16 +27,34 @@ describe 'hadoop::default' do
     end
 
     %w(hadoop-hdfs hadoop-mapreduce hadoop-yarn).each do |dir|
-      it "creates #{dir} directory" do
+      it "creates /tmp/#{dir} directory" do
         expect(chef_run).to create_directory("/tmp/#{dir}").with(
           mode: '1777'
         )
       end
     end
 
-    %w(capacity-scheduler.xml core-site.xml hadoop-policy.xml hdfs-site.xml mapred-site.xml yarn-site.xml).each do |xml|
-      it "creates #{xml} from template" do
-        expect(chef_run).to create_template("/etc/hadoop/conf.chef/#{xml}")
+    %w(hadoop-hdfs hadoop-yarn).each do |dir|
+      it "creates /var/log/#{dir} directory" do
+        expect(chef_run).to create_directory("/var/log/#{dir}").with(
+          mode: '0755'
+        )
+      end
+    end
+
+    %w(
+      capacity-scheduler.xml
+      core-site.xml
+      fair-scheduler.xml
+      hadoop-env.sh
+      hadoop-policy.xml
+      hdfs-site.xml
+      mapred-site.xml
+      yarn-env.sh
+      yarn-site.xml
+    ).each do |file|
+      it "creates #{file} from template" do
+        expect(chef_run).to create_template("/etc/hadoop/conf.chef/#{file}")
       end
     end
 
@@ -52,9 +70,9 @@ describe 'hadoop::default' do
       )
     end
 
-    it 'renders file hdfs-site.xml with dfs.datanode.max.xcievers' do
+    it 'renders file hdfs-site.xml with dfs.datanode.max.transfer.threads' do
       expect(chef_run).to render_file('/etc/hadoop/conf.chef/hdfs-site.xml').with_content(
-        /dfs.datanode.max.xcievers/
+        /dfs.datanode.max.transfer.threads/
       )
     end
 
