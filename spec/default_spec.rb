@@ -8,7 +8,7 @@ describe 'hadoop::default' do
         node.default['hadoop']['hdfs_site']['dfs.datanode.max.transfer.threads'] = '4096'
         node.default['hadoop']['hadoop_policy']['test.property'] = 'blue'
         node.default['hadoop']['mapred_site']['mapreduce.framework.name'] = 'yarn'
-        node.default['hadoop']['fair_scheduler']['test.property'] = 'green'
+        node.default['hadoop']['fair_scheduler']['defaults']['poolMaxJobsDefault'] = '1000'
         node.default['hadoop']['hadoop_env']['hadoop_log_dir'] = '/var/log/hadoop-hdfs'
         node.default['hadoop']['yarn_env']['yarn_log_dir'] = '/var/log/hadoop-yarn'
         stub_command('update-alternatives --display hadoop-conf | grep best | awk \'{print $5}\' | grep /etc/hadoop/conf.chef').and_return(false)
@@ -70,9 +70,39 @@ describe 'hadoop::default' do
       )
     end
 
+    it 'renders file fair-scheduler.xml with poolMaxJobsDefault' do
+      expect(chef_run).to render_file('/etc/hadoop/conf.chef/fair-scheduler.xml').with_content(
+        /poolMaxJobsDefault/
+      )
+    end
+
+    it 'renders file hadoop-env.sh with HADOOP_LOG_DIR' do
+      expect(chef_run).to render_file('/etc/hadoop/conf.chef/hadoop-env.sh').with_content(
+        /HADOOP_LOG_DIR/
+      )
+    end
+
+    it 'renders file hadoop-policy.xml with test.property' do
+      expect(chef_run).to render_file('/etc/hadoop/conf.chef/hadoop-policy.xml').with_content(
+        /test.property/
+      )
+    end
+
     it 'renders file hdfs-site.xml with dfs.datanode.max.transfer.threads' do
       expect(chef_run).to render_file('/etc/hadoop/conf.chef/hdfs-site.xml').with_content(
         /dfs.datanode.max.transfer.threads/
+      )
+    end
+
+    it 'renders file mapred-site.xml with mapreduce.framework.name' do
+      expect(chef_run).to render_file('/etc/hadoop/conf.chef/mapred-site.xml').with_content(
+        /mapreduce.framework.name/
+      )
+    end
+
+    it 'renders file yarn-env.sh with YARN_LOG_DIR' do
+      expect(chef_run).to render_file('/etc/hadoop/conf.chef/yarn-env.sh').with_content(
+        /YARN_LOG_DIR/
       )
     end
 
