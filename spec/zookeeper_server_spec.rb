@@ -35,6 +35,12 @@ describe 'hadoop::zookeeper_server' do
       )
     end
 
+    it 'renders file myid with server.1=localhost:2181' do
+      expect(chef_run).to render_file('/etc/zookeeper/conf.chef/zoo.cfg').with_content(
+        /server.1=localhost:2181/
+      )
+    end
+
     it 'creates ZooKeeper dataDir' do
       expect(chef_run).to create_directory('/var/lib/zookeeper').with(
         user: 'zookeeper',
