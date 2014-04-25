@@ -25,6 +25,7 @@ if node['hadoop'].key?('hdfs_site') && node['hadoop']['hdfs_site'].key?('dfs.dat
 elsif node['hadoop'].key?('hdfs_site') && node['hadoop']['hdfs_site'].key?('dfs.datanode.max.xcievers') &&
   node['hadoop']['hdfs_site']['dfs.datanode.max.xcievers'].to_i >= 4096
   Chef::Log.info("Set dfs.datanode.max.transfer.threads to #{node['hadoop']['hdfs_site']['dfs.datanode.max.xcievers']}")
+  Chef::Log.warn('dfs.datanode.max.xcievers is deprecated, use dfs.datanode.max.transfer.threads, instead')
   node.default['hadoop']['hdfs_site']['dfs.datanode.max.transfer.threads'] = node['hadoop']['hdfs_site']['dfs.datanode.max.xcievers']
 else
   Chef::Application.fatal!("You *must* set node['hadoop']['hdfs_site']['dfs.datanode.max.transfer.threads'] >= 4096 for HBase")
@@ -33,7 +34,7 @@ end
 # HBase needs hbase.rootdir and hbase.zookeeper.quorum
 if node['hbase'].key?('hbase_site') && node['hbase']['hbase_site'].key?('hbase.rootdir') && node['hbase']['hbase_site'].key?('hbase.zookeeper.quorum')
   Chef::Log.info("HBase root: #{node['hbase']['hbase_site']['hbase.rootdir']}")
-  Chef::Log.info("ZooKeeper Quorum: #{node['hbase']['hbase_site']['hbase.zookeeper.quorum']}")
+  Chef::Log.info("HBase ZooKeeper Quorum: #{node['hbase']['hbase_site']['hbase.zookeeper.quorum']}")
 else
   Chef::Application.fatal!("You *must* set node['hbase']['hbase_site']['hbase.rootdir'] and node['hbase']['hbase_site']['hbase.zookeeper.quorum']")
 end

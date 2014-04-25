@@ -100,8 +100,8 @@ if node['hive'].key? 'hive_site'
   template "#{hive_conf_dir}/hive-site.xml" do
     source 'generic-site.xml.erb'
     mode '0644'
-    owner 'hive'
-    group 'hive'
+    owner 'root'
+    group 'root'
     action :create
     variables my_vars
   end

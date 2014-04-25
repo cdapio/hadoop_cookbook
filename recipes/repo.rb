@@ -125,6 +125,13 @@ when 'cdh'
 
   when 'debian'
     codename = node['lsb']['codename']
+
+    case codename
+    when 'raring', 'saucy', 'trusty'
+      Chef::Log.warn('This version of Ubuntu is unsupported by Cloudera! Bug reports should include patches.')
+      codename = 'precise'
+    end
+
     apt_base_url = "http://archive.cloudera.com/cdh#{cdh_release}/#{node['platform']}"
     apt_repo_url = node['hadoop']['apt_repo_url'] ? node['hadoop']['apt_repo_url'] : "#{apt_base_url}/#{codename}/amd64/cdh"
     apt_repo_key_url = node['hadoop']['apt_repo_key_url'] ? node['hadoop']['apt_repo_key_url'] : "#{apt_base_url}/#{codename}/amd64/cdh/archive.key"

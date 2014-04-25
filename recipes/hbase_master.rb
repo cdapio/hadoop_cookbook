@@ -27,7 +27,7 @@ end
 # HBase can use a local directory or an HDFS directory for its rootdir...
 # if HDFS, create execute block with action :nothing
 # else create the local directory when file://
-if node['hbase']['hbase_site']['hbase.rootdir'] =~ %r{^/|^hdfs://} && node['hbase']['hbase_site']['hbase.cluster.distributed'] == 'true'
+if node['hbase']['hbase_site']['hbase.rootdir'] =~ %r{^/|^hdfs://} && node['hbase']['hbase_site']['hbase.cluster.distributed'].to_s == 'true'
   execute 'hbase-hdfs-rootdir' do
     command "hdfs dfs -mkdir -p #{node['hbase']['hbase_site']['hbase.rootdir']} && hdfs dfs -chown hbase #{node['hbase']['hbase_site']['hbase.rootdir']}"
     timeout 300
@@ -36,7 +36,7 @@ if node['hbase']['hbase_site']['hbase.rootdir'] =~ %r{^/|^hdfs://} && node['hbas
     not_if "hdfs dfs -test -d #{node['hbase']['hbase_site']['hbase.rootdir']}", :user => 'hdfs'
     action :nothing
   end
-else # Assume hbase.rootdir starts with file://
+elsif node['hbase']['hbase_site']['hbase.rootdir'] =~ %r{^/|^file://}
   directory node['hbase']['hbase_site']['hbase.rootdir'].gsub('file://', '') do
     owner 'hbase'
     group 'hbase'
@@ -44,6 +44,8 @@ else # Assume hbase.rootdir starts with file://
     action :create
     recursive true
   end
+else
+  Chef::Application.fatal!("node['hbase']['hbase_site']['hbase.rootdir'] must be set to file:// or hdfs:// locations")
 end
 
 # https://hbase.apache.org/book/hbase.secure.bulkload.html
