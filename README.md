@@ -1,5 +1,7 @@
 # hadoop cookbook
 
+[![Build Status](https://secure.travis-ci.org/continuuity/hadoop_cookbook.svg?branch=master)](http://travis-ci.org/continuuity/hadoop_cookbook)
+
 # Requirements
 
 This cookbook may work on earlier versions, but these are the minimal tested versions.
