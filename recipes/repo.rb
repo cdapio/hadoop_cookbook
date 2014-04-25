@@ -126,7 +126,7 @@ when 'cdh'
   when 'debian'
     codename = node['lsb']['codename']
     
-    if codename = 'raring'
+    if codename == 'raring'
     	codename = 'precise'
     end
     
