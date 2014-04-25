@@ -17,4 +17,4 @@ task :rubocop do
 end
 
 # default tasks are quick, commit tests
-task :default => ['foodcritic', 'rubocop', 'chefspec']
+task :default => %w(foodcritic rubocop chefspec)
