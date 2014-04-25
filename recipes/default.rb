@@ -107,7 +107,7 @@ end # End fair-scheduler.xml
       end
     end
 
-    template "#{hadoop_conf_dir}/#{envfile.gsub("_", "-")}.sh" do
+    template "#{hadoop_conf_dir}/#{envfile.gsub('_', '-')}.sh" do
       source 'generic-env.sh.erb'
       mode '0755'
       owner 'root'
