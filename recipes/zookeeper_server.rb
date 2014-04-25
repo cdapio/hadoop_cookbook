@@ -62,7 +62,7 @@ if node['zookeeper'].key? 'zoocfg'
   node.default['zookeeper']['zoocfg']['clientPort'] = zookeeper_client_port
   my_vars = { :properties => node['zookeeper']['zoocfg'] }
 
-  directory node['zookeeper']['zoocfg']['dataDir'] do
+  directory zookeeper_data_dir do
     owner 'zookeeper'
     group 'zookeeper'
     mode '0755'
@@ -70,13 +70,15 @@ if node['zookeeper'].key? 'zoocfg'
     action :create
   end
 
-  directory node['zookeeper']['zoocfg']['dataLogDir'] do
-    owner 'zookeeper'
-    group 'zookeeper'
-    mode '0755'
-    recursive true
-    action :create
-    only_if { node['zookeeper']['zoocfg'].key? 'dataLogDir' }
+  unless zookeeper_log_dir == zookeeper_data_dir
+    directory zookeeper_log_dir do
+      owner 'zookeeper'
+      group 'zookeeper'
+      mode '0755'
+      recursive true
+      action :create
+      only_if { node['zookeeper']['zoocfg'].key? 'dataLogDir' }
+    end
   end
 
   template "#{zookeeper_conf_dir}/zoo.cfg" do
