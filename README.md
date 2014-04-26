@@ -1,6 +1,10 @@
 # hadoop cookbook
 
-[![Build Status](https://secure.travis-ci.org/continuuity/hadoop_cookbook.svg?branch=master)](http://travis-ci.org/continuuity/hadoop_cookbook)
+[![Cookbook Version](http://img.shields.io/cookbook/v/hadoop.svg)][cookbook]
+[![Build Status](http://img.shields.io/travis/continuuity/hadoop.svg)][travis]
+
+[cookbook]: https://community.opscode.com/cookbooks/hadoop
+[travis]: http://travis-ci.org/continuuity/hadoop_cookbook
 
 # Requirements
 
