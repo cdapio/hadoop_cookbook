@@ -2,9 +2,11 @@
 
 [![Cookbook Version](http://img.shields.io/cookbook/v/hadoop.svg)][cookbook]
 [![Build Status](http://img.shields.io/travis/continuuity/hadoop_cookbook.svg)][travis]
+[![Code Climate](https://codeclimate.com/github/continuuity/hadoop_cookbook.png)][climate]
 
 [cookbook]: https://community.opscode.com/cookbooks/hadoop
 [travis]: http://travis-ci.org/continuuity/hadoop_cookbook
+[climate]: https://codeclimate.com/github/continuuity/hadoop_cookbook
 
 # Requirements
 
