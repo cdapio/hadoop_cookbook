@@ -136,10 +136,12 @@ RETVAL=0
 case "$1" in
     start)
       hive_start
+      RETVAL=$?
       ;;
 
     stop|force-stop)
       hive_stop
+      RETVAL=$?
       ;; 
 
     force-reload|condrestart|try-restart)
@@ -148,10 +150,12 @@ case "$1" in
 
     restart|reload)
       hive_restart
+      RETVAL=$?
       ;;
   
     status)
       hive_status
+      RETVAL=$?
       ;;
 
     *)
