@@ -22,6 +22,8 @@ This cookbook assumes that you have a working Java installation. It has been tes
 
 This cookbook is designed to be used with a wrapper cookbook or a role with settings for configuring Hadoop. The services should work out of the box on a single host, but little validation is done that you have made a working Hadoop configuration. The cookbook is attribute-driven and is suitable for use via either `chef-client` or `chef-solo` since it does not use any server-based functionality. The cookbook defines service definitions for each Hadoop service, but it does not enable or start them, by default.
 
+For more information, read the [Wrapping this cookbook](https://github.com/continuuity/hadoop_cookbook/wiki/Wrapping-this-cookbook) wiki entry.
+
 # Attributes
 
 Attributes for this cookbook define the configuration files for Hadoop and its various services. Hadoop configuration files are XML files, with name/value property pairs. The attribute name determines which file the property is placed and the property name. The attribute value is the property value. The attribute `hadoop['core_site']['fs.defaultFS']` will configure a property named `fs.defaultFS` in `core-site.xml` in `hadoop['conf_dir']`. All attribute values are taken as-is and only minimal configuration checking is done on values. It is up to the user to provide a valid configuration for your cluster.
