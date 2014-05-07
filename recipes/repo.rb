@@ -31,15 +31,18 @@ end
 case node['hadoop']['distribution']
 when 'hdp'
   case node['hadoop']['distribution_version']
-  when '2.0.4.0', '2.0.5.0', '2.0.6.0', '2.0.6.1', '2.0.10.0', '2.0.11.0'
+  when '2.0.5.0', '2.0.6.0', '2.0.6.1', '2.0.10.0', '2.0.11.0'
     hdp_version = '2.0.4.0'
     hdp_update_version = node['hadoop']['distribution_version']
   when '2.0'
     hdp_version = '2.0.4.0'
     hdp_update_version = '2.0.11.0'
-  when '2.1.1.0', '2.1', '2'
-    hdp_version = '2.1.1.0'
+  when '2.1.1.0', '2.0.4.0'
+    hdp_version = node['hadoop']['distribution_version']
     hdp_update_version = nil
+  when '2.1.2.0', '2.1', '2'
+    hdp_version = '2.1.1.0'
+    hdp_update_version = '2.1.2.0'
   else
     Chef::Application.fatal!('This cookbook only supports HDP 2.x')
   end
