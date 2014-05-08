@@ -5,7 +5,7 @@ describe 'hadoop::hadoop_mapreduce_jobtracker' do
     let(:chef_run) do
       ChefSpec::Runner.new(platform: 'centos', version: 6.4) do |node|
         node.automatic['domain'] = 'example.com'
-        node.default['hadoop']['distribution'] = 'cdh'
+        node.override['hadoop']['distribution'] = 'cdh'
         stub_command('update-alternatives --display hadoop-conf | grep best | awk \'{print $5}\' | grep /etc/hadoop/conf.chef').and_return(false)
       end.converge(described_recipe)
     end
@@ -23,7 +23,6 @@ describe 'hadoop::hadoop_mapreduce_jobtracker' do
     let(:chef_run) do
       ChefSpec::Runner.new(platform: 'centos', version: 6.4) do |node|
         node.automatic['domain'] = 'example.com'
-        node.default['hadoop']['distribution'] = 'hdp'
         stub_command('update-alternatives --display hadoop-conf | grep best | awk \'{print $5}\' | grep /etc/hadoop/conf.chef').and_return(false)
       end.converge(described_recipe)
     end
