@@ -22,5 +22,11 @@ task :metadata do
   sh 'knife cookbook metadata from file metadata.rb'
 end
 
+# run vagrant test
+desc 'Run vagrant tests'
+task :vagrant do
+  sh 'vagrant up'
+end
+
 # default tasks are quick, commit tests
 task :default => %w(foodcritic rubocop chefspec)
