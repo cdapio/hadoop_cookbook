@@ -114,6 +114,16 @@ Author:: Continuuity, Inc. (<ops@continuuity.com>)
 
 # Testing
 
+This cookbook has several ways to test it. It includes code tests, which are done using `foodcritic`, `rubocop`, and `chefspec`.
+It, also, includes functionality testing, provided by `vagrant`.
+
+```text
+rake foodcritic
+rake rubocop
+rake chefspec
+rake vagrant
+```
+
 This cookbook requires the `vagrant-omnibus` and `vagrant-berkshelf` Vagrant plugins to be installed.
 
 # License
