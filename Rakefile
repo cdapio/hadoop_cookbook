@@ -22,6 +22,12 @@ task :metadata do
   sh 'knife cookbook metadata from file metadata.rb'
 end
 
+# share cookbook to Chef community site
+desc 'Share cookbook to community site'
+task :share do
+  sh 'knife cookbook site share hadoop databases'
+end
+
 # run vagrant test
 desc 'Run vagrant tests'
 task :vagrant do
