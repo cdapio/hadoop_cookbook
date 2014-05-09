@@ -9,6 +9,8 @@ version          '1.0.8'
 depends 'yum', '>= 3.0'
 depends 'apt'
 
+recommends 'java', '>= 1.21.2'
+
 %w(centos debian redhat scientific ubuntu).each do |os|
   supports os
 end
