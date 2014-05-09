@@ -22,16 +22,20 @@ suites:
   - name: cdh4
     run_list:
       - recipe[hadoop::default]
+      - recipe[minitest-handler::default]
     attributes: { hadoop: { distribution: 'cdh', distribution_version: 4 } }
   - name: cdh5
     run_list:
       - recipe[hadoop::default]
+      - recipe[minitest-handler::default]
     attributes: { hadoop: { distribution: 'cdh', distribution_version: 5 } }
   - name: hdp20
     run_list:
       - recipe[hadoop::default]
+      - recipe[minitest-handler::default]
     attributes: { hadoop: { distribution: 'hdp', distribution_version: '2.0' } }
   - name: hdp21
     run_list:
       - recipe[hadoop::default]
+      - recipe[minitest-handler::default]
     attributes: { hadoop: { distribution: 'hdp', distribution_version: '2.1' } }
