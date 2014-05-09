@@ -20,9 +20,6 @@
 include_recipe 'hadoop::default'
 
 # Only CDH supports a JobTracker package
-# if node['hadoop']['distribution'] == 'cdh'
-#  Chef::Log.warn('Cloudera provides a compatibility JobTracker, you should consider switching to YARN (MRv2)!')
-
 package 'hadoop-0.20-mapreduce-jobtracker' do
   action :install
   only_if { node['hadoop']['distribution'] == 'cdh' }
@@ -33,7 +30,3 @@ service 'hadoop-0.20-mapreduce-jobtracker' do
   action :nothing
   only_if { node['hadoop']['distribution'] == 'cdh' }
 end
-
-# else
-#  Chef::Log.warn('This distribution does not support a JobTracker, use YARN (MRv2) instead!')
-# end
