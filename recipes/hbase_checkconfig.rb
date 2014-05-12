@@ -31,10 +31,12 @@ else
   Chef::Application.fatal!("You *must* set node['hadoop']['hdfs_site']['dfs.datanode.max.transfer.threads'] >= 4096 for HBase")
 end
 
-# HBase needs hbase.rootdir and hbase.zookeeper.quorum
-if node['hbase'].key?('hbase_site') && node['hbase']['hbase_site'].key?('hbase.rootdir') && node['hbase']['hbase_site'].key?('hbase.zookeeper.quorum')
-  Chef::Log.info("HBase root: #{node['hbase']['hbase_site']['hbase.rootdir']}")
-  Chef::Log.info("HBase ZooKeeper Quorum: #{node['hbase']['hbase_site']['hbase.zookeeper.quorum']}")
-else
-  Chef::Application.fatal!("You *must* set node['hbase']['hbase_site']['hbase.rootdir'] and node['hbase']['hbase_site']['hbase.zookeeper.quorum']")
+# HBase needs hbase.rootdir and hbase.zookeeper.quorum in distributed mode
+if node['hbase']['hbase_site'].key?('hbase.cluster.distributed') && node['hbase']['hbase_site']['hbase.cluster.distributed'].to_s == 'true'
+  if node['hbase'].key?('hbase_site') && node['hbase']['hbase_site'].key?('hbase.rootdir') && node['hbase']['hbase_site'].key?('hbase.zookeeper.quorum')
+    Chef::Log.info("HBase root: #{node['hbase']['hbase_site']['hbase.rootdir']}")
+    Chef::Log.info("HBase ZooKeeper Quorum: #{node['hbase']['hbase_site']['hbase.zookeeper.quorum']}")
+  else
+    Chef::Application.fatal!("You *must* set node['hbase']['hbase_site']['hbase.rootdir'] and node['hbase']['hbase_site']['hbase.zookeeper.quorum'] in distributed mode")
+  end
 end
