@@ -67,7 +67,7 @@ if node['hadoop'].key?('hdfs_site') && node['hadoop']['hdfs_site'].key?('dfs.ha.
 end
 
 execute 'hdfs-namenode-format' do
-  command 'hdfs namenode -format'
+  command 'hdfs namenode -format -nonInteractive'
   action :nothing
   group 'hdfs'
   user 'hdfs'
