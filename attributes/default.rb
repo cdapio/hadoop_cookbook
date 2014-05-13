@@ -10,6 +10,8 @@ default['hadoop']['distribution_version'] =
     '5'
   end
 
+default['hadoop']['force_format'] = false
+
 # Default: conf.chef
 default['hadoop']['conf_dir'] = 'conf.chef'
 default['hbase']['conf_dir'] = node['hadoop']['conf_dir']
