@@ -54,7 +54,7 @@ unless scratch_dir == '/tmp/hive-${user.name}'
 end
 
 execute 'hive-hdfs-warehousedir' do
-  command "hdfs dfs -mkdir -p #{dfs}/#{warehouse_dir} && hdfs dfs -chown hive:hdfs #{dfs}/#{warehouse_dir}"
+  command "hdfs dfs -mkdir -p #{dfs}/#{warehouse_dir} && hdfs dfs -chown hive:hdfs #{dfs}/#{warehouse_dir} && hdfs dfs -chmod 1777 #{dfs}/#{warehouse_dir}"
   timeout 300
   user 'hdfs'
   group 'hdfs'
