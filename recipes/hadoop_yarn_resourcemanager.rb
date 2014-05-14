@@ -29,17 +29,6 @@ end
 # mapreduce.jobtracker.staging.root.dir = #{hadoop_tmp_dir}/mapred/staging
 # mapreduce.cluster.temp.dir = #{hadoop_tmp_dir}/mapred/temp
 
-# YARN needs a /tmp in HDFS
-dfs = node['hadoop']['core_site']['fs.defaultFS']
-execute 'yarn-hdfs-tmpdir' do
-  command "hdfs dfs -mkdir -p #{dfs}/tmp && hdfs dfs -chmod 1777 #{dfs}/tmp"
-  timeout 300
-  user 'hdfs'
-  group 'hdfs'
-  not_if "hdfs dfs -test -d #{dfs}/tmp", :user => 'hdfs'
-  action :nothing
-end
-
 service 'hadoop-yarn-resourcemanager' do
   supports [:restart => true, :reload => false, :status => true]
   action :nothing
