@@ -19,6 +19,12 @@
 
 include_recipe 'hadoop::default'
 
+# TODO: check for these and set them up
+# mapreduce.cluster.local.dir = #{hadoop_tmp_dir}/mapred/local
+# mapreduce.jobtracker.system.dir = #{hadoop_tmp_dir}/mapred/system
+# mapreduce.jobtracker.staging.root.dir = #{hadoop_tmp_dir}/mapred/staging
+# mapreduce.cluster.temp.dir = #{hadoop_tmp_dir}/mapred/temp
+
 # Only CDH supports a JobTracker package
 package 'hadoop-0.20-mapreduce-jobtracker' do
   action :install

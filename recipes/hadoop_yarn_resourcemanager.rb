@@ -23,12 +23,6 @@ package 'hadoop-yarn-resourcemanager' do
   action :install
 end
 
-# TODO: check for these and set them up
-# mapreduce.cluster.local.dir = #{hadoop_tmp_dir}/mapred/local
-# mapreduce.jobtracker.system.dir = #{hadoop_tmp_dir}/mapred/system
-# mapreduce.jobtracker.staging.root.dir = #{hadoop_tmp_dir}/mapred/staging
-# mapreduce.cluster.temp.dir = #{hadoop_tmp_dir}/mapred/temp
-
 # YARN needs a /tmp in HDFS
 dfs = node['hadoop']['core_site']['fs.defaultFS']
 execute 'yarn-hdfs-tmpdir' do
