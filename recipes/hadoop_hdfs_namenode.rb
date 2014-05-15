@@ -73,16 +73,6 @@ execute 'hdfs-namenode-format' do
   user 'hdfs'
 end
 
-# We need a /tmp in HDFS
-dfs = node['hadoop']['core_site']['fs.defaultFS']
-execute 'hdfs-tmpdir' do
-  command "hdfs dfs -mkdir -p #{dfs}/tmp && hdfs dfs -chmod 1777 #{dfs}/tmp"
-  timeout 300
-  user 'hdfs'
-  group 'hdfs'
-  action :nothing
-end
-
 service 'hadoop-hdfs-namenode' do
   supports [:restart => true, :reload => false, :status => true]
   action :nothing

@@ -24,10 +24,6 @@ describe 'hadoop::hadoop_hdfs_namenode' do
       expect(chef_run).to_not run_execute('hdfs-namenode-format').with(user: 'hdfs')
     end
 
-    it 'creates hdfs-tmpdir execute resource, but does not run it' do
-      expect(chef_run).to_not run_execute('hdfs-tmpdir').with(user: 'hdfs')
-    end
-
     it 'creates hadoop-hdfs-namenode service resource, but does not run it' do
       expect(chef_run).to_not disable_service('hadoop-hdfs-namenode')
       expect(chef_run).to_not enable_service('hadoop-hdfs-namenode')
