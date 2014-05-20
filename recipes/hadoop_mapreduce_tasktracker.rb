@@ -26,6 +26,7 @@ package 'hadoop-0.20-mapreduce-tasktracker' do
 end
 
 service 'hadoop-0.20-mapreduce-tasktracker' do
+  status_command 'service hadoop-0.20-mapreduce-tasktracker status'
   supports [:restart => true, :reload => false, :status => true]
   action :nothing
   only_if { node['hadoop']['distribution'] == 'cdh' }
