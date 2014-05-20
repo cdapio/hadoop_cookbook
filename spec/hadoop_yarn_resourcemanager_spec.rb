@@ -13,8 +13,8 @@ describe 'hadoop::hadoop_yarn_resourcemanager' do
       expect(chef_run).to install_package('hadoop-yarn-resourcemanager')
     end
 
-    it 'creates yarn-hdfs-tmpdir execute resource, but does not run it' do
-      expect(chef_run).to_not run_execute('yarn-hdfs-tmpdir').with(user: 'hdfs')
+    it 'creates hdfs-tmpdir execute resource, but does not run it' do
+      expect(chef_run).to_not run_execute('hdfs-tmpdir').with(user: 'hdfs')
     end
 
     it 'creates hadoop-yarn-resourcemanager service resource, but does not run it' do

@@ -1,12 +1,7 @@
 # hadoop cookbook
 
-[![Cookbook Version](http://img.shields.io/cookbook/v/hadoop.svg)][cookbook]
-[![Build Status](http://img.shields.io/travis/continuuity/hadoop_cookbook.svg)][travis]
-[![Code Climate](https://codeclimate.com/github/continuuity/hadoop_cookbook.png)][climate]
-
-[cookbook]: https://community.opscode.com/cookbooks/hadoop
-[travis]: http://travis-ci.org/continuuity/hadoop_cookbook
-[climate]: https://codeclimate.com/github/continuuity/hadoop_cookbook
+[![Cookbook Version](http://img.shields.io/cookbook/v/hadoop.svg)](https://community.opscode.com/cookbooks/hadoop)
+[![Build Status](http://img.shields.io/travis/continuuity/hadoop_cookbook.svg)](http://travis-ci.org/continuuity/hadoop_cookbook)
 
 # Requirements
 
@@ -119,9 +114,20 @@ Author:: Continuuity, Inc. (<ops@continuuity.com>)
 
 # Testing
 
+This cookbook has several ways to test it. It includes code tests, which are done using `foodcritic`, `rubocop`, and `chefspec`.
+It, also, includes functionality testing, provided by `vagrant`.
+
+```text
+rake foodcritic
+rake rubocop
+rake chefspec
+rake vagrant
+```
+
 This cookbook requires the `vagrant-omnibus` and `vagrant-berkshelf` Vagrant plugins to be installed.
 
 # License
+
 Licensed under the Apache License, Version 2.0 (the "License"); you may not use this software except in compliance with the License. You may obtain a copy of the License at
 
 http://www.apache.org/licenses/LICENSE-2.0
