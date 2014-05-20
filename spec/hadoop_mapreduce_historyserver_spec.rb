@@ -9,7 +9,7 @@ describe 'hadoop::hadoop_mapreduce_historyserver' do
       end.converge(described_recipe)
     end
 
-    it 'install hadoop-mapreduce-historyserver package' do
+    it 'installs hadoop-mapreduce-historyserver package' do
       expect(chef_run).to install_package('hadoop-mapreduce-historyserver')
     end
 
