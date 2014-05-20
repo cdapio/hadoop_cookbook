@@ -44,6 +44,7 @@ dfs_jn_edits_dirs.split(',').each do |dir|
 end
 
 service 'hadoop-hdfs-journalnode' do
+  status_command 'service hadoop-hdfs-journalnode status'
   supports [:restart => true, :reload => false, :status => true]
   action :nothing
 end

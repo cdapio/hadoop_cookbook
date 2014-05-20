@@ -46,6 +46,7 @@ end
 end
 
 service 'hadoop-yarn-nodemanager' do
+  status_command 'service hadoop-yarn-nodemanager status'
   supports [:restart => true, :reload => false, :status => true]
   action :nothing
 end

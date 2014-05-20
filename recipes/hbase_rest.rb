@@ -24,6 +24,7 @@ package 'hbase-rest' do
 end
 
 service 'hbase-rest' do
+  status_command 'service hbase-rest status'
   supports [:restart => true, :reload => false, :status => true]
   action :nothing
 end

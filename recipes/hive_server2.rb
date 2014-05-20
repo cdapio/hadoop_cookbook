@@ -37,6 +37,7 @@ template '/etc/init.d/hive-server2' do
 end
 
 service 'hive-server2' do
+  status_command 'service hive-server2 status'
   supports [:restart => true, :reload => false, :status => true]
   action :nothing
 end
