@@ -103,6 +103,7 @@ if node['oozie'].key? 'oozie_site'
 end
 
 service 'oozie' do
+  status_command 'service oozie status'
   supports [:restart => true, :reload => false, :status => true]
   action :nothing
 end

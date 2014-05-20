@@ -40,6 +40,7 @@ execute 'hdfs-tmpdir' do
 end
 
 service 'hadoop-yarn-resourcemanager' do
+  status_command 'service hadoop-yarn-resourcemanager status'
   supports [:restart => true, :reload => false, :status => true]
   action :nothing
 end

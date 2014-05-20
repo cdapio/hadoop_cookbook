@@ -130,6 +130,7 @@ if node['zookeeper'].key? 'log4j'
 end # End log4j.properties
 
 service 'zookeeper-server' do
+  status_command 'service zookeeper-server status'
   supports [:restart => true, :reload => false, :status => true]
   action :nothing
 end

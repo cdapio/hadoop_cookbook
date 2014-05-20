@@ -74,6 +74,7 @@ execute 'hdfs-namenode-format' do
 end
 
 service 'hadoop-hdfs-namenode' do
+  status_command 'service hadoop-hdfs-namenode status'
   supports [:restart => true, :reload => false, :status => true]
   action :nothing
 end
