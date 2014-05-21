@@ -1,6 +1,6 @@
 #
 # Cookbook Name:: hadoop
-# Recipe:: hbase_thrift
+# Recipe:: hadoop_mapreduce_tasktracker
 #
 # Copyright (C) 2013-2014 Continuuity, Inc.
 #
@@ -17,14 +17,17 @@
 # limitations under the License.
 #
 
-include_recipe 'hadoop::hbase'
+include_recipe 'hadoop::default'
 
-package 'hbase-thrift' do
+# Only CDH supports a TaskTracker package
+package 'hadoop-0.20-mapreduce-tasktracker' do
   action :install
+  only_if { node['hadoop']['distribution'] == 'cdh' }
 end
 
-service 'hbase-thrift' do
-  status_command 'service hbase-thrift status'
+service 'hadoop-0.20-mapreduce-tasktracker' do
+  status_command 'service hadoop-0.20-mapreduce-tasktracker status'
   supports [:restart => true, :reload => false, :status => true]
   action :nothing
+  only_if { node['hadoop']['distribution'] == 'cdh' }
 end

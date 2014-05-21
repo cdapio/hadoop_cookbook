@@ -1,6 +1,6 @@
 #
 # Cookbook Name:: hadoop
-# Recipe:: hadoop_yarn_nodemanager
+# Recipe:: hadoop_mapreduce_jobtracker
 #
 # Copyright (C) 2013-2014 Continuuity, Inc.
 #
@@ -19,34 +19,21 @@
 
 include_recipe 'hadoop::default'
 
-package 'hadoop-yarn-nodemanager' do
-  action :install
-end
-
 # TODO: check for these and set them up
 # mapreduce.cluster.local.dir = #{hadoop_tmp_dir}/mapred/local
 # mapreduce.jobtracker.system.dir = #{hadoop_tmp_dir}/mapred/system
 # mapreduce.jobtracker.staging.root.dir = #{hadoop_tmp_dir}/mapred/staging
 # mapreduce.cluster.temp.dir = #{hadoop_tmp_dir}/mapred/temp
 
-# yarn.app.mapreduce.am.staging-dir = /tmp/hadoop-yarn/staging
-
-%w(yarn.nodemanager.local-dirs yarn.nodemanager.log-dirs).each do |opt|
-  if node['hadoop'].key?('yarn_site') && node['hadoop']['yarn_site'].key?(opt)
-    node['hadoop']['yarn_site'][opt].split(',').each do |dir|
-      directory dir.gsub('file://', '') do
-        owner 'yarn'
-        group 'yarn'
-        mode '0755'
-        action :create
-        recursive true
-      end
-    end
-  end
+# Only CDH supports a JobTracker package
+package 'hadoop-0.20-mapreduce-jobtracker' do
+  action :install
+  only_if { node['hadoop']['distribution'] == 'cdh' }
 end
 
-service 'hadoop-yarn-nodemanager' do
-  status_command 'service hadoop-yarn-nodemanager status'
+service 'hadoop-0.20-mapreduce-jobtracker' do
+  status_command 'service hadoop-0.20-mapreduce-jobtracker status'
   supports [:restart => true, :reload => false, :status => true]
   action :nothing
+  only_if { node['hadoop']['distribution'] == 'cdh' }
 end

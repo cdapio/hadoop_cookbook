@@ -65,6 +65,7 @@ snn_dirs.each do |dirs|
 end
 
 service 'hadoop-hdfs-secondarynamenode' do
+  status_command 'service hadoop-hdfs-secondarynamenode status'
   supports [:restart => true, :reload => false, :status => true]
   action :nothing
 end

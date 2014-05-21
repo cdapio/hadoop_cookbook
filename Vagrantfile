@@ -57,7 +57,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
           'banned.users' => 'hdfs,yarn,mapred,bin'
         },
         :hdfs_site => {
-          'dfs.datanode.max.xcievers' => 4096
+          'dfs.datanode.max.transfer.threads' => 4096
         }
       },
       :hbase => {
