@@ -186,7 +186,7 @@ if node['hadoop']['core_site']['hadoop.tmp.dir'] == 'file:///tmp/hadoop-${user}'
   end
 elsif node['hadoop']['core_site']['hadoop.tmp.dir'] =~ /${user}/
   # Since we're creating a 1777 directory, Hadoop can create the user-specific subdirectories, itself
-  directory File.dirname(hadoop_tmp_dir.gsub('file://', '') do
+  directory File.dirname(hadoop_tmp_dir.gsub('file://', '')) do
     mode '1777'
     action :create
     recursive true
