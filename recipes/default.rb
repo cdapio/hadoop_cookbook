@@ -17,6 +17,13 @@
 # limitations under the License.
 #
 
+node.default['hadoop']['distribution_version'] =
+  if node['hadoop']['distribution'] == 'hdp'
+    '2.0'
+  elsif node['hadoop']['distribution'] == 'cdh'
+    '5'
+  end
+
 include_recipe 'hadoop::repo'
 
 package 'hadoop-client' do
