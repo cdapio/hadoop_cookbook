@@ -36,15 +36,19 @@ task :vagrant do
   sh 'vagrant up'
 end
 
-# # test-kitchen
-# require 'kitchen'
-# desc 'Run Test Kitchen integration tests'
-# task :integration do
-#   Kitchen.logger = Kitchen.default_file_logger
-#   Kitchen::Config.new.instances.each do |instance|
-#     instance.test(:always)
-#   end
-# end
+# test-kitchen
+begin
+  require 'kitchen/rake_tasks'
+  desc 'Run Test Kitchen integration tests'
+  task :integration do
+    Kitchen.logger = Kitchen.default_file_logger
+    Kitchen::Config.new.instances.each do |instance|
+      instance.test(:always)
+    end
+  end
+rescue LoadError
+  puts '>>>>> Kitchen gem not loaded, omitting tasks' unless ENV['CI']
+end
 
 # default tasks are quick, commit tests
 task :default => %w(foodcritic rubocop chefspec)
