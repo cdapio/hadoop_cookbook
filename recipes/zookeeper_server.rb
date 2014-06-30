@@ -129,6 +129,21 @@ if node['zookeeper'].key? 'log4j'
   end
 end # End log4j.properties
 
+# Hack to work around broken Hortonworks release engineering
+if node['hadoop']['distribution'] == 'hdp' && node['hadoop']['distribution_version'] == '2.1'
+  log 'hdp-2.1 release engineering fix' do
+    level :warn
+    message 'Performing workaround for broken zookeeper-server init script on HDP 2.1'
+  end
+  directory '/usr/lib/bigtop-utils' do
+    action :create
+  end
+  file '/usr/lib/bigtop-utils/bigtop-detect-javahome' do
+    action :touch
+    not_if 'test -e /usr/lib/bigtop-utils/bigtop-detect-javahome'
+  end
+end # HDP 2.1 hack
+
 service 'zookeeper-server' do
   status_command 'service zookeeper-server status'
   supports [:restart => true, :reload => false, :status => true]
