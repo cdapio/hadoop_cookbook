@@ -93,6 +93,7 @@ when 'hdp'
     Chef::Log.warn('HDP only supports version 2.0 on Ubuntu at this time') unless node['hadoop']['distribution_version'] == '2.0'
     apt_base_url = 'http://public-repo-1.hortonworks.com/HDP'
     os = "ubuntu#{major_platform_version}"
+    hdp_update_version = hdp_version if hdp_update_version.nil?
     apt_repo_url = node['hadoop']['apt_repo_url'] ? node['hadoop']['apt_repo_url'] : "#{apt_base_url}/#{os}/#{hdp_update_version}"
     # Hortonworks don't know how to provide a key, but we do
     apt_repo_key_url = node['hadoop']['apt_repo_key_url'] ? node['hadoop']['apt_repo_key_url'] : "#{apt_base_url}/centos6/#{key}/#{key}-Jenkins"
