@@ -90,7 +90,6 @@ when 'hdp'
     end
 
   when 'debian'
-    Chef::Log.warn('HDP only supports version 2.0 on Ubuntu at this time') unless node['hadoop']['distribution_version'] == '2.0'
     apt_base_url = 'http://public-repo-1.hortonworks.com/HDP'
     os = "ubuntu#{major_platform_version}"
     hdp_update_version = hdp_version if hdp_update_version.nil?
