@@ -53,7 +53,7 @@ if node['spark'].has_key? 'spark_env'
     mode '0755'
     action :create
     recursive true
-    only_if { node['spark']['spark_env'].has_key? 'spark_log_dir'
+    only_if { node['spark']['spark_env'].has_key? 'spark_log_dir' }
   end
 
   template "#{spark_conf_dir}/spark-env.sh" do
