@@ -47,6 +47,7 @@ a.out
 ###########
 .watchr
 .rspec
+.rubocop.yml
 spec/*
 spec/fixtures/*
 test/*

@@ -1,5 +1,8 @@
 # hadoop cookbook
 
+[![Cookbook Version](http://img.shields.io/cookbook/v/hadoop.svg)](https://community.opscode.com/cookbooks/hadoop)
+[![Build Status](http://img.shields.io/travis/continuuity/hadoop_cookbook.svg)](http://travis-ci.org/continuuity/hadoop_cookbook)
+
 # Requirements
 
 This cookbook may work on earlier versions, but these are the minimal tested versions.
@@ -13,6 +16,8 @@ This cookbook assumes that you have a working Java installation. It has been tes
 # Usage
 
 This cookbook is designed to be used with a wrapper cookbook or a role with settings for configuring Hadoop. The services should work out of the box on a single host, but little validation is done that you have made a working Hadoop configuration. The cookbook is attribute-driven and is suitable for use via either `chef-client` or `chef-solo` since it does not use any server-based functionality. The cookbook defines service definitions for each Hadoop service, but it does not enable or start them, by default.
+
+For more information, read the [Wrapping this cookbook](https://github.com/continuuity/hadoop_cookbook/wiki/Wrapping-this-cookbook) wiki entry.
 
 # Attributes
 
@@ -116,9 +121,20 @@ Author:: Continuuity, Inc. (<ops@continuuity.com>)
 
 # Testing
 
+This cookbook has several ways to test it. It includes code tests, which are done using `foodcritic`, `rubocop`, and `chefspec`.
+It, also, includes functionality testing, provided by `vagrant`.
+
+```text
+rake foodcritic
+rake rubocop
+rake chefspec
+rake vagrant
+```
+
 This cookbook requires the `vagrant-omnibus` and `vagrant-berkshelf` Vagrant plugins to be installed.
 
 # License
+
 Licensed under the Apache License, Version 2.0 (the "License"); you may not use this software except in compliance with the License. You may obtain a copy of the License at
 
 http://www.apache.org/licenses/LICENSE-2.0

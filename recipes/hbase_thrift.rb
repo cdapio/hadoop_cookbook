@@ -2,14 +2,14 @@
 # Cookbook Name:: hadoop
 # Recipe:: hbase_thrift
 #
-# Copyright (C) 2013 Continuuity, Inc.
-# 
+# Copyright (C) 2013-2014 Continuuity, Inc.
+#
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
-# 
+#
 #    http://www.apache.org/licenses/LICENSE-2.0
-# 
+#
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -19,11 +19,12 @@
 
 include_recipe 'hadoop::hbase'
 
-package "hbase-thrift" do
+package 'hbase-thrift' do
   action :install
 end
 
-service "hbase-thrift" do
-  supports [ :restart => true, :reload => false, :status => true ]
+service 'hbase-thrift' do
+  status_command 'service hbase-thrift status'
+  supports [:restart => true, :reload => false, :status => true]
   action :nothing
 end

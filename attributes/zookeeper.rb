@@ -19,7 +19,8 @@ default['zookeeper']['log4j']['log4j.appender.ROLLINGFILE'] = 'org.apache.log4j.
 default['zookeeper']['log4j']['log4j.appender.ROLLINGFILE.Threshold'] = '${zookeeper.log.threshold}'
 default['zookeeper']['log4j']['log4j.appender.ROLLINGFILE.File'] = '${zookeeper.log.dir}/${zookeeper.log.file}'
 default['zookeeper']['log4j']['log4j.appender.ROLLINGFILE.MaxFileSize'] = '10MB'
-#default['zookeeper']['log4j']['log4j.appender.ROLLINGFILE.MaxBackupIndex'] = '10'
+# Uncomment the following to set a maximum number of logs to keep
+# default['zookeeper']['log4j']['log4j.appender.ROLLINGFILE.MaxBackupIndex'] = '10'
 default['zookeeper']['log4j']['log4j.appender.ROLLINGFILE.layout'] = 'org.apache.log4j.PatternLayout'
 default['zookeeper']['log4j']['log4j.appender.ROLLINGFILE.layout.ConversionPattern'] = '%d{ISO8601} [myid:%X{myid}] - %-5p [%t:%C{1}@%L] - %m%n'
 default['zookeeper']['log4j']['log4j.appender.TRACEFILE'] = 'org.apache.log4j.FileAppender'
