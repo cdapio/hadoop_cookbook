@@ -24,14 +24,14 @@ package 'spark-worker' do
   action :install
 end
 
-if node['spark'].key? 'spark_env' and node['spark']['spark_env'].key? 'spark_worker_dir'
+if node['spark'].key?('spark_env') && node['spark']['spark_env'].key?('spark_worker_dir')
   directory node['spark']['spark_env']['spark_worker_dir'] do
     mode '0755'
     owner 'spark'
     group 'spark'
     action :create
     recursive true
-    only_if { node['spark']['spark_env'].key? 'spark_worker_dir' }
+    only_if { node['spark']['spark_env'].key?('spark_worker_dir') }
   end
 end
 
