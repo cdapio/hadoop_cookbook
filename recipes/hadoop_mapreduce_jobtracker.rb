@@ -25,15 +25,15 @@ include_recipe 'hadoop::default'
 # mapreduce.cluster.temp.dir = #{hadoop_tmp_dir}/mapred/temp
 
 mapred_local_dirs =
-  if node['hadoop'].key?('mapred_site') && node['hadoop']['mapred_site'].key?('mapred.cluster.local.dir')
-    node['hadoop']['mapred_site']['mapred.cluster.local.dir']
+  if node['hadoop'].key?('mapred_site') && node['hadoop']['mapred_site'].key?('mapreduce.cluster.local.dir')
+    node['hadoop']['mapred_site']['mapreduce.cluster.local.dir']
   elsif node['hadoop'].key?('mapred_site') && node['hadoop']['mapred_site'].key?('mapred.local.dir')
     node['hadoop']['mapred_site']['mapred.local.dir']
   else
     'file://tmp/hadoop-mapred/local'
   end
 
-node.default['hadoop']['mapred_site']['mapred.cluster.local.dir'] = mapred_local_dirs
+node.default['hadoop']['mapred_site']['mapreduce.cluster.local.dir'] = mapred_local_dirs
 
 mapred_local_dirs.split(',').each do |dir|
   directory dir.gsub('file://', '') do
