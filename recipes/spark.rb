@@ -33,12 +33,11 @@ directory spark_conf_dir do
   recursive true
 end
 
-# TODO:
-# /etc/spark/conf.dist/fairscheduler.xml.template
+# TODO: /etc/spark/conf.dist/fairscheduler.xml.template
 
 # Setup spark-env.sh
 if node['spark'].key? 'spark_env'
-  myVars = { :options => node['spark']['spark_env'] }
+  my_vars = { :options => node['spark']['spark_env'] }
 
   spark_log_dir =
     if node['spark']['spark_env'].key? 'spark_log_dir'
@@ -62,14 +61,14 @@ if node['spark'].key? 'spark_env'
     owner 'root'
     group 'root'
     action :create
-    variables myVars
+    variables my_vars
   end
 end # End spark-env.sh
 
 # Setup metrics.properties log4j.properties
 %w(metrics log4j).each do |propfile|
   if node['spark'].key? propfile
-    myVars = { :properties => node['spark'][propfile] }
+    my_vars = { :properties => node['spark'][propfile] }
 
     template "#{spark_conf_dir}/#{propfile.gsub('_', '-')}.properties" do
       source 'generic.properties.erb'
@@ -77,7 +76,7 @@ end # End spark-env.sh
       owner 'spark'
       group 'spark'
       action :create
-      variables myVars
+      variables my_vars
     end
   end
 end # End metrics.properties log4j.properties
