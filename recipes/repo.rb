@@ -28,6 +28,14 @@ when 'debian'
   include_recipe 'apt'
 end
 
+# Set defaults for version, based on distribution
+node.default['hadoop']['distribution_version'] =
+  if node['hadoop']['distribution'] == 'hdp'
+    '2.0'
+  elsif node['hadoop']['distribution'] == 'cdh'
+    '5'
+  end
+
 case node['hadoop']['distribution']
 when 'hdp'
   case node['hadoop']['distribution_version']
