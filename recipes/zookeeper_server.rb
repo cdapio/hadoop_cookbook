@@ -115,6 +115,20 @@ if node['zookeeper'].key? 'zoocfg'
   end
 end # End zoo.cfg
 
+# Setup zookeeper-env.sh
+if node['zookeeper'].key? 'zookeeper_env'
+  my_vars = { :options => node['zookeeper']['zookeeper_env'] }
+
+  template "#{zookeeper_conf_dir}/zookeeper-env.sh" do
+    source 'generic-env.sh.erb'
+    mode '0755'
+    owner 'zookeeper'
+    group 'zookeeper'
+    action :create
+    variables my_vars
+  end
+end # End zookeeper-env.sh
+
 # Setup log4j.properties
 if node['zookeeper'].key? 'log4j'
   my_vars = { :properties => node['zookeeper']['log4j'] }
