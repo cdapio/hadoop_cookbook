@@ -1,5 +1,7 @@
 #!/usr/bin/env rake
 
+require 'bundler/setup'
+
 # chefspec task against spec/*_spec.rb
 require 'rspec/core/rake_task'
 RSpec::Core::RakeTask.new(:chefspec)
@@ -32,6 +34,20 @@ end
 desc 'Run vagrant tests'
 task :vagrant do
   sh 'vagrant up'
+end
+
+# test-kitchen
+begin
+  require 'kitchen/rake_tasks'
+  desc 'Run Test Kitchen integration tests'
+  task :integration do
+    Kitchen.logger = Kitchen.default_file_logger
+    Kitchen::Config.new.instances.each do |instance|
+      instance.test(:always)
+    end
+  end
+rescue LoadError
+  puts '>>>>> Kitchen gem not loaded, omitting tasks' unless ENV['CI']
 end
 
 # default tasks are quick, commit tests
