@@ -94,12 +94,10 @@ if node['zookeeper'].key? 'zoocfg'
   myid = nil
   1.upto(255) do |index|
     server = node['zookeeper']['zoocfg']["server.#{index}"]
-    unless server.nil?
-      if server.start_with?("#{node['fqdn']}:") || server.start_with?("#{node['ipaddress']}:") || server.start_with?("#{node['hostname']}:")
-        myid = index
-        break
-      end
-    end
+    next if server.nil?
+    next unless server.start_with?("#{node['fqdn']}:") || server.start_with?("#{node['ipaddress']}:") || server.start_with?("#{node['hostname']}:")
+    myid = index
+    break
   end
 
   template "#{node['zookeeper']['zoocfg']['dataDir']}/myid" do
