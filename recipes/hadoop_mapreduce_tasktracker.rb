@@ -25,7 +25,7 @@ mapred_local_dirs =
   elsif node['hadoop'].key?('mapred_site') && node['hadoop']['mapred_site'].key?('mapred.local.dir')
     node['hadoop']['mapred_site']['mapred.local.dir']
   else
-    'file://tmp/hadoop-mapred/local'
+    'file:///tmp/hadoop-mapred/local'
   end
 
 node.default['hadoop']['mapred_site']['mapreduce.cluster.local.dir'] = mapred_local_dirs
