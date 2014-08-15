@@ -32,20 +32,20 @@ end
 # yarn.app.mapreduce.am.staging-dir = /tmp/hadoop-yarn/staging
 
 %w(yarn.nodemanager.local-dirs yarn.nodemanager.log-dirs).each do |opt|
-  if node['hadoop'].key?('yarn_site') && node['hadoop']['yarn_site'].key?(opt)
-    node['hadoop']['yarn_site'][opt].split(',').each do |dir|
-      directory dir.gsub('file://', '') do
-        owner 'yarn'
-        group 'yarn'
-        mode '0755'
-        action :create
-        recursive true
-      end
+  next unless node['hadoop'].key?('yarn_site') && node['hadoop']['yarn_site'].key?(opt)
+  node['hadoop']['yarn_site'][opt].split(',').each do |dir|
+    directory dir.gsub('file://', '') do
+      owner 'yarn'
+      group 'yarn'
+      mode '0755'
+      action :create
+      recursive true
     end
   end
 end
 
 service 'hadoop-yarn-nodemanager' do
+  status_command 'service hadoop-yarn-nodemanager status'
   supports [:restart => true, :reload => false, :status => true]
   action :nothing
 end

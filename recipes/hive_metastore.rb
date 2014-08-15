@@ -63,6 +63,7 @@ execute 'hive-hdfs-warehousedir' do
 end
 
 service 'hive-metastore' do
+  status_command 'service hive-metastore status'
   supports [:restart => true, :reload => false, :status => true]
   action :nothing
 end

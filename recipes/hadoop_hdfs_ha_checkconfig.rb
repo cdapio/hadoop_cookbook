@@ -27,20 +27,19 @@ end
 # We have dfs.nameservices, and now need to check them
 dfs_nameservices.each do |ns|
   # Start namenode checks
-  if node['hadoop']['hdfs_site'].key? "dfs\.ha\.namenodes\.#{ns}"
-    # We need two and only two NameNodes
-    namenodes = node['hadoop']['hdfs_site']["dfs\.ha\.namenodes\.#{ns}"].split(',')
-    if namenodes.size != 2
-      Chef::Application.fatal!("NameNode HA requires exactly two entries in node['hadoop']['hdfs_site']['dfs.ha.namenodes.#{ns}']")
-    end
-    # Check NameNode-specific entries
-    namenodes.each do |nn|
-      %w(rpc-address http-address).each do |k|
-        if node['hadoop']['hdfs_site'].key? "dfs\.namenode\.#{k}\.#{ns}\.#{nn}"
-          Chef::Log.info("Set dfs.namenode.#{k}.#{ns}.#{nn} to #{node['hadoop']['hdfs_site']['dfs.namenode.#{k}.#{ns}.#{nn}']}")
-        else
-          Chef::Application.fatal!("You must set node['hadoop']['hdfs_site']['dfs.namenode.#{k}.#{ns}.#{nn}']")
-        end
+  next unless node['hadoop']['hdfs_site'].key? "dfs\.ha\.namenodes\.#{ns}"
+  # We need two and only two NameNodes
+  namenodes = node['hadoop']['hdfs_site']["dfs\.ha\.namenodes\.#{ns}"].split(',')
+  if namenodes.size != 2
+    Chef::Application.fatal!("NameNode HA requires exactly two entries in node['hadoop']['hdfs_site']['dfs.ha.namenodes.#{ns}']")
+  end
+  # Check NameNode-specific entries
+  namenodes.each do |nn|
+    %w(rpc-address http-address).each do |k|
+      if node['hadoop']['hdfs_site'].key? "dfs\.namenode\.#{k}\.#{ns}\.#{nn}"
+        Chef::Log.info("Set dfs.namenode.#{k}.#{ns}.#{nn} to #{node['hadoop']['hdfs_site']['dfs.namenode.#{k}.#{ns}.#{nn}']}")
+      else
+        Chef::Application.fatal!("You must set node['hadoop']['hdfs_site']['dfs.namenode.#{k}.#{ns}.#{nn}']")
       end
     end
   end # End namenode checks
@@ -52,9 +51,8 @@ dfs_nameservices.each do |ns|
       'org.apache.hadoop.hdfs.server.namenode.ha.ConfiguredFailoverProxyProvider'
   end # End proxy provider check
   # Start fs.defaultFS check
-  if node['hadoop']['hdfs_site']['fs.defaultFS'] != "hdfs://#{ns}"
-    Chef::Application.fatal!("HA requires node['hadoop']['hdfs_site']['fs.defaultFS'] to be 'hdfs://#{ns}'")
-  end # End fs.defaultFS check
+  next if node['hadoop']['hdfs_site']['fs.defaultFS'] == "hdfs://#{ns}"
+  Chef::Application.fatal!("HA requires node['hadoop']['hdfs_site']['fs.defaultFS'] to be 'hdfs://#{ns}'")
 end
 
 # dfs.namenode.shared.edits.dir format: "qjournal://host1:port1;host2:port2;host3:port3/journalId" or "file:///path/to/mount"

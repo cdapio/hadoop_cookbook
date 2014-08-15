@@ -68,6 +68,7 @@ execute 'hbase-bulkload-stagingdir' do
 end
 
 service 'hbase-master' do
+  status_command 'service hbase-master status'
   supports [:restart => true, :reload => false, :status => true]
   action :nothing
 end

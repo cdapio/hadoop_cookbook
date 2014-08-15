@@ -94,12 +94,10 @@ if node['zookeeper'].key? 'zoocfg'
   myid = nil
   1.upto(255) do |index|
     server = node['zookeeper']['zoocfg']["server.#{index}"]
-    unless server.nil?
-      if server.start_with?("#{node['fqdn']}:") || server.start_with?("#{node['ipaddress']}:") || server.start_with?("#{node['hostname']}:")
-        myid = index
-        break
-      end
-    end
+    next if server.nil?
+    next unless server.start_with?("#{node['fqdn']}:") || server.start_with?("#{node['ipaddress']}:") || server.start_with?("#{node['hostname']}:")
+    myid = index
+    break
   end
 
   template "#{node['zookeeper']['zoocfg']['dataDir']}/myid" do
@@ -115,6 +113,34 @@ if node['zookeeper'].key? 'zoocfg'
   end
 end # End zoo.cfg
 
+# Setup zookeeper-env.sh
+if node['zookeeper'].key? 'zookeeper_env'
+  my_vars = { :options => node['zookeeper']['zookeeper_env'] }
+
+  template "#{zookeeper_conf_dir}/zookeeper-env.sh" do
+    source 'generic-env.sh.erb'
+    mode '0755'
+    owner 'zookeeper'
+    group 'zookeeper'
+    action :create
+    variables my_vars
+  end
+end # End zookeeper-env.sh
+
+# Setup jaas.conf
+if node['zookeeper'].key?('jaas')
+  my_vars = { :options => node['zookeeper']['jaas'] }
+
+  template "#{zookeeper_conf_dir}/jaas.conf" do
+    source 'jaas.conf.erb'
+    mode '0755'
+    owner 'zookeeper'
+    group 'zookeeper'
+    action :create
+    variables my_vars
+  end
+end # End jaas.conf
+
 # Setup log4j.properties
 if node['zookeeper'].key? 'log4j'
   my_vars = { :properties => node['zookeeper']['log4j'] }
@@ -129,7 +155,23 @@ if node['zookeeper'].key? 'log4j'
   end
 end # End log4j.properties
 
+# Hack to work around broken Hortonworks release engineering
+if node['hadoop']['distribution'] == 'hdp' && node['hadoop']['distribution_version'] == '2.1'
+  log 'hdp-2.1 release engineering fix' do
+    level :warn
+    message 'Performing workaround for broken zookeeper-server init script on HDP 2.1'
+  end
+  directory '/usr/lib/bigtop-utils' do
+    action :create
+  end
+  file '/usr/lib/bigtop-utils/bigtop-detect-javahome' do
+    action :touch
+    not_if 'test -e /usr/lib/bigtop-utils/bigtop-detect-javahome'
+  end
+end # HDP 2.1 hack
+
 service 'zookeeper-server' do
+  status_command 'service zookeeper-server status'
   supports [:restart => true, :reload => false, :status => true]
   action :nothing
 end

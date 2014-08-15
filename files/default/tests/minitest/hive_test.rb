@@ -34,13 +34,12 @@ describe 'hadoop::hive' do
 
   it 'creates hive config files' do
     %w(hive_site).each do |sitefile|
-      if node['hive'].key? sitefile
-        file("/etc/hive/#{node['hive']['conf_dir']}/#{sitefile.gsub('_', '-')}.xml")
-          .must_exist
-          .with(:owner, 'root')
-          .and(:group, 'root')
-          .and(:mode, '0644')
-      end
+      next unless node['hive'].key? sitefile
+      file("/etc/hive/#{node['hive']['conf_dir']}/#{sitefile.gsub('_', '-')}.xml")
+        .must_exist
+        .with(:owner, 'root')
+        .and(:group, 'root')
+        .and(:mode, '0644')
     end
   end
 
