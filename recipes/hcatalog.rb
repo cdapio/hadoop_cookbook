@@ -19,6 +19,29 @@
 
 include_recipe 'hadoop::hive'
 
-package 'hcatalog' do
-  action :install
+case node['hadoop']['distribution']
+when 'cdh'
+  case node['hadoop']['distribution_version'].to_i
+  when 4
+    pkgs = %w(hcatalog hcatalog-server)
+    svcs = %w(hcatalog-server)
+  when 5
+    pkgs = %w(hive-hcatalog)
+    svcs = %w(hive-hcatalog)
+  end
+when 'hdp'
+  pkgs = %w(hcatalog)
+  svcs = []
 end
+
+pkgs.each do |pkg|
+  package pkg do
+    action :install
+  end
+end
+
+# Update alternatives to point to our configuration
+#execute 'update hcatalog-conf alternatives' do
+#  command "update-alternatives --install /etc/hcatalog/conf hcatalog-conf /etc/hcatalog/#{node['hcatalog']['conf_dir']} 50"
+#  not_if "update-alternatives --display hcatalog-conf | grep best | awk '{print $5}' | grep /etc/hcatalog/#{node['hcatalog']['conf_dir']}"
+#end
