@@ -30,6 +30,7 @@ package 'hadoop-yarn-proxyserver' do
 end
 
 service 'hadoop-yarn-proxyserver' do
+  status_command 'service hadoop-yarn-proxyserver status'
   supports [:restart => true, :reload => false, :status => true]
   action :nothing
 end
