@@ -19,6 +19,7 @@
 
 include_recipe 'hadoop::hive'
 
+# rubocop:disable UselessAssignment
 case node['hadoop']['distribution']
 when 'cdh'
   case node['hadoop']['distribution_version'].to_i
@@ -33,6 +34,7 @@ when 'hdp'
   pkgs = %w(hcatalog)
   svcs = []
 end
+# rubocop:enable UselessAssignment
 
 pkgs.each do |pkg|
   package pkg do
@@ -41,7 +43,7 @@ pkgs.each do |pkg|
 end
 
 # Update alternatives to point to our configuration
-#execute 'update hcatalog-conf alternatives' do
+# execute 'update hcatalog-conf alternatives' do
 #  command "update-alternatives --install /etc/hcatalog/conf hcatalog-conf /etc/hcatalog/#{node['hcatalog']['conf_dir']} 50"
 #  not_if "update-alternatives --display hcatalog-conf | grep best | awk '{print $5}' | grep /etc/hcatalog/#{node['hcatalog']['conf_dir']}"
-#end
+# end
