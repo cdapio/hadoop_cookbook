@@ -26,14 +26,6 @@ end
 
 zookeeper_conf_dir = "/etc/zookeeper/#{node['zookeeper']['conf_dir']}"
 
-directory zookeeper_conf_dir do
-  mode '0755'
-  owner 'root'
-  group 'root'
-  action :create
-  recursive true
-end
-
 # Setup zoo.cfg
 if node['zookeeper'].key? 'zoocfg'
 
@@ -126,20 +118,6 @@ if node['zookeeper'].key? 'zookeeper_env'
     variables my_vars
   end
 end # End zookeeper-env.sh
-
-# Setup jaas.conf
-if node['zookeeper'].key?('jaas')
-  my_vars = { :options => node['zookeeper']['jaas'] }
-
-  template "#{zookeeper_conf_dir}/jaas.conf" do
-    source 'jaas.conf.erb'
-    mode '0755'
-    owner 'zookeeper'
-    group 'zookeeper'
-    action :create
-    variables my_vars
-  end
-end # End jaas.conf
 
 # Setup log4j.properties
 if node['zookeeper'].key? 'log4j'
