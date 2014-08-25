@@ -47,9 +47,9 @@ if node['zookeeper'].key?('jaas')
 
   template "#{zookeeper_conf_dir}/jaas.conf" do
     source 'jaas.conf.erb'
-    mode '0755'
-    owner 'zookeeper'
-    group 'zookeeper'
+    mode '0644'
+    owner 'root'
+    group 'root'
     action :create
     variables my_vars
   end
