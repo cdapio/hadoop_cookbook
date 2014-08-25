@@ -40,7 +40,10 @@ end
 
 # Setup jaas.conf
 if node['zookeeper'].key?('jaas')
-  my_vars = { :options => node['zookeeper']['jaas'] }
+  my_vars = {
+    :client => node['zookeeper']['jaas']['client'],
+    :server => node['zookeeper']['jaas']['server']
+  }
 
   template "#{zookeeper_conf_dir}/jaas.conf" do
     source 'jaas.conf.erb'
@@ -48,9 +51,6 @@ if node['zookeeper'].key?('jaas')
     owner 'zookeeper'
     group 'zookeeper'
     action :create
-    variables({
-      :client => node['zookeeper']['jaas']['client'],
-      :server => node['zookeeper']['jaas']['server']
-    })
+    variables my_vars
   end
 end # End jaas.conf
