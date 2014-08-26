@@ -20,10 +20,30 @@
 include_recipe 'hadoop::default'
 
 # TODO: check for these and set them up
-# mapreduce.cluster.local.dir = #{hadoop_tmp_dir}/mapred/local
 # mapreduce.jobtracker.system.dir = #{hadoop_tmp_dir}/mapred/system
 # mapreduce.jobtracker.staging.root.dir = #{hadoop_tmp_dir}/mapred/staging
 # mapreduce.cluster.temp.dir = #{hadoop_tmp_dir}/mapred/temp
+
+mapred_local_dirs =
+  if node['hadoop'].key?('mapred_site') && node['hadoop']['mapred_site'].key?('mapreduce.cluster.local.dir')
+    node['hadoop']['mapred_site']['mapreduce.cluster.local.dir']
+  elsif node['hadoop'].key?('mapred_site') && node['hadoop']['mapred_site'].key?('mapred.local.dir')
+    node['hadoop']['mapred_site']['mapred.local.dir']
+  else
+    'file:///tmp/hadoop-mapred/local'
+  end
+
+node.default['hadoop']['mapred_site']['mapreduce.cluster.local.dir'] = mapred_local_dirs
+
+mapred_local_dirs.split(',').each do |dir|
+  directory dir.gsub('file://', '') do
+    mode '0755'
+    owner 'mapred'
+    group 'mapred'
+    action :create
+    recursive true
+  end
+end
 
 # Only CDH supports a JobTracker package
 package 'hadoop-0.20-mapreduce-jobtracker' do

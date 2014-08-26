@@ -1,0 +1,8 @@
+Server {
+  com.sun.security.auth.module.Krb5LoginModule required
+  useKeyTab=<%= useKeyTab %>
+  keyTab="<%= keyTab %>
+  storeKey=true
+  useTicketCache=false
+  principal="<%= principal %>";
+};

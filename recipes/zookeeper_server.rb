@@ -94,12 +94,10 @@ if node['zookeeper'].key? 'zoocfg'
   myid = nil
   1.upto(255) do |index|
     server = node['zookeeper']['zoocfg']["server.#{index}"]
-    unless server.nil?
-      if server.start_with?("#{node['fqdn']}:") || server.start_with?("#{node['ipaddress']}:") || server.start_with?("#{node['hostname']}:")
-        myid = index
-        break
-      end
-    end
+    next if server.nil?
+    next unless server.start_with?("#{node['fqdn']}:") || server.start_with?("#{node['ipaddress']}:") || server.start_with?("#{node['hostname']}:")
+    myid = index
+    break
   end
 
   template "#{node['zookeeper']['zoocfg']['dataDir']}/myid" do
@@ -114,6 +112,34 @@ if node['zookeeper'].key? 'zoocfg'
     not_if { myid.nil? }
   end
 end # End zoo.cfg
+
+# Setup zookeeper-env.sh
+if node['zookeeper'].key? 'zookeeper_env'
+  my_vars = { :options => node['zookeeper']['zookeeper_env'] }
+
+  template "#{zookeeper_conf_dir}/zookeeper-env.sh" do
+    source 'generic-env.sh.erb'
+    mode '0755'
+    owner 'zookeeper'
+    group 'zookeeper'
+    action :create
+    variables my_vars
+  end
+end # End zookeeper-env.sh
+
+# Setup jaas.conf
+if node['zookeeper'].key?('jaas')
+  my_vars = { :options => node['zookeeper']['jaas'] }
+
+  template "#{zookeeper_conf_dir}/jaas.conf" do
+    source 'jaas.conf.erb'
+    mode '0755'
+    owner 'zookeeper'
+    group 'zookeeper'
+    action :create
+    variables my_vars
+  end
+end # End jaas.conf
 
 # Setup log4j.properties
 if node['zookeeper'].key? 'log4j'

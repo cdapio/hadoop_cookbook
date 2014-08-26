@@ -3,12 +3,6 @@
 ###
 # Supported: cdh, hdp
 default['hadoop']['distribution'] = 'hdp'
-default['hadoop']['distribution_version'] =
-  if node['hadoop']['distribution'] == 'hdp'
-    '2.0'
-  elsif node['hadoop']['distribution'] == 'cdh'
-    '5'
-  end
 
 default['hadoop']['force_format'] = false
 
