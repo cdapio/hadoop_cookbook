@@ -37,7 +37,7 @@ describe 'hadoop::default' do
     %w(hadoop-hdfs hadoop-yarn).each do |dir|
       it "creates /var/log/#{dir} directory" do
         expect(chef_run).to create_directory("/var/log/#{dir}").with(
-          mode: '0755'
+          mode: '0775'
         )
       end
     end
