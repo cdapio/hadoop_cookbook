@@ -39,6 +39,13 @@ end
   end
 end
 
+# Ensure permissions for secure Hadoop... this *should* be no-op
+file '/usr/lib/hadoop-yarn/bin/container-executor' do
+  owner 'root'
+  group 'yarn'
+  mode '6050'
+end
+
 service 'hadoop-yarn-nodemanager' do
   status_command 'service hadoop-yarn-nodemanager status'
   supports [:restart => true, :reload => false, :status => true]

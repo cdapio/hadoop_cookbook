@@ -146,9 +146,9 @@ if node['hadoop'].key? 'container_executor'
 
   template "#{hadoop_conf_dir}/container-executor.cfg" do
     source 'generic.properties.erb'
-    mode '0644'
+    mode '0440'
     owner 'root'
-    group 'root'
+    group 'yarn'
     action :create
     variables my_vars
   end
