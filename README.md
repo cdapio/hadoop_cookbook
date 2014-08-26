@@ -41,10 +41,13 @@ hbase['hadoop_metrics'] | hadoop-metrics.properties | `hbase['conf_dir']`
 hbase['hbase_env'] | hbase-env.sh | `hbase['conf_dir']`
 hbase['hbase_policy'] | hbase-policy.xml | `hbase['conf_dir']`
 hbase['hbase_site'] | hbase-site.xml | `hbase['conf_dir']`
+hbase['jaas'] | jaas.conf | `hbase['conf_dir']`
 hbase['log4j'] | log4j.properties | `hbase['conf_dir']`
 hive['hive_env'] | hive-env.sh | `hive['conf_dir']`
 hive['hive_site'] | hive-site.xml | `hive['conf_dir']`
+hive['jaas'] | jaas.conf | `hive['conf_dir']`
 oozie['oozie_site'] | oozie-site.xml | `oozie['conf_dir']`
+zookeeper['jaas'] | jaas.conf | `zookeeper['conf_dir']`
 zookeeper['log4j'] | log4j.properties | `zookeeper['conf_dir']`
 zookeeper['zoocfg'] | zoo.cfg | `zookeeper['conf_dir']`
 
