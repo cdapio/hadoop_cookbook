@@ -20,7 +20,7 @@
 include_recipe 'hadoop::default'
 
 # TODO: check for these and set them up
-# mapreduce.jobtracker.system.dir = #{hadoop_tmp_dir}/mapred/system
+# mapreduce.jobtracker.system.dir = #{hadoop_tmp_dir}/mapred/system (inside HDFS) = mapred.system.dir
 # mapreduce.jobtracker.staging.root.dir = #{hadoop_tmp_dir}/mapred/staging
 # mapreduce.cluster.temp.dir = #{hadoop_tmp_dir}/mapred/temp
 
