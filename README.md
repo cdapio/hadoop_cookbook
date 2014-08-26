@@ -34,6 +34,7 @@ hadoop['hadoop_metrics'] | hadoop-metrics.properties | `hadoop['conf_dir']`
 hadoop['hadoop_policy'] | hadoop-policy.xml | `hadoop['conf_dir']`
 hadoop['hdfs_site'] | hdfs-site.xml | `hadoop['conf_dir']`
 hadoop['log4j'] | log4j.properties | `hadoop['conf_dir']`
+hadoop['mapred_env'] | mapred-env.sh | `hadoop['conf_dir']`
 hadoop['mapred_site'] | mapred-site.xml | `hadoop['conf_dir']`
 hadoop['yarn_env'] | yarn-env.sh | `hadoop['conf_dir']`
 hadoop['yarn_site'] | yarn-site.xml | `hadoop['conf_dir']`
