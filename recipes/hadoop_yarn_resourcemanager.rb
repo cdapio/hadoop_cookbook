@@ -46,7 +46,7 @@ remote_log_dir =
     '/tmp/logs'
   end
 
-default['hadoop']['yarn_site']['yarn.nodemanager.remote-app-log-dir'] = remote_log_dir
+node.default['hadoop']['yarn_site']['yarn.nodemanager.remote-app-log-dir'] = remote_log_dir
 
 execute 'yarn-remote-app-log-dir' do
   command "hdfs dfs -mkdir -p #{remote_log_dir} && hdfs dfs -chown yarn:hadoop #{remote_log_dir} && hdfs dfs -chmod 1777 #{remote_log_dir}"
