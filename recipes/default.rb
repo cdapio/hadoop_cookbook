@@ -87,19 +87,21 @@ elsif node['hadoop'].key?('yarn_site') && node['hadoop']['yarn_site'].key?('yarn
   Chef::Application.fatal!('Set YARN scheduler to fair-scheduler without configuring it, first')
 end # End fair-scheduler.xml
 
-# Setup hadoop-env.sh yarn-env.sh
-%w(hadoop_env yarn_env).each do |envfile|
+# Setup hadoop-env.sh mapred-env.sh yarn-env.sh
+%w(hadoop_env mapred_env yarn_env).each do |envfile|
   next unless node['hadoop'].key? envfile
   my_vars = { :options => node['hadoop'][envfile] }
 
-  %w(hadoop yarn).each do |svc|
+  %w(hadoop hadoop_mapred yarn).each do |svc|
     next unless node['hadoop'][envfile].key? "#{svc}_log_dir"
     directory node['hadoop'][envfile]["#{svc}_log_dir"] do
       log_dir_owner =
-        if svc == 'yarn'
-          'yarn'
-        else
+        if svc == 'hadoop_mapred'
+          'mapred'
+        elsif svc == 'hadoop'
           'hdfs'
+        else
+          svc
         end
       owner log_dir_owner
       group log_dir_owner
