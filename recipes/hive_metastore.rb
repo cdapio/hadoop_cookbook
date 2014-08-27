@@ -62,6 +62,15 @@ execute 'hive-hdfs-warehousedir' do
   action :nothing
 end
 
+template '/etc/init.d/hive-metastore' do
+  source 'hive-metastore.erb'
+  mode '0755'
+  owner 'root'
+  group 'root'
+  action :create
+  only_if { node['hadoop']['distribution'] == 'hdp' }
+end
+
 service 'hive-metastore' do
   status_command 'service hive-metastore status'
   supports [:restart => true, :reload => false, :status => true]
