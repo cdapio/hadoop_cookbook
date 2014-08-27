@@ -105,7 +105,7 @@ end # End fair-scheduler.xml
         end
       owner log_dir_owner
       group log_dir_owner
-      mode '0755'
+      mode '0775'
       action :create
       recursive true
     end
@@ -148,9 +148,9 @@ if node['hadoop'].key? 'container_executor'
 
   template "#{hadoop_conf_dir}/container-executor.cfg" do
     source 'generic.properties.erb'
-    mode '0644'
+    mode '0440'
     owner 'root'
-    group 'root'
+    group 'yarn'
     action :create
     variables my_vars
   end

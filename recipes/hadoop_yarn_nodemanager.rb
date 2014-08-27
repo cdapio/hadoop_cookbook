@@ -24,11 +24,6 @@ package 'hadoop-yarn-nodemanager' do
 end
 
 # TODO: check for these and set them up
-# mapreduce.cluster.local.dir = #{hadoop_tmp_dir}/mapred/local
-# mapreduce.jobtracker.system.dir = #{hadoop_tmp_dir}/mapred/system
-# mapreduce.jobtracker.staging.root.dir = #{hadoop_tmp_dir}/mapred/staging
-# mapreduce.cluster.temp.dir = #{hadoop_tmp_dir}/mapred/temp
-
 # yarn.app.mapreduce.am.staging-dir = /tmp/hadoop-yarn/staging
 
 %w(yarn.nodemanager.local-dirs yarn.nodemanager.log-dirs).each do |opt|
@@ -42,6 +37,13 @@ end
       recursive true
     end
   end
+end
+
+# Ensure permissions for secure Hadoop... this *should* be no-op
+file '/usr/lib/hadoop-yarn/bin/container-executor' do
+  owner 'root'
+  group 'yarn'
+  mode '6050'
 end
 
 service 'hadoop-yarn-nodemanager' do
