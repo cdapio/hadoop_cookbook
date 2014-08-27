@@ -106,6 +106,23 @@ end # End hbase-env.sh
   end
 end # End hadoop-metrics.properties log4j.properties
 
+# Setup jaas.conf
+if node['hbase'].key?('jaas')
+  my_vars = {
+    # Only use client, for connecting to secure ZooKeeper
+    :client => node['hbase']['jaas']['client']
+  }
+
+  template "#{hbase_conf_dir}/jaas.conf" do
+    source 'jaas.conf.erb'
+    mode '0644'
+    owner 'hbase'
+    group 'hbase'
+    action :create
+    variables my_vars
+  end
+end # End jaas.conf
+
 # Update alternatives to point to our configuration
 execute 'update hbase-conf alternatives' do
   command "update-alternatives --install /etc/hbase/conf hbase-conf /etc/hbase/#{node['hbase']['conf_dir']} 50"

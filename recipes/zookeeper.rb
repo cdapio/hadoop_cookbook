@@ -18,12 +18,40 @@
 #
 
 include_recipe 'hadoop::repo'
-
-package 'zookeeper' do
-  action :install
-end
+include_recipe 'hadoop::zookeeper_checkconfig'
 
 # HDP 2.0 zookeeper package doesn't create zookeeper group, creates hadoop, instead
 group 'zookeeper' do
   action :create
 end
+
+package 'zookeeper' do
+  action :install
+end
+
+zookeeper_conf_dir = "/etc/zookeeper/#{node['zookeeper']['conf_dir']}"
+
+directory zookeeper_conf_dir do
+  mode '0755'
+  owner 'root'
+  group 'root'
+  action :create
+  recursive true
+end
+
+# Setup jaas.conf
+if node['zookeeper'].key?('jaas')
+  my_vars = {
+    :client => node['zookeeper']['jaas']['client'],
+    :server => node['zookeeper']['jaas']['server']
+  }
+
+  template "#{zookeeper_conf_dir}/jaas.conf" do
+    source 'jaas.conf.erb'
+    mode '0644'
+    owner 'root'
+    group 'root'
+    action :create
+    variables my_vars
+  end
+end # End jaas.conf

@@ -40,3 +40,16 @@ if node['hbase']['hbase_site'].key?('hbase.cluster.distributed') && node['hbase'
     Chef::Application.fatal!("You *must* set node['hbase']['hbase_site']['hbase.rootdir'] and node['hbase']['hbase_site']['hbase.zookeeper.quorum'] in distributed mode")
   end
 end
+
+# If using JAAS, make sure it's configured fully
+if node['hbase'].key?('jaas')
+  %w(client server).each do |key|
+    if node['hbase']['jaas'].key?(key) && node['hbase']['jaas'][key].key?('usekeytab') &&
+      node['hbase']['jaas'][key]['usekeytab'].to_s == 'true'
+
+      if node['hbase']['jaas'][key]['keytab'].nil? || node['hbase']['jaas'][key]['principal'].nil?
+        Chef::Application.fatal!("You must set node['hbase']['jaas']['#{key}']['keytab'] and node['hbase']['jaas']['#{key}']['principal'] with node['hbase']['jaas'][key]['usekeytab']")
+      end
+    end
+  end
+end
