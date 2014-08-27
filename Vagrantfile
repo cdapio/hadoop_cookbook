@@ -26,7 +26,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     config.vm.define platform do |c|
       c.vm.box       = "opscode-#{platform}"
       c.vm.box_url   = "http://opscode-vm-bento.s3.amazonaws.com/vagrant/virtualbox/opscode_#{platform}_chef-provisionerless.box"
-      c.vm.host_name = "hadoop-#{platform}"
+      c.vm.host_name = "hadoop-#{platform}.local"
     end
   end
 
