@@ -14,6 +14,12 @@ describe 'hadoop::hadoop_mapreduce_jobtracker' do
       expect(chef_run).to install_package('hadoop-0.20-mapreduce-jobtracker')
     end
 
+    it 'creates local dir' do
+      expect(chef_run).to create_directory('/tmp/hadoop-mapred/local').with(
+        user: 'mapred',
+        group: 'mapred'
+      )
+    end
     it 'creates hadoop-0.20-mapreduce-jobtracker service resource, but does not run it' do
       expect(chef_run).to_not start_service('hadoop-0.20-mapreduce-jobtracker')
     end

@@ -48,6 +48,10 @@ describe 'hadoop::zookeeper_server' do
       )
     end
 
+    it 'creates zookeeper-server service resource, but does not run it' do
+      expect(chef_run).to_not start_service('zookeeper-server')
+    end
+
     it 'runs execute[update zookeeper-conf alternatives]' do
       expect(chef_run).to run_execute('update zookeeper-conf alternatives')
     end
