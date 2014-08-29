@@ -50,7 +50,7 @@ end
 
 # https://hbase.apache.org/book/hbase.secure.bulkload.html
 bulkload_dir =
-  if node['hbase']['hbase_site'].key? 'hbase.bulkload.staging.dir'
+  if node['hbase']['hbase_site'].key?('hbase.bulkload.staging.dir')
     node['hbase']['hbase_site']['hbase.bulkload.staging.dir']
   else
     '/tmp/hbase-staging'
