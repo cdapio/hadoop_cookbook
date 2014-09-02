@@ -25,6 +25,7 @@ group 'zookeeper' do
   action :create
 end
 user 'zookeeper' do
+  gid 'zookeeper'
   action :create
 end
 
