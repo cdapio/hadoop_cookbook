@@ -16,5 +16,9 @@ describe 'hadoop::zookeeper' do
     it 'creates zookeeper group' do
       expect(chef_run).to create_group('zookeeper')
     end
+
+    it 'creates zookeeper user' do
+      expect(chef_run).to create_user('zookeeper')
+    end
   end
 end
