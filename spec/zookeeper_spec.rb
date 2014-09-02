@@ -18,7 +18,9 @@ describe 'hadoop::zookeeper' do
     end
 
     it 'creates zookeeper user' do
-      expect(chef_run).to create_user('zookeeper')
+      expect(chef_run).to create_user('zookeeper').with(
+        gid: 'zookeeper'
+      )
     end
   end
 end
