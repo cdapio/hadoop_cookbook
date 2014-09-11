@@ -25,6 +25,19 @@ describe 'hadoop::hive' do
       end
     end
 
+    %w(/etc/hive/conf.chef /var/lib/hive).each do |dir|
+      it "creates directory #{dir}" do
+        expect(chef_run).to create_directory(dir)
+      end
+    end
+
+    it 'does not execute execute[hive-hdfs-homedir]' do
+      expect(chef_run).not_to run_execute('hive-hdfs-homedir')
+    end
+    it 'executes execute[update hive-conf alternatives]' do
+      expect(chef_run).to run_execute('update hive-conf alternatives')
+    end
+
   end
   context 'on Ubuntu 12.04' do
     let(:chef_run) do
