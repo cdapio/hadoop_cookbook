@@ -11,9 +11,17 @@ describe 'hadoop::hive' do
       end.converge(described_recipe)
     end
 
-    %w(mysql-connector-java postgresql-jdbc hive).each do |pkg|
+    it 'install hive package' do
+      expect(chef_run).to install_package('hive')
+    end
+
+    %w(mysql-connector-java postgresql-jdbc).each do |pkg|
       it "install #{pkg} package" do
         expect(chef_run).to install_package(pkg)
+      end
+      it "link #{pkg} jar" do
+        link = chef_run.link("/usr/lib/hive/lib/#{pkg}.jar")
+        expect(link).to link_to("/usr/share/java/#{pkg}.jar")
       end
     end
 
