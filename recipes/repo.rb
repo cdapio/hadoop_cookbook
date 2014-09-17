@@ -57,7 +57,9 @@ when 'hdp'
   else
     Chef::Application.fatal!('This cookbook only supports HDP 2.x')
   end
-  hdp_utils_version = '1.1.0.17'
+
+  hdp_utils_version = '1.1.0.19'
+
   case node['platform_family']
   when 'rhel'
     yum_base_url = 'http://public-repo-1.hortonworks.com/HDP'
