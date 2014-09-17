@@ -11,7 +11,7 @@ depends 'apt'
 
 recommends 'java', '>= 1.21.2'
 
-%w(centos debian redhat scientific ubuntu).each do |os|
+%w(amazon centos debian redhat scientific ubuntu).each do |os|
   supports os
 end
 
