@@ -44,12 +44,10 @@ end
 # If using JAAS, make sure it's configured fully
 if node['hbase'].key?('jaas')
   %w(client server).each do |key|
-    if node['hbase']['jaas'].key?(key) && node['hbase']['jaas'][key].key?('usekeytab') &&
+    next unless node['hbase']['jaas'].key?(key) && node['hbase']['jaas'][key].key?('usekeytab') &&
       node['hbase']['jaas'][key]['usekeytab'].to_s == 'true'
 
-      if node['hbase']['jaas'][key]['keytab'].nil? || node['hbase']['jaas'][key]['principal'].nil?
-        Chef::Application.fatal!("You must set node['hbase']['jaas']['#{key}']['keytab'] and node['hbase']['jaas']['#{key}']['principal'] with node['hbase']['jaas'][key]['usekeytab']")
-      end
-    end
+    next unless node['hbase']['jaas'][key]['keytab'].nil? || node['hbase']['jaas'][key]['principal'].nil?
+    Chef::Application.fatal!("You must set node['hbase']['jaas']['#{key}']['keytab'] and node['hbase']['jaas']['#{key}']['principal'] with node['hbase']['jaas'][key]['usekeytab']")
   end
 end
