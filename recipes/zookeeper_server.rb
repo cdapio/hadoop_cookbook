@@ -56,7 +56,7 @@ if node['zookeeper'].key? 'zoocfg'
 
   directory zookeeper_data_dir do
     owner 'zookeeper'
-    group 'zookeeper'
+    group 'hadoop'
     mode '0755'
     recursive true
     action :create
@@ -65,7 +65,7 @@ if node['zookeeper'].key? 'zoocfg'
   unless zookeeper_log_dir == zookeeper_data_dir
     directory zookeeper_log_dir do
       owner 'zookeeper'
-      group 'zookeeper'
+      group 'hadoop'
       mode '0755'
       recursive true
       action :create
@@ -112,8 +112,8 @@ if node['zookeeper'].key? 'zookeeper_env'
   template "#{zookeeper_conf_dir}/zookeeper-env.sh" do
     source 'generic-env.sh.erb'
     mode '0755'
-    owner 'zookeeper'
-    group 'zookeeper'
+    owner 'root'
+    group 'root'
     action :create
     variables my_vars
   end
