@@ -63,7 +63,7 @@ when 'hdp'
     yum_base_url = 'http://public-repo-1.hortonworks.com/HDP'
     case node['platform']
     # Only do a fatal version check on redhat/centos
-    # rubocop: disable Style/BlockNesting
+    # rubocop: disable BlockNesting
     when 'redhat', 'centos'
       # HDP supports 5 and 6
       case major_platform_version
@@ -82,7 +82,7 @@ when 'hdp'
         Chef::Application.fatal!('Your version of Amazon Linux has not been tested. File a bug report, if it works for you.')
       end
     end
-    # rubocop: enable Style/BlockNesting
+    # rubocop: enable BlockNesting
 
     yum_repo_url = node['hadoop']['yum_repo_url'] ? node['hadoop']['yum_repo_url'] : "#{yum_base_url}/#{os}/2.x/GA/#{hdp_version}"
     yum_repo_key_url = node['hadoop']['yum_repo_key_url'] ? node['hadoop']['yum_repo_key_url'] : "#{yum_base_url}/#{os}/#{key}/#{key}-Jenkins"
