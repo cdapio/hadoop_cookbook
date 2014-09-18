@@ -20,12 +20,10 @@
 # If using JAAS, make sure it's configured fully
 if node['zookeeper'].key?('jaas')
   %w(client server).each do |key|
-    if node['zookeeper']['jaas'].key?(key) && node['zookeeper']['jaas'][key].key?('usekeytab') &&
+    next unless node['zookeeper']['jaas'].key?(key) && node['zookeeper']['jaas'][key].key?('usekeytab') &&
       node['zookeeper']['jaas'][key]['usekeytab'].to_s == 'true'
 
-      if node['zookeeper']['jaas'][key]['keytab'].nil? || node['zookeeper']['jaas'][key]['principal'].nil?
-        Chef::Application.fatal!("You must set node['zookeeper']['jaas']['#{key}']['keytab'] and node['zookeeper']['jaas']['#{key}']['principal'] with node['zookeeper']['jaas'][key]['usekeytab']")
-      end
-    end
+    next unless node['zookeeper']['jaas'][key]['keytab'].nil? || node['zookeeper']['jaas'][key]['principal'].nil?
+    Chef::Application.fatal!("You must set node['zookeeper']['jaas']['#{key}']['keytab'] and node['zookeeper']['jaas']['#{key}']['principal'] with node['zookeeper']['jaas'][key]['usekeytab']")
   end
 end
