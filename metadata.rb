@@ -9,7 +9,7 @@ version          '1.3.2'
 depends 'yum', '>= 3.0'
 depends 'apt'
 
-recommends 'java', '>= 1.21.2'
+recommends 'java', '~> 1.21'
 
 %w(amazon centos debian redhat scientific ubuntu).each do |os|
   supports os
