@@ -16,7 +16,7 @@ describe 'hadoop::zookeeper_server' do
       expect(chef_run).to install_package('zookeeper-server')
     end
 
-    it 'creates ZooKeeper conf_dir' do
+    it 'creates zookeeper conf_dir' do
       expect(chef_run).to create_directory('/etc/zookeeper/conf.chef').with(
         user: 'root',
         group: 'root'
@@ -41,7 +41,11 @@ describe 'hadoop::zookeeper_server' do
       )
     end
 
-    it 'creates ZooKeeper dataDir' do
+    it 'creates zookeeper group' do
+      expect(chef_run).to create_group('zookeeper')
+    end
+
+    it 'creates zookeeper dataDir' do
       expect(chef_run).to create_directory('/var/lib/zookeeper').with(
         user: 'zookeeper',
         group: 'hadoop'
