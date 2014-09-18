@@ -27,7 +27,7 @@ end
 # We have dfs.nameservices, and now need to check them
 dfs_nameservices.each do |ns|
   # Start namenode checks
-  next unless node['hadoop']['hdfs_site'].key? "dfs\.ha\.namenodes\.#{ns}"
+  next unless node['hadoop']['hdfs_site'].key?("dfs\.ha\.namenodes\.#{ns}")
   # We need two and only two NameNodes
   namenodes = node['hadoop']['hdfs_site']["dfs\.ha\.namenodes\.#{ns}"].split(',')
   if namenodes.size != 2
@@ -36,7 +36,7 @@ dfs_nameservices.each do |ns|
   # Check NameNode-specific entries
   namenodes.each do |nn|
     %w(rpc-address http-address).each do |k|
-      if node['hadoop']['hdfs_site'].key? "dfs\.namenode\.#{k}\.#{ns}\.#{nn}"
+      if node['hadoop']['hdfs_site'].key?("dfs\.namenode\.#{k}\.#{ns}\.#{nn}")
         Chef::Log.info("Set dfs.namenode.#{k}.#{ns}.#{nn} to #{node['hadoop']['hdfs_site']['dfs.namenode.#{k}.#{ns}.#{nn}']}")
       else
         Chef::Application.fatal!("You must set node['hadoop']['hdfs_site']['dfs.namenode.#{k}.#{ns}.#{nn}']")
@@ -44,7 +44,7 @@ dfs_nameservices.each do |ns|
     end
   end # End namenode checks
   # Start proxy provider check
-  if node['hadoop']['hdfs_site'].key? "dfs\.client\.failover\.proxy\.provider\.#{ns}"
+  if node['hadoop']['hdfs_site'].key?("dfs\.client\.failover\.proxy\.provider\.#{ns}")
     Chef::Log.info("Using #{node['hadoop']['hdfs_site']['dfs.client.failover.proxy.provider.#{ns}']} for node['hadoop']['hdfs_site']['dfs.client.failover.proxy.provider.#{ns}']")
   else
     node.default['hadoop']['hdfs_site']["dfs\.client\.failover\.proxy\.provider\.#{ns}"] = \
@@ -56,7 +56,7 @@ dfs_nameservices.each do |ns|
 end
 
 # dfs.namenode.shared.edits.dir format: "qjournal://host1:port1;host2:port2;host3:port3/journalId" or "file:///path/to/mount"
-if node['hadoop']['hdfs_site'].key? 'dfs.namenode.shared.edits.dir'
+if node['hadoop']['hdfs_site'].key?('dfs.namenode.shared.edits.dir')
   if node['hadoop']['hdfs_site']['dfs.namenode.shared.edits.dir'].start_with?('qjournal')
     # Start journalnode checks
     journalnodes = node['hadoop']['hdfs_site']['dfs.namenode.shared.edits.dir'].split(';')
@@ -76,7 +76,7 @@ if node['hadoop']['hdfs_site'].key? 'dfs.namenode.shared.edits.dir'
 end
 
 # Start fencing check -- we only check that the key has a value
-if node['hadoop']['hdfs_site'].key? 'dfs.ha.fencing.methods'
+if node['hadoop']['hdfs_site'].key?('dfs.ha.fencing.methods')
   Chef::Log.info('Using the following HA fencing methods:')
   node['hadoop']['hdfs_site']['dfs.ha.fencing.methods'].split(',').each do |m|
     Chef::Log.info("  #{m}")
@@ -87,7 +87,7 @@ end # End fencing check
 
 # Start Automatic HA check
 if node['hadoop']['hdfs_site'].key?('dfs.ha.automatic-failover.enabled') && node['hadoop']['hdfs_site']['dfs.ha.automatic-failover.enabled'].to_s == 'true'
-  if node['hadoop']['core_site'].key? 'ha.zookeeper.quorum'
+  if node['hadoop']['core_site'].key?('ha.zookeeper.quorum')
     ha_zk_quorum = node['hadoop']['core_site']['ha.zookeeper.quorum'].split(',')
     Chef::Log.info("NameNode HA ZooKeeper Quorum: #{ha_zk_quorum}")
   else
