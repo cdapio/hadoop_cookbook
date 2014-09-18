@@ -24,6 +24,11 @@ package 'zookeeper-server' do
   action :install
 end
 
+# HDP 2.0.11.0 (maybe others) doesn't create zookeeper group
+group 'zookeeper' do
+  action :create
+end
+
 zookeeper_conf_dir = "/etc/zookeeper/#{node['zookeeper']['conf_dir']}"
 
 # Setup zoo.cfg
