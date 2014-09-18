@@ -13,14 +13,5 @@ describe 'hadoop::zookeeper' do
       expect(chef_run).to install_package('zookeeper')
     end
 
-    it 'creates zookeeper group' do
-      expect(chef_run).to create_group('zookeeper')
-    end
-
-    it 'creates zookeeper user' do
-      expect(chef_run).to create_user('zookeeper').with(
-        gid: 'zookeeper'
-      )
-    end
   end
 end

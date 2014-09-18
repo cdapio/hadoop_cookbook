@@ -44,7 +44,7 @@ describe 'hadoop::zookeeper_server' do
     it 'creates ZooKeeper dataDir' do
       expect(chef_run).to create_directory('/var/lib/zookeeper').with(
         user: 'zookeeper',
-        group: 'zookeeper'
+        group: 'hadoop'
       )
     end
 
