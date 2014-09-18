@@ -27,7 +27,7 @@ package 'hadoop-hdfs-journalnode' do
 end
 
 dfs_jn_edits_dirs =
-  if node['hadoop']['hdfs_site'].key? 'dfs.journalnode.edits.dir'
+  if node['hadoop']['hdfs_site'].key?('dfs.journalnode.edits.dir')
     node['hadoop']['hdfs_site']['dfs.journalnode.edits.dir']
   else
     Chef::Application.fatal!("JournalNode requires node['hadoop']['hdfs_site']['dfs.journalnode.edits.dir'] to be set")

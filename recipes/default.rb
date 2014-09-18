@@ -35,7 +35,7 @@ end
 
 # Setup capacity-scheduler.xml core-site.xml hadoop-policy.xml hdfs-site.xml mapred-site.xml yarn-site.xml
 %w(capacity_scheduler core_site hadoop_policy hdfs_site mapred_site yarn_site).each do |sitefile|
-  next unless node['hadoop'].key? sitefile
+  next unless node['hadoop'].key?(sitefile)
   my_vars = { :options => node['hadoop'][sitefile] }
 
   template "#{hadoop_conf_dir}/#{sitefile.gsub('_', '-')}.xml" do
@@ -58,7 +58,7 @@ fair_scheduler_file =
 
 fair_scheduler_dir = File.dirname(fair_scheduler_file.gsub('file://', ''))
 
-if node['hadoop'].key? 'fair_scheduler'
+if node['hadoop'].key?('fair_scheduler')
   # my_vars = { :options => node['hadoop']['fair_scheduler'] }
   my_vars = node['hadoop']['fair_scheduler']
 
@@ -89,11 +89,11 @@ end # End fair-scheduler.xml
 
 # Setup hadoop-env.sh mapred-env.sh yarn-env.sh
 %w(hadoop_env mapred_env yarn_env).each do |envfile|
-  next unless node['hadoop'].key? envfile
+  next unless node['hadoop'].key?(envfile)
   my_vars = { :options => node['hadoop'][envfile] }
 
   %w(hadoop hadoop_mapred yarn).each do |svc|
-    next unless node['hadoop'][envfile].key? "#{svc}_log_dir"
+    next unless node['hadoop'][envfile].key?("#{svc}_log_dir")
     directory node['hadoop'][envfile]["#{svc}_log_dir"] do
       log_dir_owner =
         if svc == 'hadoop_mapred'
@@ -123,7 +123,7 @@ end # End hadoop-env.sh yarn-env.sh
 
 # Setup hadoop-metrics.properties log4j.properties
 %w(hadoop_metrics log4j).each do |propfile|
-  next unless node['hadoop'].key? propfile
+  next unless node['hadoop'].key?(propfile)
   my_vars = { :properties => node['hadoop'][propfile] }
 
   template "#{hadoop_conf_dir}/#{propfile.gsub('_', '-')}.properties" do
@@ -137,9 +137,9 @@ end # End hadoop-env.sh yarn-env.sh
 end # End hadoop-metrics.properties log4j.properties
 
 # Setup container-executor.cfg
-if node['hadoop'].key? 'container_executor'
+if node['hadoop'].key?('container_executor')
   # Set container-executor.cfg options to match yarn-site.xml, if present
-  if node['hadoop'].key? 'yarn_site'
+  if node['hadoop'].key?('yarn_site')
     merged = node['hadoop']['yarn_site'].merge(node['hadoop']['container_executor'])
     my_vars = { :properties => merged }
   else
