@@ -1,6 +1,10 @@
 hadoop CHANGELOG
 ===============
 
+v1.4.1 (Sep 18, 2014)
+- Add `zookeeper` group after package installs ( Issue: #96 )
+- Code consistency updates ( Issue: #97 )
+
 v1.4.0 (Sep 18, 2014)
 ---------------------
 - Support Amazon Linux ( Issues: #84 #90 )
