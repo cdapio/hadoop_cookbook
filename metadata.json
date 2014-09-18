@@ -6,6 +6,7 @@
   "maintainer_email": "ops@continuuity.com",
   "license": "Apache 2.0",
   "platforms": {
+    "amazon": ">= 0.0.0",
     "centos": ">= 0.0.0",
     "debian": ">= 0.0.0",
     "redhat": ">= 0.0.0",
@@ -17,7 +18,7 @@
     "apt": ">= 0.0.0"
   },
   "recommendations": {
-    "java": ">= 1.21.2"
+    "java": "~> 1.21"
   },
   "suggestions": {
   },
@@ -42,5 +43,5 @@
   },
   "recipes": {
   },
-  "version": "1.3.2"
+  "version": "1.4.0"
 }
