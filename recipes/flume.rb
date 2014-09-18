@@ -52,4 +52,4 @@ if node['flume'].key? 'flume_conf'
     action :create
     variables my_vars
   end
-end # End flume-site.xml
+end # End flume.conf
