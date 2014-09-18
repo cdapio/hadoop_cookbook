@@ -15,10 +15,6 @@ platforms:
     run_list: apt::default
 
 suites:
-#  - name: default
-#    run_list:
-#      - recipe[hadoop::default]
-#    attributes: {}
   - name: cdh4
     run_list:
       - recipe[hadoop::default]
