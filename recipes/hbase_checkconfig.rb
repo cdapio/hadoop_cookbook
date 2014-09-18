@@ -32,7 +32,8 @@ else
 end
 
 # HBase needs hbase.rootdir and hbase.zookeeper.quorum in distributed mode
-if node['hbase']['hbase_site'].key?('hbase.cluster.distributed') && node['hbase']['hbase_site']['hbase.cluster.distributed'].to_s == 'true'
+if node['hbase'].key?('hbase_site') && node['hbase']['hbase_site'].key?('hbase.cluster.distributed') &&
+  node['hbase']['hbase_site']['hbase.cluster.distributed'].to_s == 'true'
   if node['hbase'].key?('hbase_site') && node['hbase']['hbase_site'].key?('hbase.rootdir') && node['hbase']['hbase_site'].key?('hbase.zookeeper.quorum')
     Chef::Log.info("HBase root: #{node['hbase']['hbase_site']['hbase.rootdir']}")
     Chef::Log.info("HBase ZooKeeper Quorum: #{node['hbase']['hbase_site']['hbase.zookeeper.quorum']}")
