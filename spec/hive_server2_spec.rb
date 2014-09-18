@@ -16,6 +16,10 @@ describe 'hadoop::hive_server2' do
       expect(chef_run).not_to install_package('hive-server2')
     end
 
+    it 'creates /etc/init.d/hive-server2 from template' do
+      expect(chef_run).to create_template('/etc/init.d/hive-server2')
+    end
+
     it 'creates hive-server2 service resource, but does not run it' do
       expect(chef_run).to_not start_service('hive-server2')
     end
