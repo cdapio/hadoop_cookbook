@@ -5,6 +5,7 @@ describe 'hadoop::flume' do
     let(:chef_run) do
       ChefSpec::Runner.new(platform: 'centos', version: 6.5) do |node|
         node.automatic['domain'] = 'example.com'
+        node.default['flume']['flume_conf']['key'] = 'value'
       end.converge(described_recipe)
     end
 
