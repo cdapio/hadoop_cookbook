@@ -13,6 +13,14 @@ describe 'hadoop::hadoop_yarn_nodemanager' do
       expect(chef_run).to install_package('hadoop-yarn-nodemanager')
     end
 
+    it 'ensures /usr/lib/hadoop-yarn/bin/container-executor has proper permissions' do
+      expect(chef_run).to create_file('/usr/lib/hadoop-yarn/bin/container-executor').with(
+        user: 'root',
+        group: 'yarn',
+        mode: '6050'
+      )
+    end
+
     it 'creates hadoop-yarn-nodemanager service resource, but does not run it' do
       expect(chef_run).to_not start_service('hadoop-yarn-nodemanager')
     end

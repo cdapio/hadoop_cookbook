@@ -39,6 +39,24 @@ execute 'hdfs-tmpdir' do
   action :nothing
 end
 
+remote_log_dir =
+  if node['hadoop'].key?('yarn_site') && node['hadoop']['yarn_site'].key?('yarn.nodemanager.remote-app-log-dir')
+    node['hadoop']['yarn_site']['yarn.nodemanager.remote-app-log-dir']
+  else
+    '/tmp/logs'
+  end
+
+node.default['hadoop']['yarn_site']['yarn.nodemanager.remote-app-log-dir'] = remote_log_dir
+
+execute 'yarn-remote-app-log-dir' do
+  command "hdfs dfs -mkdir -p #{remote_log_dir} && hdfs dfs -chown yarn:hadoop #{remote_log_dir} && hdfs dfs -chmod 1777 #{remote_log_dir}"
+  timeout 300
+  user 'hdfs'
+  group 'hdfs'
+  not_if "hdfs dfs -test -d #{remote_log_dir}", :user => 'hdfs'
+  action :nothing
+end
+
 service 'hadoop-yarn-resourcemanager' do
   status_command 'service hadoop-yarn-resourcemanager status'
   supports [:restart => true, :reload => false, :status => true]

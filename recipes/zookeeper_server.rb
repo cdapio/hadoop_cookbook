@@ -24,15 +24,12 @@ package 'zookeeper-server' do
   action :install
 end
 
-zookeeper_conf_dir = "/etc/zookeeper/#{node['zookeeper']['conf_dir']}"
-
-directory zookeeper_conf_dir do
-  mode '0755'
-  owner 'root'
-  group 'root'
+# HDP 2.0.11.0 (maybe others) doesn't create zookeeper group
+group 'zookeeper' do
   action :create
-  recursive true
 end
+
+zookeeper_conf_dir = "/etc/zookeeper/#{node['zookeeper']['conf_dir']}"
 
 # Setup zoo.cfg
 if node['zookeeper'].key? 'zoocfg'
@@ -64,7 +61,7 @@ if node['zookeeper'].key? 'zoocfg'
 
   directory zookeeper_data_dir do
     owner 'zookeeper'
-    group 'zookeeper'
+    group 'hadoop'
     mode '0755'
     recursive true
     action :create
@@ -73,7 +70,7 @@ if node['zookeeper'].key? 'zoocfg'
   unless zookeeper_log_dir == zookeeper_data_dir
     directory zookeeper_log_dir do
       owner 'zookeeper'
-      group 'zookeeper'
+      group 'hadoop'
       mode '0755'
       recursive true
       action :create
@@ -120,26 +117,12 @@ if node['zookeeper'].key? 'zookeeper_env'
   template "#{zookeeper_conf_dir}/zookeeper-env.sh" do
     source 'generic-env.sh.erb'
     mode '0755'
-    owner 'zookeeper'
-    group 'zookeeper'
+    owner 'root'
+    group 'root'
     action :create
     variables my_vars
   end
 end # End zookeeper-env.sh
-
-# Setup jaas.conf
-if node['zookeeper'].key?('jaas')
-  my_vars = { :options => node['zookeeper']['jaas'] }
-
-  template "#{zookeeper_conf_dir}/jaas.conf" do
-    source 'jaas.conf.erb'
-    mode '0755'
-    owner 'zookeeper'
-    group 'zookeeper'
-    action :create
-    variables my_vars
-  end
-end # End jaas.conf
 
 # Setup log4j.properties
 if node['zookeeper'].key? 'log4j'

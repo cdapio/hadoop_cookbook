@@ -1,6 +1,6 @@
 # hadoop cookbook
 
-[![Cookbook Version](http://img.shields.io/cookbook/v/hadoop.svg)](https://community.opscode.com/cookbooks/hadoop)
+[![Cookbook Version](http://img.shields.io/cookbook/v/hadoop.svg)](https://supermarket.getchef.com/cookbooks/hadoop)
 [![Build Status](http://img.shields.io/travis/continuuity/hadoop_cookbook.svg)](http://travis-ci.org/continuuity/hadoop_cookbook)
 
 # Requirements
@@ -34,6 +34,7 @@ hadoop['hadoop_metrics'] | hadoop-metrics.properties | `hadoop['conf_dir']`
 hadoop['hadoop_policy'] | hadoop-policy.xml | `hadoop['conf_dir']`
 hadoop['hdfs_site'] | hdfs-site.xml | `hadoop['conf_dir']`
 hadoop['log4j'] | log4j.properties | `hadoop['conf_dir']`
+hadoop['mapred_env'] | mapred-env.sh | `hadoop['conf_dir']`
 hadoop['mapred_site'] | mapred-site.xml | `hadoop['conf_dir']`
 hadoop['yarn_env'] | yarn-env.sh | `hadoop['conf_dir']`
 hadoop['yarn_site'] | yarn-site.xml | `hadoop['conf_dir']`
@@ -41,10 +42,13 @@ hbase['hadoop_metrics'] | hadoop-metrics.properties | `hbase['conf_dir']`
 hbase['hbase_env'] | hbase-env.sh | `hbase['conf_dir']`
 hbase['hbase_policy'] | hbase-policy.xml | `hbase['conf_dir']`
 hbase['hbase_site'] | hbase-site.xml | `hbase['conf_dir']`
+hbase['jaas'] | jaas.conf | `hbase['conf_dir']`
 hbase['log4j'] | log4j.properties | `hbase['conf_dir']`
 hive['hive_env'] | hive-env.sh | `hive['conf_dir']`
 hive['hive_site'] | hive-site.xml | `hive['conf_dir']`
+hive['jaas'] | jaas.conf | `hive['conf_dir']`
 oozie['oozie_site'] | oozie-site.xml | `oozie['conf_dir']`
+zookeeper['jaas'] | jaas.conf | `zookeeper['conf_dir']`
 zookeeper['log4j'] | log4j.properties | `zookeeper['conf_dir']`
 zookeeper['zoocfg'] | zoo.cfg | `zookeeper['conf_dir']`
 

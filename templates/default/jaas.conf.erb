@@ -1,8 +1,37 @@
+<% unless @client.nil? %>
+Client {
+  com.sun.security.auth.module.Krb5LoginModule required
+  <% if @client['useticketcache'].to_s == 'true' %>
+  useTicketCache=true
+  <% else %>
+  useTicketCache=false
+  <% end %>
+  <% if @client['usekeytab'].to_s == 'true' %>
+  useKeyTab=<%= @client['usekeytab'] %>
+  keyTab="<%= @client['keytab'] %>"
+  principal="<%= @client['principal'] %>";
+  <% else %>
+  useKeyTab=false;
+  <% end %>
+};
+
+<% end %>
+<% unless @server.nil? %>
 Server {
   com.sun.security.auth.module.Krb5LoginModule required
-  useKeyTab=<%= useKeyTab %>
-  keyTab="<%= keyTab %>
   storeKey=true
+  <% if @server['useticketcache'].to_s == 'true' %>
+  useTicketCache=true
+  <% else %>
   useTicketCache=false
-  principal="<%= principal %>";
+  <% end %>
+  <% if @server['usekeytab'].to_s == 'true' %>
+  useKeyTab=<%= @server['usekeytab'] %>
+  keyTab="<%= @server['keytab'] %>"
+  principal="<%= @server['principal'] %>";
+  <% else %>
+  useKeyTab=false;
+  <% end %>
 };
+
+<% end %>

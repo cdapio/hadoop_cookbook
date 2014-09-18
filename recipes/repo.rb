@@ -48,26 +48,44 @@ when 'hdp'
   when '2.1.1.0', '2.0.4.0'
     hdp_version = node['hadoop']['distribution_version']
     hdp_update_version = nil
-  when '2.1.3.0', '2.1.2.1', '2.1.2.0'
+  when '2.1.5.0', '2.1.4.0', '2.1.3.0', '2.1.2.1', '2.1.2.0'
     hdp_version = '2.1.1.0'
     hdp_update_version = node['hadoop']['distribution_version']
   when '2.1', '2'
     hdp_version = '2.1.1.0'
-    hdp_update_version = '2.1.3.0'
+    hdp_update_version = '2.1.5.0'
   else
     Chef::Application.fatal!('This cookbook only supports HDP 2.x')
   end
-  hdp_utils_version = '1.1.0.17'
+
+  hdp_utils_version = '1.1.0.19'
+
   case node['platform_family']
   when 'rhel'
     yum_base_url = 'http://public-repo-1.hortonworks.com/HDP'
-    # HDP supports 5 and 6
-    case major_platform_version
-    when 5, 6
-      os = "centos#{major_platform_version}"
-    else
-      Chef::Application.fatal!('HDP only supports RHEL/CentOS 5 and 6!')
+    case node['platform']
+    # Only do a fatal version check on redhat/centos
+    # rubocop: disable BlockNesting
+    when 'redhat', 'centos'
+      # HDP supports 5 and 6
+      case major_platform_version
+      when 5, 6
+        os = "centos#{major_platform_version}"
+      else
+        Chef::Application.fatal!('HDP only supports RHEL/CentOS 5 and 6!')
+      end
+    # Force amazon linux to use centos6 packages
+    when 'amazon'
+      case major_platform_version
+      when 2014
+        os = 'centos6'
+        Chef::Log.warn('You are running on an unsupported platform! Forcing OS version to CentOS 6 for Hadoop!')
+      else
+        Chef::Application.fatal!('Your version of Amazon Linux has not been tested. File a bug report, if it works for you.')
+      end
     end
+    # rubocop: enable BlockNesting
+
     yum_repo_url = node['hadoop']['yum_repo_url'] ? node['hadoop']['yum_repo_url'] : "#{yum_base_url}/#{os}/2.x/GA/#{hdp_version}"
     yum_repo_key_url = node['hadoop']['yum_repo_key_url'] ? node['hadoop']['yum_repo_key_url'] : "#{yum_base_url}/#{os}/#{key}/#{key}-Jenkins"
 

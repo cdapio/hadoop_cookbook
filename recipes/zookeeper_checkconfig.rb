@@ -1,6 +1,6 @@
 #
 # Cookbook Name:: hadoop
-# Recipe:: zookeeper
+# Recipe:: zookeeper_checkconfig
 #
 # Copyright (C) 2013-2014 Continuuity, Inc.
 #
@@ -17,36 +17,13 @@
 # limitations under the License.
 #
 
-include_recipe 'hadoop::repo'
-include_recipe 'hadoop::zookeeper_checkconfig'
-
-package 'zookeeper' do
-  action :install
-end
-
-zookeeper_conf_dir = "/etc/zookeeper/#{node['zookeeper']['conf_dir']}"
-
-directory zookeeper_conf_dir do
-  mode '0755'
-  owner 'root'
-  group 'root'
-  action :create
-  recursive true
-end
-
-# Setup jaas.conf
+# If using JAAS, make sure it's configured fully
 if node['zookeeper'].key?('jaas')
-  my_vars = {
-    :client => node['zookeeper']['jaas']['client'],
-    :server => node['zookeeper']['jaas']['server']
-  }
+  %w(client server).each do |key|
+    next unless node['zookeeper']['jaas'].key?(key) && node['zookeeper']['jaas'][key].key?('usekeytab') &&
+      node['zookeeper']['jaas'][key]['usekeytab'].to_s == 'true'
 
-  template "#{zookeeper_conf_dir}/jaas.conf" do
-    source 'jaas.conf.erb'
-    mode '0644'
-    owner 'root'
-    group 'root'
-    action :create
-    variables my_vars
+    next unless node['zookeeper']['jaas'][key]['keytab'].nil? || node['zookeeper']['jaas'][key]['principal'].nil?
+    Chef::Application.fatal!("You must set node['zookeeper']['jaas']['#{key}']['keytab'] and node['zookeeper']['jaas']['#{key}']['principal'] with node['zookeeper']['jaas'][key]['usekeytab']")
   end
-end # End jaas.conf
+end
