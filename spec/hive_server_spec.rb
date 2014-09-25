@@ -13,5 +13,9 @@ describe 'hadoop::hive_server' do
     it 'install hive-server package' do
       expect(chef_run).to install_package('hive-server')
     end
+
+    it 'creates hive-server service resource, but does not run it' do
+      expect(chef_run).to_not start_service('hive-server')
+    end
   end
 end

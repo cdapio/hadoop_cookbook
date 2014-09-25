@@ -13,5 +13,13 @@ describe 'hadoop::hive_metastore' do
     it 'install hive-metastore package' do
       expect(chef_run).to install_package('hive-metastore')
     end
+
+    it 'creates /etc/init.d/hive-metastore from template' do
+      expect(chef_run).to create_template('/etc/init.d/hive-metastore')
+    end
+
+    it 'creates hive-metastore service resource, but does not run it' do
+      expect(chef_run).to_not start_service('hive-metastore')
+    end
   end
 end
