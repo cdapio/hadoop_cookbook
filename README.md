@@ -1,7 +1,7 @@
 # hadoop cookbook
 
 [![Cookbook Version](http://img.shields.io/cookbook/v/hadoop.svg)](https://supermarket.getchef.com/cookbooks/hadoop)
-[![Build Status](http://img.shields.io/travis/continuuity/hadoop_cookbook.svg)](http://travis-ci.org/continuuity/hadoop_cookbook)
+[![Build Status](http://img.shields.io/travis/caskdata/hadoop_cookbook.svg)](http://travis-ci.org/caskdata/hadoop_cookbook)
 
 # Requirements
 
@@ -17,7 +17,7 @@ This cookbook assumes that you have a working Java installation. It has been tes
 
 This cookbook is designed to be used with a wrapper cookbook or a role with settings for configuring Hadoop. The services should work out of the box on a single host, but little validation is done that you have made a working Hadoop configuration. The cookbook is attribute-driven and is suitable for use via either `chef-client` or `chef-solo` since it does not use any server-based functionality. The cookbook defines service definitions for each Hadoop service, but it does not enable or start them, by default.
 
-For more information, read the [Wrapping this cookbook](https://github.com/continuuity/hadoop_cookbook/wiki/Wrapping-this-cookbook) wiki entry.
+For more information, read the [Wrapping this cookbook](https://github.com/caskdata/hadoop_cookbook/wiki/Wrapping-this-cookbook) wiki entry.
 
 # Attributes
 
@@ -114,7 +114,7 @@ zookeeper['zoocfg'] | zoo.cfg | `zookeeper['conf_dir']`
 
 # Author
 
-Author:: Continuuity, Inc. (<ops@continuuity.com>)
+Author:: Cask Data, Inc. (<ops@cask.co>)
 
 # Testing
 
