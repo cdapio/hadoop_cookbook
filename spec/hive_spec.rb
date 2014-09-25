@@ -1,9 +1,9 @@
 require 'spec_helper'
 
 describe 'hadoop::hive' do
-  context 'on Centos 6.4 x86_64' do
+  context 'on Centos 6.5 x86_64' do
     let(:chef_run) do
-      ChefSpec::Runner.new(platform: 'centos', version: 6.4) do |node|
+      ChefSpec::Runner.new(platform: 'centos', version: 6.5) do |node|
         node.automatic['domain'] = 'example.com'
         node.default['hive']['hive_site']['hive.exec.local.scratchdir'] = '/tmp'
         stub_command('update-alternatives --display hadoop-conf | grep best | awk \'{print $5}\' | grep /etc/hadoop/conf.chef').and_return(false)

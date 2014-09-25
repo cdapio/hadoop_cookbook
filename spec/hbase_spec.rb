@@ -1,9 +1,9 @@
 require 'spec_helper'
 
 describe 'hadoop::hbase' do
-  context 'on Centos 6.4 x86_64' do
+  context 'on Centos 6.5 x86_64' do
     let(:chef_run) do
-      ChefSpec::Runner.new(platform: 'centos', version: 6.4) do |node|
+      ChefSpec::Runner.new(platform: 'centos', version: 6.5) do |node|
         node.automatic['domain'] = 'example.com'
         node.default['hadoop']['hdfs_site']['dfs.datanode.max.xcievers'] = '4096'
         node.default['hbase']['hbase_site']['hbase.rootdir'] = 'hdfs://localhost:8020/hbase'
