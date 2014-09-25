@@ -5,9 +5,9 @@ If you want to help make the hadoop cookbook better, by adding new features, fix
  * Fork hadoop_cookbook into your own GitHub repository
  * Create a topic branch with an appropriate name
  * Work on your favorite feature to your content
- * Once you are satisifed, create a pull request by going to the continuuity/hadoop_cookbook project.
+ * Once you are satisifed, create a pull request by going to the caskdata/hadoop_cookbook project.
  * Address all the review comments
- * Once addressed, the changes will be committed to the continuuity/hadoop_cookbook repo.
+ * Once addressed, the changes will be committed to the caskdata/hadoop_cookbook repo.
 
 ## License
 
