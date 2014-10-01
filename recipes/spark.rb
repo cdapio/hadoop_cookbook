@@ -17,7 +17,7 @@
 # limitations under the License.
 #
 
-%w( hadoop_client scala spark-core ).each do |pkg|
+%w( hadoop-client scala spark-core ).each do |pkg|
   package pkg do
     action :install
   end
@@ -57,7 +57,7 @@ if node['spark'].key?('spark_env')
     owner 'root'
     group 'root'
     action :create
-    variables node['spark']['spark_env']
+    variables my_vars
   end
 end
 
