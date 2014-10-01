@@ -21,6 +21,10 @@ package 'scala' do
   action :install
 end
 
+package 'hadoop_client' do
+  action :install
+end
+
 package 'spark-core' do
   action :install
 end
