@@ -17,16 +17,10 @@
 # limitations under the License.
 #
 
-package 'scala' do
-  action :install
-end
-
-package 'hadoop_client' do
-  action :install
-end
-
-package 'spark-core' do
-  action :install
+%w{ hadoop_client scala spark-core }.each do |pkg|
+  package pkg do
+    action :install
+  end
 end
 
 spark_conf_dir = '/etc/spark/conf'
