@@ -50,7 +50,7 @@ if node['spark'].key?('spark_env')
       '/var/log/spark'
     end
 
-  directory node['spark']['spark_env']['spark_log_dir'] do
+  directory spark_log_dir do
     owner  'spark'
     group  'spark'
     mode   00755
