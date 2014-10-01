@@ -17,7 +17,7 @@
 # limitations under the License.
 #
 
-%w{ hadoop_client scala spark-core }.each do |pkg|
+%w( hadoop_client scala spark-core ).each do |pkg|
   package pkg do
     action :install
   end
