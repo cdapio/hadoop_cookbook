@@ -1,8 +1,8 @@
 #
 # Cookbook Name:: hadoop
-# Recipe:: spark
+# Recipe:: spark_worker
 #
-# Copyright © 2013-2014 Cask Data, Inc.
+# Copyright (C) 2014 Continuuity, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -21,6 +21,16 @@ include_recipe 'hadoop::spark'
 
 package 'spark-worker' do
   action :install
+end
+
+if node['spark'].key?('spark_env') && node['spark']['spark_env'].key?('spark_worker_dir')
+  directory node['spark']['spark_env']['spark_worker_dir'] do
+    mode '0755'
+    owner 'spark'
+    group 'spark'
+    recursive true
+    action :create
+  end
 end
 
 service 'spark-worker' do
