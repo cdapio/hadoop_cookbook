@@ -34,6 +34,8 @@ node.default['hadoop']['distribution_version'] =
     '2.0'
   elsif node['hadoop']['distribution'] == 'cdh'
     '5'
+  elsif node['hadoop']['distribution'] == 'bigtop'
+    '0.7.0'
   end
 
 case node['hadoop']['distribution']
@@ -172,4 +174,39 @@ when 'cdh'
       action :add
     end
   end # End cdh
+
+when 'bigtop'
+  bigtop_release = node['hadoop']['distribution_version']
+  case node['platform_family']
+  when 'rhel'
+    yum_base_url = "http://bigtop.s3.amazonaws.com/releases/#{bigtop_release}/redhat"
+    yum_repo_url = node['hadoop']['yum_repo_url'] ? node['hadoop']['yum_repo_url'] : "#{yum_base_url}/#{major_platform_version}/#{node['kernel']['machine']}"
+    yum_repo_key_url = node['hadoop']['yum_repo_key_url'] ? node['hadoop']['yum_repo_key_url'] : 'http://archive.apache.org/dist/bigtop/KEYS'
+
+    yum_repository "bigtop-#{bigtop_release}" do
+      name "bigtop-#{bigtop_release}"
+      description "Apache Bigtop Distribution for Hadoop, Version #{bigtop_release}"
+      url yum_repo_url
+      gpgkey yum_repo_key_url
+      gpgcheck false
+      action :add
+    end
+
+  when 'debian'
+    codename = node['lsb']['codename']
+
+    apt_base_url = "http://bigtop.s3.amazonaws.com/releases/#{bigtop_release}/#{node['platform']}"
+    apt_repo_url = node['hadoop']['apt_repo_url'] ? node['hadoop']['apt_repo_url'] : "#{apt_base_url}/#{codename}/#{node['kernel']['machine']}"
+    apt_repo_key_url = node['hadoop']['apt_repo_key_url'] ? node['hadoop']['apt_repo_key_url'] : 'http://archive.apache.org/dist/bigtop/KEYS'
+
+    apt_repository "bigtop-#{bigtop_release}" do
+      uri apt_repo_url
+      key apt_repo_key_url
+      distribution 'bigtop'
+      components ['contrib']
+      action :add
+    end
+
+  end
+
 end
