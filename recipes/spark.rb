@@ -28,16 +28,16 @@ spark_conf_dir = "/etc/spark/#{node['spark']['conf_dir']}"
 directory spark_conf_dir do
   owner 'root'
   group 'root'
-  mode 00755
+  mode '0755'
   recursive true
   action :create
 end
 
 if node['spark']['spark_env'].key?('spark_log_dir')
   directory node['spark']['spark_env']['spark_log_dir'] do
-    owner  'spark'
+    owner 'spark'
     group 'spark'
-    mode 00755
+    mode '0755'
     recursive true
     action :create
   end
@@ -58,14 +58,14 @@ if node['spark'].key?('spark_env')
   directory spark_log_dir do
     owner 'spark'
     group 'spark'
-    mode 00755
+    mode '0755'
     recursive true
     action :create
   end
 
   template "#{spark_conf_dir}/spark-env.sh" do
     source 'generic-env.sh.erb'
-    mode 00755
+    mode '0755'
     owner 'root'
     group 'root'
     action :create
@@ -78,7 +78,7 @@ if node['spark'].key?('spark_defaults')
 
   template "#{spark_conf_dir}/spark-defaults.xml" do
     source 'generic-site.xml.erb'
-    mode 00644
+    mode '0644'
     owner 'root'
     group 'root'
     variables my_vars
@@ -92,7 +92,7 @@ end
 
     template "#{spark_conf_dir}/#{propfile.gsub('_', '-')}.properties" do
       source 'generic.properties.erb'
-      mode 00644
+      mode '0644'
       owner 'spark'
       group 'spark'
       action :create
