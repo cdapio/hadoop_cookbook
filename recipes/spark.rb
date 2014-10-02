@@ -25,6 +25,14 @@ end
 
 spark_conf_dir = "/etc/spark/#{node['spark']['conf_dir']}"
 
+directory spark_conf_dir do
+  owner 'root'
+  group 'root'
+  mode 00755
+  recursive true
+  action :create
+end
+
 if node['spark']['spark_env'].key?('spark_log_dir')
   directory node['spark']['spark_env']['spark_log_dir'] do
     owner  'spark'
