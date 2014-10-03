@@ -189,6 +189,10 @@ when 'bigtop'
 
   case node['platform_family']
   when 'rhel'
+
+    # default to redhat/6 for amazon linux, which uses YYYY.MM.DD versioning
+    major_platform_version = 6 unless major_platform_version == 5
+
     yum_base_url = "http://bigtop.s3.amazonaws.com/releases/#{bigtop_release}/redhat"
     yum_repo_url = node['hadoop']['yum_repo_url'] ? node['hadoop']['yum_repo_url'] : "#{yum_base_url}/#{major_platform_version}/#{node['kernel']['machine']}"
     yum_repo_key_url = node['hadoop']['yum_repo_key_url'] ? node['hadoop']['yum_repo_key_url'] : 'http://archive.apache.org/dist/bigtop/KEYS'
