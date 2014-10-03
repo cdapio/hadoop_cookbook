@@ -177,6 +177,16 @@ when 'cdh'
 
 when 'bigtop'
   bigtop_release = node['hadoop']['distribution_version']
+
+  # allow a developer mode for use when developing against bigtop, see https://issues.cask.co/browse/COOK-1
+  if bigtop_release.downcase == 'develop' && !( node['hadoop'].key?('yum_repo_url') || node['hadoop'].key?('apt_repo_url'))
+    Chef::Application.fatal!("You must set node['hadoop']['yum_repo_url'] or node['hadoop']['apt_repo_url'] when specifying node['hadoop']['distribution_version'] == 'develop'")
+  end
+
+  # do not validate gpg repo keys when in develop mode
+  validate_repo_key =  bigtop_release.downcase == 'develop' ? false : true
+  Chef::Log.warn('Allowing install of unsigned binaries') unless validate_repo_key
+
   case node['platform_family']
   when 'rhel'
     yum_base_url = "http://bigtop.s3.amazonaws.com/releases/#{bigtop_release}/redhat"
@@ -188,7 +198,7 @@ when 'bigtop'
       description "Apache Bigtop Distribution for Hadoop, Version #{bigtop_release}"
       url yum_repo_url
       gpgkey yum_repo_key_url
-      gpgcheck false
+      gpgcheck validate_repo_key
       action :add
     end
 
@@ -199,14 +209,23 @@ when 'bigtop'
     apt_repo_url = node['hadoop']['apt_repo_url'] ? node['hadoop']['apt_repo_url'] : "#{apt_base_url}/#{codename}/#{node['kernel']['machine']}"
     apt_repo_key_url = node['hadoop']['apt_repo_key_url'] ? node['hadoop']['apt_repo_key_url'] : 'http://archive.apache.org/dist/bigtop/KEYS'
 
-    apt_repository "bigtop-#{bigtop_release}" do
-      uri apt_repo_url
-      key apt_repo_key_url
-      distribution 'bigtop'
-      components ['contrib']
-      action :add
+    if validate_repo_key
+      apt_repository "bigtop-#{bigtop_release}" do
+        uri apt_repo_url
+        key apt_repo_key_url
+        distribution 'bigtop'
+        components ['contrib']
+        action :add
+      end
+    else
+      apt_repository "bigtop-#{bigtop_release}" do
+        uri apt_repo_url
+        key apt_repo_key_url
+        trusted true
+        distribution 'bigtop'
+        components ['contrib']
+        action :add
+      end
     end
-
   end
-
 end
