@@ -33,16 +33,6 @@ directory spark_conf_dir do
   action :create
 end
 
-if node['spark']['spark_env'].key?('spark_log_dir')
-  directory node['spark']['spark_env']['spark_log_dir'] do
-    owner 'spark'
-    group 'spark'
-    mode '0755'
-    recursive true
-    action :create
-  end
-end
-
 # TODO: /etc/spark/conf.dist/fairscheduler.xml.template
 
 if node['spark'].key?('spark_env')
