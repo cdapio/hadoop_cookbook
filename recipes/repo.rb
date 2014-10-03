@@ -209,23 +209,13 @@ when 'bigtop'
     apt_repo_url = node['hadoop']['apt_repo_url'] ? node['hadoop']['apt_repo_url'] : "#{apt_base_url}/#{codename}/#{node['kernel']['machine']}"
     apt_repo_key_url = node['hadoop']['apt_repo_key_url'] ? node['hadoop']['apt_repo_key_url'] : 'http://archive.apache.org/dist/bigtop/KEYS'
 
-    if validate_repo_key
-      apt_repository "bigtop-#{bigtop_release}" do
-        uri apt_repo_url
-        key apt_repo_key_url
-        distribution 'bigtop'
-        components ['contrib']
-        action :add
-      end
-    else
-      apt_repository "bigtop-#{bigtop_release}" do
-        uri apt_repo_url
-        key apt_repo_key_url
-        trusted true
-        distribution 'bigtop'
-        components ['contrib']
-        action :add
-      end
+    apt_repository "bigtop-#{bigtop_release}" do
+      uri apt_repo_url
+      key apt_repo_key_url
+      trusted !validate_repo_key
+      distribution 'bigtop'
+      components ['contrib']
+      action :add
     end
   end
 end
