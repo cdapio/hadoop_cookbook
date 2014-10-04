@@ -207,6 +207,7 @@ when 'bigtop'
     end
 
   when 'debian'
+    # for bigtop, we do not validate codename, to support developing against custom repositories
     codename = node['lsb']['codename']
 
     apt_base_url = "http://bigtop.s3.amazonaws.com/releases/#{bigtop_release}/#{node['platform']}"
