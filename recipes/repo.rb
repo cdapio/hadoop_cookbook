@@ -190,11 +190,18 @@ when 'bigtop'
   case node['platform_family']
   when 'rhel'
 
-    # default to redhat/6 for amazon linux, which uses YYYY.MM.DD versioning
-    major_platform_version = 6 unless major_platform_version == 5
+    case node['platform_version']
+    when '5', '6'
+      yum_platform_version = node['platform_version']
+    when /\d\d\d\d\.\d\d\.\d\d/ # Amazon linux, point to redhat/6 bigtop repo
+      yum_platform_version = '6'
+    else
+      Chef::Log.warn('Unsupported platform detected, use at your own risk')
+      yum_platform_version = node['platform_version']
+    end
 
     yum_base_url = "http://bigtop.s3.amazonaws.com/releases/#{bigtop_release}/redhat"
-    yum_repo_url = node['hadoop']['yum_repo_url'] ? node['hadoop']['yum_repo_url'] : "#{yum_base_url}/#{major_platform_version}/#{node['kernel']['machine']}"
+    yum_repo_url = node['hadoop']['yum_repo_url'] ? node['hadoop']['yum_repo_url'] : "#{yum_base_url}/#{yum_platform_version}/#{node['kernel']['machine']}"
     yum_repo_key_url = node['hadoop']['yum_repo_key_url'] ? node['hadoop']['yum_repo_key_url'] : 'http://archive.apache.org/dist/bigtop/KEYS'
 
     yum_repository "bigtop-#{bigtop_release}" do
