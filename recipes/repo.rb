@@ -190,14 +190,14 @@ when 'bigtop'
   case node['platform_family']
   when 'rhel'
 
-    case node['platform_version']
-    when '5', '6'
-      yum_platform_version = node['platform_version']
-    when /\d\d\d\d\.\d\d\.\d\d/ # Amazon linux, point to redhat/6 bigtop repo
-      yum_platform_version = '6'
+    case major_platform_version
+    when 5, 6
+      yum_platform_version = major_platform_version
+    when 2014 # Amazon linux, point to redhat/6 bigtop repo
+      yum_platform_version = 6
     else
       Chef::Log.warn('Unsupported platform detected, use at your own risk')
-      yum_platform_version = node['platform_version']
+      yum_platform_version = major_platform_version
     end
 
     yum_base_url = "http://bigtop.s3.amazonaws.com/releases/#{bigtop_release}/redhat"
