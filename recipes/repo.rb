@@ -34,6 +34,8 @@ node.default['hadoop']['distribution_version'] =
     '2.0'
   elsif node['hadoop']['distribution'] == 'cdh'
     '5'
+  elsif node['hadoop']['distribution'] == 'bigtop'
+    '0.7.0'
   end
 
 case node['hadoop']['distribution']
@@ -172,4 +174,60 @@ when 'cdh'
       action :add
     end
   end # End cdh
+
+when 'bigtop'
+  bigtop_release = node['hadoop']['distribution_version']
+
+  # allow a developer mode for use when developing against bigtop, see https://issues.cask.co/browse/COOK-1
+  if bigtop_release.downcase == 'develop' && !( node['hadoop'].key?('yum_repo_url') || node['hadoop'].key?('apt_repo_url'))
+    Chef::Application.fatal!("You must set node['hadoop']['yum_repo_url'] or node['hadoop']['apt_repo_url'] when specifying node['hadoop']['distribution_version'] == 'develop'")
+  end
+
+  # do not validate gpg repo keys when in develop mode
+  validate_repo_key =  bigtop_release.downcase == 'develop' ? false : true
+  Chef::Log.warn('Allowing install of unsigned binaries') unless validate_repo_key
+
+  case node['platform_family']
+  when 'rhel'
+
+    case major_platform_version
+    when 5, 6
+      yum_platform_version = major_platform_version
+    when 2014 # Amazon linux, point to redhat/6 bigtop repo
+      yum_platform_version = 6
+    else
+      Chef::Log.warn('Unsupported platform detected, use at your own risk')
+      yum_platform_version = major_platform_version
+    end
+
+    yum_base_url = "http://bigtop.s3.amazonaws.com/releases/#{bigtop_release}/redhat"
+    yum_repo_url = node['hadoop']['yum_repo_url'] ? node['hadoop']['yum_repo_url'] : "#{yum_base_url}/#{yum_platform_version}/#{node['kernel']['machine']}"
+    yum_repo_key_url = node['hadoop']['yum_repo_key_url'] ? node['hadoop']['yum_repo_key_url'] : 'http://archive.apache.org/dist/bigtop/KEYS'
+
+    yum_repository "bigtop-#{bigtop_release}" do
+      name "bigtop-#{bigtop_release}"
+      description "Apache Bigtop Distribution for Hadoop, Version #{bigtop_release}"
+      url yum_repo_url
+      gpgkey yum_repo_key_url
+      gpgcheck validate_repo_key
+      action :add
+    end
+
+  when 'debian'
+    # for bigtop, we do not validate codename, to support developing against custom repositories
+    codename = node['lsb']['codename']
+
+    apt_base_url = "http://bigtop.s3.amazonaws.com/releases/#{bigtop_release}/#{node['platform']}"
+    apt_repo_url = node['hadoop']['apt_repo_url'] ? node['hadoop']['apt_repo_url'] : "#{apt_base_url}/#{codename}/#{node['kernel']['machine']}"
+    apt_repo_key_url = node['hadoop']['apt_repo_key_url'] ? node['hadoop']['apt_repo_key_url'] : 'http://archive.apache.org/dist/bigtop/KEYS'
+
+    apt_repository "bigtop-#{bigtop_release}" do
+      uri apt_repo_url
+      key apt_repo_key_url
+      trusted !validate_repo_key
+      distribution 'bigtop'
+      components ['contrib']
+      action :add
+    end
+  end
 end

@@ -55,8 +55,8 @@ zookeeper['zoocfg'] | zoo.cfg | `zookeeper['conf_dir']`
 
 ## Distribution Attributes
 
-* `hadoop['distribution']` - Specifies which Hadoop distribution to use, currently supported: cdh, hdp. Default `hdp`
-* `hadoop['distribution_version']` - Specifies which version of `hadoop['distribution']` to use. Default `2.0` if `hadoop['distribution']` is `hdp` and `5` if `hadoop['distribution']` is `cdh`
+* `hadoop['distribution']` - Specifies which Hadoop distribution to use, currently supported: cdh, hdp, bigtop. Default `hdp`
+* `hadoop['distribution_version']` - Specifies which version of `hadoop['distribution']` to use. Default `2.0` if `hadoop['distribution']` is `hdp`, `5` if `hadoop['distribution']` is `cdh`, and `0.7.0` if `hadoop['distribution']` is `bigtop`.  It can also be set to `develop` when `hadoop['distribution']` is `bigtop` to allow installing from development repos without gpg validation. 
 
 ### APT-specific settings
 
