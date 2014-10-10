@@ -28,7 +28,7 @@ unless node['spark']['release']['install'] == false
   remote_file "#{node['spark']['release']['install_path']}/spark-#{node['spark']['release']['version']}-bin-#{node['spark']['release']['package_type']}.tgz" do
     source "http://d3kbcqa49mib13.cloudfront.net/spark-#{node['spark']['release']['version']}-bin-#{node['spark']['release']['package_type']}.tgz"
     checksum node['spark']['release']['checksum']
-    not_if { ::File.exists?("/tmp/spark-#{node['spark']['release']['version']}-bin-#{node['spark']['release']['package_type']}.tgz") }
+    not_if { ::File.exist?("#{node['spark']['release']['install_path']}/spark-#{node['spark']['release']['version']}-bin-#{node['spark']['release']['package_type']}.tgz") }
     action :create_if_missing
   end
 
