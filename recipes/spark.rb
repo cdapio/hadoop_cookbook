@@ -21,6 +21,35 @@ include_recipe 'hadoop::repo'
 
 package 'spark-core' do
   action :install
+  only_if { node['hadoop']['distribution'] == 'cdh'  }
+end
+
+unless node['spark']['release']['install'] == false
+  remote_file "#{node['spark']['release']['install_path']}/spark-#{node['spark']['release']['version']}-bin-#{node['spark']['release']['package_type']}.tgz" do
+    source "http://d3kbcqa49mib13.cloudfront.net/spark-#{node['spark']['release']['version']}-bin-#{node['spark']['release']['package_type']}.tgz"
+    checksum node['spark']['release']['checksum']
+    not_if { ::File.exists?("/tmp/spark-#{node['spark']['release']['version']}-bin-#{node['spark']['release']['package_type']}.tgz") }
+    action :create_if_missing
+  end
+
+  execute 'install-spark-release' do
+    cwd node['spark']['release']['install_path']
+    user 'root'
+    group 'root'
+    command <<-EOS
+      tar -xvzf spark-#{node['spark']['release']['version']}-bin-#{node['spark']['release']['package_type']}.tgz
+      ln -s spark-#{node['spark']['release']['version']}-bin-#{node['spark']['release']['package_type']} spark
+    EOS
+    action :run
+  end
+
+  link "#{node['spark']['release']['install_path']}/spark-#{node['spark']['release']['version']}-bin-#{node['spark']['release']['package_type']}" do
+    to "#{node['spark']['release']['install_path']}/spark"
+    action :create
+  end
+
+  # override SPARK_HOME to use release install
+  node.override['spark']['spark_env']['spark_home'] = "#{node['spark']['release']['install_path']}/spark"
 end
 
 spark_conf_dir = "/etc/spark/#{node['spark']['conf_dir']}"

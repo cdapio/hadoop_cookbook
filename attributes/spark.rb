@@ -1,3 +1,11 @@
+
+# spark release
+default['spark']['release']['install']       = false
+default['spark']['release']['install_path']  = '/opt'
+default['spark']['release']['spark_version'] = '1.1.0'
+default['spark']['release']['package_type']  = 'hadoop2.3'
+default['spark']['release']['checksum']      = '4d112223ab16a2b7fc4965e14bc9f9b1'
+
 # spark-env.sh
 default['spark']['spark_env']['standalone_spark_master_host'] = node['fqdn']
 default['spark']['spark_env']['spark_master_ip']              = node['fqdn']
