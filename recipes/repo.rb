@@ -35,7 +35,7 @@ node.default['hadoop']['distribution_version'] =
   elsif node['hadoop']['distribution'] == 'cdh'
     '5'
   elsif node['hadoop']['distribution'] == 'bigtop'
-    '0.7.0'
+    '0.8.0'
   end
 
 case node['hadoop']['distribution']
