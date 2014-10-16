@@ -1,7 +1,17 @@
 hadoop CHANGELOG
 ===============
 
+v1.5.0 (Sep 25, 2014)
+---------------------
+This release adds Flume support to the cookbook.
+
+- Update test-kitchen to use more recipes ( Issue: #95 )
+- Test improvements ( Issues: #98 #100 #101 )
+- Flume support ( Issue: #99 )
+- Simplify RHEL handling ( Issue: #102 )
+
 v1.4.1 (Sep 18, 2014)
+---------------------
 - Add `zookeeper` group after package installs ( Issue: #96 )
 - Code consistency updates ( Issue: #97 )
 
