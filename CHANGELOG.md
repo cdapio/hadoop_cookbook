@@ -1,6 +1,10 @@
 hadoop CHANGELOG
 ===============
 
+v1.6.0 (Oct 16, 2014)
+---------------------
+- Add Bigtop support ( Issue: #105 ) (COOK-1)
+
 v1.5.0 (Sep 25, 2014)
 ---------------------
 This release adds Flume support to the cookbook.
