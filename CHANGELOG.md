@@ -1,6 +1,10 @@
 hadoop CHANGELOG
 ===============
 
+v1.6.1 (Oct 16, 2014)
+---------------------
+- Update Bigtop to `0.8.0` release ( Issues: #106 #107 ) (COOK-1)
+
 v1.6.0 (Oct 16, 2014)
 ---------------------
 - Add Bigtop support ( Issue: #105 ) (COOK-1)
