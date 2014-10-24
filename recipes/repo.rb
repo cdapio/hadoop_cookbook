@@ -31,7 +31,7 @@ end
 # Set defaults for version, based on distribution
 node.default['hadoop']['distribution_version'] =
   if node['hadoop']['distribution'] == 'hdp'
-    '2.0'
+    '2.1'
   elsif node['hadoop']['distribution'] == 'cdh'
     '5'
   elsif node['hadoop']['distribution'] == 'bigtop'
