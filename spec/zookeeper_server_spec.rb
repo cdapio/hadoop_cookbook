@@ -9,6 +9,7 @@ describe 'hadoop::zookeeper_server' do
         node.default['zookeeper']['zoocfg']['dataDir'] = '/var/lib/zookeeper'
         node.default['zookeeper']['zoocfg']['server.1'] = 'localhost:2181'
         stub_command('update-alternatives --display zookeeper-conf | grep best | awk \'{print $5}\' | grep /etc/zookeeper/conf.chef').and_return(false)
+        stub_command('test -e /usr/lib/bigtop-utils/bigtop-detect-javahome').and_return(false)
       end.converge(described_recipe)
     end
 
