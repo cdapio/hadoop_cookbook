@@ -2,7 +2,7 @@
 # vi: set ft=ruby :
 
 # Vagrantfile API/syntax version. Don't touch unless you know what you're doing!
-VAGRANTFILE_API_VERSION = "2"
+VAGRANTFILE_API_VERSION = '2'
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # All Vagrant configuration is done here. The most common configuration
@@ -32,7 +32,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   config.vm.provider :virtualbox do |vb|
     # Use VBoxManage to customize the VM. For example to change memory:
-    vb.customize ["modifyvm", :id, "--memory", "2048"]
+    vb.customize ['modifyvm', :id, '--memory', '2048']
   end
 
   # Ubuntu needs this, but global provisioners run first
@@ -81,20 +81,20 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     }
 
     chef.run_list = [
-      "recipe[minitest-handler::default]",
-      "recipe[java::default]",
-      "recipe[hadoop::default]",
-      "recipe[hadoop::hadoop_hdfs_namenode]",
-      "recipe[hadoop::hadoop_hdfs_datanode]",
-      "recipe[hadoop::hadoop_hdfs_secondarynamenode]",
-      "recipe[hadoop::hadoop_yarn_resourcemanager]",
-      "recipe[hadoop::hadoop_yarn_nodemanager]",
-      "recipe[hadoop::zookeeper_server]",
-      "recipe[hadoop::hbase_master]",
-      "recipe[hadoop::hbase_regionserver]",
-      "recipe[hadoop::hive_server2]",
-      "recipe[hadoop::hive_metastore]",
-      "recipe[hadoop::oozie]"
+      'recipe[minitest-handler::default]',
+      'recipe[java::default]',
+      'recipe[hadoop::default]',
+      'recipe[hadoop::hadoop_hdfs_namenode]',
+      'recipe[hadoop::hadoop_hdfs_datanode]',
+      'recipe[hadoop::hadoop_hdfs_secondarynamenode]',
+      'recipe[hadoop::hadoop_yarn_resourcemanager]',
+      'recipe[hadoop::hadoop_yarn_nodemanager]',
+      'recipe[hadoop::zookeeper_server]',
+      'recipe[hadoop::hbase_master]',
+      'recipe[hadoop::hbase_regionserver]',
+      'recipe[hadoop::hive_server2]',
+      'recipe[hadoop::hive_metastore]',
+      'recipe[hadoop::oozie]'
     ]
   end
 end
