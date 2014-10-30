@@ -83,7 +83,7 @@ if node['hadoop'].key?('fair_scheduler')
     variables my_vars
   end
 elsif node['hadoop'].key?('yarn_site') && node['hadoop']['yarn_site'].key?('yarn.resourcemanager.scheduler.class') &&
-  node['hadoop']['yarn_site']['yarn.resourcemanager.scheduler.class'] == 'org.apache.hadoop.yarn.server.resourcemanager.scheduler.fair.FairScheduler'
+      node['hadoop']['yarn_site']['yarn.resourcemanager.scheduler.class'] == 'org.apache.hadoop.yarn.server.resourcemanager.scheduler.fair.FairScheduler'
   Chef::Application.fatal!('Set YARN scheduler to fair-scheduler without configuring it, first')
 end # End fair-scheduler.xml
 
