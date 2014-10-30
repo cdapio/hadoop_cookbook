@@ -56,6 +56,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
         :container_executor => {
           'banned.users' => 'hdfs,yarn,mapred,bin'
         },
+        :hadoop_env => {
+          'hadoop_log_dir' => '/data/logs/hadoop-hdfs'
+        },
         :hdfs_site => {
           'dfs.datanode.max.transfer.threads' => 4096
         }
