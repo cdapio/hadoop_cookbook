@@ -6,6 +6,7 @@ describe 'hadoop::hive' do
       ChefSpec::Runner.new(platform: 'centos', version: 6.5) do |node|
         node.automatic['domain'] = 'example.com'
         node.default['hive']['hive_site']['hive.exec.local.scratchdir'] = '/tmp'
+        node.default['hive']['hive_env']['hive_log_dir'] = '/data/log/hive'
         stub_command('update-alternatives --display hadoop-conf | grep best | awk \'{print $5}\' | grep /etc/hadoop/conf.chef').and_return(false)
         stub_command('update-alternatives --display hive-conf | grep best | awk \'{print $5}\' | grep /etc/hive/conf.chef').and_return(false)
       end.converge(described_recipe)
