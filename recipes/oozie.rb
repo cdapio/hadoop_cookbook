@@ -102,6 +102,47 @@ if node['oozie'].key?('oozie_site')
   end
 end
 
+# Setup oozie-env.sh
+if node['oozie'].key?('oozie_env')
+  my_vars = { :options => node['oozie']['oozie_env'] }
+
+  oozie_log_dir =
+    if node['oozie']['oozie_env'].key?('oozie_log_dir')
+      node['oozie']['oozie_env']['oozie_log_dir']
+    else
+      '/var/log/oozie'
+    end
+
+  directory oozie_log_dir do
+    owner 'oozie'
+    group 'oozie'
+    mode '0755'
+    action :create
+    recursive true
+    only_if { node['oozie']['oozie_env'].key?('oozie_log_dir') }
+  end
+
+  unless node['oozie']['oozie_env']['oozie_log_dir'] == '/var/log/oozie'
+    # Delete default directory, if we aren't set to it
+    directory '/var/log/oozie' do
+      action :delete
+    end
+    # symlink
+    link '/var/log/oozie' do
+      to node['oozie']['oozie_env']['oozie_log_dir']
+    end
+  end
+
+  template "#{oozie_conf_dir}/oozie-env.sh" do
+    source 'generic-env.sh.erb'
+    mode '0755'
+    owner 'root'
+    group 'root'
+    action :create
+    variables my_vars
+  end
+end # End oozie-env.sh
+
 service 'oozie' do
   status_command 'service oozie status'
   supports [:restart => true, :reload => false, :status => true]
