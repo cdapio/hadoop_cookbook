@@ -179,7 +179,7 @@ when 'bigtop'
   bigtop_release = node['hadoop']['distribution_version']
 
   # allow a developer mode for use when developing against bigtop, see https://issues.cask.co/browse/COOK-1
-  if bigtop_release.downcase == 'develop' && !( node['hadoop'].key?('yum_repo_url') || node['hadoop'].key?('apt_repo_url'))
+  if bigtop_release.downcase == 'develop' && !(node['hadoop'].key?('yum_repo_url') || node['hadoop'].key?('apt_repo_url'))
     Chef::Application.fatal!("You must set node['hadoop']['yum_repo_url'] or node['hadoop']['apt_repo_url'] when specifying node['hadoop']['distribution_version'] == 'develop'")
   end
 
