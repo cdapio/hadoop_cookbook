@@ -123,7 +123,7 @@ if node['zookeeper'].key?('zookeeper_env')
 
   directory zookeeper_log_dir do
     owner 'zookeeper'
-    group 'hadoop'
+    group 'zookeeper'
     mode '0755'
     action :create
     recursive true
