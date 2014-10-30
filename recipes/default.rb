@@ -94,6 +94,7 @@ end # End fair-scheduler.xml
 
   %w(hadoop hadoop_mapred yarn).each do |svc|
     next unless node['hadoop'][envfile].key?("#{svc}_log_dir")
+    # Create directory
     directory node['hadoop'][envfile]["#{svc}_log_dir"] do
       log_dir_owner =
         if svc == 'hadoop_mapred'
@@ -104,10 +105,29 @@ end # End fair-scheduler.xml
           svc
         end
       owner log_dir_owner
-      group log_dir_owner
+      group 'hadoop'
       mode '0775'
       action :create
       recursive true
+    end
+    log_dir =
+      case svc
+      when 'hadoop'
+        'hdfs'
+      when 'hadoop_mapred'
+        'mapred'
+      else
+        svc
+      end
+    unless node['hadoop'][envfile]["#{svc}_log_dir"] == "/var/log/hadoop-#{log_dir}"
+      # Delete default directory, if we aren't set to it
+      directory "/var/log/hadoop-#{log_dir}" do
+        action :delete
+      end
+      # symlink
+      link "/var/log/hadoop-#{log_dir}" do
+        to node['hadoop'][envfile]["#{svc}_log_dir"]
+      end
     end
   end
 

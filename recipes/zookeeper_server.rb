@@ -41,7 +41,7 @@ if node['zookeeper'].key?('zoocfg')
     else
       '/var/lib/zookeeper'
     end
-  zookeeper_log_dir =
+  zookeeper_datalog_dir =
     if node['zookeeper']['zoocfg'].key?('dataLogDir')
       node['zookeeper']['zoocfg']['dataLogDir']
     else
@@ -55,7 +55,7 @@ if node['zookeeper'].key?('zoocfg')
     end
 
   node.default['zookeeper']['zoocfg']['dataDir'] = zookeeper_data_dir
-  node.default['zookeeper']['zoocfg']['dataLogDir'] = zookeeper_log_dir
+  node.default['zookeeper']['zoocfg']['dataLogDir'] = zookeeper_datalog_dir
   node.default['zookeeper']['zoocfg']['clientPort'] = zookeeper_client_port
   my_vars = { :properties => node['zookeeper']['zoocfg'] }
 
@@ -67,8 +67,8 @@ if node['zookeeper'].key?('zoocfg')
     action :create
   end
 
-  unless zookeeper_log_dir == zookeeper_data_dir
-    directory zookeeper_log_dir do
+  unless zookeeper_datalog_dir == zookeeper_data_dir
+    directory zookeeper_datalog_dir do
       owner 'zookeeper'
       group 'hadoop'
       mode '0755'
@@ -114,6 +114,22 @@ end # End zoo.cfg
 if node['zookeeper'].key?('zookeeper_env')
   my_vars = { :options => node['zookeeper']['zookeeper_env'] }
 
+  zookeeper_log_dir =
+    if node['zookeeper']['zookeeper_env'].key?('zookeeper_log_dir')
+      node['zookeeper']['zookeeper_env']['zookeeper_log_dir']
+    else
+      '/var/log/zookeeper'
+    end
+
+  directory zookeeper_log_dir do
+    owner 'zookeeper'
+    group 'zookeeper'
+    mode '0755'
+    action :create
+    recursive true
+    only_if { node['zookeeper']['zookeeper_env'].key?('zookeeper_log_dir') }
+  end
+
   template "#{zookeeper_conf_dir}/zookeeper-env.sh" do
     source 'generic-env.sh.erb'
     mode '0755'
@@ -121,6 +137,17 @@ if node['zookeeper'].key?('zookeeper_env')
     group 'root'
     action :create
     variables my_vars
+  end
+
+  unless node['zookeeper']['zookeeper_env']['zookeeper_log_dir'] == '/var/log/zookeeper'
+    # Delete default directory, if we aren't set to it
+    directory '/var/log/zookeeper' do
+      action :delete
+    end
+    # symlink
+    link '/var/log/zookeeper' do
+      to node['zookeeper']['zookeeper_env']['zookeeper_log_dir']
+    end
   end
 end # End zookeeper-env.sh
 

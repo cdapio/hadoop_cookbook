@@ -9,7 +9,7 @@ describe 'hadoop::default' do
         node.default['hadoop']['hadoop_policy']['test.property'] = 'blue'
         node.default['hadoop']['mapred_site']['mapreduce.framework.name'] = 'yarn'
         node.default['hadoop']['fair_scheduler']['defaults']['poolMaxJobsDefault'] = '1000'
-        node.default['hadoop']['hadoop_env']['hadoop_log_dir'] = '/var/log/hadoop-hdfs'
+        node.default['hadoop']['hadoop_env']['hadoop_log_dir'] = '/data/log/hadoop-hdfs'
         node.default['hadoop']['yarn_env']['yarn_log_dir'] = '/var/log/hadoop-yarn'
         stub_command('update-alternatives --display hadoop-conf | grep best | awk \'{print $5}\' | grep /etc/hadoop/conf.chef').and_return(false)
       end.converge(described_recipe)
@@ -34,12 +34,25 @@ describe 'hadoop::default' do
       end
     end
 
-    %w(hadoop-hdfs hadoop-yarn).each do |dir|
-      it "creates /var/log/#{dir} directory" do
-        expect(chef_run).to create_directory("/var/log/#{dir}").with(
-          mode: '0775'
-        )
-      end
+    it 'creates /var/log/hadoop-yarn' do
+      expect(chef_run).to create_directory('/var/log/hadoop-yarn').with(
+        mode: '0775'
+      )
+    end
+
+    it 'deletes /var/log/hadoop-hdfs' do
+      expect(chef_run).to delete_directory('/var/log/hadoop-hdfs')
+    end
+
+    it 'creates /data/log/hadoop-hdfs' do
+      expect(chef_run).to create_directory('/data/log/hadoop-hdfs').with(
+        mode: '0775'
+      )
+    end
+
+    it 'creates /var/log/hadoop-hdfs symlink' do
+      link = chef_run.link('/var/log/hadoop-hdfs')
+      expect(link).to link_to('/data/log/hadoop-hdfs')
     end
 
     %w(
