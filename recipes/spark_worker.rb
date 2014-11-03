@@ -23,14 +23,19 @@ package 'spark-worker' do
   action :install
 end
 
-if node['spark'].key?('spark_env') && node['spark']['spark_env'].key?('spark_worker_dir')
-  directory node['spark']['spark_env']['spark_worker_dir'] do
-    mode '0755'
-    owner 'spark'
-    group 'spark'
-    recursive true
-    action :create
+worker_dir =
+  if node['spark'].key?('spark_env') && node['spark']['spark_env'].key?('spark_worker_dir')
+    node['spark']['spark_env']['spark_worker_dir']
+  else
+    '/var/run/spark/work'
   end
+
+directory worker_dir do
+  mode '0755'
+  owner 'spark'
+  group 'spark'
+  recursive true
+  action :create
 end
 
 service 'spark-worker' do

@@ -26,28 +26,26 @@ end
 dfs = node['hadoop']['core_site']['fs.defaultFS']
 
 execute 'hdfs-spark-userdir' do
-  command <<-EOS
-    hdfs dfs -mkdir -p #{dfs}/user/spark
-    hdfs dfs -chown -R spark:spark #{dfs}/user/spark
-  EOS
+  command "hdfs dfs -mkdir -p #{dfs}/user/spark && hdfs dfs -chown -R spark:spark #{dfs}/user/spark"
   user 'hdfs'
   group 'hdfs'
   timeout 300
   action :run
 end
 
-if node['spark']['spark_defaults'].key?('spark.eventLog.dir')
-  execute 'hdfs-spark-eventlog-dir' do
-    command <<-EOS
-      hdfs dfs -mkdir -p #{dfs}#{node['spark']['spark_defaults']['spark.eventLog.dir']}
-      hdfs dfs -chown -R spark:spark #{dfs}#{node['spark']['spark_defaults']['spark.eventLog.dir']}
-      hdfs dfs -chmod 1777 #{dfs}#{node['spark']['spark_defaults']['spark.eventLog.dir']}
-    EOS
-    user 'hdfs'
-    group 'hdfs'
-    timeout 300
-    action :run
+eventlog_dir =
+  if node['spark']['spark_defaults'].key?('spark.eventLog.dir')
+    node['spark']['spark_defaults']['spark.eventLog.dir']
+  else
+    '/user/spark/applicationHistory'
   end
+
+execute 'hdfs-spark-eventlog-dir' do
+  command "hdfs dfs -mkdir -p #{dfs}#{eventlog_dir} && hdfs dfs -chown -R spark:spark #{dfs}#{eventlog_dir} && hdfs dfs -chmod 1777 #{dfs}#{eventlog_dir}"
+  user 'hdfs'
+  group 'hdfs'
+  timeout 300
+  action :run
 end
 
 service 'spark-history-server' do
