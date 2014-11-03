@@ -83,7 +83,7 @@ if node['hadoop'].key?('fair_scheduler')
     variables my_vars
   end
 elsif node['hadoop'].key?('yarn_site') && node['hadoop']['yarn_site'].key?('yarn.resourcemanager.scheduler.class') &&
-  node['hadoop']['yarn_site']['yarn.resourcemanager.scheduler.class'] == 'org.apache.hadoop.yarn.server.resourcemanager.scheduler.fair.FairScheduler'
+      node['hadoop']['yarn_site']['yarn.resourcemanager.scheduler.class'] == 'org.apache.hadoop.yarn.server.resourcemanager.scheduler.fair.FairScheduler'
   Chef::Application.fatal!('Set YARN scheduler to fair-scheduler without configuring it, first')
 end # End fair-scheduler.xml
 
@@ -92,6 +92,7 @@ end # End fair-scheduler.xml
   next unless node['hadoop'].key?(envfile)
   my_vars = { :options => node['hadoop'][envfile] }
 
+  # rubocop:disable Style/Next
   %w(hadoop hadoop_mapred yarn).each do |svc|
     next unless node['hadoop'][envfile].key?("#{svc}_log_dir")
     # Create directory
@@ -130,6 +131,7 @@ end # End fair-scheduler.xml
       end
     end
   end
+  # rubocop:enable Style/Next
 
   template "#{hadoop_conf_dir}/#{envfile.gsub('_', '-')}.sh" do
     source 'generic-env.sh.erb'

@@ -21,7 +21,7 @@
 if node['zookeeper'].key?('jaas')
   %w(client server).each do |key|
     next unless node['zookeeper']['jaas'].key?(key) && node['zookeeper']['jaas'][key].key?('usekeytab') &&
-      node['zookeeper']['jaas'][key]['usekeytab'].to_s == 'true'
+                node['zookeeper']['jaas'][key]['usekeytab'].to_s == 'true'
 
     next unless node['zookeeper']['jaas'][key]['keytab'].nil? || node['zookeeper']['jaas'][key]['principal'].nil?
     Chef::Application.fatal!("You must set node['zookeeper']['jaas']['#{key}']['keytab'] and node['zookeeper']['jaas']['#{key}']['principal'] with node['zookeeper']['jaas'][key]['usekeytab']")

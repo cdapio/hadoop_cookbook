@@ -15,7 +15,7 @@ end
 # rubocop rake task
 desc 'Ruby style guide linter'
 task :rubocop do
-  sh 'rubocop'
+  sh 'rubocop -D'
 end
 
 # creates metadata.json
