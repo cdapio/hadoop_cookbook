@@ -106,17 +106,16 @@ end
 
 # Setup metrics.properties log4j.properties
 %w(metrics log4j).each do |propfile|
-  if node['spark'].key? propfile
-    my_vars = { :properties => node['spark'][propfile] }
+  next unless node['spark'].key?(propfile)
+  my_vars = { :properties => node['spark'][propfile] }
 
-    template "#{spark_conf_dir}/#{propfile.gsub('_', '-')}.properties" do
-      source 'generic.properties.erb'
-      mode '0644'
-      owner 'spark'
-      group 'spark'
-      action :create
-      variables my_vars
-    end
+  template "#{spark_conf_dir}/#{propfile.gsub('_', '-')}.properties" do
+    source 'generic.properties.erb'
+    mode '0644'
+    owner 'spark'
+    group 'spark'
+    action :create
+    variables my_vars
   end
 end # End metrics.properties log4j.properties
 
