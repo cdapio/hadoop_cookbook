@@ -3,7 +3,7 @@ require 'spec_helper'
 describe 'hadoop::hive' do
   context 'on Centos 6.5 x86_64' do
     let(:chef_run) do
-      ChefSpec::Runner.new(platform: 'centos', version: 6.5) do |node|
+      ChefSpec::SoloRunner.new(platform: 'centos', version: 6.5) do |node|
         node.automatic['domain'] = 'example.com'
         node.default['hive']['hive_site']['hive.exec.local.scratchdir'] = '/tmp'
         node.default['hive']['hive_env']['hive_log_dir'] = '/data/log/hive'
@@ -42,7 +42,7 @@ describe 'hadoop::hive' do
   end
   context 'on Ubuntu 12.04' do
     let(:chef_run) do
-      ChefSpec::Runner.new(platform: 'ubuntu', version: 12.04) do |node|
+      ChefSpec::SoloRunner.new(platform: 'ubuntu', version: 12.04) do |node|
         node.automatic['domain'] = 'example.com'
         node.default['hive']['hive_site']['hive.exec.local.scratchdir'] = '/tmp'
         stub_command('update-alternatives --display hadoop-conf | grep best | awk \'{print $5}\' | grep /etc/hadoop/conf.chef').and_return(false)
