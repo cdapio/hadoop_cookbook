@@ -1,14 +1,16 @@
 require 'spec_helper'
 
 describe 'hadoop::zookeeper_server' do
-  context 'on Centos 6.4 x86_64' do
+  context 'on Centos 6.5 x86_64' do
     let(:chef_run) do
-      ChefSpec::Runner.new(platform: 'centos', version: 6.4) do |node|
+      ChefSpec::Runner.new(platform: 'centos', version: 6.5) do |node|
         node.automatic['domain'] = 'example.com'
         node.automatic['hostname'] = 'localhost'
         node.default['zookeeper']['zoocfg']['dataDir'] = '/var/lib/zookeeper'
         node.default['zookeeper']['zoocfg']['server.1'] = 'localhost:2181'
+        node.default['zookeeper']['zookeeper_env']['zookeeper_log_dir'] = '/data/log/zookeeper'
         stub_command('update-alternatives --display zookeeper-conf | grep best | awk \'{print $5}\' | grep /etc/zookeeper/conf.chef').and_return(false)
+        stub_command('test -e /usr/lib/bigtop-utils/bigtop-detect-javahome').and_return(false)
       end.converge(described_recipe)
     end
 
@@ -16,7 +18,7 @@ describe 'hadoop::zookeeper_server' do
       expect(chef_run).to install_package('zookeeper-server')
     end
 
-    it 'creates ZooKeeper conf_dir' do
+    it 'creates zookeeper conf_dir' do
       expect(chef_run).to create_directory('/etc/zookeeper/conf.chef').with(
         user: 'root',
         group: 'root'
@@ -41,11 +43,19 @@ describe 'hadoop::zookeeper_server' do
       )
     end
 
-    it 'creates ZooKeeper dataDir' do
+    it 'creates zookeeper group' do
+      expect(chef_run).to create_group('zookeeper')
+    end
+
+    it 'creates zookeeper dataDir' do
       expect(chef_run).to create_directory('/var/lib/zookeeper').with(
         user: 'zookeeper',
-        group: 'zookeeper'
+        group: 'hadoop'
       )
+    end
+
+    it 'creates zookeeper-server service resource, but does not run it' do
+      expect(chef_run).to_not start_service('zookeeper-server')
     end
 
     it 'runs execute[update zookeeper-conf alternatives]' do

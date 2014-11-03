@@ -2,7 +2,7 @@
 # Cookbook Name:: hadoop
 # Recipe:: repo
 #
-# Copyright (C) 2013-2014 Continuuity, Inc.
+# Copyright © 2013-2014 Cask Data, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -31,9 +31,11 @@ end
 # Set defaults for version, based on distribution
 node.default['hadoop']['distribution_version'] =
   if node['hadoop']['distribution'] == 'hdp'
-    '2.0'
+    '2.1'
   elsif node['hadoop']['distribution'] == 'cdh'
     '5'
+  elsif node['hadoop']['distribution'] == 'bigtop'
+    '0.8.0'
   end
 
 case node['hadoop']['distribution']
@@ -48,26 +50,27 @@ when 'hdp'
   when '2.1.1.0', '2.0.4.0'
     hdp_version = node['hadoop']['distribution_version']
     hdp_update_version = nil
-  when '2.1.3.0', '2.1.2.1', '2.1.2.0'
+  when '2.1.5.0', '2.1.4.0', '2.1.3.0', '2.1.2.1', '2.1.2.0'
     hdp_version = '2.1.1.0'
     hdp_update_version = node['hadoop']['distribution_version']
   when '2.1', '2'
     hdp_version = '2.1.1.0'
-    hdp_update_version = '2.1.3.0'
+    hdp_update_version = '2.1.5.0'
   else
     Chef::Application.fatal!('This cookbook only supports HDP 2.x')
   end
-  hdp_utils_version = '1.1.0.17'
+
+  hdp_utils_version = '1.1.0.19'
+
   case node['platform_family']
   when 'rhel'
     yum_base_url = 'http://public-repo-1.hortonworks.com/HDP'
-    # HDP supports 5 and 6
-    case major_platform_version
-    when 5, 6
+    if major_platform_version == 5
       os = "centos#{major_platform_version}"
     else
-      Chef::Application.fatal!('HDP only supports RHEL/CentOS 5 and 6!')
+      os = 'centos6'
     end
+
     yum_repo_url = node['hadoop']['yum_repo_url'] ? node['hadoop']['yum_repo_url'] : "#{yum_base_url}/#{os}/2.x/GA/#{hdp_version}"
     yum_repo_key_url = node['hadoop']['yum_repo_key_url'] ? node['hadoop']['yum_repo_key_url'] : "#{yum_base_url}/#{os}/#{key}/#{key}-Jenkins"
 
@@ -171,4 +174,60 @@ when 'cdh'
       action :add
     end
   end # End cdh
+
+when 'bigtop'
+  bigtop_release = node['hadoop']['distribution_version']
+
+  # allow a developer mode for use when developing against bigtop, see https://issues.cask.co/browse/COOK-1
+  if bigtop_release.downcase == 'develop' && !( node['hadoop'].key?('yum_repo_url') || node['hadoop'].key?('apt_repo_url'))
+    Chef::Application.fatal!("You must set node['hadoop']['yum_repo_url'] or node['hadoop']['apt_repo_url'] when specifying node['hadoop']['distribution_version'] == 'develop'")
+  end
+
+  # do not validate gpg repo keys when in develop mode
+  validate_repo_key =  bigtop_release.downcase == 'develop' ? false : true
+  Chef::Log.warn('Allowing install of unsigned binaries') unless validate_repo_key
+
+  case node['platform_family']
+  when 'rhel'
+
+    case major_platform_version
+    when 5, 6
+      yum_platform_version = major_platform_version
+    when 2014 # Amazon linux, point to redhat/6 bigtop repo
+      yum_platform_version = 6
+    else
+      Chef::Log.warn('Unsupported platform detected, use at your own risk')
+      yum_platform_version = major_platform_version
+    end
+
+    yum_base_url = "http://bigtop.s3.amazonaws.com/releases/#{bigtop_release}/redhat"
+    yum_repo_url = node['hadoop']['yum_repo_url'] ? node['hadoop']['yum_repo_url'] : "#{yum_base_url}/#{yum_platform_version}/#{node['kernel']['machine']}"
+    yum_repo_key_url = node['hadoop']['yum_repo_key_url'] ? node['hadoop']['yum_repo_key_url'] : 'http://archive.apache.org/dist/bigtop/KEYS'
+
+    yum_repository "bigtop-#{bigtop_release}" do
+      name "bigtop-#{bigtop_release}"
+      description "Apache Bigtop Distribution for Hadoop, Version #{bigtop_release}"
+      url yum_repo_url
+      gpgkey yum_repo_key_url
+      gpgcheck validate_repo_key
+      action :add
+    end
+
+  when 'debian'
+    # for bigtop, we do not validate codename, to support developing against custom repositories
+    codename = node['lsb']['codename']
+
+    apt_base_url = "http://bigtop.s3.amazonaws.com/releases/#{bigtop_release}/#{node['platform']}"
+    apt_repo_url = node['hadoop']['apt_repo_url'] ? node['hadoop']['apt_repo_url'] : "#{apt_base_url}/#{codename}/#{node['kernel']['machine']}"
+    apt_repo_key_url = node['hadoop']['apt_repo_key_url'] ? node['hadoop']['apt_repo_key_url'] : 'http://archive.apache.org/dist/bigtop/KEYS'
+
+    apt_repository "bigtop-#{bigtop_release}" do
+      uri apt_repo_url
+      key apt_repo_key_url
+      trusted !validate_repo_key
+      distribution 'bigtop'
+      components ['contrib']
+      action :add
+    end
+  end
 end

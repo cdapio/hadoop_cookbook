@@ -2,7 +2,7 @@
 # Cookbook Name:: hadoop
 # Recipe:: hbase_master
 #
-# Copyright (C) 2013-2014 Continuuity, Inc.
+# Copyright © 2013-2014 Cask Data, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -27,7 +27,9 @@ end
 # HBase can use a local directory or an HDFS directory for its rootdir...
 # if HDFS, create execute block with action :nothing
 # else create the local directory when file://
-if node['hbase']['hbase_site']['hbase.rootdir'] =~ %r{^hdfs://} || (node['hbase']['hbase_site']['hbase.rootdir'] =~ /^\// && node['hbase']['hbase_site']['hbase.cluster.distributed'].to_s == 'true')
+if node['hbase'].key?('hbase_site') && node['hbase']['hbase_site'].key?('hbase.rootdir') &&
+  node['hbase']['hbase_site']['hbase.rootdir'] =~ %r{^hdfs://} || (node['hbase']['hbase_site']['hbase.rootdir'] =~ /^\// &&
+  node['hbase']['hbase_site']['hbase.cluster.distributed'].to_s == 'true')
   execute 'hbase-hdfs-rootdir' do
     command "hdfs dfs -mkdir -p #{node['hbase']['hbase_site']['hbase.rootdir']} && hdfs dfs -chown hbase #{node['hbase']['hbase_site']['hbase.rootdir']}"
     timeout 300
@@ -50,7 +52,7 @@ end
 
 # https://hbase.apache.org/book/hbase.secure.bulkload.html
 bulkload_dir =
-  if node['hbase']['hbase_site'].key? 'hbase.bulkload.staging.dir'
+  if node['hbase']['hbase_site'].key?('hbase.bulkload.staging.dir')
     node['hbase']['hbase_site']['hbase.bulkload.staging.dir']
   else
     '/tmp/hbase-staging'

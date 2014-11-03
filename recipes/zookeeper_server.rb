@@ -2,7 +2,7 @@
 # Cookbook Name:: hadoop
 # Recipe:: zookeeper_server
 #
-# Copyright (C) 2013-2014 Continuuity, Inc.
+# Copyright © 2013-2014 Cask Data, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -24,60 +24,57 @@ package 'zookeeper-server' do
   action :install
 end
 
-zookeeper_conf_dir = "/etc/zookeeper/#{node['zookeeper']['conf_dir']}"
-
-directory zookeeper_conf_dir do
-  mode '0755'
-  owner 'root'
-  group 'root'
+# HDP 2.0.11.0 (maybe others) doesn't create zookeeper group
+group 'zookeeper' do
   action :create
-  recursive true
 end
 
+zookeeper_conf_dir = "/etc/zookeeper/#{node['zookeeper']['conf_dir']}"
+
 # Setup zoo.cfg
-if node['zookeeper'].key? 'zoocfg'
+if node['zookeeper'].key?('zoocfg')
 
   # We need to create a data directory, if it exists
   zookeeper_data_dir =
-    if node['zookeeper']['zoocfg'].key? 'dataDir'
+    if node['zookeeper']['zoocfg'].key?('dataDir')
       node['zookeeper']['zoocfg']['dataDir']
     else
       '/var/lib/zookeeper'
     end
-  zookeeper_log_dir =
-    if node['zookeeper']['zoocfg'].key? 'dataLogDir'
+  zookeeper_datalog_dir =
+    if node['zookeeper']['zoocfg'].key?('dataLogDir')
       node['zookeeper']['zoocfg']['dataLogDir']
     else
       '/var/lib/zookeeper'
     end
   zookeeper_client_port =
-    if node['zookeeper']['zoocfg'].key? 'clientPort'
+    if node['zookeeper']['zoocfg'].key?('clientPort')
       node['zookeeper']['zoocfg']['clientPort']
     else
       '2181'
     end
 
   node.default['zookeeper']['zoocfg']['dataDir'] = zookeeper_data_dir
-  node.default['zookeeper']['zoocfg']['dataLogDir'] = zookeeper_log_dir
+  node.default['zookeeper']['zoocfg']['dataLogDir'] = zookeeper_datalog_dir
   node.default['zookeeper']['zoocfg']['clientPort'] = zookeeper_client_port
   my_vars = { :properties => node['zookeeper']['zoocfg'] }
 
   directory zookeeper_data_dir do
     owner 'zookeeper'
-    group 'zookeeper'
+    group 'hadoop'
     mode '0755'
     recursive true
     action :create
   end
 
-  unless zookeeper_log_dir == zookeeper_data_dir
-    directory zookeeper_log_dir do
+  unless zookeeper_datalog_dir == zookeeper_data_dir
+    directory zookeeper_datalog_dir do
       owner 'zookeeper'
-      group 'zookeeper'
+      group 'hadoop'
       mode '0755'
       recursive true
       action :create
-      only_if { node['zookeeper']['zoocfg'].key? 'dataLogDir' }
+      only_if { node['zookeeper']['zoocfg'].key?('dataLogDir') }
     end
   end
 
@@ -114,35 +111,48 @@ if node['zookeeper'].key? 'zoocfg'
 end # End zoo.cfg
 
 # Setup zookeeper-env.sh
-if node['zookeeper'].key? 'zookeeper_env'
+if node['zookeeper'].key?('zookeeper_env')
   my_vars = { :options => node['zookeeper']['zookeeper_env'] }
+
+  zookeeper_log_dir =
+    if node['zookeeper']['zookeeper_env'].key?('zookeeper_log_dir')
+      node['zookeeper']['zookeeper_env']['zookeeper_log_dir']
+    else
+      '/var/log/zookeeper'
+    end
+
+  directory zookeeper_log_dir do
+    owner 'zookeeper'
+    group 'zookeeper'
+    mode '0755'
+    action :create
+    recursive true
+    only_if { node['zookeeper']['zookeeper_env'].key?('zookeeper_log_dir') }
+  end
 
   template "#{zookeeper_conf_dir}/zookeeper-env.sh" do
     source 'generic-env.sh.erb'
     mode '0755'
-    owner 'zookeeper'
-    group 'zookeeper'
+    owner 'root'
+    group 'root'
     action :create
     variables my_vars
+  end
+
+  unless node['zookeeper']['zookeeper_env']['zookeeper_log_dir'] == '/var/log/zookeeper'
+    # Delete default directory, if we aren't set to it
+    directory '/var/log/zookeeper' do
+      action :delete
+    end
+    # symlink
+    link '/var/log/zookeeper' do
+      to node['zookeeper']['zookeeper_env']['zookeeper_log_dir']
+    end
   end
 end # End zookeeper-env.sh
 
-# Setup jaas.conf
-if node['zookeeper'].key?('jaas')
-  my_vars = { :options => node['zookeeper']['jaas'] }
-
-  template "#{zookeeper_conf_dir}/jaas.conf" do
-    source 'jaas.conf.erb'
-    mode '0755'
-    owner 'zookeeper'
-    group 'zookeeper'
-    action :create
-    variables my_vars
-  end
-end # End jaas.conf
-
 # Setup log4j.properties
-if node['zookeeper'].key? 'log4j'
+if node['zookeeper'].key?('log4j')
   my_vars = { :properties => node['zookeeper']['log4j'] }
 
   template "#{zookeeper_conf_dir}/log4j.properties" do

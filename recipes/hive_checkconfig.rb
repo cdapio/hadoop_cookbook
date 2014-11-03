@@ -2,7 +2,7 @@
 # Cookbook Name:: hadoop
 # Recipe:: hive_checkconfig
 #
-# Copyright (C) 2013-2014 Continuuity, Inc.
+# Copyright © 2013-2014 Cask Data, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -25,4 +25,15 @@ if node['hive'].key?('hive_site') && node['hive']['hive_site'].key?('hive.suppor
   Chef::Log.info("Hive ZooKeeper Quorum: #{node['hive']['hive_site']['hive.zookeeper.quorum']}")
 else
   Chef::Application.fatal!("You *must* set node['hive']['hive_site']['hive.support.concurrency'] and node['hive']['hive_site']['hive.zookeeper.quorum']")
+end
+
+# If using JAAS, make sure it's configured fully
+if node['hive'].key?('jaas')
+  %w(client server).each do |key|
+    next unless node['hive']['jaas'].key?(key) && node['hive']['jaas'][key].key?('usekeytab') &&
+      node['hive']['jaas'][key]['usekeytab'].to_s == 'true'
+
+    next unless node['hive']['jaas'][key]['keytab'].nil? || node['hive']['jaas'][key]['principal'].nil?
+    Chef::Application.fatal!("You must set node['hive']['jaas']['#{key}']['keytab'] and node['hive']['jaas']['#{key}']['principal'] with node['hive']['jaas'][key]['usekeytab']")
+  end
 end

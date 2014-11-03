@@ -2,7 +2,7 @@
 # Cookbook Name:: hadoop
 # Recipe:: hadoop_yarn_resourcemanager
 #
-# Copyright (C) 2013-2014 Continuuity, Inc.
+# Copyright © 2013-2014 Cask Data, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -36,6 +36,24 @@ execute 'hdfs-tmpdir' do
   timeout 300
   user 'hdfs'
   group 'hdfs'
+  action :nothing
+end
+
+remote_log_dir =
+  if node['hadoop'].key?('yarn_site') && node['hadoop']['yarn_site'].key?('yarn.nodemanager.remote-app-log-dir')
+    node['hadoop']['yarn_site']['yarn.nodemanager.remote-app-log-dir']
+  else
+    '/tmp/logs'
+  end
+
+node.default['hadoop']['yarn_site']['yarn.nodemanager.remote-app-log-dir'] = remote_log_dir
+
+execute 'yarn-remote-app-log-dir' do
+  command "hdfs dfs -mkdir -p #{remote_log_dir} && hdfs dfs -chown yarn:hadoop #{remote_log_dir} && hdfs dfs -chmod 1777 #{remote_log_dir}"
+  timeout 300
+  user 'hdfs'
+  group 'hdfs'
+  not_if "hdfs dfs -test -d #{remote_log_dir}", :user => 'hdfs'
   action :nothing
 end
 

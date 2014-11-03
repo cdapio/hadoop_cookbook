@@ -1,7 +1,8 @@
 # hadoop cookbook
 
-[![Cookbook Version](http://img.shields.io/cookbook/v/hadoop.svg)](https://community.opscode.com/cookbooks/hadoop)
-[![Build Status](http://img.shields.io/travis/continuuity/hadoop_cookbook.svg)](http://travis-ci.org/continuuity/hadoop_cookbook)
+[![Cookbook Version](http://img.shields.io/cookbook/v/hadoop.svg)](https://supermarket.getchef.com/cookbooks/hadoop)
+[![Apache License 2.0](http://img.shields.io/badge/license-apache%202.0-green.svg)](http://opensource.org/licenses/Apache-2.0)
+[![Build Status](http://img.shields.io/travis/caskdata/hadoop_cookbook.svg)](http://travis-ci.org/caskdata/hadoop_cookbook)
 
 # Requirements
 
@@ -17,7 +18,7 @@ This cookbook assumes that you have a working Java installation. It has been tes
 
 This cookbook is designed to be used with a wrapper cookbook or a role with settings for configuring Hadoop. The services should work out of the box on a single host, but little validation is done that you have made a working Hadoop configuration. The cookbook is attribute-driven and is suitable for use via either `chef-client` or `chef-solo` since it does not use any server-based functionality. The cookbook defines service definitions for each Hadoop service, but it does not enable or start them, by default.
 
-For more information, read the [Wrapping this cookbook](https://github.com/continuuity/hadoop_cookbook/wiki/Wrapping-this-cookbook) wiki entry.
+For more information, read the [Wrapping this cookbook](https://github.com/caskdata/hadoop_cookbook/wiki/Wrapping-this-cookbook) wiki entry.
 
 # Attributes
 
@@ -34,6 +35,7 @@ hadoop['hadoop_metrics'] | hadoop-metrics.properties | `hadoop['conf_dir']`
 hadoop['hadoop_policy'] | hadoop-policy.xml | `hadoop['conf_dir']`
 hadoop['hdfs_site'] | hdfs-site.xml | `hadoop['conf_dir']`
 hadoop['log4j'] | log4j.properties | `hadoop['conf_dir']`
+hadoop['mapred_env'] | mapred-env.sh | `hadoop['conf_dir']`
 hadoop['mapred_site'] | mapred-site.xml | `hadoop['conf_dir']`
 hadoop['yarn_env'] | yarn-env.sh | `hadoop['conf_dir']`
 hadoop['yarn_site'] | yarn-site.xml | `hadoop['conf_dir']`
@@ -41,20 +43,23 @@ hbase['hadoop_metrics'] | hadoop-metrics.properties | `hbase['conf_dir']`
 hbase['hbase_env'] | hbase-env.sh | `hbase['conf_dir']`
 hbase['hbase_policy'] | hbase-policy.xml | `hbase['conf_dir']`
 hbase['hbase_site'] | hbase-site.xml | `hbase['conf_dir']`
+hbase['jaas'] | jaas.conf | `hbase['conf_dir']`
 hbase['log4j'] | log4j.properties | `hbase['conf_dir']`
 hive['hive_env'] | hive-env.sh | `hive['conf_dir']`
 hive['hive_site'] | hive-site.xml | `hive['conf_dir']`
+hive['jaas'] | jaas.conf | `hive['conf_dir']`
 oozie['oozie_site'] | oozie-site.xml | `oozie['conf_dir']`
 spark['log4j'] | log4j.properties | `spark['conf_dir']`
 spark['metrics'] | metrics.properties | `spark['conf_dir']`
 spark['spark_env'] | spark-env.sh | `spark['conf_dir']`
+zookeeper['jaas'] | jaas.conf | `zookeeper['conf_dir']`
 zookeeper['log4j'] | log4j.properties | `zookeeper['conf_dir']`
 zookeeper['zoocfg'] | zoo.cfg | `zookeeper['conf_dir']`
 
 ## Distribution Attributes
 
-* `hadoop['distribution']` - Specifies which Hadoop distribution to use, currently supported: cdh, hdp. Default `hdp`
-* `hadoop['distribution_version']` - Specifies which version of `hadoop['distribution']` to use. Default `2.0` if `hadoop['distribution']` is `hdp` and `5` if `hadoop['distribution']` is `cdh`
+* `hadoop['distribution']` - Specifies which Hadoop distribution to use, currently supported: cdh, hdp, bigtop. Default `hdp`
+* `hadoop['distribution_version']` - Specifies which version of `hadoop['distribution']` to use. Default `2.0` if `hadoop['distribution']` is `hdp`, `5` if `hadoop['distribution']` is `cdh`, and `0.7.0` if `hadoop['distribution']` is `bigtop`.  It can also be set to `develop` when `hadoop['distribution']` is `bigtop` to allow installing from development repos without gpg validation. 
 
 ### APT-specific settings
 
@@ -117,7 +122,7 @@ zookeeper['zoocfg'] | zoo.cfg | `zookeeper['conf_dir']`
 
 # Author
 
-Author:: Continuuity, Inc. (<ops@continuuity.com>)
+Author:: Cask Data, Inc. (<ops@cask.co>)
 
 # Testing
 

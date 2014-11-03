@@ -2,7 +2,7 @@
 # Cookbook Name:: hadoop
 # Recipe:: hive
 #
-# Copyright (C) 2013-2014 Continuuity, Inc.
+# Copyright © 2013-2014 Cask Data, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -94,7 +94,7 @@ directory local_scratch_dir do
 end
 
 # Setup hive-site.xml
-if node['hive'].key? 'hive_site'
+if node['hive'].key?('hive_site')
   my_vars = { :options => node['hive']['hive_site'] }
 
   template "#{hive_conf_dir}/hive-site.xml" do
@@ -108,11 +108,11 @@ if node['hive'].key? 'hive_site'
 end # End hive-site.xml
 
 # Setup hive-env.sh
-if node['hive'].key? 'hive_env'
+if node['hive'].key?('hive_env')
   my_vars = { :options => node['hive']['hive_env'] }
 
   hive_log_dir =
-    if node['hive']['hive_env'].key? 'hive_log_dir'
+    if node['hive']['hive_env'].key?('hive_log_dir')
       node['hive']['hive_env']['hive_log_dir']
     else
       '/var/log/hive'
@@ -124,7 +124,18 @@ if node['hive'].key? 'hive_env'
     mode '0755'
     action :create
     recursive true
-    only_if { node['hive']['hive_env'].key? 'hive_log_dir' }
+    only_if { node['hive']['hive_env'].key?('hive_log_dir') }
+  end
+
+  unless node['hive']['hive_env']['hive_log_dir'] == '/var/log/hive'
+    # Delete default directory, if we aren't set to it
+    directory '/var/log/hive' do
+      action :delete
+    end
+    # symlink
+    link '/var/log/hive' do
+      to node['hive']['hive_env']['hive_log_dir']
+    end
   end
 
   template "#{hive_conf_dir}/hive-env.sh" do

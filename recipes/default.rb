@@ -2,7 +2,7 @@
 # Cookbook Name:: hadoop
 # Recipe:: default
 #
-# Copyright (C) 2013-2014 Continuuity, Inc.
+# Copyright © 2013-2014 Cask Data, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -35,7 +35,7 @@ end
 
 # Setup capacity-scheduler.xml core-site.xml hadoop-policy.xml hdfs-site.xml mapred-site.xml yarn-site.xml
 %w(capacity_scheduler core_site hadoop_policy hdfs_site mapred_site yarn_site).each do |sitefile|
-  next unless node['hadoop'].key? sitefile
+  next unless node['hadoop'].key?(sitefile)
   my_vars = { :options => node['hadoop'][sitefile] }
 
   template "#{hadoop_conf_dir}/#{sitefile.gsub('_', '-')}.xml" do
@@ -58,7 +58,7 @@ fair_scheduler_file =
 
 fair_scheduler_dir = File.dirname(fair_scheduler_file.gsub('file://', ''))
 
-if node['hadoop'].key? 'fair_scheduler'
+if node['hadoop'].key?('fair_scheduler')
   # my_vars = { :options => node['hadoop']['fair_scheduler'] }
   my_vars = node['hadoop']['fair_scheduler']
 
@@ -87,25 +87,47 @@ elsif node['hadoop'].key?('yarn_site') && node['hadoop']['yarn_site'].key?('yarn
   Chef::Application.fatal!('Set YARN scheduler to fair-scheduler without configuring it, first')
 end # End fair-scheduler.xml
 
-# Setup hadoop-env.sh yarn-env.sh
-%w(hadoop_env yarn_env).each do |envfile|
-  next unless node['hadoop'].key? envfile
+# Setup hadoop-env.sh mapred-env.sh yarn-env.sh
+%w(hadoop_env mapred_env yarn_env).each do |envfile|
+  next unless node['hadoop'].key?(envfile)
   my_vars = { :options => node['hadoop'][envfile] }
 
-  %w(hadoop yarn).each do |svc|
-    next unless node['hadoop'][envfile].key? "#{svc}_log_dir"
+  %w(hadoop hadoop_mapred yarn).each do |svc|
+    next unless node['hadoop'][envfile].key?("#{svc}_log_dir")
+    # Create directory
     directory node['hadoop'][envfile]["#{svc}_log_dir"] do
       log_dir_owner =
-        if svc == 'yarn'
-          'yarn'
-        else
+        if svc == 'hadoop_mapred'
+          'mapred'
+        elsif svc == 'hadoop'
           'hdfs'
+        else
+          svc
         end
       owner log_dir_owner
-      group log_dir_owner
-      mode '0755'
+      group 'hadoop'
+      mode '0775'
       action :create
       recursive true
+    end
+    log_dir =
+      case svc
+      when 'hadoop'
+        'hdfs'
+      when 'hadoop_mapred'
+        'mapred'
+      else
+        svc
+      end
+    unless node['hadoop'][envfile]["#{svc}_log_dir"] == "/var/log/hadoop-#{log_dir}"
+      # Delete default directory, if we aren't set to it
+      directory "/var/log/hadoop-#{log_dir}" do
+        action :delete
+      end
+      # symlink
+      link "/var/log/hadoop-#{log_dir}" do
+        to node['hadoop'][envfile]["#{svc}_log_dir"]
+      end
     end
   end
 
@@ -121,7 +143,7 @@ end # End hadoop-env.sh yarn-env.sh
 
 # Setup hadoop-metrics.properties log4j.properties
 %w(hadoop_metrics log4j).each do |propfile|
-  next unless node['hadoop'].key? propfile
+  next unless node['hadoop'].key?(propfile)
   my_vars = { :properties => node['hadoop'][propfile] }
 
   template "#{hadoop_conf_dir}/#{propfile.gsub('_', '-')}.properties" do
@@ -135,9 +157,9 @@ end # End hadoop-env.sh yarn-env.sh
 end # End hadoop-metrics.properties log4j.properties
 
 # Setup container-executor.cfg
-if node['hadoop'].key? 'container_executor'
+if node['hadoop'].key?('container_executor')
   # Set container-executor.cfg options to match yarn-site.xml, if present
-  if node['hadoop'].key? 'yarn_site'
+  if node['hadoop'].key?('yarn_site')
     merged = node['hadoop']['yarn_site'].merge(node['hadoop']['container_executor'])
     my_vars = { :properties => merged }
   else
@@ -146,9 +168,9 @@ if node['hadoop'].key? 'container_executor'
 
   template "#{hadoop_conf_dir}/container-executor.cfg" do
     source 'generic.properties.erb'
-    mode '0644'
+    mode '0440'
     owner 'root'
-    group 'root'
+    group 'yarn'
     action :create
     variables my_vars
   end
