@@ -17,7 +17,6 @@
 # limitations under the License.
 #
 
-include_recipe 'hadoop::repo'
 include_recipe 'hadoop::spark'
 
 package 'spark-master' do
@@ -25,6 +24,7 @@ package 'spark-master' do
 end
 
 service 'spark-master' do
+  status_command 'service spark-master status'
   supports [:restart => true, :reload => false, :status => true]
   action :nothing
 end

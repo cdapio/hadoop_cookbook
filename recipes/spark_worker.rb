@@ -17,7 +17,6 @@
 # limitations under the License.
 #
 
-include_recipe 'hadoop::repo'
 include_recipe 'hadoop::spark'
 
 package 'spark-worker' do
@@ -29,13 +28,13 @@ if node['spark'].key?('spark_env') && node['spark']['spark_env'].key?('spark_wor
     mode '0755'
     owner 'spark'
     group 'spark'
-    action :create
     recursive true
-    only_if { node['spark']['spark_env'].key?('spark_worker_dir') }
+    action :create
   end
 end
 
 service 'spark-worker' do
+  status_command 'service spark-worker status'
   supports [:restart => true, :reload => false, :status => true]
   action :nothing
 end
