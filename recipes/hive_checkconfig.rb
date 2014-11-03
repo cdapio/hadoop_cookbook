@@ -20,7 +20,7 @@
 # HiveServer2 requires Hive Table Lock Manager
 # http://www.cloudera.com/content/cloudera-content/cloudera-docs/CDH4/4.2.0/CDH4-Installation-Guide/cdh4ig_topic_18_5.html
 if node['hive'].key?('hive_site') && node['hive']['hive_site'].key?('hive.support.concurrency') &&
-  node['hive']['hive_site']['hive.support.concurrency'].to_s == 'true' && node['hive']['hive_site'].key?('hive.zookeeper.quorum')
+   node['hive']['hive_site']['hive.support.concurrency'].to_s == 'true' && node['hive']['hive_site'].key?('hive.zookeeper.quorum')
   Chef::Log.info('Hive Table Lock Manager enabled')
   Chef::Log.info("Hive ZooKeeper Quorum: #{node['hive']['hive_site']['hive.zookeeper.quorum']}")
 else
@@ -31,7 +31,7 @@ end
 if node['hive'].key?('jaas')
   %w(client server).each do |key|
     next unless node['hive']['jaas'].key?(key) && node['hive']['jaas'][key].key?('usekeytab') &&
-      node['hive']['jaas'][key]['usekeytab'].to_s == 'true'
+                node['hive']['jaas'][key]['usekeytab'].to_s == 'true'
 
     next unless node['hive']['jaas'][key]['keytab'].nil? || node['hive']['jaas'][key]['principal'].nil?
     Chef::Application.fatal!("You must set node['hive']['jaas']['#{key}']['keytab'] and node['hive']['jaas']['#{key}']['principal'] with node['hive']['jaas'][key]['usekeytab']")

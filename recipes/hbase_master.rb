@@ -28,7 +28,7 @@ end
 # if HDFS, create execute block with action :nothing
 # else create the local directory when file://
 if node['hbase'].key?('hbase_site') && node['hbase']['hbase_site'].key?('hbase.rootdir') &&
-  node['hbase']['hbase_site']['hbase.rootdir'] =~ %r{^hdfs://} || (node['hbase']['hbase_site']['hbase.rootdir'] =~ /^\// &&
+   node['hbase']['hbase_site']['hbase.rootdir'] =~ %r{^hdfs://} || (node['hbase']['hbase_site']['hbase.rootdir'] =~ /^\// &&
   node['hbase']['hbase_site']['hbase.cluster.distributed'].to_s == 'true')
   execute 'hbase-hdfs-rootdir' do
     command "hdfs dfs -mkdir -p #{node['hbase']['hbase_site']['hbase.rootdir']} && hdfs dfs -chown hbase #{node['hbase']['hbase_site']['hbase.rootdir']}"
