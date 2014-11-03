@@ -98,7 +98,6 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       'recipe[hadoop::hive_server2]',
       'recipe[hadoop::hive_metastore]',
       'recipe[hadoop::oozie]',
-      'recipe[hadoop::spark]',
       'recipe[hadoop::spark_master]',
       'recipe[hadoop::spark_worker]'
     ]
