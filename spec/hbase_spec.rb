@@ -33,6 +33,27 @@ describe 'hadoop::hbase' do
       end
     end
 
+    it 'creates hbase HBASE_LOG_DIR' do
+      expect(chef_run).to create_directory('/data/log/hbase').with(
+        mode: '0755',
+        user: 'hbase',
+        group: 'hbase'
+      )
+    end
+
+    it 'deletes /var/log/hbase' do
+      expect(chef_run).to delete_directory('/var/log/hbase')
+    end
+
+    it 'creates /var/log/hbase symlink' do
+      link = chef_run.link('/var/log/hbase')
+      expect(link).to link_to('/data/log/hbase')
+    end
+
+    it 'creates /etc/hbase/conf.chef/hbase-env.sh template' do
+      expect(chef_run).to create_template('/etc/hbase/conf.chef/hbase-env.sh')
+    end
+
     it 'runs execute[update hbase-conf alternatives]' do
       expect(chef_run).to run_execute('update hbase-conf alternatives')
     end
