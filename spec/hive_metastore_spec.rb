@@ -18,6 +18,10 @@ describe 'hadoop::hive_metastore' do
       expect(chef_run).to create_template('/etc/init.d/hive-metastore')
     end
 
+    it 'does not run execute[hive-hdfs-warehousedir]' do
+      expect(chef_run).not_to run_execute('hive-hdfs-warehousedir')
+    end
+
     it 'creates hive-metastore service resource, but does not run it' do
       expect(chef_run).to_not start_service('hive-metastore')
     end
