@@ -3,7 +3,7 @@ require 'spec_helper'
 describe 'hadoop::zookeeper_server' do
   context 'on Centos 6.5 x86_64' do
     let(:chef_run) do
-      ChefSpec::Runner.new(platform: 'centos', version: 6.5) do |node|
+      ChefSpec::SoloRunner.new(platform: 'centos', version: 6.5) do |node|
         node.automatic['domain'] = 'example.com'
         node.automatic['hostname'] = 'localhost'
         node.default['zookeeper']['zoocfg']['dataDir'] = '/var/lib/zookeeper'
@@ -52,6 +52,39 @@ describe 'hadoop::zookeeper_server' do
         user: 'zookeeper',
         group: 'hadoop'
       )
+    end
+
+    it 'creates zookeeper ZOOKEEPER_LOG_DIR' do
+      expect(chef_run).to create_directory('/data/log/zookeeper').with(
+        mode: '0755',
+        user: 'zookeeper',
+        group: 'zookeeper'
+      )
+    end
+
+    it 'deletes /var/log/zookeeper' do
+      expect(chef_run).to delete_directory('/var/log/zookeeper')
+    end
+
+    it 'creates /var/log/zookeeper symlink' do
+      link = chef_run.link('/var/log/zookeeper')
+      expect(link).to link_to('/data/log/zookeeper')
+    end
+
+    it 'creates /etc/zookeeper/conf.chef/zookeeper-env.sh template' do
+      expect(chef_run).to create_template('/etc/zookeeper/conf.chef/zookeeper-env.sh')
+    end
+
+    it 'creates /usr/lib/bigtop-utils directory' do
+      expect(chef_run).to create_directory('/usr/lib/bigtop-utils')
+    end
+
+    it 'creates file /usr/lib/bigtop-utils/bigtop-detect-javahome' do
+      expect(chef_run).to touch_file('/usr/lib/bigtop-utils/bigtop-detect-javahome')
+    end
+
+    it 'logs hdp-2.1 release engineering fix' do
+      expect(chef_run).to write_log('Performing workaround for broken zookeeper-server init script on HDP 2.1')
     end
 
     it 'creates zookeeper-server service resource, but does not run it' do
