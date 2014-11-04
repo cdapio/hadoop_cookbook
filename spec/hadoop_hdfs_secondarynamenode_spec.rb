@@ -3,7 +3,7 @@ require 'spec_helper'
 describe 'hadoop::hadoop_hdfs_secondarynamenode' do
   context 'on Centos 6.5 x86_64' do
     let(:chef_run) do
-      ChefSpec::Runner.new(platform: 'centos', version: 6.5) do |node|
+      ChefSpec::SoloRunner.new(platform: 'centos', version: 6.5) do |node|
         node.automatic['domain'] = 'example.com'
         node.default['hadoop']['hdfs_site']['dfs.namenode.checkpoint.dir'] = '/tmp/hadoop-hdfs/dfs/namesecondary'
         node.default['hadoop']['hdfs_site']['dfs.namenode.checkpoint.edits.dir'] = '/tmp/hadoop-hdfs/dfs/namesecondaryedits'
