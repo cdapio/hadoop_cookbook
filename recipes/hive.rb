@@ -78,21 +78,6 @@ directory '/var/lib/hive' do
   action :create
 end
 
-local_scratch_dir =
-  if node['hive'].key?('hive_site') && node['hive']['hive_site'].key?('hive.exec.local.scratchdir')
-    node['hive']['hive_site']['hive.exec.local.scratchdir']
-  else
-    '/tmp/${user.name}'
-  end
-
-directory local_scratch_dir do
-  mode '1777'
-  owner 'hive'
-  group 'hive'
-  action :create
-  not_if { local_scratch_dir == '/tmp/${user.name}' }
-end
-
 # Setup hive-site.xml
 if node['hive'].key?('hive_site')
   my_vars = { :options => node['hive']['hive_site'] }
@@ -104,6 +89,19 @@ if node['hive'].key?('hive_site')
     group 'root'
     action :create
     variables my_vars
+  end
+
+  if node['hive']['hive_site'].key?('hive.exec.local.scratchdir') &&
+     node['hive']['hive_site']['hive.exec.local.scratchdir'] != '/tmp/${user.name}'
+
+    local_scratch_dir = node['hive']['hive_site']['hive.exec.local.scratchdir']
+
+    directory local_scratch_dir do
+      mode '1777'
+      owner 'hive'
+      group 'hive'
+      action :create
+    end
   end
 end # End hive-site.xml
 
