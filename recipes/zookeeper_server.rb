@@ -143,6 +143,7 @@ if node['zookeeper'].key?('zookeeper_env')
     # Delete default directory, if we aren't set to it
     directory '/var/log/zookeeper' do
       action :delete
+      not_if 'test -L /var/log/zookeeper'
     end
     # symlink
     link '/var/log/zookeeper' do
