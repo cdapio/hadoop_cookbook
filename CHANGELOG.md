@@ -1,6 +1,10 @@
 hadoop CHANGELOG
 ===============
 
+v1.7.1 (Nov 5, 2014)
+--------------------
+- Hotfix symlink log dirs ( Issue: #119 )
+
 v1.7.0 (Nov 5, 2014)
 --------------------
 - Use Java 7 by default ( Issue: #108 [COOK-5](https://issues.cask.co/browse/COOK-5) )
