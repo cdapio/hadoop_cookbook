@@ -21,7 +21,7 @@ include_recipe 'hadoop::spark'
 
 package 'spark-history-server' do
   action :install
-  only_if { node['hadoop']['distribution'] == 'cdh'  }
+  only_if { node['hadoop']['distribution'] == 'cdh' }
 end
 
 dfs = node['hadoop']['core_site']['fs.defaultFS']

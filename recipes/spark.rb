@@ -25,10 +25,30 @@ package 'spark-core' do
 end
 
 unless node['spark']['release']['install'] == false
-  remote_file "#{node['spark']['release']['install_path']}/spark-#{node['spark']['release']['version']}-bin-#{node['spark']['release']['package_type']}.tgz" do
-    source "http://d3kbcqa49mib13.cloudfront.net/spark-#{node['spark']['release']['version']}-bin-#{node['spark']['release']['package_type']}.tgz"
+
+  # Spark binary compatibility matrix
+  case node['hadoop']['distribution']
+  when 'cdh'
+    if node['hadoop']['distribution_version'].to_i == 4
+      spark_release = 'cdh4'
+    elsif node['hadoop']['distribution_version'].to_f == 5.0 || node['hadoop']['distribution_version'].to_f == 5.1
+      spark_release = 'hadoop2.3'
+    else
+      spark_release = 'hadoop2.4'
+    end
+  when 'hdp'
+    if node['hadoop']['distribution_version'] == '2' || node['hadoop']['distribution_version'].to_f == 2.1
+      spark_release = 'hadoop2.4'
+    else
+      ### TODO: HDP 2.0 is Hadoop 2.2... does 2.3 work?
+      spark_release = 'hadoop2.3'
+    end
+  end
+
+  remote_file "#{node['spark']['release']['install_path']}/spark-#{node['spark']['release']['version']}-bin-#{spark_release}.tgz" do
+    source "http://d3kbcqa49mib13.cloudfront.net/spark-#{node['spark']['release']['version']}-bin-#{spark_release}.tgz"
     checksum node['spark']['release']['checksum']
-    not_if { ::File.exist?("#{node['spark']['release']['install_path']}/spark-#{node['spark']['release']['version']}-bin-#{node['spark']['release']['package_type']}.tgz") }
+    not_if { ::File.exist?("#{node['spark']['release']['install_path']}/spark-#{node['spark']['release']['version']}-bin-#{spark_release}.tgz") }
     action :create_if_missing
   end
 
@@ -36,14 +56,12 @@ unless node['spark']['release']['install'] == false
     cwd node['spark']['release']['install_path']
     user 'root'
     group 'root'
-    command <<-EOS
-      tar -xvzf spark-#{node['spark']['release']['version']}-bin-#{node['spark']['release']['package_type']}.tgz
-      ln -s spark-#{node['spark']['release']['version']}-bin-#{node['spark']['release']['package_type']} spark
-    EOS
+    command "tar -xvzf spark-#{node['spark']['release']['version']}-bin-#{spark_release}.tgz"
+    not_if "test -d #{node['spark']['release']['install_path']}/spark-#{node['spark']['release']['version']}-bin-#{spark_release}"
     action :run
   end
 
-  link "#{node['spark']['release']['install_path']}/spark-#{node['spark']['release']['version']}-bin-#{node['spark']['release']['package_type']}" do
+  link "#{node['spark']['release']['install_path']}/spark-#{node['spark']['release']['version']}-bin-#{spark_release}" do
     to "#{node['spark']['release']['install_path']}/spark"
     action :create
   end
