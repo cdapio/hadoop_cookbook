@@ -3,6 +3,7 @@ hadoop CHANGELOG
 
 v1.7.1 (Nov 5, 2014)
 --------------------
+- Initial Oozie tests ( Issue: #118 )
 - Hotfix symlink log dirs ( Issue: #119 )
 
 v1.7.0 (Nov 5, 2014)
