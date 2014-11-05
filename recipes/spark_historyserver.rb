@@ -30,7 +30,7 @@ execute 'hdfs-spark-userdir' do
   user 'hdfs'
   group 'hdfs'
   timeout 300
-  action :run
+  action :nothing
 end
 
 eventlog_dir =
@@ -45,7 +45,7 @@ execute 'hdfs-spark-eventlog-dir' do
   user 'hdfs'
   group 'hdfs'
   timeout 300
-  action :run
+  action :nothing
 end
 
 service 'spark-history-server' do
