@@ -1,6 +1,13 @@
 hadoop CHANGELOG
 ===============
 
+v1.7.0 (Nov 5, 2014)
+--------------------
+- Use Java 7 by default ( Issue: #108 [COOK-5](https://issues.cask.co/browse/COOK-5) )
+- Use HDP 2.1 by default ( Issue: #109 )
+- Update tests ( Issues: #110 #111 #114 #115 #116 )
+- Symlink default log dirs to new locations ( Issue: #113 )
+
 v1.6.1 (Oct 16, 2014)
 ---------------------
 - Update Bigtop to `0.8.0` release ( Issues: #106 #107 ) (COOK-1)
