@@ -19,12 +19,15 @@
 
 include_recipe 'hadoop::spark'
 
-package 'spark-master' do
-  action :install
-end
+if node['hadoop']['distribution'] == 'cdh'
 
-service 'spark-master' do
-  status_command 'service spark-master status'
-  supports [:restart => true, :reload => false, :status => true]
-  action :nothing
+  package 'spark-master' do
+    action :install
+  end
+
+  service 'spark-master' do
+    status_command 'service spark-master status'
+    supports [:restart => true, :reload => false, :status => true]
+    action :nothing
+  end
 end

@@ -19,8 +19,17 @@
 
 include_recipe 'hadoop::spark'
 
-package 'spark-worker' do
-  action :install
+if node['hadoop']['distribution'] == 'cdh'
+  package 'spark-worker' do
+    action :install
+    only_if { node['hadoop']['distribution'] == 'cdh' }
+  end
+
+  service 'spark-worker' do
+    status_command 'service spark-worker status'
+    supports [:restart => true, :reload => false, :status => true]
+    action :nothing
+  end
 end
 
 worker_dir =
@@ -36,10 +45,4 @@ directory worker_dir do
   group 'spark'
   recursive true
   action :create
-end
-
-service 'spark-worker' do
-  status_command 'service spark-worker status'
-  supports [:restart => true, :reload => false, :status => true]
-  action :nothing
 end

@@ -21,7 +21,7 @@ include_recipe 'hadoop::repo'
 
 package 'spark-core' do
   action :install
-  only_if { node['hadoop']['distribution'] == 'cdh'  }
+  only_if { node['hadoop']['distribution'] == 'cdh' }
 end
 
 unless node['spark']['release']['install'] == false
