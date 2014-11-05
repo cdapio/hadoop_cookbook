@@ -14,5 +14,30 @@ describe 'hadoop::oozie' do
     it 'install oozie package' do
       expect(chef_run).to install_package('oozie')
     end
+
+    it 'install unzip package' do
+      expect(chef_run).to install_package('unzip')
+    end
+
+    %w(mysql-connector-java postgresql-jdbc).each do |pkg|
+      it "install #{pkg} package" do
+        expect(chef_run).to install_package(pkg)
+      end
+      it "link #{pkg}.jar" do
+        link = chef_run.link("/var/lib/oozie/#{pkg}.jar")
+        expect(link).to link_to("/usr/share/java/#{pkg}.jar")
+      end
+    end
+
+    # remote_file[/var/folders/l1/pynvnmx56nx9r6qdzkt_w0j00000gn/T/d20141105-7943-jjys19/ext-2.2.zip]   hadoop/recipes/oozie.rb:68
+    # script[extract extjs into Oozie data directory]   hadoop/recipes/oozie.rb:76
+    # directory[/etc/oozie/conf.chef]    hadoop/recipes/oozie.rb:84
+    # directory[/data/log/oozie]         hadoop/recipes/oozie.rb:116
+    # directory[/var/log/oozie]          hadoop/recipes/oozie.rb:127
+    # link[/var/log/oozie]               hadoop/recipes/oozie.rb:132
+    # template[/etc/oozie/conf.chef/oozie-env.sh]   hadoop/recipes/oozie.rb:137
+    # service[oozie]                     hadoop/recipes/oozie.rb:147
+    # execute[update oozie-conf alternatives]   hadoop/recipes/oozie.rb:154
+
   end
 end
