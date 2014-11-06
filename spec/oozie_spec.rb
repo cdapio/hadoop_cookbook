@@ -29,7 +29,10 @@ describe 'hadoop::oozie' do
       end
     end
 
-    # remote_file[/var/folders/l1/pynvnmx56nx9r6qdzkt_w0j00000gn/T/d20141105-7943-jjys19/ext-2.2.zip]   hadoop/recipes/oozie.rb:68
+    it 'creates ext-2.2.zip file' do
+      expect(chef_run).to create_remote_file_if_missing('/var/lib/oozie/ext-2.2.zip')
+    end
+
     # script[extract extjs into Oozie data directory]   hadoop/recipes/oozie.rb:76
     # directory[/etc/oozie/conf.chef]    hadoop/recipes/oozie.rb:84
     # directory[/data/log/oozie]         hadoop/recipes/oozie.rb:116
