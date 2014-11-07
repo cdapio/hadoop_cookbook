@@ -6,6 +6,8 @@ describe 'hadoop::spark' do
       ChefSpec::SoloRunner.new(platform: 'centos', version: 6.5) do |node|
         node.automatic['domain'] = 'example.com'
         node.default['spark']['release']['install'] = true
+        node.default['spark']['spark_env']['spark_log_dir'] = '/data/log/spark'
+        stub_command('test -L /var/log/spark').and_return(false)
         stub_command('update-alternatives --display spark-conf | grep best | awk \'{print $5}\' | grep /etc/spark/conf.chef').and_return(false)
       end.converge(described_recipe)
     end
@@ -13,6 +15,29 @@ describe 'hadoop::spark' do
     it 'does not install spark-core package' do
       expect(chef_run).not_to install_package('spark-core')
     end
+
+    it 'creates Spark conf_dir' do
+      expect(chef_run).to create_directory('/etc/spark/conf.chef').with(
+        user: 'root',
+        group: 'root'
+      )
+    end
+
+    it 'deletes /var/log/spark' do
+      expect(chef_run).to delete_directory('/var/log/spark')
+    end
+
+    it 'creates /data/log/spark' do
+      expect(chef_run).to create_directory('/data/log/spark').with(
+        mode: '0775'
+      )
+    end
+
+    it 'creates /var/log/spark symlink' do
+      link = chef_run.link('/var/log/spark')
+      expect(link).to link_to('/data/log/spark')
+    end
+
   end
 
   context 'using CDH 5' do
