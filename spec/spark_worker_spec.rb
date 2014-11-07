@@ -6,6 +6,7 @@ describe 'hadoop::spark_worker' do
       ChefSpec::SoloRunner.new(platform: 'centos', version: 6.5) do |node|
         node.automatic['domain'] = 'example.com'
         node.default['spark']['release']['install'] = true
+        node.default['spark']['spark_env']['spark_worker_dir'] = '/data/spark/work'
         stub_command('test -L /var/log/spark').and_return(false)
         stub_command('update-alternatives --display spark-conf | grep best | awk \'{print $5}\' | grep /etc/spark/conf.chef').and_return(false)
       end.converge(described_recipe)
@@ -13,6 +14,10 @@ describe 'hadoop::spark_worker' do
 
     it 'does not install spark-worker package' do
       expect(chef_run).not_to install_package('spark-worker')
+    end
+
+    it 'creates /data/spark/work directory' do
+      expect(chef_run).to create_directory('/data/spark/work')
     end
   end
 
@@ -33,6 +38,10 @@ describe 'hadoop::spark_worker' do
 
     it 'creates spark-worker service resource, but does not run it' do
       expect(chef_run).to_not start_service('spark-worker')
+    end
+
+    it 'creates /var/run/spark/work directory' do
+      expect(chef_run).to create_directory('/var/run/spark/work')
     end
   end
 end
