@@ -167,7 +167,8 @@ if node['zookeeper'].key?('log4j')
 end # End log4j.properties
 
 # Hack to work around broken Hortonworks release engineering
-if node['hadoop']['distribution'] == 'hdp' && node['hadoop']['distribution_version'] == '2.1'
+if node['hadoop']['distribution'] == 'hdp' &&
+   (node['hadoop']['distribution_version'].to_f == 2.1 || node['hadoop']['distribution_version'].to_s == '2')
   log 'hdp-2.1 release engineering fix' do
     level :warn
     message 'Performing workaround for broken zookeeper-server init script on HDP 2.1'
