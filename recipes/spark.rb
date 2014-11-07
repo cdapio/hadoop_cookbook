@@ -101,7 +101,7 @@ if node['spark'].key?('spark_env')
     only_if { node['spark']['spark_env'].key?('spark_log_dir') }
   end
 
-  unless node['spark']['spark_env']['spark_log_dir'] == '/var/log/spark'
+  unless spark_log_dir == '/var/log/spark'
     # Delete default directory, if we aren't set to it
     directory '/var/log/spark' do
       action :delete
