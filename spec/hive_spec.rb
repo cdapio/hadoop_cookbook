@@ -8,7 +8,6 @@ describe 'hadoop::hive' do
         node.default['hive']['hive_site']['hive.exec.local.scratchdir'] = '/tmp/hive/scratch'
         node.default['hive']['hive_env']['hive_log_dir'] = '/data/log/hive'
         stub_command('test -L /var/log/hive').and_return(false)
-        stub_command('update-alternatives --display hadoop-conf | grep best | awk \'{print $5}\' | grep /etc/hadoop/conf.chef').and_return(false)
         stub_command('update-alternatives --display hive-conf | grep best | awk \'{print $5}\' | grep /etc/hive/conf.chef').and_return(false)
       end.converge(described_recipe)
     end
