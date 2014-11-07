@@ -28,5 +28,9 @@ describe 'hadoop::spark_historyserver' do
     it 'installs spark-history-server package' do
       expect(chef_run).to install_package('spark-history-server')
     end
+
+    it 'creates spark-history-server service resource, but does not run it' do
+      expect(chef_run).to_not start_service('spark-history-server')
+    end
   end
 end

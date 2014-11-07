@@ -28,5 +28,9 @@ describe 'hadoop::spark_worker' do
     it 'installs spark-worker package' do
       expect(chef_run).to install_package('spark-worker')
     end
+
+    it 'creates spark-worker service resource, but does not run it' do
+      expect(chef_run).to_not start_service('spark-worker')
+    end
   end
 end

@@ -28,5 +28,9 @@ describe 'hadoop::spark_master' do
     it 'installs spark-master package' do
       expect(chef_run).to install_package('spark-master')
     end
+
+    it 'creates spark-master service resource, but does not run it' do
+      expect(chef_run).to_not start_service('spark-master')
+    end
   end
 end
