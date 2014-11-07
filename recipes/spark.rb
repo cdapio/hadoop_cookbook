@@ -98,6 +98,7 @@ if node['spark'].key?('spark_env')
     mode '0755'
     recursive true
     action :create
+    only_if { node['spark']['spark_env'].key?('spark_log_dir') }
   end
 
   unless node['spark']['spark_env']['spark_log_dir'] == '/var/log/spark'
