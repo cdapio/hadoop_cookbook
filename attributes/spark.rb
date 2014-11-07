@@ -17,7 +17,6 @@ default['spark']['spark_env']['spark_worker_webui_port']      = 18_081
 default['spark']['spark_env']['spark_master_port']            = 7077
 default['spark']['spark_env']['spark_worker_port']            = 7078
 default['spark']['spark_env']['spark_worker_dir']             = '/var/run/spark/work'
-default['spark']['spark_env']['spark_log_dir']                = '/var/log/spark'
 default['spark']['spark_env']['spark_pid_dir']                = '/var/run/spark/'
 default['spark']['spark_env']['spark_history_server_log_dir'] = '/user/spark/applicationHistory'
 default['spark']['spark_env']['hadoop_conf_dir']              = '/etc/hadoop/conf'
