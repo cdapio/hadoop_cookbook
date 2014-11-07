@@ -17,7 +17,7 @@
 # limitations under the License.
 #
 
-include_recipe 'hadoop::default'
+include_recipe 'hadoop::repo'
 
 package 'hive' do
   action :install
