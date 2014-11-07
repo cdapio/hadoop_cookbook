@@ -14,6 +14,14 @@ describe 'hadoop::spark_historyserver' do
     it 'does not install spark-history-server package' do
       expect(chef_run).not_to install_package('spark-history-server')
     end
+
+    it 'creates hdfs-spark-userdir execute resource, but does not run it' do
+      expect(chef_run).to_not run_execute('hdfs-spark-userdir').with(user: 'hdfs')
+    end
+
+    it 'creates hdfs-spark-eventlog-dir execute resource, but does not run it' do
+      expect(chef_run).to_not run_execute('hdfs-spark-eventlog-dir').with(user: 'hdfs')
+    end
   end
 
   context 'using CDH 5' do
