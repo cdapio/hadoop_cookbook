@@ -56,6 +56,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
         :container_executor => {
           'banned.users' => 'hdfs,yarn,mapred,bin'
         },
+        :distribution => 'cdh',
+        :distribution_version => 5,
         :hadoop_env => {
           'hadoop_log_dir' => '/data/logs/hadoop-hdfs'
         },
@@ -74,6 +76,12 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
         :hive_site => {
           'hive.support.concurrency' => 'true',
           'hive.zookeeper.quorum' => 'localhost'
+        }
+      },
+      :spark => {
+        :spark_env => {
+          :standalone_spark_master_host => 'localhost',
+          :spark_master_ip => 'localhost'
         }
       },
       :zookeeper => {
