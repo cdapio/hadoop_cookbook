@@ -3,6 +3,10 @@ hadoop CHANGELOG
 
 Unreleased changes:
 -------------------
+- Opportunistic creation of `hive.exec.local.scratchdir` ( Issue: #117 )
+- Only use `hadoop::repo` for Hive ( Issue: #120 )
+- More Oozie tests ( Issue: #121 )
+- Only test `hadoop::default` in Vagrant ( Issue: #122 )
 
 v1.7.1 (Nov 5, 2014)
 --------------------
