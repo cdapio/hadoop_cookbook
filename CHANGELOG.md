@@ -7,6 +7,9 @@ Unreleased changes:
 - Only use `hadoop::repo` for Hive ( Issue: #120 )
 - More Oozie tests ( Issue: #121 )
 - Only test `hadoop::default` in Vagrant ( Issue: #122 )
+- Avro libraries/tools support ( Issue: #123 [COOK-6](https://issues.cask.co/browse/COOK-6) )
+- Parquet support ( Issue: #124 [COOK-7](https://issues.cask.co/browse/COOK-7) )
+- Improve version matching for HDP 2.1 ( Issue: #125 )
 
 v1.7.1 (Nov 5, 2014)
 --------------------
