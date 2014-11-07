@@ -100,6 +100,18 @@ if node['spark'].key?('spark_env')
     action :create
   end
 
+  unless node['spark']['spark_env']['spark_log_dir'] == '/var/log/spark'
+    # Delete default directory, if we aren't set to it
+    directory '/var/log/spark' do
+      action :delete
+      not_if 'test -L /var/log/spark'
+    end
+    # symlink
+    link '/var/log/spark' do
+      to node['spark']['spark_env']['spark_log_dir']
+    end
+  end
+
   template "#{spark_conf_dir}/spark-env.sh" do
     source 'generic-env.sh.erb'
     mode '0755'
