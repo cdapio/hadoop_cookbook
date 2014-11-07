@@ -7,6 +7,7 @@ describe 'hadoop::spark' do
         node.automatic['domain'] = 'example.com'
         node.default['spark']['release']['install'] = true
         node.default['spark']['spark_env']['spark_log_dir'] = '/data/log/spark'
+        node.default['spark']['spark_site']['spark.eventLog.enabled'] = false
         stub_command('test -L /var/log/spark').and_return(false)
         stub_command('update-alternatives --display spark-conf | grep best | awk \'{print $5}\' | grep /etc/spark/conf.chef').and_return(false)
       end.converge(described_recipe)
@@ -38,6 +39,18 @@ describe 'hadoop::spark' do
       expect(link).to link_to('/data/log/spark')
     end
 
+    %w(
+      spark-env.sh
+      spark-defaults.xml
+    ).each do |file|
+      it "creates #{file} from template" do
+        expect(chef_run).to create_template("/etc/spark/conf.chef/#{file}")
+      end
+    end
+
+    it 'runs execute[update spark-conf alternatives]' do
+      expect(chef_run).to run_execute('update spark-conf alternatives')
+    end
   end
 
   context 'using CDH 5' do
@@ -46,6 +59,7 @@ describe 'hadoop::spark' do
         node.automatic['domain'] = 'example.com'
         node.override['hadoop']['distribution'] = 'cdh'
         node.override['hadoop']['distribution_version'] = 5
+        stub_command('test -L /var/log/spark').and_return(false)
         stub_command('update-alternatives --display spark-conf | grep best | awk \'{print $5}\' | grep /etc/spark/conf.chef').and_return(false)
       end.converge(described_recipe)
     end
