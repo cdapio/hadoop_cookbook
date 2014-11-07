@@ -1,6 +1,9 @@
 hadoop CHANGELOG
 ===============
 
+Unreleased changes:
+-------------------
+
 v1.7.1 (Nov 5, 2014)
 --------------------
 - Initial Oozie tests ( Issue: #118 )
@@ -15,11 +18,11 @@ v1.7.0 (Nov 5, 2014)
 
 v1.6.1 (Oct 16, 2014)
 ---------------------
-- Update Bigtop to `0.8.0` release ( Issues: #106 #107 ) (COOK-1)
+- Update Bigtop to `0.8.0` release ( Issues: #106 #107 [COOK-1](https://issues.cask.co/browse/COOK-1) )
 
 v1.6.0 (Oct 16, 2014)
 ---------------------
-- Add Bigtop support ( Issue: #105 ) (COOK-1)
+- Add Bigtop support ( Issue: #105 [COOK-1](https://issues.cask.co/browse/COOK-1) )
 
 v1.5.0 (Sep 25, 2014)
 ---------------------
