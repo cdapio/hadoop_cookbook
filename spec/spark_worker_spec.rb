@@ -6,6 +6,7 @@ describe 'hadoop::spark_worker' do
       ChefSpec::SoloRunner.new(platform: 'centos', version: 6.5) do |node|
         node.automatic['domain'] = 'example.com'
         node.default['spark']['release']['install'] = true
+        stub_command('test -L /var/log/spark').and_return(false)
         stub_command('update-alternatives --display spark-conf | grep best | awk \'{print $5}\' | grep /etc/spark/conf.chef').and_return(false)
       end.converge(described_recipe)
     end
@@ -21,6 +22,7 @@ describe 'hadoop::spark_worker' do
         node.automatic['domain'] = 'example.com'
         node.override['hadoop']['distribution'] = 'cdh'
         node.override['hadoop']['distribution_version'] = 5
+        stub_command('test -L /var/log/spark').and_return(false)
         stub_command('update-alternatives --display spark-conf | grep best | awk \'{print $5}\' | grep /etc/spark/conf.chef').and_return(false)
       end.converge(described_recipe)
     end

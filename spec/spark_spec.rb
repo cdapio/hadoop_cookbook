@@ -30,7 +30,7 @@ describe 'hadoop::spark' do
 
     it 'creates /data/log/spark' do
       expect(chef_run).to create_directory('/data/log/spark').with(
-        mode: '0775'
+        mode: '0755'
       )
     end
 
