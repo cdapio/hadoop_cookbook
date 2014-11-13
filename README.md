@@ -49,6 +49,9 @@ hive['hive_env'] | hive-env.sh | `hive['conf_dir']`
 hive['hive_site'] | hive-site.xml | `hive['conf_dir']`
 hive['jaas'] | jaas.conf | `hive['conf_dir']`
 oozie['oozie_site'] | oozie-site.xml | `oozie['conf_dir']`
+spark['log4j'] | log4j.properties | `spark['conf_dir']`
+spark['metrics'] | metrics.properties | `spark['conf_dir']`
+spark['spark_env'] | spark-env.sh | `spark['conf_dir']`
 zookeeper['jaas'] | jaas.conf | `zookeeper['conf_dir']`
 zookeeper['log4j'] | log4j.properties | `zookeeper['conf_dir']`
 zookeeper['zoocfg'] | zoo.cfg | `zookeeper['conf_dir']`
@@ -74,6 +77,7 @@ zookeeper['zoocfg'] | zoo.cfg | `zookeeper['conf_dir']`
 * `hbase['conf_dir']` - The directory used inside `/etc/hbase` and used via the alternatives system. Default `conf.chef`
 * `hive['conf_dir']` - The directory used inside `/etc/hive` and used via the alternatives system. Default `conf.chef`
 * `oozie['conf_dir']` - The directory used inside `/etc/oozie` and used via the alternatives system. Default `conf.chef`
+* `spark['conf_dir']` - The directory used inside `/etc/spark` and used via the alternatives system. Default `conf.chef`
 * `zookeeper['conf_dir']` - The directory used inside `/etc/zookeeper` and used via the alternatives system. Default `conf.chef`
 
 ## Default Attributes
@@ -110,6 +114,9 @@ zookeeper['zoocfg'] | zoo.cfg | `zookeeper['conf_dir']`
 * `oozie_client` - Sets up an Oozie client.
 * `pig` - Installs pig interpreter.
 * `repo` - Sets up package manager repositories for specified `hadoop['distribution']`
+* `spark` - Sets up configuration and `spark-core` packages.
+* `spark_master` - Sets up a Spark Master.
+* `spark_worker` - Sets up a Spark Worker.
 * `zookeeper` - Sets up `zookeeper` package.
 * `zookeeper_server` - Sets up a ZooKeeper server.
 

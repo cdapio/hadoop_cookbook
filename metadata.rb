@@ -15,6 +15,6 @@ recommends 'java', '~> 1.21'
   supports os
 end
 
-%w(hadoop_cluster hadoop_cluster_rpm hadoop_for_hbase hbase hbase_cluster hive pig zookeeper zookeeper_cluster).each do |cb|
+%w(hadoop_cluster hadoop_cluster_rpm hadoop_for_hbase hbase hbase_cluster hive pig spark zookeeper zookeeper_cluster).each do |cb|
   conflicts cb
 end
