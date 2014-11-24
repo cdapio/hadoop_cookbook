@@ -1,7 +1,7 @@
 hadoop CHANGELOG
 ===============
 
-Unreleased changes:
+v1.8.0 (Nov 24, 2014)
 -------------------
 - Opportunistic creation of `hive.exec.local.scratchdir` ( Issue: #117 )
 - Only use `hadoop::repo` for Hive ( Issue: #120 )
