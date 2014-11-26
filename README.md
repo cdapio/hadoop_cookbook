@@ -117,6 +117,7 @@ zookeeper['zoocfg'] | zoo.cfg | `zookeeper['conf_dir']`
 * `spark` - Sets up configuration and `spark-core` packages.
 * `spark_master` - Sets up a Spark Master.
 * `spark_worker` - Sets up a Spark Worker.
+* `tez` - Sets up configuration  and `tez` packages.
 * `zookeeper` - Sets up `zookeeper` package.
 * `zookeeper_server` - Sets up a ZooKeeper server.
 
