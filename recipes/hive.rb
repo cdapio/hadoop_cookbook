@@ -154,7 +154,7 @@ execute 'hive-hdfs-homedir' do
   timeout 300
   user 'hdfs'
   group 'hdfs'
-  not_if 'hdfs dfs -test -d #{dfs}/user/hive', :user => 'hdfs'
+  not_if "hdfs dfs -test -d #{dfs}/user/hive", :user => 'hdfs'
   action :nothing
 end
 
