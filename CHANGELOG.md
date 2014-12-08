@@ -1,8 +1,8 @@
 hadoop CHANGELOG
 ===============
 
-Unreleased
-----------
+v1.8.1 (Dec 8, 2014)
+--------------------
 - Ubuntu Trusty support for CDH5 ( Issue: #128 )
 - Spark MLib requires `libgfortran.so.3` ( Issue: #129 )
 - Simplify `container-executor.cfg` ( Issue: #130 )
