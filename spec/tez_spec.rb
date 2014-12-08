@@ -14,11 +14,11 @@ describe 'hadoop::tez' do
       expect(chef_run).to install_package('tez')
     end
 
-    it 'executes execute[tez-hdfs-appdir]' do
+    it 'does not executes execute[tez-hdfs-appdir]' do
       expect(chef_run).to_not run_execute('tez-hdfs-appdir')
     end
 
-    it 'executes execute[hive-hdfs-appdir]' do
+    it 'does not executes execute[hive-hdfs-appdir]' do
       expect(chef_run).to_not run_execute('hive-hdfs-appdir')
     end
 
