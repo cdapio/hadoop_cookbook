@@ -90,7 +90,6 @@ execute 'update tez-conf alternatives' do
 end
 
 if node.recipe?('hadoop::hive') && node['hive']['hive_site']['hive.execution.engine'] == 'tez'
-  dfs = node['hadoop']['core_site']['fs.defaultFS']
   execute 'hive-hdfs-appdir' do
     command <<-EOS
     set -e
