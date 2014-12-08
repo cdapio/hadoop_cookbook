@@ -72,8 +72,8 @@ unless node['spark']['release']['install'] == false
     action :run
   end
 
-  link "#{node['spark']['release']['install_path']}/spark-#{node['spark']['release']['version']}-bin-#{spark_release}" do
-    to "#{node['spark']['release']['install_path']}/spark"
+  link "#{node['spark']['release']['install_path']}/spark" do
+    to "#{node['spark']['release']['install_path']}/spark-#{node['spark']['release']['version']}-bin-#{spark_release}"
     action :create
   end
 
