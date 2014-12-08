@@ -24,6 +24,17 @@ package 'spark-core' do
   only_if { node['hadoop']['distribution'] == 'cdh' }
 end
 
+# Spark MLib requires this
+fortran_libs =
+  if node['platform_family'] == 'debian'
+    'libgfortran3'
+  else
+    'libgfortran'
+  end
+package fortran_libs do
+  action :install
+end
+
 unless node['spark']['release']['install'] == false
 
   # Spark binary compatibility matrix
