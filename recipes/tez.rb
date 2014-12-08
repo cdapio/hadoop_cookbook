@@ -28,14 +28,13 @@ end
 dfs = node['hadoop']['core_site']['fs.defaultFS']
 execute 'tez-hdfs-appdir' do
   command <<-EOS
-  set -e
-  hdfs dfs -mkdir -p #{dfs}/apps/tez
-  hdfs dfs -copyFromLocal /usr/lib/tez/* #{dfs}/apps/tez
-  hdfs dfs -chown -R  hdfs:users #{dfs}/apps/tez
-  hdfs dfs -chmod 755 #{dfs}/apps
-  hdfs dfs -chmod 755 #{dfs}/apps/tez
-  hdfs dfs -chmod 755 #{dfs}/apps/tez/lib/
-  hdfs dfs -chmod 644 #{dfs}/apps/tez/*.jar
+  hdfs dfs -mkdir -p #{dfs}/apps/tez && \
+  hdfs dfs -copyFromLocal /usr/lib/tez/* #{dfs}/apps/tez && \
+  hdfs dfs -chown -R  hdfs:users #{dfs}/apps/tez && \
+  hdfs dfs -chmod 755 #{dfs}/apps && \
+  hdfs dfs -chmod 755 #{dfs}/apps/tez && \
+  hdfs dfs -chmod 755 #{dfs}/apps/tez/lib && \
+  hdfs dfs -chmod 644 #{dfs}/apps/tez/*.jar && \
   hdfs dfs -chmod 644 #{dfs}/apps/tez/lib/*.jar
   EOS
   timeout 300
@@ -92,8 +91,7 @@ end
 if node.recipe?('hadoop::hive') && node['hive']['hive_site']['hive.execution.engine'] == 'tez'
   execute 'hive-hdfs-appdir' do
     command <<-EOS
-    set -e
-    hdfs dfs -mkdir -p #{dfs}/apps/hive/install
+    hdfs dfs -mkdir -p #{dfs}/apps/hive/install && \
     hdfs dfs -copyFromLocal /usr/lib/hive/lib/hive-exec-* #{dfs}/apps/hive/install/
     EOS
     timeout 300
