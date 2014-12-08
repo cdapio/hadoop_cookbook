@@ -26,10 +26,8 @@ describe 'hadoop::tez' do
       expect(chef_run).to run_execute('update tez-conf alternatives')
     end
 
-    %w(/etc/tez/conf.chef).each do |directory|
-      it "creates #{directory} directory" do
-        expect(chef_run).to create_directory(directory)
-      end
+    it 'creates /etc/tez/conf.chef directory' do
+      expect(chef_run).to create_directory('/etc/tez/conf.chef')
     end
 
     %w(/etc/tez/conf.chef/tez-site.xml /etc/tez/conf.chef/tez-env.sh).each do |template|
