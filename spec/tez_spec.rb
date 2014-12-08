@@ -10,12 +10,6 @@ describe 'hadoop::tez' do
       end.converge(described_recipe)
     end
 
-    %w(HDP-2.x Updates-HDP-2.x HDP-UTILS-1.1.0.19).each do |repo|
-      it "add #{repo} yum_repository" do
-        expect(chef_run).to add_yum_repository(repo)
-      end
-    end
-
     it 'install tez package' do
       expect(chef_run).to install_package('tez')
     end
