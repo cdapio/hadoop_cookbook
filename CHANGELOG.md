@@ -1,8 +1,14 @@
 hadoop CHANGELOG
 ===============
 
+Unreleased
+----------
+- Ubuntu Trusty support for CDH5 ( Issue: #128 )
+- Spark MLib requires `libgfortran.so.3` ( Issue: #129 )
+- Simplify `container-executor.cfg` ( Issue: #130 )
+
 v1.8.0 (Nov 24, 2014)
--------------------
+---------------------
 - Opportunistic creation of `hive.exec.local.scratchdir` ( Issue: #117 )
 - Only use `hadoop::repo` for Hive ( Issue: #120 )
 - More Oozie tests ( Issue: #121 )
