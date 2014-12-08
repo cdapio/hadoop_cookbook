@@ -161,13 +161,7 @@ end # End hadoop-metrics.properties log4j.properties
 
 # Setup container-executor.cfg
 if node['hadoop'].key?('container_executor')
-  # Set container-executor.cfg options to match yarn-site.xml, if present
-  if node['hadoop'].key?('yarn_site')
-    merged = node['hadoop']['yarn_site'].merge(node['hadoop']['container_executor'])
-    my_vars = { :properties => merged }
-  else
-    my_vars = { :properties => node['hadoop']['container_executor'] }
-  end
+  my_vars = { :properties => node['hadoop']['container_executor'] }
 
   template "#{hadoop_conf_dir}/container-executor.cfg" do
     source 'generic.properties.erb'
