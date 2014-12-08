@@ -6,6 +6,7 @@ Unreleased
 - Ubuntu Trusty support for CDH5 ( Issue: #128 )
 - Spark MLib requires `libgfortran.so.3` ( Issue: #129 )
 - Simplify `container-executor.cfg` ( Issue: #130 )
+- Minor spark fixes from @pauloricardomg ( Issue: #131 )
 
 v1.8.0 (Nov 24, 2014)
 ---------------------
