@@ -155,11 +155,18 @@ when 'cdh'
   when 'debian'
     codename = node['lsb']['codename']
 
+    # rubocop: disable Metrics/BlockNesting
     case codename
     when 'raring', 'saucy', 'trusty'
       Chef::Log.warn('This version of Ubuntu is unsupported by Cloudera! Bug reports should include patches.')
       codename = 'precise'
+    when 'trusty'
+      unless cdh_release >= 5
+        Chef::Log.warn('This version of Ubuntu is unsupported by Cloudera! Bug reports should include patches.')
+        codename = 'precise'
+      end
     end
+    # rubocop: enable Metrics/BlockNesting
 
     apt_base_url = "http://archive.cloudera.com/cdh#{cdh_release}/#{node['platform']}"
     apt_repo_url = node['hadoop']['apt_repo_url'] ? node['hadoop']['apt_repo_url'] : "#{apt_base_url}/#{codename}/amd64/cdh"
