@@ -1,6 +1,10 @@
 hadoop CHANGELOG
 ===============
 
+v1.9.0 (Dec 8, 2014)
+--------------------
+- Tez support from @mandrews ( Issues: #127 #132 )
+
 v1.8.1 (Dec 8, 2014)
 --------------------
 - Ubuntu Trusty support for CDH5 ( Issue: #128 )
