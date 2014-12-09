@@ -1,9 +1,9 @@
 require 'spec_helper'
 
 describe 'hadoop::hbase_master' do
-  context 'on Centos 6.4 in distributed mode' do
+  context 'on Centos 6.5 in distributed mode' do
     let(:chef_run) do
-      ChefSpec::Runner.new(platform: 'centos', version: 6.4) do |node|
+      ChefSpec::SoloRunner.new(platform: 'centos', version: 6.5) do |node|
         node.automatic['domain'] = 'example.com'
         node.default['hadoop']['hdfs_site']['dfs.datanode.max.transfer.threads'] = '4096'
         node.default['hbase']['hbase_site']['hbase.rootdir'] = 'hdfs://localhost:8020/hbase'
@@ -30,12 +30,12 @@ describe 'hadoop::hbase_master' do
     end
   end
 
-  context 'on Centos 6.4 in local mode' do
+  context 'on Centos 6.5 in local mode' do
     let(:chef_run) do
-      ChefSpec::Runner.new(platform: 'centos', version: 6.4) do |node|
+      ChefSpec::SoloRunner.new(platform: 'centos', version: 6.5) do |node|
         node.automatic['domain'] = 'example.com'
         node.default['hadoop']['hdfs_site']['dfs.datanode.max.transfer.threads'] = '4096'
-        node.default['hbase']['hbase_site']['hbase.rootdir'] = 'file:///tmp/hbase'
+        node.override['hbase']['hbase_site']['hbase.rootdir'] = 'file:///tmp/hbase'
         node.default['hbase']['hbase_site']['hbase.zookeeper.quorum'] = 'localhost'
         node.default['hbase']['hbase_site']['hbase.cluster.distributed'] = 'false'
         stub_command('update-alternatives --display hbase-conf | grep best | awk \'{print $5}\' | grep /etc/hbase/conf.chef').and_return(false)

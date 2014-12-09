@@ -2,7 +2,7 @@
 # vi: set ft=ruby :
 
 # Vagrantfile API/syntax version. Don't touch unless you know what you're doing!
-VAGRANTFILE_API_VERSION = "2"
+VAGRANTFILE_API_VERSION = '2'
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # All Vagrant configuration is done here. The most common configuration
@@ -26,13 +26,13 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     config.vm.define platform do |c|
       c.vm.box       = "opscode-#{platform}"
       c.vm.box_url   = "http://opscode-vm-bento.s3.amazonaws.com/vagrant/virtualbox/opscode_#{platform}_chef-provisionerless.box"
-      c.vm.host_name = "hadoop-#{platform}"
+      c.vm.host_name = "hadoop-#{platform}.local"
     end
   end
 
   config.vm.provider :virtualbox do |vb|
     # Use VBoxManage to customize the VM. For example to change memory:
-    vb.customize ["modifyvm", :id, "--memory", "2048"]
+    vb.customize ['modifyvm', :id, '--memory', '2048']
   end
 
   # Ubuntu needs this, but global provisioners run first
@@ -47,7 +47,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       },
       :java => {
         :install_flavor => 'oracle',
-        :jdk_version => "6",
+        :jdk_version => 7,
         :oracle => {
           :accept_oracle_download_terms => true
         }
@@ -55,6 +55,11 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       :hadoop => {
         :container_executor => {
           'banned.users' => 'hdfs,yarn,mapred,bin'
+        },
+        :distribution => 'cdh',
+        :distribution_version => 5,
+        :hadoop_env => {
+          'hadoop_log_dir' => '/data/logs/hadoop-hdfs'
         },
         :hdfs_site => {
           'dfs.datanode.max.transfer.threads' => 4096
@@ -73,6 +78,12 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
           'hive.zookeeper.quorum' => 'localhost'
         }
       },
+      :spark => {
+        :spark_env => {
+          :standalone_spark_master_host => 'localhost',
+          :spark_master_ip => 'localhost'
+        }
+      },
       :zookeeper => {
         :zoocfg => {
           :dataLogDir => '/tmp/zookeeper/logs'
@@ -81,20 +92,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     }
 
     chef.run_list = [
-      "recipe[minitest-handler::default]",
-      "recipe[java::default]",
-      "recipe[hadoop::default]",
-      "recipe[hadoop::hadoop_hdfs_namenode]",
-      "recipe[hadoop::hadoop_hdfs_datanode]",
-      "recipe[hadoop::hadoop_hdfs_secondarynamenode]",
-      "recipe[hadoop::hadoop_yarn_resourcemanager]",
-      "recipe[hadoop::hadoop_yarn_nodemanager]",
-      "recipe[hadoop::zookeeper_server]",
-      "recipe[hadoop::hbase_master]",
-      "recipe[hadoop::hbase_regionserver]",
-      "recipe[hadoop::hive_server2]",
-      "recipe[hadoop::hive_metastore]",
-      "recipe[hadoop::oozie]"
+      'recipe[minitest-handler::default]',
+      'recipe[java::default]',
+      'recipe[hadoop::default]'
     ]
   end
 end

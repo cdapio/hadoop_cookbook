@@ -2,7 +2,7 @@
 # Cookbook Name:: hadoop
 # Recipe:: oozie
 #
-# Copyright (C) 2013-2014 Continuuity, Inc.
+# Copyright © 2013-2014 Cask Data, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -64,21 +64,21 @@ jars.each do |jar|
   end
 end
 
+package 'unzip'
+
 extjs = 'ext-2.2.zip'
-remote_file "#{Chef::Config[:file_cache_path]}/#{extjs}" do
+remote_file "#{oozie_data_dir}/#{extjs}" do
   source "http://extjs.com/deploy/#{extjs}"
   mode '0644'
   action :create_if_missing
 end
 
-package 'unzip'
-
 script 'extract extjs into Oozie data directory' do
   interpreter 'bash'
   user 'root'
   action :nothing
-  code "unzip -o -d #{oozie_data_dir} #{Chef::Config[:file_cache_path]}/#{extjs}"
-  subscribes :run, "remote_file[#{Chef::Config[:file_cache_path]}/#{extjs}", :immediately
+  code "unzip -o -d #{oozie_data_dir} #{oozie_data_dir}/#{extjs}"
+  subscribes :run, "remote_file[#{oozie_data_dir}/#{extjs}]", :immediately
 end
 
 directory oozie_conf_dir do
@@ -89,7 +89,7 @@ directory oozie_conf_dir do
   recursive true
 end
 
-if node['oozie'].key? 'oozie_site'
+if node['oozie'].key?('oozie_site')
   my_vars = { :options => node['oozie']['oozie_site'] }
 
   template "#{oozie_conf_dir}/oozie-site.xml" do
@@ -101,6 +101,48 @@ if node['oozie'].key? 'oozie_site'
     variables my_vars
   end
 end
+
+# Setup oozie-env.sh
+if node['oozie'].key?('oozie_env')
+  my_vars = { :options => node['oozie']['oozie_env'] }
+
+  oozie_log_dir =
+    if node['oozie']['oozie_env'].key?('oozie_log_dir')
+      node['oozie']['oozie_env']['oozie_log_dir']
+    else
+      '/var/log/oozie'
+    end
+
+  directory oozie_log_dir do
+    owner 'oozie'
+    group 'oozie'
+    mode '0755'
+    action :create
+    recursive true
+    only_if { node['oozie']['oozie_env'].key?('oozie_log_dir') }
+  end
+
+  unless node['oozie']['oozie_env']['oozie_log_dir'] == '/var/log/oozie'
+    # Delete default directory, if we aren't set to it
+    directory '/var/log/oozie' do
+      action :delete
+      not_if 'test -L /var/log/oozie'
+    end
+    # symlink
+    link '/var/log/oozie' do
+      to node['oozie']['oozie_env']['oozie_log_dir']
+    end
+  end
+
+  template "#{oozie_conf_dir}/oozie-env.sh" do
+    source 'generic-env.sh.erb'
+    mode '0755'
+    owner 'root'
+    group 'root'
+    action :create
+    variables my_vars
+  end
+end # End oozie-env.sh
 
 service 'oozie' do
   status_command 'service oozie status'

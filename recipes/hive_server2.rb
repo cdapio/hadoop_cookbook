@@ -2,7 +2,7 @@
 # Cookbook Name:: hadoop
 # Recipe:: hive_server
 #
-# Copyright (C) 2013-2014 Continuuity, Inc.
+# Copyright © 2013-2014 Cask Data, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -35,6 +35,25 @@ template '/etc/init.d/hive-server2' do
   action :create
   only_if { node['hadoop']['distribution'] == 'hdp' }
 end
+
+hive_conf_dir = "/etc/hive/#{node['hive']['conf_dir']}"
+
+# Setup jaas.conf
+if node['hive'].key?('jaas')
+  my_vars = {
+    # Only use client, for connecting to secure ZooKeeper
+    :client => node['hive']['jaas']['client']
+  }
+
+  template "#{hive_conf_dir}/jaas.conf" do
+    source 'jaas.conf.erb'
+    mode '0644'
+    owner 'hive'
+    group 'hive'
+    action :create
+    variables my_vars
+  end
+end # End jaas.conf
 
 service 'hive-server2' do
   status_command 'service hive-server2 status'

@@ -2,7 +2,7 @@
 # Cookbook Name:: hadoop
 # Recipe:: hadoop_mapreduce_jobtracker
 #
-# Copyright (C) 2013-2014 Continuuity, Inc.
+# Copyright © 2013-2014 Cask Data, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -20,7 +20,7 @@
 include_recipe 'hadoop::default'
 
 # TODO: check for these and set them up
-# mapreduce.jobtracker.system.dir = #{hadoop_tmp_dir}/mapred/system
+# mapreduce.jobtracker.system.dir = #{hadoop_tmp_dir}/mapred/system (inside HDFS) = mapred.system.dir
 # mapreduce.jobtracker.staging.root.dir = #{hadoop_tmp_dir}/mapred/staging
 # mapreduce.cluster.temp.dir = #{hadoop_tmp_dir}/mapred/temp
 

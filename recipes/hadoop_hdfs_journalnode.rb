@@ -2,7 +2,7 @@
 # Cookbook Name:: hadoop
 # Recipe:: hadoop_hdfs_journalnode
 #
-# Copyright (C) 2013-2014 Continuuity, Inc.
+# Copyright © 2013-2014 Cask Data, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -27,7 +27,7 @@ package 'hadoop-hdfs-journalnode' do
 end
 
 dfs_jn_edits_dirs =
-  if node['hadoop']['hdfs_site'].key? 'dfs.journalnode.edits.dir'
+  if node['hadoop']['hdfs_site'].key?('dfs.journalnode.edits.dir')
     node['hadoop']['hdfs_site']['dfs.journalnode.edits.dir']
   else
     Chef::Application.fatal!("JournalNode requires node['hadoop']['hdfs_site']['dfs.journalnode.edits.dir'] to be set")

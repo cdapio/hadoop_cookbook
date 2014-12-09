@@ -52,6 +52,7 @@ spec/*
 spec/fixtures/*
 test/*
 features/*
+files/default/tests/*
 Guardfile
 Procfile
 Thorfile
