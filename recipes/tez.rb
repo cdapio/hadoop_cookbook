@@ -42,7 +42,6 @@ execute 'tez-hdfs-appdir' do
   group 'hdfs'
   not_if "hdfs dfs -test -d #{dfs}/apps/tez", :user => 'hdfs'
   action :nothing
->>>>>>> origin/master
 end
 
 tez_conf_dir = "/etc/tez/#{node['tez']['conf_dir']}"
@@ -102,4 +101,3 @@ if node.recipe?('hadoop::hive') && node['hive']['hive_site']['hive.execution.eng
     action :nothing
   end
 end
->>>>>>> origin/master
