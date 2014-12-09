@@ -79,6 +79,7 @@ zookeeper['zoocfg'] | zoo.cfg | `zookeeper['conf_dir']`
 * `hbase['conf_dir']` - The directory used inside `/etc/hbase` and used via the alternatives system. Default `conf.chef`
 * `hive['conf_dir']` - The directory used inside `/etc/hive` and used via the alternatives system. Default `conf.chef`
 * `oozie['conf_dir']` - The directory used inside `/etc/oozie` and used via the alternatives system. Default `conf.chef`
+* `tez['conf_dir']` - The directory used inside `/etc/tez` and used via the alternatives system. Default `conf.chef`
 * `spark['conf_dir']` - The directory used inside `/etc/spark` and used via the alternatives system. Default `conf.chef`
 * `zookeeper['conf_dir']` - The directory used inside `/etc/zookeeper` and used via the alternatives system. Default `conf.chef`
 

@@ -66,7 +66,7 @@ if node['tez'].key?('tez_site')
     action :create
     variables my_vars
   end
-end
+end # End tez-site.xml
 
 # Setup tez-env.sh
 if node['tez'].key?('tez_env')
@@ -80,7 +80,7 @@ if node['tez'].key?('tez_env')
     action :create
     variables my_vars
   end
-end
+end # End tez-env.sh
 
 # Update alternatives to point to our configuration
 execute 'update tez-conf alternatives' do
