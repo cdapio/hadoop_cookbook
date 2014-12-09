@@ -139,7 +139,7 @@ if node['zookeeper'].key?('zookeeper_env')
     variables my_vars
   end
 
-  unless node['zookeeper']['zookeeper_env']['zookeeper_log_dir'] == '/var/log/zookeeper'
+  unless zookeeper_log_dir == '/var/log/zookeeper'
     # Delete default directory, if we aren't set to it
     directory '/var/log/zookeeper' do
       action :delete
@@ -147,7 +147,7 @@ if node['zookeeper'].key?('zookeeper_env')
     end
     # symlink
     link '/var/log/zookeeper' do
-      to node['zookeeper']['zookeeper_env']['zookeeper_log_dir']
+      to zookeeper_log_dir
     end
   end
 end # End zookeeper-env.sh

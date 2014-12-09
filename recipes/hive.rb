@@ -125,7 +125,7 @@ if node['hive'].key?('hive_env')
     only_if { node['hive']['hive_env'].key?('hive_log_dir') }
   end
 
-  unless node['hive']['hive_env']['hive_log_dir'] == '/var/log/hive'
+  unless hive_log_dir == '/var/log/hive'
     # Delete default directory, if we aren't set to it
     directory '/var/log/hive' do
       action :delete
@@ -133,7 +133,7 @@ if node['hive'].key?('hive_env')
     end
     # symlink
     link '/var/log/hive' do
-      to node['hive']['hive_env']['hive_log_dir']
+      to hive_log_dir
     end
   end
 

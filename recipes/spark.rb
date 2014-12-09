@@ -120,7 +120,7 @@ if node['spark'].key?('spark_env')
     end
     # symlink
     link '/var/log/spark' do
-      to node['spark']['spark_env']['spark_log_dir']
+      to spark_log_dir
     end
   end
 

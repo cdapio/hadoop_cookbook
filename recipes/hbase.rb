@@ -81,7 +81,7 @@ if node['hbase'].key?('hbase_env')
     only_if { node['hbase']['hbase_env'].key?('hbase_log_dir') }
   end
 
-  unless node['hbase']['hbase_env']['hbase_log_dir'] == '/var/log/hbase'
+  unless hbase_log_dir == '/var/log/hbase'
     # Delete default directory, if we aren't set to it
     directory '/var/log/hbase' do
       action :delete
@@ -89,7 +89,7 @@ if node['hbase'].key?('hbase_env')
     end
     # symlink
     link '/var/log/hbase' do
-      to node['hbase']['hbase_env']['hbase_log_dir']
+      to hbase_log_dir
     end
   end
 

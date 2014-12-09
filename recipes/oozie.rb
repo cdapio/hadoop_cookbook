@@ -122,7 +122,7 @@ if node['oozie'].key?('oozie_env')
     only_if { node['oozie']['oozie_env'].key?('oozie_log_dir') }
   end
 
-  unless node['oozie']['oozie_env']['oozie_log_dir'] == '/var/log/oozie'
+  unless oozie_log_dir == '/var/log/oozie'
     # Delete default directory, if we aren't set to it
     directory '/var/log/oozie' do
       action :delete
@@ -130,7 +130,7 @@ if node['oozie'].key?('oozie_env')
     end
     # symlink
     link '/var/log/oozie' do
-      to node['oozie']['oozie_env']['oozie_log_dir']
+      to oozie_log_dir
     end
   end
 
