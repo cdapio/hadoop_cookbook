@@ -214,6 +214,12 @@ else
   end
 end # End hadoop.tmp.dir
 
+# Some HDP versions ship broken init scripts/config
+execute 'fix-hdp-jsvc-path' do
+  command 'sed -i -e "/JSVC_HOME=/ s:libexec:lib:" /etc/default/hadoop'
+  only_if { node['hadoop']['distribution'] == 'hdp' }
+end
+
 # Update alternatives to point to our configuration
 execute 'update hadoop-conf alternatives' do
   command "update-alternatives --install /etc/hadoop/conf hadoop-conf /etc/hadoop/#{node['hadoop']['conf_dir']} 50"
