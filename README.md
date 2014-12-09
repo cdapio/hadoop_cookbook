@@ -52,6 +52,8 @@ oozie['oozie_site'] | oozie-site.xml | `oozie['conf_dir']`
 spark['log4j'] | log4j.properties | `spark['conf_dir']`
 spark['metrics'] | metrics.properties | `spark['conf_dir']`
 spark['spark_env'] | spark-env.sh | `spark['conf_dir']`
+tez['tez_env'] | tez-env.sh | `tez['conf_dir']`
+tez['tez_site'] | tez-site.xml | `tez['conf_dir']`
 zookeeper['jaas'] | jaas.conf | `zookeeper['conf_dir']`
 zookeeper['log4j'] | log4j.properties | `zookeeper['conf_dir']`
 zookeeper['zoocfg'] | zoo.cfg | `zookeeper['conf_dir']`
@@ -117,6 +119,7 @@ zookeeper['zoocfg'] | zoo.cfg | `zookeeper['conf_dir']`
 * `spark` - Sets up configuration and `spark-core` packages.
 * `spark_master` - Sets up a Spark Master.
 * `spark_worker` - Sets up a Spark Worker.
+* `tez` - Sets up configuration  and `tez` packages.
 * `zookeeper` - Sets up `zookeeper` package.
 * `zookeeper_server` - Sets up a ZooKeeper server.
 
