@@ -1,8 +1,8 @@
 hadoop CHANGELOG
 ===============
 
-Unreleased
-----------
+v1.9.1 (Dec 9, 2014)
+--------------------
 - Spark tests for #129 ( Issue: #133 )
 - Improve *_LOG_DIR symlink handling ( Issue: #134 )
 - Fix PATH to `jsvc` in `/etc/default/hadoop` ( Issue: #135 )
