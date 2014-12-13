@@ -1,7 +1,6 @@
 require File.expand_path('../support/helpers', __FILE__)
 
 describe 'hadoop::zookeeper_server' do
-
   include Helpers::Hadoop
 
   # Example spec tests can be found at http://git.io/Fahwsw
@@ -31,5 +30,4 @@ describe 'hadoop::zookeeper_server' do
       .and(:group, 'root')
       .and(:mode, '0644')
   end
-
 end

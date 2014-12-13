@@ -1,7 +1,6 @@
 require File.expand_path('../support/helpers', __FILE__)
 
 describe 'hadoop::hbase' do
-
   include Helpers::Hadoop
 
   # Example spec tests can be found at http://git.io/Fahwsw
@@ -34,5 +33,4 @@ describe 'hadoop::hbase' do
         .and(:mode, '0644')
     end
   end
-
 end
