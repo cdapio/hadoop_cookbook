@@ -69,7 +69,6 @@ describe 'hadoop::hive' do
     it 'creates /tmp/hive/scratch directory' do
       expect(chef_run).to create_directory('/tmp/hive/scratch')
     end
-
   end
 
   context 'on Ubuntu 12.04' do
@@ -92,6 +91,5 @@ describe 'hadoop::hive' do
         expect(link).to link_to("/usr/share/java/#{jar}.jar")
       end
     end
-
   end
 end

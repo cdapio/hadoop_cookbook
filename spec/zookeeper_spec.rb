@@ -12,6 +12,5 @@ describe 'hadoop::zookeeper' do
     it 'install zookeeper package' do
       expect(chef_run).to install_package('zookeeper')
     end
-
   end
 end

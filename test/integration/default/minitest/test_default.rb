@@ -1,7 +1,6 @@
 require 'minitest/autorun'
 
 describe 'hadoop::default' do
-
   it 'creates hadoop conf dir' do
     directory("/etc/hadoop/#{node['hadoop']['conf_dir']}")
       .must_exist
@@ -31,5 +30,4 @@ describe 'hadoop::default' do
         .and(:mode, '0644')
     end
   end
-
 end
