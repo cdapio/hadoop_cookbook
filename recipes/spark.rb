@@ -81,7 +81,7 @@ unless node['spark']['release']['install'] == false
   node.override['spark']['spark_env']['spark_home'] = "#{node['spark']['release']['install_path']}/spark"
 end
 
-spark_conf_dir = "/etc/spark/#{node['spark']['conf_dir']}"
+spark_conf_dir = node['spark']['conf_dir']
 
 directory spark_conf_dir do
   owner 'root'
@@ -160,9 +160,3 @@ end
     variables my_vars
   end
 end # End metrics.properties log4j.properties
-
-# Update alternatives to point to our configuration
-execute 'update spark-conf alternatives' do
-  command "update-alternatives --install /etc/spark/conf spark-conf /etc/spark/#{node['spark']['conf_dir']} 50"
-  not_if "update-alternatives --display spark-conf | grep best | awk '{print $5}' | grep /etc/spark/#{node['spark']['conf_dir']}"
-end
