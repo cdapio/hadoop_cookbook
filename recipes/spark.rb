@@ -160,9 +160,3 @@ end
     variables my_vars
   end
 end # End metrics.properties log4j.properties
-
-# Update alternatives to point to our configuration
-execute 'update spark-conf alternatives' do
-  command "update-alternatives --install /etc/spark/conf spark-conf #{node['spark']['conf_dir']} 50"
-  not_if "update-alternatives --display spark-conf | grep best | awk '{print $5}' | grep #{node['spark']['conf_dir']}"
-end
