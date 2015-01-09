@@ -63,6 +63,7 @@ describe 'hadoop::default' do
       hadoop-env.sh
       hadoop-policy.xml
       hdfs-site.xml
+      log4j.properties
       mapred-site.xml
       yarn-env.sh
       yarn-site.xml
