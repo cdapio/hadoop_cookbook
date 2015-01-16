@@ -1,6 +1,10 @@
 hadoop CHANGELOG
 ===============
 
+v1.9.2 (Jan 8, 2015)
+--------------------
+- Defaults for log4j ( Issues: #139 )
+
 v1.9.1 (Dec 9, 2014)
 --------------------
 - Spark tests for #129 ( Issue: #133 )
