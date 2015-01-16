@@ -1,9 +1,14 @@
 hadoop CHANGELOG
 ===============
 
+Unreleased
+----------
+- Enforce Java 7 or higher on CDH 5.3 ( Issue: #140 )
+- Default `hive.metastore.uris` ( Issue: #141 )
+
 v1.9.2 (Jan 8, 2015)
 --------------------
-- Defaults for log4j ( Issues: #139 )
+- Defaults for log4j ( Issue: #139 )
 
 v1.9.1 (Dec 9, 2014)
 --------------------
