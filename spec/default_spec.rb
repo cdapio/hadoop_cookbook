@@ -11,6 +11,7 @@ describe 'hadoop::default' do
         node.default['hadoop']['fair_scheduler']['defaults']['poolMaxJobsDefault'] = '1000'
         node.default['hadoop']['hadoop_env']['hadoop_log_dir'] = '/data/log/hadoop-hdfs'
         node.default['hadoop']['yarn_env']['yarn_log_dir'] = '/var/log/hadoop-yarn'
+        stub_command('test -L /var/log/hadoop-hdfs').and_return(false)
         stub_command('update-alternatives --display hadoop-conf | grep best | awk \'{print $5}\' | grep /etc/hadoop/conf.chef').and_return(false)
       end.converge(described_recipe)
     end
@@ -62,6 +63,7 @@ describe 'hadoop::default' do
       hadoop-env.sh
       hadoop-policy.xml
       hdfs-site.xml
+      log4j.properties
       mapred-site.xml
       yarn-env.sh
       yarn-site.xml

@@ -49,6 +49,11 @@ hive['hive_env'] | hive-env.sh | `hive['conf_dir']`
 hive['hive_site'] | hive-site.xml | `hive['conf_dir']`
 hive['jaas'] | jaas.conf | `hive['conf_dir']`
 oozie['oozie_site'] | oozie-site.xml | `oozie['conf_dir']`
+spark['log4j'] | log4j.properties | `spark['conf_dir']`
+spark['metrics'] | metrics.properties | `spark['conf_dir']`
+spark['spark_env'] | spark-env.sh | `spark['conf_dir']`
+tez['tez_env'] | tez-env.sh | `tez['conf_dir']`
+tez['tez_site'] | tez-site.xml | `tez['conf_dir']`
 zookeeper['jaas'] | jaas.conf | `zookeeper['conf_dir']`
 zookeeper['log4j'] | log4j.properties | `zookeeper['conf_dir']`
 zookeeper['zoocfg'] | zoo.cfg | `zookeeper['conf_dir']`
@@ -56,7 +61,7 @@ zookeeper['zoocfg'] | zoo.cfg | `zookeeper['conf_dir']`
 ## Distribution Attributes
 
 * `hadoop['distribution']` - Specifies which Hadoop distribution to use, currently supported: cdh, hdp, bigtop. Default `hdp`
-* `hadoop['distribution_version']` - Specifies which version of `hadoop['distribution']` to use. Default `2.0` if `hadoop['distribution']` is `hdp`, `5` if `hadoop['distribution']` is `cdh`, and `0.7.0` if `hadoop['distribution']` is `bigtop`.  It can also be set to `develop` when `hadoop['distribution']` is `bigtop` to allow installing from development repos without gpg validation. 
+* `hadoop['distribution_version']` - Specifies which version of `hadoop['distribution']` to use. Default `2.0` if `hadoop['distribution']` is `hdp`, `5` if `hadoop['distribution']` is `cdh`, and `0.8.0` if `hadoop['distribution']` is `bigtop`.  It can also be set to `develop` when `hadoop['distribution']` is `bigtop` to allow installing from development repos without gpg validation. 
 
 ### APT-specific settings
 
@@ -74,6 +79,8 @@ zookeeper['zoocfg'] | zoo.cfg | `zookeeper['conf_dir']`
 * `hbase['conf_dir']` - The directory used inside `/etc/hbase` and used via the alternatives system. Default `conf.chef`
 * `hive['conf_dir']` - The directory used inside `/etc/hive` and used via the alternatives system. Default `conf.chef`
 * `oozie['conf_dir']` - The directory used inside `/etc/oozie` and used via the alternatives system. Default `conf.chef`
+* `tez['conf_dir']` - The directory used inside `/etc/tez` and used via the alternatives system. Default `conf.chef`
+* `spark['conf_dir']` - The directory used inside `/etc/spark` and used via the alternatives system. Default `conf.chef`
 * `zookeeper['conf_dir']` - The directory used inside `/etc/zookeeper` and used via the alternatives system. Default `conf.chef`
 
 ## Default Attributes
@@ -110,6 +117,10 @@ zookeeper['zoocfg'] | zoo.cfg | `zookeeper['conf_dir']`
 * `oozie_client` - Sets up an Oozie client.
 * `pig` - Installs pig interpreter.
 * `repo` - Sets up package manager repositories for specified `hadoop['distribution']`
+* `spark` - Sets up configuration and `spark-core` packages.
+* `spark_master` - Sets up a Spark Master.
+* `spark_worker` - Sets up a Spark Worker.
+* `tez` - Sets up configuration  and `tez` packages.
 * `zookeeper` - Sets up `zookeeper` package.
 * `zookeeper_server` - Sets up a ZooKeeper server.
 

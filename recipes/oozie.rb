@@ -64,21 +64,21 @@ jars.each do |jar|
   end
 end
 
+package 'unzip'
+
 extjs = 'ext-2.2.zip'
-remote_file "#{Chef::Config[:file_cache_path]}/#{extjs}" do
+remote_file "#{oozie_data_dir}/#{extjs}" do
   source "http://extjs.com/deploy/#{extjs}"
   mode '0644'
   action :create_if_missing
 end
 
-package 'unzip'
-
 script 'extract extjs into Oozie data directory' do
   interpreter 'bash'
   user 'root'
   action :nothing
-  code "unzip -o -d #{oozie_data_dir} #{Chef::Config[:file_cache_path]}/#{extjs}"
-  subscribes :run, "remote_file[#{Chef::Config[:file_cache_path]}/#{extjs}", :immediately
+  code "unzip -o -d #{oozie_data_dir} #{oozie_data_dir}/#{extjs}"
+  subscribes :run, "remote_file[#{oozie_data_dir}/#{extjs}]", :immediately
 end
 
 directory oozie_conf_dir do
@@ -122,14 +122,15 @@ if node['oozie'].key?('oozie_env')
     only_if { node['oozie']['oozie_env'].key?('oozie_log_dir') }
   end
 
-  unless node['oozie']['oozie_env']['oozie_log_dir'] == '/var/log/oozie'
+  unless oozie_log_dir == '/var/log/oozie'
     # Delete default directory, if we aren't set to it
     directory '/var/log/oozie' do
       action :delete
+      not_if 'test -L /var/log/oozie'
     end
     # symlink
     link '/var/log/oozie' do
-      to node['oozie']['oozie_env']['oozie_log_dir']
+      to oozie_log_dir
     end
   end
 

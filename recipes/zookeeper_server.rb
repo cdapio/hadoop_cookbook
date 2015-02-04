@@ -139,14 +139,15 @@ if node['zookeeper'].key?('zookeeper_env')
     variables my_vars
   end
 
-  unless node['zookeeper']['zookeeper_env']['zookeeper_log_dir'] == '/var/log/zookeeper'
+  unless zookeeper_log_dir == '/var/log/zookeeper'
     # Delete default directory, if we aren't set to it
     directory '/var/log/zookeeper' do
       action :delete
+      not_if 'test -L /var/log/zookeeper'
     end
     # symlink
     link '/var/log/zookeeper' do
-      to node['zookeeper']['zookeeper_env']['zookeeper_log_dir']
+      to zookeeper_log_dir
     end
   end
 end # End zookeeper-env.sh
@@ -166,7 +167,8 @@ if node['zookeeper'].key?('log4j')
 end # End log4j.properties
 
 # Hack to work around broken Hortonworks release engineering
-if node['hadoop']['distribution'] == 'hdp' && node['hadoop']['distribution_version'] == '2.1'
+if node['hadoop']['distribution'] == 'hdp' &&
+   (node['hadoop']['distribution_version'].to_f == 2.1 || node['hadoop']['distribution_version'].to_s == '2')
   log 'hdp-2.1 release engineering fix' do
     level :warn
     message 'Performing workaround for broken zookeeper-server init script on HDP 2.1'

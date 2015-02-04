@@ -17,7 +17,7 @@
 # limitations under the License.
 #
 
-include_recipe 'hadoop::default'
+include_recipe 'hadoop::repo'
 
 package 'hive' do
   action :install
@@ -78,21 +78,6 @@ directory '/var/lib/hive' do
   action :create
 end
 
-local_scratch_dir =
-  if node['hive'].key?('hive_site') && node['hive']['hive_site'].key?('hive.exec.local.scratchdir')
-    node['hive']['hive_site']['hive.exec.local.scratchdir']
-  else
-    '/tmp/${user.name}'
-  end
-
-directory local_scratch_dir do
-  mode '1777'
-  owner 'hive'
-  group 'hive'
-  action :create
-  not_if { local_scratch_dir == '/tmp/${user.name}' }
-end
-
 # Setup hive-site.xml
 if node['hive'].key?('hive_site')
   my_vars = { :options => node['hive']['hive_site'] }
@@ -104,6 +89,19 @@ if node['hive'].key?('hive_site')
     group 'root'
     action :create
     variables my_vars
+  end
+
+  if node['hive']['hive_site'].key?('hive.exec.local.scratchdir') &&
+     node['hive']['hive_site']['hive.exec.local.scratchdir'] != '/tmp/${user.name}'
+
+    local_scratch_dir = node['hive']['hive_site']['hive.exec.local.scratchdir']
+
+    directory local_scratch_dir do
+      mode '1777'
+      owner 'hive'
+      group 'hive'
+      action :create
+    end
   end
 end # End hive-site.xml
 
@@ -127,14 +125,15 @@ if node['hive'].key?('hive_env')
     only_if { node['hive']['hive_env'].key?('hive_log_dir') }
   end
 
-  unless node['hive']['hive_env']['hive_log_dir'] == '/var/log/hive'
+  unless hive_log_dir == '/var/log/hive'
     # Delete default directory, if we aren't set to it
     directory '/var/log/hive' do
       action :delete
+      not_if 'test -L /var/log/hive'
     end
     # symlink
     link '/var/log/hive' do
-      to node['hive']['hive_env']['hive_log_dir']
+      to hive_log_dir
     end
   end
 
@@ -155,7 +154,7 @@ execute 'hive-hdfs-homedir' do
   timeout 300
   user 'hdfs'
   group 'hdfs'
-  not_if 'hdfs dfs -test -d #{dfs}/user/hive', :user => 'hdfs'
+  not_if "hdfs dfs -test -d #{dfs}/user/hive", :user => 'hdfs'
   action :nothing
 end
 

@@ -22,7 +22,6 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     centos-6.5
     ubuntu-12.04
   ).each do |platform|
-
     config.vm.define platform do |c|
       c.vm.box       = "opscode-#{platform}"
       c.vm.box_url   = "http://opscode-vm-bento.s3.amazonaws.com/vagrant/virtualbox/opscode_#{platform}_chef-provisionerless.box"
@@ -56,6 +55,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
         :container_executor => {
           'banned.users' => 'hdfs,yarn,mapred,bin'
         },
+        :distribution => 'cdh',
+        :distribution_version => 5,
         :hadoop_env => {
           'hadoop_log_dir' => '/data/logs/hadoop-hdfs'
         },
@@ -76,6 +77,12 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
           'hive.zookeeper.quorum' => 'localhost'
         }
       },
+      :spark => {
+        :spark_env => {
+          :standalone_spark_master_host => 'localhost',
+          :spark_master_ip => 'localhost'
+        }
+      },
       :zookeeper => {
         :zoocfg => {
           :dataLogDir => '/tmp/zookeeper/logs'
@@ -86,18 +93,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     chef.run_list = [
       'recipe[minitest-handler::default]',
       'recipe[java::default]',
-      'recipe[hadoop::default]',
-      'recipe[hadoop::hadoop_hdfs_namenode]',
-      'recipe[hadoop::hadoop_hdfs_datanode]',
-      'recipe[hadoop::hadoop_hdfs_secondarynamenode]',
-      'recipe[hadoop::hadoop_yarn_resourcemanager]',
-      'recipe[hadoop::hadoop_yarn_nodemanager]',
-      'recipe[hadoop::zookeeper_server]',
-      'recipe[hadoop::hbase_master]',
-      'recipe[hadoop::hbase_regionserver]',
-      'recipe[hadoop::hive_server2]',
-      'recipe[hadoop::hive_metastore]',
-      'recipe[hadoop::oozie]'
+      'recipe[hadoop::default]'
     ]
   end
 end

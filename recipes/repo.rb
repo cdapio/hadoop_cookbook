@@ -138,6 +138,9 @@ when 'hdp'
 
 when 'cdh'
   cdh_release = node['hadoop']['distribution_version'].to_i
+  if node['hadoop']['distribution_version'].to_f >= 5.3 && node['java']['jdk_version'] < 7
+    Chef::Application.fatal!('CDH 5.3 and above require Java 7 or higher')
+  end
   case node['platform_family']
   when 'rhel'
     yum_base_url = "http://archive.cloudera.com/cdh#{cdh_release}/redhat"
@@ -155,11 +158,18 @@ when 'cdh'
   when 'debian'
     codename = node['lsb']['codename']
 
+    # rubocop: disable Metrics/BlockNesting
     case codename
     when 'raring', 'saucy', 'trusty'
       Chef::Log.warn('This version of Ubuntu is unsupported by Cloudera! Bug reports should include patches.')
       codename = 'precise'
+    when 'trusty'
+      unless cdh_release >= 5
+        Chef::Log.warn('This version of Ubuntu is unsupported by Cloudera! Bug reports should include patches.')
+        codename = 'precise'
+      end
     end
+    # rubocop: enable Metrics/BlockNesting
 
     apt_base_url = "http://archive.cloudera.com/cdh#{cdh_release}/#{node['platform']}"
     apt_repo_url = node['hadoop']['apt_repo_url'] ? node['hadoop']['apt_repo_url'] : "#{apt_base_url}/#{codename}/amd64/cdh"

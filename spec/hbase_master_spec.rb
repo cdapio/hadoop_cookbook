@@ -45,6 +45,5 @@ describe 'hadoop::hbase_master' do
     it 'creates hbase.rootdir directory' do
       expect(chef_run).to create_directory('/tmp/hbase')
     end
-
   end
 end

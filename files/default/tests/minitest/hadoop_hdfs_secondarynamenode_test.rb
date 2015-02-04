@@ -1,7 +1,6 @@
 require File.expand_path('../support/helpers', __FILE__)
 
 describe 'hadoop::hadoop_hdfs_secondarynamenode' do
-
   include Helpers::Hadoop
 
   it 'ensures HDFS checkpoint dirs exist' do
@@ -23,5 +22,4 @@ describe 'hadoop::hadoop_hdfs_secondarynamenode' do
         .and(:mode, '0700')
     end
   end
-
 end

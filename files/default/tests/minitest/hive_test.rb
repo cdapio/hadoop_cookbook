@@ -1,7 +1,6 @@
 require File.expand_path('../support/helpers', __FILE__)
 
 describe 'hadoop::hive' do
-
   include Helpers::Hadoop
 
   # Example spec tests can be found at http://git.io/Fahwsw
@@ -42,5 +41,4 @@ describe 'hadoop::hive' do
         .and(:mode, '0644')
     end
   end
-
 end

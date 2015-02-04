@@ -124,6 +124,7 @@ end # End fair-scheduler.xml
       # Delete default directory, if we aren't set to it
       directory "/var/log/hadoop-#{log_dir}" do
         action :delete
+        not_if "test -L /var/log/hadoop-#{log_dir}"
       end
       # symlink
       link "/var/log/hadoop-#{log_dir}" do
@@ -160,13 +161,7 @@ end # End hadoop-metrics.properties log4j.properties
 
 # Setup container-executor.cfg
 if node['hadoop'].key?('container_executor')
-  # Set container-executor.cfg options to match yarn-site.xml, if present
-  if node['hadoop'].key?('yarn_site')
-    merged = node['hadoop']['yarn_site'].merge(node['hadoop']['container_executor'])
-    my_vars = { :properties => merged }
-  else
-    my_vars = { :properties => node['hadoop']['container_executor'] }
-  end
+  my_vars = { :properties => node['hadoop']['container_executor'] }
 
   template "#{hadoop_conf_dir}/container-executor.cfg" do
     source 'generic.properties.erb'
@@ -218,6 +213,12 @@ else
     recursive true
   end
 end # End hadoop.tmp.dir
+
+# Some HDP versions ship broken init scripts/config
+execute 'fix-hdp-jsvc-path' do
+  command 'sed -i -e "/JSVC_HOME=/ s:libexec:lib:" /etc/default/hadoop'
+  only_if { node['hadoop']['distribution'] == 'hdp' }
+end
 
 # Update alternatives to point to our configuration
 execute 'update hadoop-conf alternatives' do
