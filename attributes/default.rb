@@ -1,7 +1,7 @@
 ###
 # cookbook settings
 ###
-# Supported: cdh, hdp
+# Supported: cdh, hdp, bigtop
 default['hadoop']['distribution'] = 'hdp'
 
 default['hadoop']['force_format'] = false
