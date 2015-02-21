@@ -126,6 +126,7 @@ if node['oozie'].key?('oozie_env')
     # Delete default directory, if we aren't set to it
     directory '/var/log/oozie' do
       action :delete
+      recursive true
       not_if 'test -L /var/log/oozie'
     end
     # symlink

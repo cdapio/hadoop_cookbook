@@ -129,6 +129,7 @@ if node['hive'].key?('hive_env')
     # Delete default directory, if we aren't set to it
     directory '/var/log/hive' do
       action :delete
+      recursive true
       not_if 'test -L /var/log/hive'
     end
     # symlink

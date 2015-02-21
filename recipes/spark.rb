@@ -116,6 +116,7 @@ if node['spark'].key?('spark_env')
     # Delete default directory, if we aren't set to it
     directory '/var/log/spark' do
       action :delete
+      recursive true
       not_if 'test -L /var/log/spark'
     end
     # symlink
