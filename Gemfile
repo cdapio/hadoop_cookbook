@@ -4,7 +4,6 @@ gem 'berkshelf', '~> 3.0'
 gem 'foodcritic', '~> 3.0'
 
 gem 'chefspec', '~> 4.0'
-gem 'chef', '< 12.0'
 gem 'rspec', '~> 3.0'
 
 gem 'chef', '< 12.0'

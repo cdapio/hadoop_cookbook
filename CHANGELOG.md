@@ -1,10 +1,12 @@
 hadoop CHANGELOG
 ===============
 
-Unreleased
+v1.10.0 (Feb 24, 2015)
 ----------
-- Enforce Java 7 or higher on CDH 5.3 ( Issue: #140 )
-- Default `hive.metastore.uris` ( Issue: #141 )
+- Enforce Java 7 or higher on CDH 5.3 ( Issues: #140 [COOK-18](https://issues.cask.co/browse/COOK-18) )
+- Default `hive.metastore.uris` ( Issues: #141 [COOK-19](https://issues.cask.co/browse/COOK-19) )
+- HDP 2.2 support ( Issues: #142 [COOK-16](https://issues.cask.co/browse/COOK-16) )
+- Recursive deletes on log dirs ( Issue: #143 [COOK-23](https://issues.cask.co/browse/COOK-23) )
 
 v1.9.2 (Jan 8, 2015)
 --------------------
