@@ -85,6 +85,7 @@ if node['hbase'].key?('hbase_env')
     # Delete default directory, if we aren't set to it
     directory '/var/log/hbase' do
       action :delete
+      recursive true
       not_if 'test -L /var/log/hbase'
     end
     # symlink

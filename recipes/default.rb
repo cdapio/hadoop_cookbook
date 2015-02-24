@@ -124,6 +124,7 @@ end # End fair-scheduler.xml
       # Delete default directory, if we aren't set to it
       directory "/var/log/hadoop-#{log_dir}" do
         action :delete
+        recursive true
         not_if "test -L /var/log/hadoop-#{log_dir}"
       end
       # symlink
