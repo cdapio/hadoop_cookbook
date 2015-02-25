@@ -1,8 +1,12 @@
 hadoop CHANGELOG
 ===============
 
+v1.10.1 (Feb 24, 2015)
+----------------------
+- HDP Repo fix ( Issues: #144 [COOK-24](https://issues.cask.co/browse/COOK-24) )
+
 v1.10.0 (Feb 24, 2015)
-----------
+----------------------
 - Enforce Java 7 or higher on CDH 5.3 ( Issues: #140 [COOK-18](https://issues.cask.co/browse/COOK-18) )
 - Default `hive.metastore.uris` ( Issues: #141 [COOK-19](https://issues.cask.co/browse/COOK-19) )
 - HDP 2.2 support ( Issues: #142 [COOK-16](https://issues.cask.co/browse/COOK-16) )
