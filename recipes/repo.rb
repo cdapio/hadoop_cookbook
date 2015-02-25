@@ -127,6 +127,7 @@ when 'hdp'
       uri apt_repo_url
       key apt_repo_key_url
       distribution 'HDP'
+      trusted true
       components ['main']
       action :add
     end
