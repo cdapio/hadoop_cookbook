@@ -20,7 +20,7 @@
 module Hadoop
   # Helpers for Hadoop
   module Helpers
-    def policy_rc.d(cmd)
+    def policy_rcd(cmd)
       case cmd
       when 'disable'
         Chef::Log.info('Disabling package auto-start')
