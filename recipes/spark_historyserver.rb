@@ -68,7 +68,6 @@ if node['hadoop']['distribution'] == 'cdh'
 else
   s_cmd = 'true #'
 end
-  
 
 service 'spark-history-server' do
   status_command "#{s_cmd} status"
