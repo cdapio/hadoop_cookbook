@@ -19,9 +19,23 @@
 
 include_recipe 'hadoop::default'
 include_recipe 'hadoop::hadoop_hdfs_checkconfig'
+pkg = 'hadoop-hdfs-namenode'
 
-package 'hadoop-hdfs-namenode' do
-  action :install
+package pkg do
+  action :nothing
+end
+
+# Hack to prevent auto-start of services, see COOK-26
+ruby_block "package-#{pkg}" do
+  block do
+    begin
+      Chef::Resource::RubyBlock.send(:include, Hadoop::Helpers)
+      policy_rcd('disable') if node['platform_family'] == 'debian'
+      resources("package[#{pkg}]").run_action(:install)
+    ensure
+      policy_rcd('enable') if node['platform_family'] == 'debian'
+    end
+  end
 end
 
 dfs_name_dirs =
@@ -73,8 +87,8 @@ execute 'hdfs-namenode-format' do
   user 'hdfs'
 end
 
-service 'hadoop-hdfs-namenode' do
-  status_command 'service hadoop-hdfs-namenode status'
+service pkg do
+  status_command "service #{pkg} status"
   supports [:restart => true, :reload => false, :status => true]
   action :nothing
 end

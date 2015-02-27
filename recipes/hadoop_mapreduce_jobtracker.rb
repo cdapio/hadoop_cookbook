@@ -51,6 +51,22 @@ package 'hadoop-0.20-mapreduce-jobtracker' do
   only_if { node['hadoop']['distribution'] == 'cdh' }
 end
 
+### TODO: make this work
+
+
+# Hack to prevent auto-start of services, see COOK-26
+ruby_block "package-#{pkg}" do
+  block do
+    begin
+      Chef::Resource::RubyBlock.send(:include, Hadoop::Helpers)
+      policy_rcd('disable') if node['platform_family'] == 'debian'
+      resources("package[#{pkg}]").run_action(:install)
+    ensure
+      policy_rcd('enable') if node['platform_family'] == 'debian'
+    end
+  end
+end
+
 service 'hadoop-0.20-mapreduce-jobtracker' do
   status_command 'service hadoop-0.20-mapreduce-jobtracker status'
   supports [:restart => true, :reload => false, :status => true]

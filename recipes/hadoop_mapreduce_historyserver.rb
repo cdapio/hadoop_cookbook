@@ -18,13 +18,27 @@
 #
 
 include_recipe 'hadoop::default'
+pkg = 'hadoop-mapreduce-historyserver'
 
-package 'hadoop-mapreduce-historyserver' do
-  action :install
+package pkg do
+  action :nothing
 end
 
-service 'hadoop-mapreduce-historyserver' do
-  status_command 'service hadoop-mapreduce-historyserver status'
+# Hack to prevent auto-start of services, see COOK-26
+ruby_block "package-#{pkg}" do
+  block do
+    begin
+      Chef::Resource::RubyBlock.send(:include, Hadoop::Helpers)
+      policy_rcd('disable') if node['platform_family'] == 'debian'
+      resources("package[#{pkg}]").run_action(:install)
+    ensure
+      policy_rcd('enable') if node['platform_family'] == 'debian'
+    end
+  end
+end
+
+service pkg do
+  status_command "service #{pkg} status"
   supports [:restart => true, :reload => false, :status => true]
   action :nothing
 end

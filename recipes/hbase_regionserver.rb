@@ -19,14 +19,28 @@
 
 include_recipe 'hadoop::hbase'
 include_recipe 'hadoop::hbase_checkconfig'
+pkg = 'hbase-regionserver'
 
-package 'hbase-regionserver' do
-  action :install
+package pkg do
+  action :nothing
 end
 
-service 'hbase-regionserver' do
+# Hack to prevent auto-start of services, see COOK-26
+ruby_block "package-#{pkg}" do
+  block do
+    begin
+      Chef::Resource::RubyBlock.send(:include, Hadoop::Helpers)
+      policy_rcd('disable') if node['platform_family'] == 'debian'
+      resources("package[#{pkg}]").run_action(:install)
+    ensure
+      policy_rcd('enable') if node['platform_family'] == 'debian'
+    end
+  end
+end
+
+service pkg do
   supports [:restart => true, :reload => false, :status => true]
   # cdh4.4 init scripts do not return non-zero exit codes for status
-  status_command 'service hbase-regionserver status | grep -v "not running"'
+  status_command "service #{pkg} status | grep -v 'not running'"
   action :nothing
 end

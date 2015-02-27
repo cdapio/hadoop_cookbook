@@ -18,7 +18,6 @@
 #
 
 module Hadoop
-  # Helpers for Hadoop
   module Helpers
     def policy_rcd(cmd)
       case cmd

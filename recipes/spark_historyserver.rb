@@ -18,9 +18,23 @@
 #
 
 include_recipe 'hadoop::spark'
+pkg = 'spark-history-server'
 
-package 'spark-history-server' do
-  action :install
+package pkg do
+  action :nothing
+end
+
+# Hack to prevent auto-start of services, see COOK-26
+ruby_block "package-#{pkg}" do
+  block do
+    begin
+      Chef::Resource::RubyBlock.send(:include, Hadoop::Helpers)
+      policy_rcd('disable') if node['platform_family'] == 'debian'
+      resources("package[#{pkg}]").run_action(:install)
+    ensure
+      policy_rcd('enable') if node['platform_family'] == 'debian'
+    end
+  end
   only_if { node['hadoop']['distribution'] == 'cdh' }
 end
 
@@ -49,8 +63,18 @@ execute 'hdfs-spark-eventlog-dir' do
   action :nothing
 end
 
+if node['hadoop']['distribution'] == 'cdh'
+  s_cmd = "service #{pkg}"
+else
+  s_cmd = 'true #'
+end
+  
+
 service 'spark-history-server' do
-  status_command 'service spark-history-server status'
+  status_command "#{s_cmd} status"
+  start_command "#{s_cmd} start"
+  stop_command "#{s_cmd} stop"
+  restart_command "#{s_cmd} restart"
   supports [:restart => true, :reload => false, :status => true]
   action :nothing
 end

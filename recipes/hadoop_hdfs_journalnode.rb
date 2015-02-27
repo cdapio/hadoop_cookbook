@@ -22,8 +22,22 @@
 include_recipe 'hadoop::default'
 include_recipe 'hadoop::hadoop_hdfs_checkconfig'
 
-package 'hadoop-hdfs-journalnode' do
-  action :install
+pkg = 'hadoop-hdfs-journalnode'
+package pkg do
+  action :nothing
+end
+
+# Hack to prevent auto-start of services, see COOK-26
+ruby_block "package-#{pkg}" do
+  block do
+    begin
+      Chef::Resource::RubyBlock.send(:include, Hadoop::Helpers)
+      policy_rcd('disable') if node['platform_family'] == 'debian'
+      resources("package[#{pkg}]").run_action(:install)
+    ensure
+      policy_rcd('enable') if node['platform_family'] == 'debian'
+    end
+  end
 end
 
 dfs_jn_edits_dirs =
@@ -43,8 +57,8 @@ dfs_jn_edits_dirs.split(',').each do |dir|
   end
 end
 
-service 'hadoop-hdfs-journalnode' do
-  status_command 'service hadoop-hdfs-journalnode status'
+service pkg do
+  status_command "service #{pkg} status"
   supports [:restart => true, :reload => false, :status => true]
   action :nothing
 end
