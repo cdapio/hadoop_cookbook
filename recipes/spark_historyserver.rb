@@ -66,7 +66,7 @@ end
 if node['hadoop']['distribution'] == 'cdh'
   s_cmd = "service #{pkg}"
 else
-  s_cmd = 'true #'
+  s_cmd = 'true #' # Ends with # to make arguments a comment, versus part of command line
 end
 
 service 'spark-history-server' do
