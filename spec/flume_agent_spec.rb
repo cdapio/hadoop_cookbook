@@ -8,8 +8,12 @@ describe 'hadoop::flume_agent' do
       end.converge(described_recipe)
     end
 
-    it 'install flume-agent package' do
-      expect(chef_run).to install_package('flume-agent')
+    it 'does not install flume-agent package' do
+      expect(chef_run).not_to install_package('flume-agent')
+    end
+
+    it 'runs package-flume-agent ruby_block' do
+      expect(chef_run).to run_ruby_block('package-flume-agent')
     end
 
     it 'creates flume-agent service resource, but does not run it' do
@@ -25,8 +29,12 @@ describe 'hadoop::flume_agent' do
       end.converge(described_recipe)
     end
 
-    it 'install flume-ng package' do
-      expect(chef_run).to install_package('flume-ng-agent')
+    it 'does not install flume-ng package' do
+      expect(chef_run).not_to install_package('flume-ng-agent')
+    end
+
+    it 'runs package-flume-ng-agent ruby_block' do
+      expect(chef_run).to run_ruby_block('package-flume-ng-agent')
     end
   end
 end
