@@ -1,6 +1,11 @@
 hadoop CHANGELOG
 ===============
 
+v1.11.0 (Feb 27, 2015)
+----------------------
+- Stop packages from auto-starting on install ( Issues: #145 [COOK-26](https://issues.cask.co/browse/COOK-26) )
+- Fail fast on invalid distribution ( Issues: #146 [COOK-25](https://issues.cask.co/browse/COOK-25) )
+
 v1.10.1 (Feb 24, 2015)
 ----------------------
 - HDP Repo fix ( Issues: #144 [COOK-24](https://issues.cask.co/browse/COOK-24) )
