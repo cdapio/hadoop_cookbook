@@ -2,7 +2,7 @@
 # Cookbook Name:: hadoop
 # Recipe:: hive_server
 #
-# Copyright © 2013-2014 Cask Data, Inc.
+# Copyright © 2013-2015 Cask Data, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -20,15 +20,29 @@
 include_recipe 'hadoop::hive'
 include_recipe 'hadoop::zookeeper'
 include_recipe 'hadoop::hive_checkconfig'
+pkg = 'hive-server2'
 
-package 'hive-server2' do
-  action :install
+package pkg do
+  action :nothing
+end
+
+# Hack to prevent auto-start of services, see COOK-26
+ruby_block "package-#{pkg}" do
+  block do
+    begin
+      Chef::Resource::RubyBlock.send(:include, Hadoop::Helpers)
+      policy_rcd('disable') if node['platform_family'] == 'debian'
+      resources("package[#{pkg}]").run_action(:install)
+    ensure
+      policy_rcd('enable') if node['platform_family'] == 'debian'
+    end
+  end
   # Hortonworks ships this as part of the hive package
   not_if { node['hadoop']['distribution'] == 'hdp' }
 end
 
-template '/etc/init.d/hive-server2' do
-  source 'hive-server2.erb'
+template "/etc/init.d/#{pkg}" do
+  source "#{pkg}.erb"
   mode '0755'
   owner 'root'
   group 'root'
@@ -55,8 +69,8 @@ if node['hive'].key?('jaas')
   end
 end # End jaas.conf
 
-service 'hive-server2' do
-  status_command 'service hive-server2 status'
+service pkg do
+  status_command "service #{pkg} status"
   supports [:restart => true, :reload => false, :status => true]
   action :nothing
 end

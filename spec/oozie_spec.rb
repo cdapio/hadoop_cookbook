@@ -11,9 +11,23 @@ describe 'hadoop::oozie' do
         stub_command('update-alternatives --display oozie-conf | grep best | awk \'{print $5}\' | grep /etc/oozie/conf.chef').and_return(false)
       end.converge(described_recipe)
     end
+    pkg = 'oozie'
 
-    it 'install oozie package' do
-      expect(chef_run).to install_package('oozie')
+    it "does not install #{pkg} package" do
+      expect(chef_run).not_to install_package(pkg)
+    end
+
+    it "runs package-#{pkg} ruby_block" do
+      expect(chef_run).to run_ruby_block("package-#{pkg}")
+    end
+
+    it "creates #{pkg} service resource, but does not run it" do
+      expect(chef_run).to_not disable_service(pkg)
+      expect(chef_run).to_not enable_service(pkg)
+      expect(chef_run).to_not reload_service(pkg)
+      expect(chef_run).to_not restart_service(pkg)
+      expect(chef_run).to_not start_service(pkg)
+      expect(chef_run).to_not stop_service(pkg)
     end
 
     it 'creates oozie conf_dir' do
@@ -36,13 +50,13 @@ describe 'hadoop::oozie' do
       expect(chef_run).to install_package('unzip')
     end
 
-    %w(mysql-connector-java postgresql-jdbc).each do |pkg|
-      it "install #{pkg} package" do
-        expect(chef_run).to install_package(pkg)
+    %w(mysql-connector-java postgresql-jdbc).each do |p|
+      it "install #{p} package" do
+        expect(chef_run).to install_package(p)
       end
-      it "link #{pkg}.jar" do
-        link = chef_run.link("/var/lib/oozie/#{pkg}.jar")
-        expect(link).to link_to("/usr/share/java/#{pkg}.jar")
+      it "link #{p}.jar" do
+        link = chef_run.link("/var/lib/oozie/#{p}.jar")
+        expect(link).to link_to("/usr/share/java/#{p}.jar")
       end
     end
 
@@ -67,10 +81,6 @@ describe 'hadoop::oozie' do
     it 'creates /var/log/oozie symlink' do
       link = chef_run.link('/var/log/oozie')
       expect(link).to link_to('/data/log/oozie')
-    end
-
-    it 'creates oozie service resource, but does not run it' do
-      expect(chef_run).to_not start_service('oozie')
     end
 
     it 'runs execute[update oozie-conf alternatives]' do

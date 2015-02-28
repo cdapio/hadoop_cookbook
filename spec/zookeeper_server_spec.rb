@@ -14,9 +14,23 @@ describe 'hadoop::zookeeper_server' do
         stub_command('test -e /usr/lib/bigtop-utils/bigtop-detect-javahome').and_return(false)
       end.converge(described_recipe)
     end
+    pkg = 'zookeeper-server'
 
-    it 'install zookeeper-server package' do
-      expect(chef_run).to install_package('zookeeper-server')
+    it "does not install #{pkg} package" do
+      expect(chef_run).not_to install_package(pkg)
+    end
+
+    it "runs package-#{pkg} ruby_block" do
+      expect(chef_run).to run_ruby_block("package-#{pkg}")
+    end
+
+    it "creates #{pkg} service resource, but does not run it" do
+      expect(chef_run).to_not disable_service(pkg)
+      expect(chef_run).to_not enable_service(pkg)
+      expect(chef_run).to_not reload_service(pkg)
+      expect(chef_run).to_not restart_service(pkg)
+      expect(chef_run).to_not start_service(pkg)
+      expect(chef_run).to_not stop_service(pkg)
     end
 
     it 'creates zookeeper conf_dir' do
@@ -86,10 +100,6 @@ describe 'hadoop::zookeeper_server' do
 
     it 'logs hdp-2.1 release engineering fix' do
       expect(chef_run).to write_log('Performing workaround for broken zookeeper-server init script on HDP 2.1')
-    end
-
-    it 'creates zookeeper-server service resource, but does not run it' do
-      expect(chef_run).to_not start_service('zookeeper-server')
     end
 
     it 'runs execute[update zookeeper-conf alternatives]' do

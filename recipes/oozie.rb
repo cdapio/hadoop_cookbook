@@ -2,7 +2,7 @@
 # Cookbook Name:: hadoop
 # Recipe:: oozie
 #
-# Copyright © 2013-2014 Cask Data, Inc.
+# Copyright © 2013-2015 Cask Data, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -19,9 +19,23 @@
 
 include_recipe 'hadoop::repo'
 include_recipe 'hadoop::oozie_client'
+pkg = 'oozie'
 
-package 'oozie' do
-  action :install
+package pkg do
+  action :nothing
+end
+
+# Hack to prevent auto-start of services, see COOK-26
+ruby_block "package-#{pkg}" do
+  block do
+    begin
+      Chef::Resource::RubyBlock.send(:include, Hadoop::Helpers)
+      policy_rcd('disable') if node['platform_family'] == 'debian'
+      resources("package[#{pkg}]").run_action(:install)
+    ensure
+      policy_rcd('enable') if node['platform_family'] == 'debian'
+    end
+  end
 end
 
 oozie_conf_dir = "/etc/oozie/#{node['oozie']['conf_dir']}"
@@ -52,8 +66,8 @@ when 'rhel'
   end
 end
 
-pkgs.each do |pkg|
-  package pkg do
+pkgs.each do |p|
+  package p do
     action :install
   end
 end
@@ -145,8 +159,8 @@ if node['oozie'].key?('oozie_env')
   end
 end # End oozie-env.sh
 
-service 'oozie' do
-  status_command 'service oozie status'
+service pkg do
+  status_command "service #{pkg} status"
   supports [:restart => true, :reload => false, :status => true]
   action :nothing
 end
