@@ -200,3 +200,7 @@ suites:
       - recipe[hadoop::zookeeper]
       - recipe[hadoop::zookeeper_server]
     attributes: { hadoop: { distribution: 'bigtop', distribution_version: '0.8.0' } }
+  - name: broken
+    run_list:
+      - recipe[hadoop::default]
+    attributes: { hadoop: { distribution: 'broken' } }

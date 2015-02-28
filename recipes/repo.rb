@@ -244,4 +244,7 @@ when 'bigtop'
       action :add
     end
   end
+else
+  # COOK-25 fail fast
+  Chef::Application.fatal!("Invalid node['hadoop']['distribution'] (#{node['hadoop']['distribution']}) specified!")
 end
