@@ -2,7 +2,7 @@
 # Cookbook Name:: hadoop
 # Recipe:: hive_metastore
 #
-# Copyright © 2013-2014 Cask Data, Inc.
+# Copyright © 2013-2015 Cask Data, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -18,9 +18,23 @@
 #
 
 include_recipe 'hadoop::hive'
+pkg = 'hive-metastore'
 
-package 'hive-metastore' do
-  action :install
+package pkg do
+  action :nothing
+end
+
+# Hack to prevent auto-start of services, see COOK-26
+ruby_block "package-#{pkg}" do
+  block do
+    begin
+      Chef::Resource::RubyBlock.send(:include, Hadoop::Helpers)
+      policy_rcd('disable') if node['platform_family'] == 'debian'
+      resources("package[#{pkg}]").run_action(:install)
+    ensure
+      policy_rcd('enable') if node['platform_family'] == 'debian'
+    end
+  end
 end
 
 # Hive HDFS directories
@@ -62,8 +76,8 @@ execute 'hive-hdfs-warehousedir' do
   action :nothing
 end
 
-template '/etc/init.d/hive-metastore' do
-  source 'hive-metastore.erb'
+template "/etc/init.d/#{pkg}" do
+  source "#{pkg}.erb"
   mode '0755'
   owner 'root'
   group 'root'
@@ -71,8 +85,8 @@ template '/etc/init.d/hive-metastore' do
   only_if { node['hadoop']['distribution'] == 'hdp' }
 end
 
-service 'hive-metastore' do
-  status_command 'service hive-metastore status'
+service pkg do
+  status_command "service #{pkg} status"
   supports [:restart => true, :reload => false, :status => true]
   action :nothing
 end

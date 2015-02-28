@@ -10,9 +10,19 @@ describe 'hadoop::spark_historyserver' do
         stub_command('update-alternatives --display spark-conf | grep best | awk \'{print $5}\' | grep /etc/spark/conf.chef').and_return(false)
       end.converge(described_recipe)
     end
+    pkg = 'spark-historyserver'
 
-    it 'does not install spark-history-server package' do
-      expect(chef_run).not_to install_package('spark-history-server')
+    it "does not install #{pkg} package" do
+      expect(chef_run).not_to install_package(pkg)
+    end
+
+    it "creates #{pkg} service resource, but does not run it" do
+      expect(chef_run).to_not disable_service(pkg)
+      expect(chef_run).to_not enable_service(pkg)
+      expect(chef_run).to_not reload_service(pkg)
+      expect(chef_run).to_not restart_service(pkg)
+      expect(chef_run).to_not start_service(pkg)
+      expect(chef_run).to_not stop_service(pkg)
     end
 
     it 'creates hdfs-spark-userdir execute resource, but does not run it' do
@@ -34,13 +44,23 @@ describe 'hadoop::spark_historyserver' do
         stub_command('update-alternatives --display spark-conf | grep best | awk \'{print $5}\' | grep /etc/spark/conf.chef').and_return(false)
       end.converge(described_recipe)
     end
+    pkg = 'spark-history-server'
 
-    it 'installs spark-history-server package' do
-      expect(chef_run).to install_package('spark-history-server')
+    it "does not install #{pkg} package" do
+      expect(chef_run).not_to install_package(pkg)
     end
 
-    it 'creates spark-history-server service resource, but does not run it' do
-      expect(chef_run).to_not start_service('spark-history-server')
+    it "runs package-#{pkg} ruby_block" do
+      expect(chef_run).to run_ruby_block("package-#{pkg}")
+    end
+
+    it "creates #{pkg} service resource, but does not run it" do
+      expect(chef_run).to_not disable_service(pkg)
+      expect(chef_run).to_not enable_service(pkg)
+      expect(chef_run).to_not reload_service(pkg)
+      expect(chef_run).to_not restart_service(pkg)
+      expect(chef_run).to_not start_service(pkg)
+      expect(chef_run).to_not stop_service(pkg)
     end
   end
 end

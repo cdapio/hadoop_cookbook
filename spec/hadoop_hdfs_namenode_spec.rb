@@ -8,9 +8,23 @@ describe 'hadoop::hadoop_hdfs_namenode' do
         stub_command('update-alternatives --display hadoop-conf | grep best | awk \'{print $5}\' | grep /etc/hadoop/conf.chef').and_return(false)
       end.converge(described_recipe)
     end
+    pkg = 'hadoop-hdfs-namenode'
 
-    it 'install hadoop-hdfs-namenode package' do
-      expect(chef_run).to install_package('hadoop-hdfs-namenode')
+    it "does not install #{pkg} package" do
+      expect(chef_run).not_to install_package(pkg)
+    end
+
+    it "runs package-#{pkg} ruby_block" do
+      expect(chef_run).to run_ruby_block("package-#{pkg}")
+    end
+
+    it "creates #{pkg} service resource, but does not run it" do
+      expect(chef_run).to_not disable_service(pkg)
+      expect(chef_run).to_not enable_service(pkg)
+      expect(chef_run).to_not reload_service(pkg)
+      expect(chef_run).to_not restart_service(pkg)
+      expect(chef_run).to_not start_service(pkg)
+      expect(chef_run).to_not stop_service(pkg)
     end
 
     it 'creates HDFS name dir' do
@@ -22,15 +36,6 @@ describe 'hadoop::hadoop_hdfs_namenode' do
 
     it 'creates hdfs-namenode-format execute resource, but does not run it' do
       expect(chef_run).to_not run_execute('hdfs-namenode-format').with(user: 'hdfs')
-    end
-
-    it 'creates hadoop-hdfs-namenode service resource, but does not run it' do
-      expect(chef_run).to_not disable_service('hadoop-hdfs-namenode')
-      expect(chef_run).to_not enable_service('hadoop-hdfs-namenode')
-      expect(chef_run).to_not reload_service('hadoop-hdfs-namenode')
-      expect(chef_run).to_not restart_service('hadoop-hdfs-namenode')
-      expect(chef_run).to_not start_service('hadoop-hdfs-namenode')
-      expect(chef_run).to_not stop_service('hadoop-hdfs-namenode')
     end
   end
 end
