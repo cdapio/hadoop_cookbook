@@ -7,6 +7,7 @@ describe 'hadoop::hadoop_hdfs_journalnode' do
         node.automatic['domain'] = 'example.com'
         node.default['hadoop']['hdfs_site']['dfs.journalnode.edits.dir'] = '/tmp/hadoop-hdfs/dfs/journal'
         stub_command('update-alternatives --display hadoop-conf | grep best | awk \'{print $5}\' | grep /etc/hadoop/conf.chef').and_return(false)
+        stub_command(%r{/sys/kernel/mm/(.*)transparent_hugepage/defrag}).and_return(false)
       end.converge(described_recipe)
     end
     pkg = 'hadoop-hdfs-journalnode'

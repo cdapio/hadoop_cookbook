@@ -10,6 +10,7 @@ describe 'hadoop::hbase_master' do
         node.default['hbase']['hbase_site']['hbase.zookeeper.quorum'] = 'localhost'
         node.default['hbase']['hbase_site']['hbase.cluster.distributed'] = 'true'
         stub_command('update-alternatives --display hbase-conf | grep best | awk \'{print $5}\' | grep /etc/hbase/conf.chef').and_return(false)
+        stub_command(%r{/sys/kernel/mm/(.*)transparent_hugepage/defrag}).and_return(false)
       end.converge(described_recipe)
     end
     pkg = 'hbase-master'
@@ -49,6 +50,7 @@ describe 'hadoop::hbase_master' do
         node.default['hbase']['hbase_site']['hbase.zookeeper.quorum'] = 'localhost'
         node.default['hbase']['hbase_site']['hbase.cluster.distributed'] = 'false'
         stub_command('update-alternatives --display hbase-conf | grep best | awk \'{print $5}\' | grep /etc/hbase/conf.chef').and_return(false)
+        stub_command(%r{/sys/kernel/mm/(.*)transparent_hugepage/defrag}).and_return(false)
       end.converge(described_recipe)
     end
 
