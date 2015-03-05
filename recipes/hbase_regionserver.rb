@@ -18,7 +18,7 @@
 #
 
 include_recipe 'hadoop::hbase'
-include_recipe 'hadoop::hbase_checkconfig'
+include_recipe 'hadoop::_hbase_checkconfig'
 pkg = 'hbase-regionserver'
 
 package pkg do
