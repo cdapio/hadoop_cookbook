@@ -21,6 +21,7 @@
 
 include_recipe 'hadoop::default'
 include_recipe 'hadoop::_hadoop_hdfs_checkconfig'
+include_recipe 'hadoop::_system_tuning'
 
 pkg = 'hadoop-hdfs-journalnode'
 package pkg do

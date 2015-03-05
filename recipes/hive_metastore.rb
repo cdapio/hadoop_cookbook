@@ -18,6 +18,7 @@
 #
 
 include_recipe 'hadoop::hive'
+include_recipe 'hadoop::_system_tuning'
 pkg = 'hive-metastore'
 
 package pkg do

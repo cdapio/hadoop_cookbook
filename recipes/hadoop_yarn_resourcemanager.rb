@@ -18,6 +18,7 @@
 #
 
 include_recipe 'hadoop::default'
+include_recipe 'hadoop::_system_tuning'
 pkg = 'hadoop-yarn-resourcemanager'
 
 package pkg do
