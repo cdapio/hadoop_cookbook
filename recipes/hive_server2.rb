@@ -18,8 +18,8 @@
 #
 
 include_recipe 'hadoop::hive'
+include_recipe 'hadoop::_hive_checkconfig'
 include_recipe 'hadoop::zookeeper'
-include_recipe 'hadoop::hive_checkconfig'
 pkg = 'hive-server2'
 
 package pkg do

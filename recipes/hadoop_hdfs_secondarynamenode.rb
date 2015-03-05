@@ -18,7 +18,7 @@
 #
 
 include_recipe 'hadoop::default'
-include_recipe 'hadoop::hadoop_hdfs_checkconfig'
+include_recipe 'hadoop::_hadoop_hdfs_checkconfig'
 pkg = 'hadoop-hdfs-secondarynamenode'
 
 package pkg do
