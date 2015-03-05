@@ -20,7 +20,7 @@
 # http://hadoop.apache.org/docs/current/hadoop-yarn/hadoop-yarn-site/HDFSHighAvailabilityWithQJM.html
 
 include_recipe 'hadoop::default'
-include_recipe 'hadoop::hadoop_hdfs_checkconfig'
+include_recipe 'hadoop::_hadoop_hdfs_checkconfig'
 
 pkg = 'hadoop-hdfs-journalnode'
 package pkg do

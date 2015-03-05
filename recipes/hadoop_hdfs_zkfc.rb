@@ -18,7 +18,7 @@
 #
 
 include_recipe 'hadoop::default'
-include_recipe 'hadoop::hadoop_hdfs_ha_checkconfig'
+include_recipe 'hadoop::_hadoop_hdfs_ha_checkconfig'
 include_recipe 'hadoop::zookeeper'
 pkg = 'hadoop-hdfs-zkfc'
 
