@@ -8,6 +8,7 @@ version          '1.11.1'
 
 depends 'yum', '>= 3.0'
 depends 'apt'
+depends 'sysctl'
 
 recommends 'java', '~> 1.21'
 
