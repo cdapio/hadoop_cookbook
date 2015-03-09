@@ -1,6 +1,15 @@
 hadoop CHANGELOG
 ===============
 
+v1.11.2 (Mar 9, 2015)
+---------------------
+- Prefix internal recipes with underscore ( Issue: #147 )
+- Fix Java 7 check ( Issues: #149 [COOK-27](https://issues.cask.co/browse/COOK-27) )
+
+v1.11.1 (Feb 27, 2015)
+----------------------
+- Packaging fix
+
 v1.11.0 (Feb 27, 2015)
 ----------------------
 - Stop packages from auto-starting on install ( Issues: #145 [COOK-26](https://issues.cask.co/browse/COOK-26) )
