@@ -142,7 +142,7 @@ when 'hdp'
 
 when 'cdh'
   cdh_release = node['hadoop']['distribution_version'].to_i
-  if node['hadoop']['distribution_version'].to_f >= 5.3 && node['java']['jdk_version'] < 7
+  if node['hadoop']['distribution_version'].to_f >= 5.3 && node.key?('java') && node['java'].key?('jdk_version') && node['java']['jdk_version'] < 7
     Chef::Application.fatal!('CDH 5.3 and above require Java 7 or higher')
   end
   case node['platform_family']
