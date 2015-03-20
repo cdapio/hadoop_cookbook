@@ -37,9 +37,6 @@ ruby_block "package-#{pkg}" do
   end
 end
 
-# TODO: check for these and set them up
-# yarn.app.mapreduce.am.staging-dir = /tmp/hadoop-yarn/staging
-
 %w(yarn.nodemanager.local-dirs yarn.nodemanager.log-dirs).each do |opt|
   next unless node['hadoop'].key?('yarn_site') && node['hadoop']['yarn_site'].key?(opt)
   node['hadoop']['yarn_site'][opt].split(',').each do |dir|
