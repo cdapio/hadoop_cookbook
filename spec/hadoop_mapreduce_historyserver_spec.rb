@@ -26,5 +26,13 @@ describe 'hadoop::hadoop_mapreduce_historyserver' do
       expect(chef_run).to_not start_service(pkg)
       expect(chef_run).to_not stop_service(pkg)
     end
+
+    it 'creates mapreduce-jobhistory-intermediate-done-dir execute resource, but does not run it' do
+      expect(chef_run).to_not run_execute('mapreduce-jobhistory-intermediate-done-dir').with(user: 'hdfs')
+    end
+
+    it 'creates mapreduce-jobhistory-done-dir execute resource, but does not run it' do
+      expect(chef_run).to_not run_execute('mapreduce-jobhistory-done-dir').with(user: 'hdfs')
+    end
   end
 end
