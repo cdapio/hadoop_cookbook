@@ -34,5 +34,9 @@ describe 'hadoop::hadoop_yarn_resourcemanager' do
     it 'creates yarn-remote-app-log-dir execute resource, but does not run it' do
       expect(chef_run).to_not run_execute('yarn-remote-app-log-dir').with(user: 'hdfs')
     end
+
+    it 'creates yarn-app-mapreduce-am-staging-dir execute resource, but does not run it' do
+      expect(chef_run).to_not run_execute('yarn-app-mapreduce-am-staging-dir').with(user: 'hdfs')
+    end
   end
 end

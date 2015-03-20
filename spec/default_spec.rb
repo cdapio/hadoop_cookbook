@@ -121,6 +121,10 @@ describe 'hadoop::default' do
       )
     end
 
+    it 'runs execute[fix-hdp-jsvc-path]' do
+      expect(chef_run).to run_execute('fix-hdp-jsvc-path')
+    end
+
     it 'runs execute[update hadoop-conf alternatives]' do
       expect(chef_run).to run_execute('update hadoop-conf alternatives')
     end
