@@ -8,6 +8,7 @@ describe 'hadoop::hive_server2' do
         node.default['hive']['hive_site']['hive.support.concurrency'] = 'true'
         node.default['hive']['hive_site']['hive.zookeeper.quorum'] = 'localhost'
         stub_command('update-alternatives --display hive-conf | grep best | awk \'{print $5}\' | grep /etc/hive/conf.chef').and_return(false)
+        stub_command(%r{/sys/kernel/mm/(.*)transparent_hugepage/defrag}).and_return(false)
       end.converge(described_recipe)
     end
     pkg = 'hive-server2'
@@ -42,6 +43,7 @@ describe 'hadoop::hive_server2' do
         node.default['hive']['hive_site']['hive.support.concurrency'] = 'true'
         node.default['hive']['hive_site']['hive.zookeeper.quorum'] = 'localhost'
         stub_command('update-alternatives --display hive-conf | grep best | awk \'{print $5}\' | grep /etc/hive/conf.chef').and_return(false)
+        stub_command(%r{/sys/kernel/mm/(.*)transparent_hugepage/defrag}).and_return(false)
       end.converge(described_recipe)
     end
     pkg = 'hive-server2'

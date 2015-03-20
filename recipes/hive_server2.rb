@@ -19,6 +19,7 @@
 
 include_recipe 'hadoop::hive'
 include_recipe 'hadoop::_hive_checkconfig'
+include_recipe 'hadoop::_system_tuning'
 include_recipe 'hadoop::zookeeper'
 pkg = 'hive-server2'
 

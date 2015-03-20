@@ -19,6 +19,7 @@
 
 include_recipe 'hadoop::hbase'
 include_recipe 'hadoop::_hbase_checkconfig'
+include_recipe 'hadoop::_system_tuning'
 pkg = 'hbase-master'
 
 package pkg do

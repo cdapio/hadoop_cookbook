@@ -18,6 +18,7 @@
 #
 
 include_recipe 'hadoop::default'
+include_recipe 'hadoop::_system_tuning'
 pkg = 'hadoop-0.20-mapreduce-tasktracker'
 
 mapred_local_dirs =

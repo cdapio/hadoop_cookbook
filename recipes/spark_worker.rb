@@ -18,6 +18,7 @@
 #
 
 include_recipe 'hadoop::spark'
+include_recipe 'hadoop::_system_tuning'
 pkg = 'spark-worker'
 
 if node['hadoop']['distribution'] == 'cdh'
