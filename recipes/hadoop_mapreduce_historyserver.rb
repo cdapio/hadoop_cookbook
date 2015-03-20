@@ -37,6 +37,10 @@ ruby_block "package-#{pkg}" do
   end
 end
 
+# TODO: check for these and set them up
+# mapreduce.jobhistory.intermediate-done-dir = ${yarn.app.mapreduce.am.staging-dir}/history/done_intermediate
+# mapreduce.jobhistory.done-dir = ${yarn.app.mapreduce.am.staging-dir}/history/done
+
 service pkg do
   status_command "service #{pkg} status"
   supports [:restart => true, :reload => false, :status => true]
