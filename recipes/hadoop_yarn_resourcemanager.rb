@@ -71,6 +71,24 @@ execute 'yarn-remote-app-log-dir' do
   action :nothing
 end
 
+am_staging_dir =
+  if node['hadoop'].key?('mapred_site') && node['hadoop']['mapred_site'].key?('yarn.app.mapreduce.am.staging-dir')
+    node['hadoop']['mapred_site']['yarn.app.mapreduce.am.staging-dir']
+  else
+    '/tmp/hadoop-yarn/staging'
+  end
+
+node.default['hadoop']['mapred_site']['yarn.app.mapreduce.am.staging-dir'] = am_staging_dir
+
+execute 'yarn-app-mapreduce-am-staging-dir' do
+  command "hdfs dfs -mkdir -p #{am_staging_dir} && hdfs dfs -chown yarn:hadoop #{am_staging_dir} && hdfs dfs -chmod 1777 #{am_staging_dir}"
+  timeout 300
+  user 'hdfs'
+  group 'hdfs'
+  not_if "hdfs dfs -test -d #{remote_log_dir}", :user => 'hdfs'
+  action :nothing
+end
+
 service pkg do
   status_command "service #{pkg} status"
   supports [:restart => true, :reload => false, :status => true]
