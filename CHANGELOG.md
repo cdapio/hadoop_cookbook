@@ -1,6 +1,12 @@
 hadoop CHANGELOG
 ===============
 
+v1.12.0 (Mar 20, 2015)
+----------------------
+- Support yarn.app.mapreduce.am.staging-dir ( Issue: #150 )
+- Support mapreduce.jobhistory.done-dir and mapreduce.jobhistory.intermediate-done-dir ( Issue: #151 )
+- Tests for #135 and #150 ( Issue: #152 )
+
 v1.11.2 (Mar 9, 2015)
 ---------------------
 - Prefix internal recipes with underscore ( Issue: #147 )
