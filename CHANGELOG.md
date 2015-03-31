@@ -1,6 +1,12 @@
 hadoop CHANGELOG
 ===============
 
+v1.13.0 (Mar 31, 2015)
+----------------------
+- Enable system tuning ( Issue: #148 )
+- Test against more Ruby versions ( Issue: #153 )
+- Fix guard on mapreduce.jobhistory.done-dir ( Issue: #154 )
+
 v1.12.0 (Mar 20, 2015)
 ----------------------
 - Support yarn.app.mapreduce.am.staging-dir ( Issue: #150 )
