@@ -72,7 +72,7 @@ execute 'mapreduce-jobhistory-done-dir' do
   timeout 300
   user 'hdfs'
   group 'hdfs'
-  not_if "hdfs dfs -test -d #{jhs_intermediate_done_dir}", :user => 'hdfs'
+  not_if "hdfs dfs -test -d #{jhs_done_dir}", :user => 'hdfs'
   action :nothing
 end
 
