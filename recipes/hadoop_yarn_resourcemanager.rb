@@ -86,7 +86,7 @@ execute 'yarn-app-mapreduce-am-staging-dir' do
   timeout 300
   user 'hdfs'
   group 'hdfs'
-  not_if "hdfs dfs -test -d #{remote_log_dir}", :user => 'hdfs'
+  not_if "hdfs dfs -test -d #{am_staging_dir}", :user => 'hdfs'
   action :nothing
 end
 
