@@ -35,7 +35,7 @@ update_thp_defrag = true
 if ::File.exist?(thp_defrag)
   file = File.new("#{thp_defrag}")
   text = file.read
-  if text =~ /\[never\]/
+  if text =~ /\[never\]/ then
     update_thp_defrag = false
   end
 else
