@@ -17,11 +17,11 @@
 # limitations under the License.
 #
 
-include_recipe 'sysctl::default'
+#include_recipe 'sysctl::default'
 # Disable swapping
-sysctl_param 'vm.swappiness' do
-  value 0
-end
+#sysctl_param 'vm.swappiness' do
+#  value 0
+#end
 
 case node['platform_family']
 when 'debian', 'suse'
@@ -32,15 +32,13 @@ end
 
 # Do not assume file exists, Ubuntu 14 in AWS does not have thp_defrag file
 update_thp_defrag = true
-if ::File.exists?(thp_defrag) then
+if ::File.exist?(thp_defrag)
   file = File.new("#{thp_defrag}")
   text = file.read
-  if ( text =~ /\[never\]/ ) then
-    #puts "#{thp_defrag} contains [never]"
+  if text =~ /\[never\]/
     update_thp_defrag = false
   end
 else
-  #puts "file #{thp_defrag} not found"
   update_thp_defrag = false
 end
 
