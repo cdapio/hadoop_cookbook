@@ -34,9 +34,7 @@ end
 update_thp_defrag = true
 file = File.new("#{thp_defrag}")
 text = file.read
-if ::File.exist?(thp_defrag) && text =~ /\[never\]/ then
-    update_thp_defrag = false
-end
+update_thp_defrag = false if ::File.exist?(thp_defrag) && text =~ /\[never\]/
 
 execute 'disable-transparent-hugepage-compaction' do
   command "echo never > #{thp_defrag}"
