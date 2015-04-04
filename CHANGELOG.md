@@ -1,6 +1,10 @@
 hadoop CHANGELOG
 ===============
 
+Unreleased
+----------
+- Fix YARN AM staging dir ( Issues: #157 [COOK-30](https://issues.cask.co/browse/COOK-30) )
+
 v1.13.0 (Mar 31, 2015)
 ----------------------
 - Enable system tuning ( Issue: #148 )
