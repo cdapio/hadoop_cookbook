@@ -40,12 +40,6 @@ else
   update_thp_defrag = false
 end
 
-# Do not assume file exists, Ubuntu 14 in AWS does not have thp_defrag file
-update_thp_defrag = true
-file = File.new(thp_defrag)
-text = file.read
-update_thp_defrag = false if ::File.exist?(thp_defrag) && text =~ /\[never\]/
-
 execute 'disable-transparent-hugepage-compaction' do
   command "echo never > #{thp_defrag}"
   only_if { update_thp_defrag }
