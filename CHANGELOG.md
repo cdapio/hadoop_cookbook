@@ -1,9 +1,11 @@
 hadoop CHANGELOG
 ===============
 
-Unreleased
-----------
+v.1.13.1 (Apr 15, 2015)
+-----------------------
 - Fix YARN AM staging dir ( Issues: #157 [COOK-30](https://issues.cask.co/browse/COOK-30) )
+- Support HDP 2.0.13.0 and bump HDP-UTILS to 1.1.0.20 ( Issue: #158 )
+- Document issue tracker location ( Issues: #159 [COOK-32](https://issues.cask.co/browse/COOK-32) )
 
 v1.13.0 (Mar 31, 2015)
 ----------------------
