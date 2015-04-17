@@ -30,18 +30,9 @@ when 'rhel'
   thp_defrag = '/sys/kernel/mm/redhat_transparent_hugepage/defrag'
 end
 
-# Do not assume file exists, Ubuntu 14 in AWS does not have thp_defrag file
-update_thp_defrag = true
-if ::File.exist?(thp_defrag)
-  file = File.new(thp_defrag)
-  text = file.read
-  update_thp_defrag = false if text =~ /\[never\]/
-else
-  update_thp_defrag = false
-end
-
 execute 'disable-transparent-hugepage-compaction' do
   command "echo never > #{thp_defrag}"
-  only_if { update_thp_defrag }
+  only_if "ls #{thp_defrag}"
+  not_if "grep -- [never] #{thp_defrag}"
   action :run
 end
