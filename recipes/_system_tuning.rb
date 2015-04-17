@@ -17,12 +17,13 @@
 # limitations under the License.
 #
 
-#include_recipe 'sysctl::default'
+include_recipe 'sysctl::default'
 # Disable swapping
-#sysctl_param 'vm.swappiness' do
-#  value 0
-#end
+sysctl_param 'vm.swappiness' do
+  value 0
+end
 
+# select transparent_hugepage file
 case node['platform_family']
 when 'debian', 'suse'
   thp_defrag = '/sys/kernel/mm/transparent_hugepage/defrag'
@@ -30,18 +31,8 @@ when 'rhel'
   thp_defrag = '/sys/kernel/mm/redhat_transparent_hugepage/defrag'
 end
 
-# Do not assume file exists, Ubuntu 14 in AWS does not have thp_defrag file
-update_thp_defrag = true
-if ::File.exist?(thp_defrag)
-  file = File.new(thp_defrag)
-  text = file.read
-  update_thp_defrag = false if text =~ /\[never\]/
-else
-  update_thp_defrag = false
-end
-
+# disable transparent_hugepage (if exists, file missing on AWS Ubuntu images)
 execute 'disable-transparent-hugepage-compaction' do
   command "echo never > #{thp_defrag}"
-  only_if { update_thp_defrag }
-  action :run
+  not_if "ls #{thp_defrag} && grep '\[never\]' #{thp_defrag}"
 end
