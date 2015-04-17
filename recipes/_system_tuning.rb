@@ -32,6 +32,6 @@ end
 
 execute 'disable-transparent-hugepage-compaction' do
   command "echo never > #{thp_defrag}"
-  only_if "ls #{thp_defrag}"
-  not_if "grep '\[never\]' #{thp_defrag}"
+  not_if "ls #{thp_defrag} && grep '\[never\]' #{thp_defrag}"
 end
+
