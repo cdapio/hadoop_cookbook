@@ -52,7 +52,13 @@ end
 end
 
 # Ensure permissions for secure Hadoop... this *should* be no-op
-file '/usr/hdp/current/hadoop-yarn-nodemanager/bin/container-executor' do
+if node['hadoop']['distribution'] == 'hdp' && node['hadoop']['distribution_version'].to_f = 2.2
+  container_executor_path = '/usr/hdp/current/hadoop-yarn-nodemanager/bin/'
+else
+  container_executor_path = '/usr/lib/hadoop-yarn/bin/'
+end
+
+file "#{container_executor_path}/container-executor" do
   owner 'root'
   group 'yarn'
   mode '6050'
