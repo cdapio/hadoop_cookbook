@@ -75,7 +75,7 @@ describe 'hadoop::hive' do
     let(:chef_run) do
       ChefSpec::SoloRunner.new(platform: 'centos', version: 6.5) do |node|
         node.override['hadoop']['distribution'] = 'hdp'
-        node.override['hadoop']['distribution_version'] = 2.2
+        node.override['hadoop']['distribution_version'] = '2.2'
         node.automatic['domain'] = 'example.com'
         node.default['hive']['hive_site']['hive.exec.local.scratchdir'] = '/tmp/hive/scratch'
         node.default['hive']['hive_env']['hive_log_dir'] = '/data/log/hive'
@@ -169,7 +169,7 @@ describe 'hadoop::hive' do
     let(:chef_run) do
       ChefSpec::SoloRunner.new(platform: 'ubuntu', version: 12.04) do |node|
         node.override['hadoop']['distribution'] = 'hdp'
-        node.override['hadoop']['distribution_version'] = 2.2
+        node.override['hadoop']['distribution_version'] = '2.2'
         node.automatic['domain'] = 'example.com'
         stub_command('update-alternatives --display hadoop-conf | grep best | awk \'{print $5}\' | grep /etc/hadoop/conf.chef').and_return(false)
         stub_command('update-alternatives --display hive-conf | grep best | awk \'{print $5}\' | grep /etc/hive/conf.chef').and_return(false)
