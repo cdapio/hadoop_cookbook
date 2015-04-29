@@ -219,8 +219,8 @@ end # End hadoop.tmp.dir
 execute 'fix-hdp-jsvc-path' do
   command 'sed -i -e "/JSVC_HOME=/ s:libexec:lib:" /etc/default/hadoop'
   only_if do
-    node['hadoop']['distribution'] == 'hdp' && (node['hadoop']['distribution_version'] == '2' || \
-                                                node['hadoop']['distribution_version'].to_f == '2.1')
+    node['hadoop']['distribution'] == 'hdp' && (node['hadoop']['distribution_version'].to_s == '2' || \
+                                                node['hadoop']['distribution_version'].to_f == 2.1)
   end
 end
 
