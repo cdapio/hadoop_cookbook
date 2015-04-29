@@ -140,7 +140,7 @@ end # End jaas.conf
 if node['hbase'].key?('limits') && !node['hbase']['limits'].empty?
   l = []
   node['hbase']['limits'].each do |k, v|
-    l << { domain: 'hbase', type: 'hard', item: k, value: v }
+    l << { domain: 'hbase', type: '-', item: k, value: v }
   end
   limits_config 'hbase' do
     limits l
