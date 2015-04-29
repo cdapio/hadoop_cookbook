@@ -226,15 +226,19 @@ end
 
 # limits.d settings
 if node['hadoop'].key?('limits') && !node['hadoop']['limits'].empty?
-  %w(hdfs mapred).each do |u|
+  %w(hdfs mapred yarn).each do |u|
     l = []
     node['hadoop']['limits'].each do |k, v|
       l << { domain: u, type: '-', item: k, value: v }
     end
 
     limits_config u do
+      action :create
       limits l
     end
+  end
+  limits_config 'mapreduce' do
+    action :delete
   end
 end # End limits.d
 
