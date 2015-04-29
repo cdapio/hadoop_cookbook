@@ -60,8 +60,8 @@ describe 'hadoop::oozie' do
       end
     end
 
-    it 'creates ext-2.2.zip file' do
-      expect(chef_run).to create_remote_file_if_missing('/var/lib/oozie/ext-2.2.zip')
+    it 'creates ext-2.3.0.zip file' do
+      expect(chef_run).to create_remote_file_if_missing('/var/lib/oozie/ext-2.3.0.zip')
     end
 
     it 'does not run script[extract extjs into Oozie data directory]' do
