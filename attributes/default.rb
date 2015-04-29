@@ -18,7 +18,7 @@ default['zookeeper']['conf_dir'] = node['hadoop']['conf_dir']
 
 # limits.d settings
 default['hadoop']['limits']['nofile'] = '32768'
-default['hadoop']['limits']['noproc'] = '65536'
+default['hadoop']['limits']['nproc'] = '65536'
 
 ###
 # core-site.xml settings
