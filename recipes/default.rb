@@ -218,7 +218,10 @@ end # End hadoop.tmp.dir
 # Some HDP versions ship broken init scripts/config
 execute 'fix-hdp-jsvc-path' do
   command 'sed -i -e "/JSVC_HOME=/ s:libexec:lib:" /etc/default/hadoop'
-  only_if { node['hadoop']['distribution'] == 'hdp' }
+  only_if do
+    node['hadoop']['distribution'] == 'hdp' && (node['hadoop']['distribution_version'] == '2' || \
+                                                node['hadoop']['distribution_version'].to_f == '2.1')
+  end
 end
 
 # Update alternatives to point to our configuration
