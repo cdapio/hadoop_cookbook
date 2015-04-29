@@ -52,7 +52,7 @@ end
 end
 
 # Ensure permissions for secure Hadoop... this *should* be no-op
-file '/usr/lib/hadoop-yarn/bin/container-executor' do
+file '/usr/hdp/current/hadoop-yarn-nodemanager/bin/container-executor' do
   owner 'root'
   group 'yarn'
   mode '6050'

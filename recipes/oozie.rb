@@ -80,9 +80,9 @@ end
 
 package 'unzip'
 
-extjs = 'ext-2.2.zip'
+extjs = 'ext-2.3.0.zip'
 remote_file "#{oozie_data_dir}/#{extjs}" do
-  source "http://extjs.com/deploy/#{extjs}"
+  source "http://dev.sencha.com/deploy/#{extjs}"
   mode '0644'
   action :create_if_missing
 end
