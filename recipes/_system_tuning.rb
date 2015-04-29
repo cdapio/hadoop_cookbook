@@ -28,10 +28,9 @@ when 'debian', 'suse'
   thp_defrag = '/sys/kernel/mm/transparent_hugepage/defrag'
 when 'rhel'
   thp_defrag = '/sys/kernel/mm/redhat_transparent_hugepage/defrag'
-else
-  thp_defrag = '/dev/null'
 end
+
 execute 'disable-transparent-hugepage-compaction' do
   command "echo never > #{thp_defrag}"
-  not_if "grep '\[never\]' #{thp_defrag}"
+  not_if "ls #{thp_defrag} && grep '\[never\]' #{thp_defrag}"
 end
