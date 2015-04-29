@@ -16,6 +16,10 @@ default['spark']['conf_dir'] = node['hadoop']['conf_dir']
 default['tez']['conf_dir'] = node['hadoop']['conf_dir']
 default['zookeeper']['conf_dir'] = node['hadoop']['conf_dir']
 
+# limits.d settings
+default['hadoop']['limits']['nofile'] = '32768'
+default['hadoop']['limits']['noproc'] = '65536'
+
 ###
 # core-site.xml settings
 ###

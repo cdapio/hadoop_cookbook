@@ -224,6 +224,20 @@ execute 'fix-hdp-jsvc-path' do
   end
 end
 
+# limits.d settings
+if node['hadoop'].key?('limits') && !node['hadoop']['limits'].empty?
+  %w(hdfs mapred).each do |u|
+    l = []
+    node['hadoop']['limits'].each do |k, v|
+      l << { domain: u, type: '-', item: k, value: v }
+    end
+
+    limits_config u do
+      limits l
+    end
+  end
+end # End limits.d
+
 # Update alternatives to point to our configuration
 execute 'update hadoop-conf alternatives' do
   command "update-alternatives --install /etc/hadoop/conf hadoop-conf /etc/hadoop/#{node['hadoop']['conf_dir']} 50"
