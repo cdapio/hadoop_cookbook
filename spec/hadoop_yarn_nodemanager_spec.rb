@@ -28,8 +28,8 @@ describe 'hadoop::hadoop_yarn_nodemanager' do
       expect(chef_run).to_not stop_service(pkg)
     end
 
-    it 'ensures /usr/lib/hadoop-yarn/bin/container-executor has proper permissions' do
-      expect(chef_run).to create_file('/usr/lib/hadoop-yarn/bin/container-executor').with(
+    it 'ensures /usr/hdp/current/hadoop-yarn-nodemanager/bin/container-executor has proper permissions' do
+      expect(chef_run).to create_file('/usr/hdp/current/hadoop-yarn-nodemanager/bin/container-executor').with(
         user: 'root',
         group: 'yarn',
         mode: '6050'
