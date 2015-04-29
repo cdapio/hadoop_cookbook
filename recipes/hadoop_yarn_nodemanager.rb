@@ -52,7 +52,7 @@ end
 end
 
 # Ensure permissions for secure Hadoop... this *should* be no-op
-container_executor_path = 
+container_executor_path =
   if node['hadoop']['distribution'] == 'hdp' && node['hadoop']['distribution_version'].to_f == 2.2
     '/usr/hdp/current/hadoop-yarn-nodemanager/bin'
   else

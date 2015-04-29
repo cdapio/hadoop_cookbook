@@ -90,7 +90,6 @@ describe 'hadoop::hive' do
         expect(link).to link_to("/usr/share/java/#{pkg}.jar")
       end
     end
-
   end
 
   context 'on Ubuntu 12.04' do
