@@ -173,7 +173,7 @@ when 'cdh'
 
     # rubocop: disable Metrics/BlockNesting
     case codename
-    when 'raring', 'saucy', 'trusty'
+    when 'raring', 'saucy'
       Chef::Log.warn('This version of Ubuntu is unsupported by Cloudera! Bug reports should include patches.')
       codename = 'precise'
     when 'trusty'
