@@ -86,7 +86,7 @@ describe 'hadoop::hive' do
 
     %w(mysql-connector-java postgresql-jdbc).each do |pkg|
       it "link #{pkg}.jar" do
-        link = chef_run.link("/usr/hdp/current/hive-server2/lib/#{pkg}.jar")
+        link = chef_run.link("/usr/hdp/current/hive-client/lib/#{pkg}.jar")
         expect(link).to link_to("/usr/share/java/#{pkg}.jar")
       end
     end
@@ -127,7 +127,7 @@ describe 'hadoop::hive' do
 
     %w(mysql-connector-java postgresql-jdbc4).each do |jar|
       it "link #{jar}.jar" do
-        link = chef_run.link("/usr/hdp/current/hive-server2/lib/#{jar}.jar")
+        link = chef_run.link("/usr/hdp/current/hive-client/lib/#{jar}.jar")
         expect(link).to link_to("/usr/share/java/#{jar}.jar")
       end
     end
