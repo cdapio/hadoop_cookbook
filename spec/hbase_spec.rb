@@ -55,6 +55,10 @@ describe 'hadoop::hbase' do
       expect(chef_run).to create_template('/etc/hbase/conf.chef/hbase-env.sh')
     end
 
+    it 'sets hbase limits' do
+      expect(chef_run).to create_limits_config('hbase')
+    end
+
     it 'runs execute[update hbase-conf alternatives]' do
       expect(chef_run).to run_execute('update hbase-conf alternatives')
     end

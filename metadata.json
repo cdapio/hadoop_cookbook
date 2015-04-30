@@ -16,7 +16,8 @@
   "dependencies": {
     "yum": ">= 3.0",
     "apt": ">= 0.0.0",
-    "sysctl": ">= 0.0.0"
+    "sysctl": ">= 0.0.0",
+    "limits": ">= 0.0.0"
   },
   "recommendations": {
     "java": "~> 1.21"

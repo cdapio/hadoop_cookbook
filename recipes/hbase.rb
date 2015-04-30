@@ -136,6 +136,17 @@ if node['hbase'].key?('jaas')
   end
 end # End jaas.conf
 
+# limits.d settings
+if node['hbase'].key?('limits') && !node['hbase']['limits'].empty?
+  l = []
+  node['hbase']['limits'].each do |k, v|
+    l << { domain: 'hbase', type: '-', item: k, value: v }
+  end
+  limits_config 'hbase' do
+    limits l
+  end
+end # End limits.d
+
 # Update alternatives to point to our configuration
 execute 'update hbase-conf alternatives' do
   command "update-alternatives --install /etc/hbase/conf hbase-conf /etc/hbase/#{node['hbase']['conf_dir']} 50"
