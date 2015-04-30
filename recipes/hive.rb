@@ -26,7 +26,8 @@ end
 hive_conf_dir = "/etc/hive/#{node['hive']['conf_dir']}"
 
 hive_data_dir =
-  if node['hadoop']['distribution'] == 'hdp' && node['hadoop']['distribution_version'].to_f == 2.2
+  if node['hadoop']['distribution'] == 'hdp' && (node['hadoop']['distribution_version'].to_s == '2' || \
+                                                 node['hadoop']['distribution_version'].to_f == 2.2)
     '/usr/hdp/current/hive-client/lib'
   else
     '/usr/lib/hive/lib'
