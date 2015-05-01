@@ -227,20 +227,22 @@ end
 # limits.d settings
 if node['hadoop'].key?('limits') && !node['hadoop']['limits'].empty?
   %w(hdfs mapred yarn).each do |u|
-    l = []
-    node['hadoop']['limits'].each do |k, v|
-      l << { domain: u, type: '-', item: k, value: v }
+    ulimit_domain u do
+      node['hadoop']['limits'].each do |k, v|
+        rule do
+          item k
+          type '-'
+          value v
+        end
+      end
     end
-
-    limits_config u do
-      action :create
-      limits l
-    end
-  end
-  limits_config 'mapreduce' do
-    action :delete
   end
 end # End limits.d
+
+# Remove extra mapreduce file, if it exists
+file '/etc/security/limits.d/mapreduce.conf' do
+  action :delete
+end
 
 # Update alternatives to point to our configuration
 execute 'update hadoop-conf alternatives' do
