@@ -33,7 +33,7 @@ node.default['hadoop']['distribution_version'] =
   if node['hadoop']['distribution'] == 'hdp'
     '2.1.7.0'
   elsif node['hadoop']['distribution'] == 'cdh'
-    '5'
+    '5.3.2'
   elsif node['hadoop']['distribution'] == 'bigtop'
     '0.8.0'
   end
@@ -161,6 +161,7 @@ when 'cdh'
   if node['hadoop']['distribution_version'].to_f >= 5.3 && node.key?('java') && node['java'].key?('jdk_version') && node['java']['jdk_version'] < 7
     Chef::Application.fatal!('CDH 5.3 and above require Java 7 or higher')
   end
+  Chef::Log.warn("Short versions for node['hadoop']['distribution_version'] are deprecated! Please use full version!") if node['hadoop']['distribution_version'].to_s == '5'
   case node['platform_family']
   when 'rhel'
     yum_base_url = "http://archive.cloudera.com/cdh#{cdh_release}/redhat"
