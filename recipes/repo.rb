@@ -31,9 +31,9 @@ end
 # Set defaults for version, based on distribution
 node.default['hadoop']['distribution_version'] =
   if node['hadoop']['distribution'] == 'hdp'
-    '2.1'
+    '2.1.7.0'
   elsif node['hadoop']['distribution'] == 'cdh'
-    '5'
+    '5.3.2'
   elsif node['hadoop']['distribution'] == 'bigtop'
     '0.8.0'
   end
@@ -47,6 +47,8 @@ when 'hdp'
   when '2.0'
     hdp_version = '2.0.4.0'
     hdp_update_version = '2.0.13.0'
+    Chef::Log.warn("Short versions for node['hadoop']['distribution_version'] are deprecated! Please use full version!")
+    node.override['hadoop']['distribution_version'] = hdp_update_version
   when '2.0.4.0', '2.1.1.0', '2.2.0.0'
     hdp_version = node['hadoop']['distribution_version']
     hdp_update_version = nil
@@ -56,9 +58,14 @@ when 'hdp'
   when '2.1'
     hdp_version = '2.1.1.0'
     hdp_update_version = '2.1.7.0'
-  when '2.2.4.2', '2.2', '2'
+  when '2.2.4.2'
     hdp_version = '2.2.0.0'
     hdp_update_version = '2.2.4.2'
+  when '2.2', '2'
+    hdp_version = '2.2.0.0'
+    hdp_update_version = '2.2.4.2'
+    Chef::Log.warn("Short versions for node['hadoop']['distribution_version'] are deprecated! Please use full version!")
+    node.override['hadoop']['distribution_version'] = hdp_update_version
   else
     Chef::Application.fatal!('This cookbook only supports HDP 2.x')
   end
@@ -154,6 +161,7 @@ when 'cdh'
   if node['hadoop']['distribution_version'].to_f >= 5.3 && node.key?('java') && node['java'].key?('jdk_version') && node['java']['jdk_version'] < 7
     Chef::Application.fatal!('CDH 5.3 and above require Java 7 or higher')
   end
+  Chef::Log.warn("Short versions for node['hadoop']['distribution_version'] are deprecated! Please use full version!") if node['hadoop']['distribution_version'].to_s == '5'
   case node['platform_family']
   when 'rhel'
     yum_base_url = "http://archive.cloudera.com/cdh#{cdh_release}/redhat"
