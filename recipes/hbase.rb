@@ -137,14 +137,15 @@ if node['hbase'].key?('jaas')
 end # End jaas.conf
 
 # limits.d settings
-if node['hbase'].key?('limits') && !node['hbase']['limits'].empty?
-  l = []
+ulimit_domain 'hbase' do
   node['hbase']['limits'].each do |k, v|
-    l << { domain: 'hbase', type: '-', item: k, value: v }
+    rule do
+      item k
+      type '-'
+      value v
+    end
   end
-  limits_config 'hbase' do
-    limits l
-  end
+  only_if { node['hbase'].key?('limits') && !node['hbase']['limits'].empty? }
 end # End limits.d
 
 # Update alternatives to point to our configuration

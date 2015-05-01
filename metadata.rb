@@ -9,7 +9,7 @@ version          '1.13.1'
 depends 'yum', '>= 3.0'
 depends 'apt'
 depends 'sysctl'
-depends 'limits'
+depends 'ulimit'
 
 recommends 'java', '~> 1.21'
 
