@@ -125,6 +125,16 @@ describe 'hadoop::default' do
       expect(chef_run).to run_execute('fix-hdp-jsvc-path')
     end
 
+    it 'sets limits for hdfs/mapred/yarn' do
+      %w(hdfs mapred yarn).each do |u|
+        expect(chef_run).to create_ulimit_domain(u)
+      end
+    end
+
+    it 'deletes redundant mapreduce limits' do
+      expect(chef_run).to delete_file('/etc/security/limits.d/mapreduce.conf')
+    end
+
     it 'runs execute[update hadoop-conf alternatives]' do
       expect(chef_run).to run_execute('update hadoop-conf alternatives')
     end

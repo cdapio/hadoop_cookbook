@@ -1,6 +1,23 @@
 hadoop CHANGELOG
 ===============
 
+Unreleased
+----------
+- Transparent Hugepages are not universally available ( Issue: #156 )
+- Support HDP 2.2.4.2 repo ( Issue: #160 )
+- Fix YARN/Hive/Oozie PATHs for HDP 2.2 ( Issue: #161 )
+- Official CDH5 repo for Trusty ( Issue: #162 )
+- Set user limits by attribute ( Issues: #163 #165 [COOK-35](https://issues.cask.co/browse/COOK-35) )
+- Fix extjs link ( Issues: #164 [COOK-36](https://issues.cask.co/browse/COOK-36) )
+- Use HDP mysql-connector-java ( Issues: #166 [COOK-34](https://issues.cask.co/browse/COOK-34) )
+- Deprecate short versions ( Issue: #167 )
+
+v.1.13.1 (Apr 15, 2015)
+-----------------------
+- Fix YARN AM staging dir ( Issues: #157 [COOK-30](https://issues.cask.co/browse/COOK-30) )
+- Support HDP 2.0.13.0 and bump HDP-UTILS to 1.1.0.20 ( Issue: #158 )
+- Document issue tracker location ( Issues: #159 [COOK-32](https://issues.cask.co/browse/COOK-32) )
+
 v1.13.0 (Mar 31, 2015)
 ----------------------
 - Enable system tuning ( Issue: #148 )

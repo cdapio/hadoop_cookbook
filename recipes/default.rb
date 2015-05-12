@@ -218,7 +218,30 @@ end # End hadoop.tmp.dir
 # Some HDP versions ship broken init scripts/config
 execute 'fix-hdp-jsvc-path' do
   command 'sed -i -e "/JSVC_HOME=/ s:libexec:lib:" /etc/default/hadoop'
-  only_if { node['hadoop']['distribution'] == 'hdp' }
+  only_if do
+    node['hadoop']['distribution'] == 'hdp' && (node['hadoop']['distribution_version'].to_s == '2' || \
+                                                node['hadoop']['distribution_version'].to_f == 2.1)
+  end
+end
+
+# limits.d settings
+if node['hadoop'].key?('limits') && !node['hadoop']['limits'].empty?
+  %w(hdfs mapred yarn).each do |u|
+    ulimit_domain u do
+      node['hadoop']['limits'].each do |k, v|
+        rule do
+          item k
+          type '-'
+          value v
+        end
+      end
+    end
+  end
+end # End limits.d
+
+# Remove extra mapreduce file, if it exists
+file '/etc/security/limits.d/mapreduce.conf' do
+  action :delete
 end
 
 # Update alternatives to point to our configuration

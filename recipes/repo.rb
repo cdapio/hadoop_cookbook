@@ -2,7 +2,7 @@
 # Cookbook Name:: hadoop
 # Recipe:: repo
 #
-# Copyright © 2013-2014 Cask Data, Inc.
+# Copyright © 2013-2015 Cask Data, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -31,9 +31,9 @@ end
 # Set defaults for version, based on distribution
 node.default['hadoop']['distribution_version'] =
   if node['hadoop']['distribution'] == 'hdp'
-    '2.1'
+    '2.1.7.0'
   elsif node['hadoop']['distribution'] == 'cdh'
-    '5'
+    '5.3.2'
   elsif node['hadoop']['distribution'] == 'bigtop'
     '0.8.0'
   end
@@ -41,13 +41,15 @@ node.default['hadoop']['distribution_version'] =
 case node['hadoop']['distribution']
 when 'hdp'
   case node['hadoop']['distribution_version']
-  when '2.0.5.0', '2.0.6.0', '2.0.6.1', '2.0.10.0', '2.0.11.0', '2.0.12.0'
+  when '2.0.5.0', '2.0.6.0', '2.0.6.1', '2.0.10.0', '2.0.11.0', '2.0.12.0', '2.0.13.0'
     hdp_version = '2.0.4.0'
     hdp_update_version = node['hadoop']['distribution_version']
   when '2.0'
     hdp_version = '2.0.4.0'
-    hdp_update_version = '2.0.12.0'
-  when '2.1.1.0', '2.0.4.0'
+    hdp_update_version = '2.0.13.0'
+    Chef::Log.warn("Short versions for node['hadoop']['distribution_version'] are deprecated! Please use full version!")
+    node.override['hadoop']['distribution_version'] = hdp_update_version
+  when '2.0.4.0', '2.1.1.0', '2.2.0.0'
     hdp_version = node['hadoop']['distribution_version']
     hdp_update_version = nil
   when '2.1.2.0', '2.1.2.1', '2.1.3.0', '2.1.4.0', '2.1.5.0', '2.1.7.0'
@@ -56,14 +58,19 @@ when 'hdp'
   when '2.1'
     hdp_version = '2.1.1.0'
     hdp_update_version = '2.1.7.0'
-  when '2.2.0.0', '2.2', '2'
+  when '2.2.4.2'
     hdp_version = '2.2.0.0'
-    hdp_update_version = nil
+    hdp_update_version = '2.2.4.2'
+  when '2.2', '2'
+    hdp_version = '2.2.0.0'
+    hdp_update_version = '2.2.4.2'
+    Chef::Log.warn("Short versions for node['hadoop']['distribution_version'] are deprecated! Please use full version!")
+    node.override['hadoop']['distribution_version'] = hdp_update_version
   else
     Chef::Application.fatal!('This cookbook only supports HDP 2.x')
   end
 
-  hdp_utils_version = '1.1.0.19'
+  hdp_utils_version = '1.1.0.20'
 
   case node['platform_family']
   when 'rhel'
@@ -119,7 +126,16 @@ when 'hdp'
       os = "#{node['platform']}12"
     end
     hdp_update_version = hdp_version if hdp_update_version.nil?
-    apt_repo_url = node['hadoop']['apt_repo_url'] ? node['hadoop']['apt_repo_url'] : "#{apt_base_url}/#{os}/#{hdp_update_version}"
+    hdp_apt_repo_path =
+      case hdp_update_version
+      when '2.2.0.0'
+        "2.x/GA/#{hdp_update_version}"
+      when '2.2.4.2'
+        "2.x/updates/#{hdp_update_version}"
+      else
+        hdp_update_version
+      end
+    apt_repo_url = node['hadoop']['apt_repo_url'] ? node['hadoop']['apt_repo_url'] : "#{apt_base_url}/#{os}/#{hdp_apt_repo_path}"
     # Hortonworks don't know how to provide a key, but we do
     apt_repo_key_url = node['hadoop']['apt_repo_key_url'] ? node['hadoop']['apt_repo_key_url'] : "#{apt_base_url}/centos6/#{key}/#{key}-Jenkins"
 
@@ -145,6 +161,7 @@ when 'cdh'
   if node['hadoop']['distribution_version'].to_f >= 5.3 && node.key?('java') && node['java'].key?('jdk_version') && node['java']['jdk_version'] < 7
     Chef::Application.fatal!('CDH 5.3 and above require Java 7 or higher')
   end
+  Chef::Log.warn("Short versions for node['hadoop']['distribution_version'] are deprecated! Please use full version!") if node['hadoop']['distribution_version'].to_s == '5'
   case node['platform_family']
   when 'rhel'
     yum_base_url = "http://archive.cloudera.com/cdh#{cdh_release}/redhat"
@@ -164,7 +181,7 @@ when 'cdh'
 
     # rubocop: disable Metrics/BlockNesting
     case codename
-    when 'raring', 'saucy', 'trusty'
+    when 'raring', 'saucy'
       Chef::Log.warn('This version of Ubuntu is unsupported by Cloudera! Bug reports should include patches.')
       codename = 'precise'
     when 'trusty'

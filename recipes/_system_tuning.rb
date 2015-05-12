@@ -23,7 +23,6 @@ sysctl_param 'vm.swappiness' do
   value 0
 end
 
-# select transparent_hugepage file
 case node['platform_family']
 when 'debian', 'suse'
   thp_defrag = '/sys/kernel/mm/transparent_hugepage/defrag'
@@ -31,8 +30,7 @@ when 'rhel'
   thp_defrag = '/sys/kernel/mm/redhat_transparent_hugepage/defrag'
 end
 
-# disable transparent_hugepage (if exists, file missing on AWS Ubuntu images)
 execute 'disable-transparent-hugepage-compaction' do
-  command "(ls #{thp_defrag} && echo never #{thp_defrag}) || (ls #{thp_defrag} || exit 0)"
-  not_if "(ls #{thp_defrag} && grep '\[never\]' #{thp_defrag}) || (ls #{thp_defrag} || exit 0)"
+  command "echo never > #{thp_defrag}"
+  not_if "ls #{thp_defrag} && grep '\[never\]' #{thp_defrag}"
 end
