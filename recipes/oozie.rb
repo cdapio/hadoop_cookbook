@@ -40,37 +40,19 @@ end
 
 oozie_conf_dir = "/etc/oozie/#{node['oozie']['conf_dir']}"
 oozie_data_dir = '/var/lib/oozie'
-java_share_dir = '/usr/share/java'
 
-case node['platform_family']
-when 'debian'
-  pkgs = %w(
-    mysql-connector-java
-    libpostgresql-jdbc-java
-  )
-  jars = %w(
-    mysql-connector-java
-    postgresql-jdbc4
-  )
-when 'rhel'
-  case node['platform_version'].to_i
-  when 6
-    pkgs = %w(
-      mysql-connector-java
-      postgresql-jdbc
-    )
-    jars = pkgs
+oozie_sql =
+  if node['oozie'].key?('oozie_site') && node['oozie']['oozie_site'].key?('oozie.service.JPAService.jdbc.url')
+    node['oozie']['oozie_site']['oozie.service.JPAService.jdbc.url'].split(':')[1]
   else
-    Chef::Log.warn('You must download and install JDBC connectors')
-    pkgs = nil
+    'derby'
   end
-end
 
-pkgs.each do |p|
-  package p do
-    action :install
-  end
-end
+node.default['hadoop']['sql_connector'] = oozie_sql
+include_recipe 'hadoop::_sql_connectors'
+
+java_share_dir = '/usr/share/java'
+jars = node['hadoop']['sql_jars']
 
 jars.each do |jar|
   link "#{oozie_data_dir}/#{jar}.jar" do

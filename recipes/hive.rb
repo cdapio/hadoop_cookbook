@@ -33,37 +33,18 @@ hive_data_dir =
     '/usr/lib/hive/lib'
   end
 
-java_share_dir = '/usr/share/java'
-
-case node['platform_family']
-when 'debian'
-  pkgs = %w(
-    mysql-connector-java
-    libpostgresql-jdbc-java
-  )
-  jars = %w(
-    mysql-connector-java
-    postgresql-jdbc4
-  )
-when 'rhel'
-  case node['platform_version'].to_i
-  when 6
-    pkgs = %w(
-      mysql-connector-java
-      postgresql-jdbc
-    )
-    jars = pkgs
+hive_sql =
+  if node['hive'].key?('hive_site') && node['hive']['hive_site'].key?('javax.jdo.option.ConnectionURL')
+    node['hive']['hive_site']['javax.jdo.option.ConnectionURL'].split(':')[1]
   else
-    Chef::Log.warn('You must download and install JDBC connectors')
-    pkgs = nil
+    'derby'
   end
-end
 
-pkgs.each do |pkg|
-  package pkg do
-    action :install
-  end
-end
+node.default['hadoop']['sql_connector'] = hive_sql
+include_recipe 'hadoop::_sql_connectors'
+
+java_share_dir = '/usr/share/java'
+jars = node['hadoop']['sql_jars']
 
 jars.each do |jar|
   link "#{hive_data_dir}/#{jar}.jar" do
