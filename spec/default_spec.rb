@@ -12,7 +12,7 @@ describe 'hadoop::default' do
         node.default['hadoop']['hadoop_env']['hadoop_log_dir'] = '/data/log/hadoop-hdfs'
         node.default['hadoop']['yarn_env']['yarn_log_dir'] = '/var/log/hadoop-yarn'
         stub_command(/update-alternatives --display /).and_return(false)
-        stub_command('test -L /var/log/hadoop-hdfs').and_return(false)
+        stub_command(/test -L /).and_return(false)
       end.converge(described_recipe)
     end
 
