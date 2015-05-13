@@ -1,9 +1,9 @@
 require 'spec_helper'
 
 describe 'hadoop::zookeeper_server' do
-  context 'on Centos 6.5 x86_64' do
+  context 'on Centos 6.6 x86_64' do
     let(:chef_run) do
-      ChefSpec::SoloRunner.new(platform: 'centos', version: 6.5) do |node|
+      ChefSpec::SoloRunner.new(platform: 'centos', version: 6.6) do |node|
         node.automatic['domain'] = 'example.com'
         node.automatic['hostname'] = 'localhost'
         node.default['zookeeper']['zoocfg']['dataDir'] = '/var/lib/zookeeper'

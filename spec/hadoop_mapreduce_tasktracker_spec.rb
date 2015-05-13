@@ -1,9 +1,9 @@
 require 'spec_helper'
 
 describe 'hadoop::hadoop_mapreduce_tasktracker' do
-  context 'on Centos 6.5 with CDH' do
+  context 'on Centos 6.6 with CDH' do
     let(:chef_run) do
-      ChefSpec::SoloRunner.new(platform: 'centos', version: 6.5) do |node|
+      ChefSpec::SoloRunner.new(platform: 'centos', version: 6.6) do |node|
         node.automatic['domain'] = 'example.com'
         node.override['hadoop']['distribution'] = 'cdh'
         stub_command('update-alternatives --display hadoop-conf | grep best | awk \'{print $5}\' | grep /etc/hadoop/conf.chef').and_return(false)
@@ -30,9 +30,9 @@ describe 'hadoop::hadoop_mapreduce_tasktracker' do
     end
   end
 
-  context 'on Centos 6.5 with HDP' do
+  context 'on Centos 6.6 with HDP' do
     let(:chef_run) do
-      ChefSpec::SoloRunner.new(platform: 'centos', version: 6.5) do |node|
+      ChefSpec::SoloRunner.new(platform: 'centos', version: 6.6) do |node|
         node.automatic['domain'] = 'example.com'
         stub_command('update-alternatives --display hadoop-conf | grep best | awk \'{print $5}\' | grep /etc/hadoop/conf.chef').and_return(false)
         stub_command(%r{/sys/kernel/mm/(.*)transparent_hugepage/defrag}).and_return(false)

@@ -1,9 +1,9 @@
 require 'spec_helper'
 
 describe 'hadoop::spark_master' do
-  context 'on Centos 6.5 x86_64' do
+  context 'on Centos 6.6 x86_64' do
     let(:chef_run) do
-      ChefSpec::SoloRunner.new(platform: 'centos', version: 6.5) do |node|
+      ChefSpec::SoloRunner.new(platform: 'centos', version: 6.6) do |node|
         node.automatic['domain'] = 'example.com'
         node.default['spark']['release']['install'] = true
         stub_command('test -L /var/log/spark').and_return(false)
@@ -19,7 +19,7 @@ describe 'hadoop::spark_master' do
 
   context 'using CDH 5' do
     let(:chef_run) do
-      ChefSpec::SoloRunner.new(platform: 'centos', version: 6.5) do |node|
+      ChefSpec::SoloRunner.new(platform: 'centos', version: 6.6) do |node|
         node.automatic['domain'] = 'example.com'
         node.override['hadoop']['distribution'] = 'cdh'
         node.override['hadoop']['distribution_version'] = '5.3.2'

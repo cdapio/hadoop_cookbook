@@ -1,9 +1,9 @@
 require 'spec_helper'
 
 describe 'hadoop::oozie' do
-  context 'on Centos 6.5 x86_64' do
+  context 'on Centos 6.6 x86_64' do
     let(:chef_run) do
-      ChefSpec::SoloRunner.new(platform: 'centos', version: 6.5) do |node|
+      ChefSpec::SoloRunner.new(platform: 'centos', version: 6.6) do |node|
         node.automatic['domain'] = 'example.com'
         node.default['oozie']['oozie_env']['oozie_log_dir'] = '/data/log/oozie'
         node.default['oozie']['oozie_site']['example_property'] = 'test'

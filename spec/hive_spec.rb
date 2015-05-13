@@ -1,9 +1,9 @@
 require 'spec_helper'
 
 describe 'hadoop::hive' do
-  context 'on Centos 6.5 x86_64' do
+  context 'on Centos 6.6 x86_64' do
     let(:chef_run) do
-      ChefSpec::SoloRunner.new(platform: 'centos', version: 6.5) do |node|
+      ChefSpec::SoloRunner.new(platform: 'centos', version: 6.6) do |node|
         node.automatic['domain'] = 'example.com'
         node.default['hive']['hive_site']['hive.exec.local.scratchdir'] = '/tmp/hive/scratch'
         node.default['hive']['hive_env']['hive_log_dir'] = '/data/log/hive'
@@ -73,7 +73,7 @@ describe 'hadoop::hive' do
 
   context 'using HDP 2.2' do
     let(:chef_run) do
-      ChefSpec::SoloRunner.new(platform: 'centos', version: 6.5) do |node|
+      ChefSpec::SoloRunner.new(platform: 'centos', version: 6.6) do |node|
         node.override['hadoop']['distribution'] = 'hdp'
         node.override['hadoop']['distribution_version'] = '2.2.4.2'
         node.automatic['domain'] = 'example.com'
