@@ -25,33 +25,6 @@ end
 
 hive_conf_dir = "/etc/hive/#{node['hive']['conf_dir']}"
 
-hive_data_dir =
-  if node['hadoop']['distribution'] == 'hdp' && (node['hadoop']['distribution_version'].to_s == '2' || \
-                                                 node['hadoop']['distribution_version'].to_f == 2.2)
-    '/usr/hdp/current/hive-client/lib'
-  else
-    '/usr/lib/hive/lib'
-  end
-
-hive_sql =
-  if node['hive'].key?('hive_site') && node['hive']['hive_site'].key?('javax.jdo.option.ConnectionURL')
-    node['hive']['hive_site']['javax.jdo.option.ConnectionURL'].split(':')[1]
-  else
-    'derby'
-  end
-
-node.default['hadoop']['sql_connector'] = hive_sql
-include_recipe 'hadoop::_sql_connectors'
-
-java_share_dir = '/usr/share/java'
-jars = node['hadoop']['sql_jars']
-
-jars.each do |jar|
-  link "#{hive_data_dir}/#{jar}.jar" do
-    to "#{java_share_dir}/#{jar}.jar"
-  end
-end
-
 directory hive_conf_dir do
   mode '0755'
   owner 'root'
