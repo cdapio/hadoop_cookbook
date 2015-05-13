@@ -2,7 +2,7 @@
 # Cookbook Name:: hadoop
 # Recipe:: default
 #
-# Copyright © 2013-2014 Cask Data, Inc.
+# Copyright © 2013-2015 Cask Data, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -18,6 +18,7 @@
 #
 
 include_recipe 'hadoop::repo'
+include_recipe 'hadoop::_hadoop_checkconfig'
 
 package 'hadoop-client' do
   action :install
@@ -35,7 +36,6 @@ end
 
 # Setup capacity-scheduler.xml core-site.xml hadoop-policy.xml hdfs-site.xml mapred-site.xml yarn-site.xml
 %w(capacity_scheduler core_site hadoop_policy hdfs_site mapred_site yarn_site).each do |sitefile|
-  next unless node['hadoop'].key?(sitefile)
   my_vars = { :options => node['hadoop'][sitefile] }
 
   template "#{hadoop_conf_dir}/#{sitefile.gsub('_', '-')}.xml" do
@@ -45,6 +45,7 @@ end
     group 'root'
     action :create
     variables my_vars
+    only_if { node['hadoop'].key?(sitefile) && !node['hadoop'][sitefile].empty? }
   end
 end # End capacity-scheduler.xml core-site.xml hadoop-policy.xml hdfs-site.xml mapred-site.xml yarn-site.xml
 
@@ -56,45 +57,36 @@ fair_scheduler_file =
     "#{hadoop_conf_dir}/fair-scheduler.xml"
   end
 
+# This is a bit redundant, but necessary to pass foodcritic testing without duplicating resources
 fair_scheduler_dir = File.dirname(fair_scheduler_file.gsub('file://', ''))
-
-if node['hadoop'].key?('fair_scheduler')
-  # my_vars = { :options => node['hadoop']['fair_scheduler'] }
-  my_vars = node['hadoop']['fair_scheduler']
-
-  # This is a bit redundant, but necessary to pass foodcritic testing without duplicating resources
-  unless fair_scheduler_dir == hadoop_conf_dir
-    directory fair_scheduler_dir do
-      mode '0755'
-      owner 'root'
-      group 'root'
-      action :create
-      recursive true
-      not_if { fair_scheduler_dir == hadoop_conf_dir }
-    end
-  end
-
-  template fair_scheduler_file.gsub('file://', '') do
-    source 'fair-scheduler.xml.erb'
-    mode '0644'
+unless fair_scheduler_dir == hadoop_conf_dir
+  directory fair_scheduler_dir do
+    mode '0755'
     owner 'root'
     group 'root'
     action :create
-    variables my_vars
+    recursive true
+    not_if { fair_scheduler_dir == hadoop_conf_dir }
   end
-elsif node['hadoop'].key?('yarn_site') && node['hadoop']['yarn_site'].key?('yarn.resourcemanager.scheduler.class') &&
-      node['hadoop']['yarn_site']['yarn.resourcemanager.scheduler.class'] == 'org.apache.hadoop.yarn.server.resourcemanager.scheduler.fair.FairScheduler'
-  Chef::Application.fatal!('Set YARN scheduler to fair-scheduler without configuring it, first')
+end
+
+template fair_scheduler_file.gsub('file://', '') do
+  source 'fair-scheduler.xml.erb'
+  mode '0644'
+  owner 'root'
+  group 'root'
+  action :create
+  variables node['hadoop']['fair_scheduler']
+  only_if { node['hadoop'].key?('fair_scheduler') && !node['hadoop']['fair_scheduler'].empty? }
 end # End fair-scheduler.xml
 
 # Setup hadoop-env.sh mapred-env.sh yarn-env.sh
 %w(hadoop_env mapred_env yarn_env).each do |envfile|
-  next unless node['hadoop'].key?(envfile)
   my_vars = { :options => node['hadoop'][envfile] }
 
   # rubocop:disable Style/Next
   %w(hadoop hadoop_mapred yarn).each do |svc|
-    next unless node['hadoop'][envfile].key?("#{svc}_log_dir")
+    next unless node['hadoop'].key?(envfile) && node['hadoop'][envfile].key?("#{svc}_log_dir")
     # Create directory
     directory node['hadoop'][envfile]["#{svc}_log_dir"] do
       log_dir_owner =
@@ -120,6 +112,7 @@ end # End fair-scheduler.xml
       else
         svc
       end
+    # Prevent duplicate resources
     unless node['hadoop'][envfile]["#{svc}_log_dir"] == "/var/log/hadoop-#{log_dir}"
       # Delete default directory, if we aren't set to it
       directory "/var/log/hadoop-#{log_dir}" do
@@ -142,12 +135,12 @@ end # End fair-scheduler.xml
     group 'root'
     action :create
     variables my_vars
+    only_if { node['hadoop'].key?(envfile) && !node['hadoop'][envfile].empty? }
   end
 end # End hadoop-env.sh yarn-env.sh
 
 # Setup hadoop-metrics.properties log4j.properties
 %w(hadoop_metrics log4j).each do |propfile|
-  next unless node['hadoop'].key?(propfile)
   my_vars = { :properties => node['hadoop'][propfile] }
 
   template "#{hadoop_conf_dir}/#{propfile.gsub('_', '-')}.properties" do
@@ -157,21 +150,20 @@ end # End hadoop-env.sh yarn-env.sh
     group 'root'
     action :create
     variables my_vars
+    only_if { node['hadoop'].key?(propfile) && !node['hadoop'][propfile].empty? }
   end
 end # End hadoop-metrics.properties log4j.properties
 
 # Setup container-executor.cfg
-if node['hadoop'].key?('container_executor')
-  my_vars = { :properties => node['hadoop']['container_executor'] }
-
-  template "#{hadoop_conf_dir}/container-executor.cfg" do
-    source 'generic.properties.erb'
-    mode '0440'
-    owner 'root'
-    group 'yarn'
-    action :create
-    variables my_vars
-  end
+my_var = { :properties => node['hadoop']['container_executor'] }
+template "#{hadoop_conf_dir}/container-executor.cfg" do
+  source 'generic.properties.erb'
+  mode '0440'
+  owner 'root'
+  group 'yarn'
+  action :create
+  variables my_var
+  only_if { node['hadoop'].key?('container_executor') && !node['hadoop']['container_executor'].empty? }
 end # End container-executor.cfg
 
 # Set hadoop.tmp.dir
@@ -225,17 +217,16 @@ execute 'fix-hdp-jsvc-path' do
 end
 
 # limits.d settings
-if node['hadoop'].key?('limits') && !node['hadoop']['limits'].empty?
-  %w(hdfs mapred yarn).each do |u|
-    ulimit_domain u do
-      node['hadoop']['limits'].each do |k, v|
-        rule do
-          item k
-          type '-'
-          value v
-        end
+%w(hdfs mapred yarn).each do |u|
+  ulimit_domain u do
+    node['hadoop']['limits'].each do |k, v|
+      rule do
+        item k
+        type '-'
+        value v
       end
     end
+    only_if { node['hadoop'].key?('limits') && !node['hadoop']['limits'].empty? }
   end
 end # End limits.d
 
