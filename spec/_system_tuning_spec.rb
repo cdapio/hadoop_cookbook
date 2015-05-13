@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe 'hadoop::_system_tuning' do
-  context 'on Centos 6.6 x86_64' do
+  context 'on Centos 6.6' do
     let(:chef_run) do
       ChefSpec::SoloRunner.new(platform: 'centos', version: 6.6) do
         stub_command(%r{/sys/kernel/mm/(.*)transparent_hugepage/defrag}).and_return(false)

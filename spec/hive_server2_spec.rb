@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe 'hadoop::hive_server2' do
-  context 'on Centos 6.6 x86_64' do
+  context 'on Centos 6.6' do
     let(:chef_run) do
       ChefSpec::SoloRunner.new(platform: 'centos', version: 6.6) do |node|
         node.automatic['domain'] = 'example.com'
@@ -35,7 +35,7 @@ describe 'hadoop::hive_server2' do
     end
   end
 
-  context 'on Centos 6.6 x86_64 with CDH' do
+  context 'on Centos 6.6 with CDH' do
     let(:chef_run) do
       ChefSpec::SoloRunner.new(platform: 'centos', version: 6.6) do |node|
         node.automatic['domain'] = 'example.com'
