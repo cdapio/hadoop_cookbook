@@ -9,7 +9,7 @@ describe 'hadoop::hbase' do
         node.default['hbase']['hbase_site']['hbase.rootdir'] = 'hdfs://localhost:8020/hbase'
         node.default['hbase']['hbase_env']['hbase_log_dir'] = '/data/log/hbase'
         stub_command('test -L /var/log/hbase').and_return(false)
-        stub_command('update-alternatives --display hbase-conf | grep best | awk \'{print $5}\' | grep /etc/hbase/conf.chef').and_return(false)
+        stub_command(/update-alternatives --display /).and_return(false)
       end.converge(described_recipe)
     end
 
@@ -69,7 +69,7 @@ describe 'hadoop::hbase' do
       ChefSpec::SoloRunner.new(platform: 'ubuntu', version: 12.04) do |node|
         node.automatic['domain'] = 'example.com'
         node.default['hadoop']['hdfs_site']['dfs.datanode.max.xcievers'] = '4096'
-        stub_command('update-alternatives --display hbase-conf | grep best | awk \'{print $5}\' | grep /etc/hbase/conf.chef').and_return(false)
+        stub_command(/update-alternatives --display /).and_return(false)
       end.converge(described_recipe)
     end
 

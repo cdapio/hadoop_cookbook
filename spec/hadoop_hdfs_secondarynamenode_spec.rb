@@ -7,7 +7,7 @@ describe 'hadoop::hadoop_hdfs_secondarynamenode' do
         node.automatic['domain'] = 'example.com'
         node.default['hadoop']['hdfs_site']['dfs.namenode.checkpoint.dir'] = '/tmp/hadoop-hdfs/dfs/namesecondary'
         node.default['hadoop']['hdfs_site']['dfs.namenode.checkpoint.edits.dir'] = '/tmp/hadoop-hdfs/dfs/namesecondaryedits'
-        stub_command('update-alternatives --display hadoop-conf | grep best | awk \'{print $5}\' | grep /etc/hadoop/conf.chef').and_return(false)
+        stub_command(/update-alternatives --display /).and_return(false)
         stub_command(%r{/sys/kernel/mm/(.*)transparent_hugepage/defrag}).and_return(false)
       end.converge(described_recipe)
     end

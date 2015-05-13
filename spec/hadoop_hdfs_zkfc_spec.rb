@@ -8,7 +8,7 @@ describe 'hadoop::hadoop_hdfs_zkfc' do
         node.default['hadoop']['hdfs_site']['dfs.nameservices'] = 'hdfs'
         node.default['hadoop']['hdfs_site']['fs.defaultFS'] = 'hdfs://hdfs'
         node.default['hadoop']['hdfs_site']['dfs.ha.fencing.methods'] = 'something'
-        stub_command('update-alternatives --display hadoop-conf | grep best | awk \'{print $5}\' | grep /etc/hadoop/conf.chef').and_return(false)
+        stub_command(/update-alternatives --display /).and_return(false)
       end.converge(described_recipe)
     end
     pkg = 'hadoop-hdfs-zkfc'

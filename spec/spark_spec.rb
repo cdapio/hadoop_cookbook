@@ -9,7 +9,7 @@ describe 'hadoop::spark' do
         node.default['spark']['spark_env']['spark_log_dir'] = '/data/log/spark'
         node.default['spark']['spark_site']['spark.eventLog.enabled'] = false
         stub_command('test -L /var/log/spark').and_return(false)
-        stub_command('update-alternatives --display spark-conf | grep best | awk \'{print $5}\' | grep /etc/spark/conf.chef').and_return(false)
+        stub_command(/update-alternatives --display /).and_return(false)
       end.converge(described_recipe)
     end
 
@@ -64,7 +64,7 @@ describe 'hadoop::spark' do
         node.override['hadoop']['distribution'] = 'cdh'
         node.override['hadoop']['distribution_version'] = '5.3.2'
         stub_command('test -L /var/log/spark').and_return(false)
-        stub_command('update-alternatives --display spark-conf | grep best | awk \'{print $5}\' | grep /etc/spark/conf.chef').and_return(false)
+        stub_command(/update-alternatives --display /).and_return(false)
       end.converge(described_recipe)
     end
 

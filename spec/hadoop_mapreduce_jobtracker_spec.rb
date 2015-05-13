@@ -6,7 +6,7 @@ describe 'hadoop::hadoop_mapreduce_jobtracker' do
       ChefSpec::SoloRunner.new(platform: 'centos', version: 6.6) do |node|
         node.automatic['domain'] = 'example.com'
         node.override['hadoop']['distribution'] = 'cdh'
-        stub_command('update-alternatives --display hadoop-conf | grep best | awk \'{print $5}\' | grep /etc/hadoop/conf.chef').and_return(false)
+        stub_command(/update-alternatives --display /).and_return(false)
         stub_command(%r{/sys/kernel/mm/(.*)transparent_hugepage/defrag}).and_return(false)
       end.converge(described_recipe)
     end
@@ -41,7 +41,7 @@ describe 'hadoop::hadoop_mapreduce_jobtracker' do
     let(:chef_run) do
       ChefSpec::SoloRunner.new(platform: 'centos', version: 6.6) do |node|
         node.automatic['domain'] = 'example.com'
-        stub_command('update-alternatives --display hadoop-conf | grep best | awk \'{print $5}\' | grep /etc/hadoop/conf.chef').and_return(false)
+        stub_command(/update-alternatives --display /).and_return(false)
         stub_command(%r{/sys/kernel/mm/(.*)transparent_hugepage/defrag}).and_return(false)
       end.converge(described_recipe)
     end

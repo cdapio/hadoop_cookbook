@@ -7,7 +7,7 @@ describe 'hadoop::spark_master' do
         node.automatic['domain'] = 'example.com'
         node.default['spark']['release']['install'] = true
         stub_command('test -L /var/log/spark').and_return(false)
-        stub_command('update-alternatives --display spark-conf | grep best | awk \'{print $5}\' | grep /etc/spark/conf.chef').and_return(false)
+        stub_command(/update-alternatives --display /).and_return(false)
         stub_command(%r{/sys/kernel/mm/(.*)transparent_hugepage/defrag}).and_return(false)
       end.converge(described_recipe)
     end
@@ -24,7 +24,7 @@ describe 'hadoop::spark_master' do
         node.override['hadoop']['distribution'] = 'cdh'
         node.override['hadoop']['distribution_version'] = '5.3.2'
         stub_command('test -L /var/log/spark').and_return(false)
-        stub_command('update-alternatives --display spark-conf | grep best | awk \'{print $5}\' | grep /etc/spark/conf.chef').and_return(false)
+        stub_command(/update-alternatives --display /).and_return(false)
         stub_command(%r{/sys/kernel/mm/(.*)transparent_hugepage/defrag}).and_return(false)
       end.converge(described_recipe)
     end
