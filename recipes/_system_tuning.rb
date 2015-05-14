@@ -17,6 +17,9 @@
 # limitations under the License.
 #
 
+# Disable SELinux
+include_recipe 'selinux::disabled'
+
 include_recipe 'sysctl::default'
 # Disable swapping
 sysctl_param 'vm.swappiness' do
