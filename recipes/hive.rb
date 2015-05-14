@@ -38,7 +38,7 @@ java_share_dir = '/usr/share/java'
 case node['platform_family']
 when 'debian'
   pkgs = %w(
-    mysql-connector-java
+    libmysql-java
     libpostgresql-jdbc-java
   )
   jars = %w(
