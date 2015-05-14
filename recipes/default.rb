@@ -86,6 +86,7 @@ end # End fair-scheduler.xml
 
   # rubocop:disable Style/Next
   %w(hadoop hadoop_mapred yarn).each do |svc|
+    # Keep next here, in case envfile isn't set, so we don't NPE on directory resource
     next unless node['hadoop'].key?(envfile) && node['hadoop'][envfile].key?("#{svc}_log_dir")
     # Create directory
     directory node['hadoop'][envfile]["#{svc}_log_dir"] do
