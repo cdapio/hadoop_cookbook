@@ -60,25 +60,25 @@ dfs_name_dirs.split(',').each do |dir|
   end
 end
 
-# Are we HA?
+# Are we using automatic failover HA?
 if node['hadoop'].key?('hdfs_site') && node['hadoop']['hdfs_site'].key?('dfs.ha.automatic-failover.enabled') &&
    node['hadoop']['hdfs_site']['dfs.ha.automatic-failover.enabled'].to_s == 'true'
   include_recipe 'hadoop::hadoop_hdfs_ha_checkconfig'
   include_recipe 'hadoop::hadoop_hdfs_zkfc'
+end
 
-  execute 'hdfs-namenode-bootstrap-standby' do
-    command 'hdfs namenode -bootstrapStandby'
-    action :nothing
-    group 'hdfs'
-    user 'hdfs'
-  end
+execute 'hdfs-namenode-bootstrap-standby' do
+  command 'hdfs namenode -bootstrapStandby'
+  action :nothing
+  group 'hdfs'
+  user 'hdfs'
+end
 
-  execute 'hdfs-namenode-initialize-sharededits' do
-    command 'hdfs namenode -initializeSharedEdits'
-    action :nothing
-    group 'hdfs'
-    user 'hdfs'
-  end
+execute 'hdfs-namenode-initialize-sharededits' do
+  command 'hdfs namenode -initializeSharedEdits'
+  action :nothing
+  group 'hdfs'
+  user 'hdfs'
 end
 
 execute 'hdfs-namenode-format' do
