@@ -73,6 +73,10 @@ describe 'hadoop::hbase' do
       end.converge(described_recipe)
     end
 
+    it 'install hbase package' do
+      expect(chef_run).to install_package('hbase')
+    end
+
     it 'install libsnappy1 package' do
       expect(chef_run).to install_package('libsnappy1')
     end
