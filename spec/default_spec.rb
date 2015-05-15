@@ -1,9 +1,9 @@
 require 'spec_helper'
 
 describe 'hadoop::default' do
-  context 'on Centos 6.5 x86_64' do
+  context 'on Centos 6.6' do
     let(:chef_run) do
-      ChefSpec::SoloRunner.new(platform: 'centos', version: 6.5) do |node|
+      ChefSpec::SoloRunner.new(platform: 'centos', version: 6.6) do |node|
         node.automatic['domain'] = 'example.com'
         node.default['hadoop']['hdfs_site']['dfs.datanode.max.transfer.threads'] = '4096'
         node.default['hadoop']['hadoop_policy']['test.property'] = 'blue'
@@ -11,8 +11,8 @@ describe 'hadoop::default' do
         node.default['hadoop']['fair_scheduler']['defaults']['poolMaxJobsDefault'] = '1000'
         node.default['hadoop']['hadoop_env']['hadoop_log_dir'] = '/data/log/hadoop-hdfs'
         node.default['hadoop']['yarn_env']['yarn_log_dir'] = '/var/log/hadoop-yarn'
-        stub_command('test -L /var/log/hadoop-hdfs').and_return(false)
-        stub_command('update-alternatives --display hadoop-conf | grep best | awk \'{print $5}\' | grep /etc/hadoop/conf.chef').and_return(false)
+        stub_command(/update-alternatives --display /).and_return(false)
+        stub_command(/test -L /).and_return(false)
       end.converge(described_recipe)
     end
 
