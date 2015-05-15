@@ -1,16 +1,16 @@
 require 'spec_helper'
 
 describe 'hadoop::zookeeper_server' do
-  context 'on Centos 6.5 x86_64' do
+  context 'on Centos 6.6' do
     let(:chef_run) do
-      ChefSpec::SoloRunner.new(platform: 'centos', version: 6.5) do |node|
+      ChefSpec::SoloRunner.new(platform: 'centos', version: 6.6) do |node|
         node.automatic['domain'] = 'example.com'
         node.automatic['hostname'] = 'localhost'
         node.default['zookeeper']['zoocfg']['dataDir'] = '/var/lib/zookeeper'
         node.default['zookeeper']['zoocfg']['server.1'] = 'localhost:2181'
         node.default['zookeeper']['zookeeper_env']['zookeeper_log_dir'] = '/data/log/zookeeper'
-        stub_command('test -L /var/log/zookeeper').and_return(false)
-        stub_command('update-alternatives --display zookeeper-conf | grep best | awk \'{print $5}\' | grep /etc/zookeeper/conf.chef').and_return(false)
+        stub_command(/test -L /).and_return(false)
+        stub_command(/update-alternatives --display /).and_return(false)
         stub_command('test -e /usr/lib/bigtop-utils/bigtop-detect-javahome').and_return(false)
       end.converge(described_recipe)
     end
