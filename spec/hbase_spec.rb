@@ -6,14 +6,16 @@ describe 'hadoop::hbase' do
       ChefSpec::SoloRunner.new(platform: 'centos', version: 6.6) do |node|
         node.automatic['domain'] = 'example.com'
         node.default['hadoop']['hdfs_site']['dfs.datanode.max.xcievers'] = '4096'
+        node.default['hbase']['hadoop_metrics']['foo'] = 'bar'
         node.default['hbase']['hbase_site']['hbase.rootdir'] = 'hdfs://localhost:8020/hbase'
         node.default['hbase']['hbase_env']['hbase_log_dir'] = '/data/log/hbase'
+        node.default['hbase']['log4j']['log4j.threshold'] = 'ALL'
         stub_command(/test -L /).and_return(false)
         stub_command(/update-alternatives --display /).and_return(false)
       end.converge(described_recipe)
     end
 
-    it 'install hbase package' do
+    it 'installs hbase package' do
       expect(chef_run).to install_package('hbase')
     end
 
@@ -28,9 +30,15 @@ describe 'hadoop::hbase' do
       )
     end
 
-    %w(hbase-policy.xml hbase-site.xml).each do |xml|
-      it "creates #{xml} from template" do
-        expect(chef_run).to create_template("/etc/hbase/conf.chef/#{xml}")
+    %w(
+      hadoop-metrics.properties
+      hbase-env.sh
+      hbase-policy.xml
+      hbase-site.xml
+      log4j.properties
+    ).each do |file|
+      it "creates #{file} from template" do
+        expect(chef_run).to create_template("/etc/hbase/conf.chef/#{file}")
       end
     end
 
@@ -51,10 +59,6 @@ describe 'hadoop::hbase' do
       expect(link).to link_to('/data/log/hbase')
     end
 
-    it 'creates /etc/hbase/conf.chef/hbase-env.sh template' do
-      expect(chef_run).to create_template('/etc/hbase/conf.chef/hbase-env.sh')
-    end
-
     it 'sets hbase limits' do
       expect(chef_run).to create_ulimit_domain('hbase')
     end
@@ -73,7 +77,7 @@ describe 'hadoop::hbase' do
       end.converge(described_recipe)
     end
 
-    it 'install libsnappy1 package' do
+    it 'installs libsnappy1 package' do
       expect(chef_run).to install_package('libsnappy1')
     end
   end

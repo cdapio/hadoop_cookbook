@@ -7,8 +7,11 @@ describe 'hadoop::default' do
         node.automatic['domain'] = 'example.com'
         node.default['hadoop']['hdfs_site']['dfs.datanode.max.transfer.threads'] = '4096'
         node.default['hadoop']['hadoop_policy']['test.property'] = 'blue'
+        node.default['hadoop']['hadoop_metrics']['something.something'] = 'dark.side'
         node.default['hadoop']['mapred_site']['mapreduce.framework.name'] = 'yarn'
+        node.default['hadoop']['mapred_env']['my_test_variable'] = 'test'
         node.default['hadoop']['fair_scheduler']['defaults']['poolMaxJobsDefault'] = '1000'
+        node.default['hadoop']['container_executor']['banned.users'] = 'root'
         node.default['hadoop']['hadoop_env']['hadoop_log_dir'] = '/data/log/hadoop-hdfs'
         node.default['hadoop']['yarn_env']['yarn_log_dir'] = '/var/log/hadoop-yarn'
         stub_command(/update-alternatives --display /).and_return(false)
@@ -58,12 +61,15 @@ describe 'hadoop::default' do
 
     %w(
       capacity-scheduler.xml
+      container-executor.cfg
       core-site.xml
       fair-scheduler.xml
       hadoop-env.sh
+      hadoop-metrics.properties
       hadoop-policy.xml
       hdfs-site.xml
       log4j.properties
+      mapred-env.sh
       mapred-site.xml
       yarn-env.sh
       yarn-site.xml
