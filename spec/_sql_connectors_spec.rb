@@ -13,6 +13,19 @@ describe 'hadoop::_sql_connectors' do
     end
   end
 
+  context 'Using MySQL on Ubuntu 12.04 on CDH' do
+    let(:chef_run) do
+      ChefSpec::SoloRunner.new(platform: 'ubuntu', version: 12.04) do |node|
+        node.default['hadoop']['sql_connector'] = 'mysql'
+        node.override['hadoop']['distribution'] = 'cdh'
+      end.converge(described_recipe)
+    end
+
+    it 'install libmysql-java package' do
+      expect(chef_run).to install_package('libmysql-java')
+    end
+  end
+
   context 'using PostgreSQL on CentOS 6.6 x86_64' do
     let(:chef_run) do
       ChefSpec::SoloRunner.new(platform: 'centos', version: 6.6) do |node|

@@ -25,6 +25,17 @@ package 'hadoop-client' do
   action :install
 end
 
+libhdfs =
+  if node['platform_family'] == 'debian'
+    'libhdfs0'
+  else
+    'hadoop-libhdfs'
+  end
+
+package libhdfs do
+  action :install
+end
+
 hadoop_conf_dir = "/etc/hadoop/#{node['hadoop']['conf_dir']}"
 
 directory hadoop_conf_dir do
