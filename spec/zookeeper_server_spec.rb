@@ -62,6 +62,12 @@ describe 'hadoop::zookeeper_server' do
       expect(chef_run).to create_group('zookeeper')
     end
 
+    it 'manages zookeeper user' do
+      expect(chef_run).to manage_user('zookeeper').with(
+        shell: '/bin/bash'
+      )
+    end
+
     it 'creates zookeeper dataDir' do
       expect(chef_run).to create_directory('/var/lib/zookeeper').with(
         user: 'zookeeper',

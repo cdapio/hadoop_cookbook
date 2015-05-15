@@ -43,6 +43,12 @@ group 'zookeeper' do
   action :create
 end
 
+# Ensure zookeeper user has shell access
+user 'zookeeper' do
+  action :manage
+  shell '/bin/bash'
+end
+
 zookeeper_conf_dir = "/etc/zookeeper/#{node['zookeeper']['conf_dir']}"
 
 zookeeper_data_dir =
