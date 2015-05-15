@@ -12,7 +12,7 @@ describe 'hadoop::hive' do
       end.converge(described_recipe)
     end
 
-    it 'install hive package' do
+    it 'installs hive package' do
       expect(chef_run).to install_package('hive')
     end
 
@@ -58,6 +58,37 @@ describe 'hadoop::hive' do
 
     it 'creates /tmp/hive/scratch directory' do
       expect(chef_run).to create_directory('/tmp/hive/scratch')
+    end
+  end
+
+  context 'using default hive.exec.local.scratchdir' do
+    let(:chef_run) do
+      ChefSpec::SoloRunner.new(platform: 'centos', version: 6.6) do |node|
+        node.automatic['domain'] = 'example.com'
+        node.default['hive']['hive_env']['hive_log_dir'] = '/data/log/hive'
+        stub_command('test -L /var/log/hive').and_return(false)
+        stub_command('update-alternatives --display hive-conf | grep best | awk \'{print $5}\' | grep /etc/hive/conf.chef').and_return(false)
+      end.converge(described_recipe)
+    end
+
+    it 'does not create /tmp/hive directory' do
+      expect(chef_run).not_to create_directory('/tmp/hive')
+    end
+  end
+
+  context 'using /tmp/hive for hive.exec.local.scratchdir' do
+    let(:chef_run) do
+      ChefSpec::SoloRunner.new(platform: 'centos', version: 6.6) do |node|
+        node.default['hive']['hive_site']['hive.exec.local.scratchdir'] = '/tmp/hive'
+        node.automatic['domain'] = 'example.com'
+        stub_command(/test -L /).and_return(false)
+        stub_command('update-alternatives --display hadoop-conf | grep best | awk \'{print $5}\' | grep /etc/hadoop/conf.chef').and_return(false)
+        stub_command('update-alternatives --display hive-conf | grep best | awk \'{print $5}\' | grep /etc/hive/conf.chef').and_return(false)
+      end.converge(described_recipe)
+    end
+
+    it 'creates /tmp/hive directory' do
+      expect(chef_run).to create_directory('/tmp/hive')
     end
   end
 end

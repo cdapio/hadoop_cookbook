@@ -17,7 +17,7 @@
 # limitations under the License.
 #
 
-include_recipe 'hadoop::repo'
+include_recipe 'hadoop::repo' if node['hadoop']['distribution'] == 'cdh'
 
 package 'parquet-format' do
   action :install
