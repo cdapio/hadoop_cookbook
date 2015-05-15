@@ -17,11 +17,11 @@
 # limitations under the License.
 #
 
-include_recipe 'hadoop::repo'
+include_recipe 'hadoop::repo' if node['spark']['release']['install'].to_s == 'false'
 
 package 'spark-core' do
   action :install
-  only_if { node['hadoop']['distribution'] == 'cdh' }
+  only_if { node['hadoop']['distribution'] == 'cdh' && node['spark']['release']['install'].to_s == 'false' }
 end
 
 # Spark MLib requires this
@@ -35,7 +35,7 @@ package fortran_libs do
   action :install
 end
 
-unless node['spark']['release']['install'] == false
+unless node['spark']['release']['install'].to_s == 'false'
 
   # Spark binary compatibility matrix
   case node['hadoop']['distribution']
@@ -93,72 +93,66 @@ end
 
 # TODO: /etc/spark/conf.dist/fairscheduler.xml.template
 
-if node['spark'].key?('spark_env')
-  my_vars = { :options => node['spark']['spark_env'] }
+spark_log_dir =
+  if node['spark'].key?('spark_env') && node['spark']['spark_env'].key?('spark_log_dir')
+    node['spark']['spark_env']['spark_log_dir']
+  else
+    '/var/log/spark'
+  end
 
-  spark_log_dir =
-    if node['spark']['spark_env'].key?('spark_log_dir')
-      node['spark']['spark_env']['spark_log_dir']
-    else
-      '/var/log/spark'
-    end
+directory spark_log_dir do
+  owner 'spark'
+  group 'spark'
+  mode '0755'
+  recursive true
+  action :create
+  only_if { node['spark'].key?('spark_env') && node['spark']['spark_env'].key?('spark_log_dir') }
+end
 
-  directory spark_log_dir do
-    owner 'spark'
-    group 'spark'
-    mode '0755'
+unless spark_log_dir == '/var/log/spark'
+  # Delete default directory, if we aren't set to it
+  directory '/var/log/spark' do
+    action :delete
     recursive true
-    action :create
-    only_if { node['spark']['spark_env'].key?('spark_log_dir') }
+    not_if 'test -L /var/log/spark'
   end
-
-  unless spark_log_dir == '/var/log/spark'
-    # Delete default directory, if we aren't set to it
-    directory '/var/log/spark' do
-      action :delete
-      recursive true
-      not_if 'test -L /var/log/spark'
-    end
-    # symlink
-    link '/var/log/spark' do
-      to spark_log_dir
-    end
-  end
-
-  template "#{spark_conf_dir}/spark-env.sh" do
-    source 'generic-env.sh.erb'
-    mode '0755'
-    owner 'root'
-    group 'root'
-    action :create
-    variables my_vars
-  end
-end # End spark-env.sh
-
-if node['spark'].key?('spark_defaults')
-  my_vars = { :options => node['spark']['spark_defaults'] }
-
-  template "#{spark_conf_dir}/spark-defaults.xml" do
-    source 'generic-site.xml.erb'
-    mode '0644'
-    owner 'root'
-    group 'root'
-    variables my_vars
+  # symlink
+  link '/var/log/spark' do
+    to spark_log_dir
   end
 end
 
+# Start spark-env.sh
+template "#{spark_conf_dir}/spark-env.sh" do
+  source 'generic-env.sh.erb'
+  mode '0755'
+  owner 'root'
+  group 'root'
+  action :create
+  variables :options => node['spark']['spark_env']
+  only_if { node['spark'].key?('spark_env') && !node['spark']['spark_env'].empty? }
+end # End spark-env.sh
+
+# Start spark-defaults.xml
+template "#{spark_conf_dir}/spark-defaults.xml" do
+  source 'generic-site.xml.erb'
+  mode '0644'
+  owner 'root'
+  group 'root'
+  variables :options => node['spark']['spark_defaults']
+  only_if { node['spark'].key?('spark_defaults') && !node['spark']['spark_defaults'].empty? }
+end # End spark-defaults.xml
+
 # Setup metrics.properties log4j.properties
 %w(metrics log4j).each do |propfile|
-  next unless node['spark'].key?(propfile)
-  my_vars = { :properties => node['spark'][propfile] }
-
   template "#{spark_conf_dir}/#{propfile.gsub('_', '-')}.properties" do
     source 'generic.properties.erb'
     mode '0644'
     owner 'spark'
     group 'spark'
     action :create
-    variables my_vars
+    variables :properties => node['spark'][propfile]
+    only_if { node['spark'].key?(propfile) && !node['spark'][propfile].empty? }
   end
 end # End metrics.properties log4j.properties
 
