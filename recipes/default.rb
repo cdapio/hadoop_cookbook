@@ -47,15 +47,13 @@ end
 
 # Setup capacity-scheduler.xml core-site.xml hadoop-policy.xml hdfs-site.xml mapred-site.xml yarn-site.xml
 %w(capacity_scheduler core_site hadoop_policy hdfs_site mapred_site yarn_site).each do |sitefile|
-  my_vars = { :options => node['hadoop'][sitefile] }
-
   template "#{hadoop_conf_dir}/#{sitefile.gsub('_', '-')}.xml" do
     source 'generic-site.xml.erb'
     mode '0644'
     owner 'root'
     group 'root'
     action :create
-    variables my_vars
+    variables :options => node['hadoop'][sitefile]
     only_if { node['hadoop'].key?(sitefile) && !node['hadoop'][sitefile].empty? }
   end
 end # End capacity-scheduler.xml core-site.xml hadoop-policy.xml hdfs-site.xml mapred-site.xml yarn-site.xml
@@ -93,8 +91,6 @@ end # End fair-scheduler.xml
 
 # Setup hadoop-env.sh mapred-env.sh yarn-env.sh
 %w(hadoop_env mapred_env yarn_env).each do |envfile|
-  my_vars = { :options => node['hadoop'][envfile] }
-
   # rubocop:disable Style/Next
   %w(hadoop hadoop_mapred yarn).each do |svc|
     # Keep next here, in case envfile isn't set, so we don't NPE on directory resource
@@ -146,35 +142,32 @@ end # End fair-scheduler.xml
     owner 'root'
     group 'root'
     action :create
-    variables my_vars
+    variables :options => node['hadoop'][envfile]
     only_if { node['hadoop'].key?(envfile) && !node['hadoop'][envfile].empty? }
   end
 end # End hadoop-env.sh yarn-env.sh
 
 # Setup hadoop-metrics.properties log4j.properties
 %w(hadoop_metrics log4j).each do |propfile|
-  my_vars = { :properties => node['hadoop'][propfile] }
-
   template "#{hadoop_conf_dir}/#{propfile.gsub('_', '-')}.properties" do
     source 'generic.properties.erb'
     mode '0644'
     owner 'root'
     group 'root'
     action :create
-    variables my_vars
+    variables :properties => node['hadoop'][propfile]
     only_if { node['hadoop'].key?(propfile) && !node['hadoop'][propfile].empty? }
   end
 end # End hadoop-metrics.properties log4j.properties
 
 # Setup container-executor.cfg
-my_var = { :properties => node['hadoop']['container_executor'] }
 template "#{hadoop_conf_dir}/container-executor.cfg" do
   source 'generic.properties.erb'
-  mode '0440'
+  mode '0400'
   owner 'root'
-  group 'yarn'
+  group 'root'
   action :create
-  variables my_var
+  variables :properties => node['hadoop']['container_executor']
   only_if { node['hadoop'].key?('container_executor') && !node['hadoop']['container_executor'].empty? }
 end # End container-executor.cfg
 
