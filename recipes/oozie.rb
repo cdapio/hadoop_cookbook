@@ -62,6 +62,7 @@ end
 
 package 'unzip'
 
+### TODO: Use ark cookbook/resource for this
 extjs = 'ext-2.2.zip'
 remote_file "#{oozie_data_dir}/#{extjs}" do
   source "http://dev.sencha.com/deploy/#{extjs}"
@@ -85,60 +86,55 @@ directory oozie_conf_dir do
   recursive true
 end
 
-if node['oozie'].key?('oozie_site')
-  my_vars = { :options => node['oozie']['oozie_site'] }
+# Setup oozie-site.xml
+template "#{oozie_conf_dir}/oozie-site.xml" do
+  source 'generic-site.xml.erb'
+  mode '0644'
+  owner 'oozie'
+  group 'oozie'
+  action :create
+  variables :options => node['oozie']['oozie_site']
+  only_if { node['oozie'].key?('oozie_site') && !node['oozie']['oozie_site'].empty? }
+end # End oozie-site.xml
 
-  template "#{oozie_conf_dir}/oozie-site.xml" do
-    source 'generic-site.xml.erb'
-    mode '0644'
-    owner 'oozie'
-    group 'oozie'
-    action :create
-    variables my_vars
+oozie_log_dir =
+  if node['oozie'].key?('oozie_env') && node['oozie']['oozie_env'].key?('oozie_log_dir')
+    node['oozie']['oozie_env']['oozie_log_dir']
+  else
+    '/var/log/oozie'
+  end
+
+directory oozie_log_dir do
+  owner 'oozie'
+  group 'oozie'
+  mode '0755'
+  action :create
+  recursive true
+  only_if { node['oozie'].key?('oozie_env') && node['oozie']['oozie_env'].key?('oozie_log_dir') }
+end
+
+unless oozie_log_dir == '/var/log/oozie'
+  # Delete default directory, if we aren't set to it
+  directory '/var/log/oozie' do
+    action :delete
+    recursive true
+    not_if 'test -L /var/log/oozie'
+  end
+  # symlink
+  link '/var/log/oozie' do
+    to oozie_log_dir
   end
 end
 
 # Setup oozie-env.sh
-if node['oozie'].key?('oozie_env')
-  my_vars = { :options => node['oozie']['oozie_env'] }
-
-  oozie_log_dir =
-    if node['oozie']['oozie_env'].key?('oozie_log_dir')
-      node['oozie']['oozie_env']['oozie_log_dir']
-    else
-      '/var/log/oozie'
-    end
-
-  directory oozie_log_dir do
-    owner 'oozie'
-    group 'oozie'
-    mode '0755'
-    action :create
-    recursive true
-    only_if { node['oozie']['oozie_env'].key?('oozie_log_dir') }
-  end
-
-  unless oozie_log_dir == '/var/log/oozie'
-    # Delete default directory, if we aren't set to it
-    directory '/var/log/oozie' do
-      action :delete
-      recursive true
-      not_if 'test -L /var/log/oozie'
-    end
-    # symlink
-    link '/var/log/oozie' do
-      to oozie_log_dir
-    end
-  end
-
-  template "#{oozie_conf_dir}/oozie-env.sh" do
-    source 'generic-env.sh.erb'
-    mode '0755'
-    owner 'root'
-    group 'root'
-    action :create
-    variables my_vars
-  end
+template "#{oozie_conf_dir}/oozie-env.sh" do
+  source 'generic-env.sh.erb'
+  mode '0755'
+  owner 'root'
+  group 'root'
+  action :create
+  variables :options => node['oozie']['oozie_env']
+  only_if { node['oozie'].key?('oozie_env') && !node['oozie']['oozie_env'].empty? }
 end # End oozie-env.sh
 
 service pkg do
