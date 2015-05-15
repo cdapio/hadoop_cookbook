@@ -1,9 +1,9 @@
 require 'spec_helper'
 
 describe 'hadoop::oozie' do
-  context 'on Centos 6.5 x86_64' do
+  context 'on Centos 6.6 x86_64' do
     let(:chef_run) do
-      ChefSpec::SoloRunner.new(platform: 'centos', version: 6.5) do |node|
+      ChefSpec::SoloRunner.new(platform: 'centos', version: 6.6) do |node|
         node.automatic['domain'] = 'example.com'
         node.default['oozie']['oozie_env']['oozie_log_dir'] = '/data/log/oozie'
         node.default['oozie']['oozie_site']['example_property'] = 'test'
@@ -48,16 +48,6 @@ describe 'hadoop::oozie' do
 
     it 'install unzip package' do
       expect(chef_run).to install_package('unzip')
-    end
-
-    %w(mysql-connector-java postgresql-jdbc).each do |p|
-      it "install #{p} package" do
-        expect(chef_run).to install_package(p)
-      end
-      it "link #{p}.jar" do
-        link = chef_run.link("/var/lib/oozie/#{p}.jar")
-        expect(link).to link_to("/usr/share/java/#{p}.jar")
-      end
     end
 
     it 'creates ext-2.2.zip file' do
