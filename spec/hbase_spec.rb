@@ -19,10 +19,6 @@ describe 'hadoop::hbase' do
       expect(chef_run).to install_package('hbase')
     end
 
-    it 'installs snappy package' do
-      expect(chef_run).to install_package('snappy')
-    end
-
     it 'creates hbase conf_dir' do
       expect(chef_run).to create_directory('/etc/hbase/conf.chef').with(
         user: 'root',
@@ -65,20 +61,6 @@ describe 'hadoop::hbase' do
 
     it 'runs execute[update hbase-conf alternatives]' do
       expect(chef_run).to run_execute('update hbase-conf alternatives')
-    end
-  end
-
-  context 'on Ubuntu 12.04' do
-    let(:chef_run) do
-      ChefSpec::SoloRunner.new(platform: 'ubuntu', version: 12.04) do |node|
-        node.automatic['domain'] = 'example.com'
-        node.default['hadoop']['hdfs_site']['dfs.datanode.max.xcievers'] = '4096'
-        stub_command(/update-alternatives --display /).and_return(false)
-      end.converge(described_recipe)
-    end
-
-    it 'installs libsnappy1 package' do
-      expect(chef_run).to install_package('libsnappy1')
     end
   end
 end
