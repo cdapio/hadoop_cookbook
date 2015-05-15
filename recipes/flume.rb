@@ -41,15 +41,14 @@ directory flume_conf_dir do
 end
 
 # Setup flume.conf
-if node['flume'].key? 'flume_conf'
-  my_vars = { :options => node['flume']['flume_conf'] }
+my_vars = { :properties => node['flume']['flume_conf'] }
 
-  template "#{flume_conf_dir}/flume.conf" do
-    source 'generic.properties.erb'
-    mode '0644'
-    owner 'root'
-    group 'root'
-    action :create
-    variables my_vars
-  end
+template "#{flume_conf_dir}/flume.conf" do
+  source 'generic.properties.erb'
+  mode '0644'
+  owner 'root'
+  group 'root'
+  action :create
+  variables my_vars
+  only_if { node['flume'].key?('flume_conf') && !node['flume']['flume_conf'].empty? }
 end # End flume.conf

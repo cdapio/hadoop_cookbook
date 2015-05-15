@@ -2,7 +2,7 @@
 # Cookbook Name:: hadoop
 # Recipe:: hbase
 #
-# Copyright © 2013-2014 Cask Data, Inc.
+# Copyright © 2013-2015 Cask Data, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -32,6 +32,7 @@ pkg =
   when 'rhel'
     'snappy'
   end
+
 package pkg do
   action :install
 end
@@ -48,7 +49,6 @@ end
 
 # Setup hbase-policy.xml hbase-site.xml
 %w(hbase_policy hbase_site).each do |sitefile|
-  next unless node['hbase'].key?(sitefile)
   my_vars = { :options => node['hbase'][sitefile] }
 
   template "#{hbase_conf_dir}/#{sitefile.gsub('_', '-')}.xml" do
@@ -58,55 +58,54 @@ end
     group 'root'
     action :create
     variables my_vars
+    only_if { node['hbase'].key?(sitefile) && !node['hbase'][sitefile].empty? }
   end
 end # End hbase-policy.xml hbase-site.xml
 
 # Setup hbase-env.sh
-if node['hbase'].key?('hbase_env')
-  my_vars = { :options => node['hbase']['hbase_env'] }
+my_vars = { :options => node['hbase']['hbase_env'] }
 
-  hbase_log_dir =
-    if node['hbase']['hbase_env'].key?('hbase_log_dir')
-      node['hbase']['hbase_env']['hbase_log_dir']
-    else
-      '/var/log/hbase'
-    end
+hbase_log_dir =
+  if node['hbase'].key?('hbase_env') && node['hbase']['hbase_env'].key?('hbase_log_dir')
+    node['hbase']['hbase_env']['hbase_log_dir']
+  else
+    '/var/log/hbase'
+  end
 
-  directory hbase_log_dir do
-    owner 'hbase'
-    group 'hbase'
-    mode '0755'
-    action :create
+directory hbase_log_dir do
+  owner 'hbase'
+  group 'hbase'
+  mode '0755'
+  action :create
+  recursive true
+  only_if { node['hbase'].key?('hbase_env') && node['hbase']['hbase_env'].key?('hbase_log_dir') }
+end
+
+unless hbase_log_dir == '/var/log/hbase'
+  # Delete default directory, if we aren't set to it
+  directory '/var/log/hbase' do
+    action :delete
     recursive true
-    only_if { node['hbase']['hbase_env'].key?('hbase_log_dir') }
+    not_if 'test -L /var/log/hbase'
   end
+  # symlink
+  link '/var/log/hbase' do
+    to hbase_log_dir
+  end
+end
 
-  unless hbase_log_dir == '/var/log/hbase'
-    # Delete default directory, if we aren't set to it
-    directory '/var/log/hbase' do
-      action :delete
-      recursive true
-      not_if 'test -L /var/log/hbase'
-    end
-    # symlink
-    link '/var/log/hbase' do
-      to hbase_log_dir
-    end
-  end
-
-  template "#{hbase_conf_dir}/hbase-env.sh" do
-    source 'generic-env.sh.erb'
-    mode '0755'
-    owner 'hdfs'
-    group 'hdfs'
-    action :create
-    variables my_vars
-  end
+template "#{hbase_conf_dir}/hbase-env.sh" do
+  source 'generic-env.sh.erb'
+  mode '0755'
+  owner 'hdfs'
+  group 'hdfs'
+  action :create
+  variables my_vars
+  only_if { node['hbase'].key?('hbase_env') && !node['hbase']['hbase_env'].empty? }
 end # End hbase-env.sh
 
 # Setup hadoop-metrics.properties log4j.properties
 %w(hadoop_metrics log4j).each do |propfile|
-  next unless node['hbase'].key?(propfile)
   my_vars = { :properties => node['hbase'][propfile] }
 
   template "#{hbase_conf_dir}/#{propfile.gsub('_', '-')}.properties" do
@@ -116,11 +115,12 @@ end # End hbase-env.sh
     group 'hbase'
     action :create
     variables my_vars
+    only_if { node['hbase'].key?(propfile) && !node['hbase'][propfile].empty? }
   end
 end # End hadoop-metrics.properties log4j.properties
 
 # Setup jaas.conf
-if node['hbase'].key?('jaas')
+if node['hbase'].key?('jaas') && node['hbase']['jaas'].key?('client')
   my_vars = {
     # Only use client, for connecting to secure ZooKeeper
     :client => node['hbase']['jaas']['client']
@@ -133,6 +133,7 @@ if node['hbase'].key?('jaas')
     group 'hbase'
     action :create
     variables my_vars
+    only_if { node['hbase'].key?('jaas') && node['hbase']['jaas'].key?('client') }
   end
 end # End jaas.conf
 

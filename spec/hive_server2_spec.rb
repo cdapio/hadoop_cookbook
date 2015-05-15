@@ -1,13 +1,13 @@
 require 'spec_helper'
 
 describe 'hadoop::hive_server2' do
-  context 'on Centos 6.5 x86_64' do
+  context 'on Centos 6.6' do
     let(:chef_run) do
-      ChefSpec::SoloRunner.new(platform: 'centos', version: 6.5) do |node|
+      ChefSpec::SoloRunner.new(platform: 'centos', version: 6.6) do |node|
         node.automatic['domain'] = 'example.com'
         node.default['hive']['hive_site']['hive.support.concurrency'] = 'true'
         node.default['hive']['hive_site']['hive.zookeeper.quorum'] = 'localhost'
-        stub_command('update-alternatives --display hive-conf | grep best | awk \'{print $5}\' | grep /etc/hive/conf.chef').and_return(false)
+        stub_command(/update-alternatives --display /).and_return(false)
         stub_command(%r{/sys/kernel/mm/(.*)transparent_hugepage/defrag}).and_return(false)
       end.converge(described_recipe)
     end
@@ -35,14 +35,14 @@ describe 'hadoop::hive_server2' do
     end
   end
 
-  context 'on Centos 6.5 x86_64 with CDH' do
+  context 'on Centos 6.6 with CDH' do
     let(:chef_run) do
-      ChefSpec::SoloRunner.new(platform: 'centos', version: 6.5) do |node|
+      ChefSpec::SoloRunner.new(platform: 'centos', version: 6.6) do |node|
         node.automatic['domain'] = 'example.com'
         node.override['hadoop']['distribution'] = 'cdh'
         node.default['hive']['hive_site']['hive.support.concurrency'] = 'true'
         node.default['hive']['hive_site']['hive.zookeeper.quorum'] = 'localhost'
-        stub_command('update-alternatives --display hive-conf | grep best | awk \'{print $5}\' | grep /etc/hive/conf.chef').and_return(false)
+        stub_command(/update-alternatives --display /).and_return(false)
         stub_command(%r{/sys/kernel/mm/(.*)transparent_hugepage/defrag}).and_return(false)
       end.converge(described_recipe)
     end
