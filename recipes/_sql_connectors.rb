@@ -30,7 +30,11 @@ if node['hadoop'].key?('sql_connector')
       Chef::Log.warn('You must download and install JDBC connectors, manually')
       pkgs = nil
     else
-      pkgs = ['mysql-connector-java']
+      if node['platform_family'] == 'debian' && node['hadoop']['distribution'] != 'hdp'
+        pkgs = ['libmysql-java']
+      else
+        pkgs = ['mysql-connector-java']
+      end
     end
     jars = pkgs
   when 'postgresql'
