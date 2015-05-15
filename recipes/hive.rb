@@ -25,52 +25,6 @@ end
 
 hive_conf_dir = "/etc/hive/#{node['hive']['conf_dir']}"
 
-hive_data_dir =
-  if node['hadoop']['distribution'] == 'hdp' && (node['hadoop']['distribution_version'].to_s == '2' || \
-                                                 node['hadoop']['distribution_version'].to_f == 2.2)
-    '/usr/hdp/current/hive-client/lib'
-  else
-    '/usr/lib/hive/lib'
-  end
-
-java_share_dir = '/usr/share/java'
-
-case node['platform_family']
-when 'debian'
-  pkgs = %w(
-    mysql-connector-java
-    libpostgresql-jdbc-java
-  )
-  jars = %w(
-    mysql-connector-java
-    postgresql-jdbc4
-  )
-when 'rhel'
-  case node['platform_version'].to_i
-  when 6
-    pkgs = %w(
-      mysql-connector-java
-      postgresql-jdbc
-    )
-    jars = pkgs
-  else
-    Chef::Log.warn('You must download and install JDBC connectors')
-    pkgs = nil
-  end
-end
-
-pkgs.each do |pkg|
-  package pkg do
-    action :install
-  end
-end
-
-jars.each do |jar|
-  link "#{hive_data_dir}/#{jar}.jar" do
-    to "#{java_share_dir}/#{jar}.jar"
-  end
-end
-
 directory hive_conf_dir do
   mode '0755'
   owner 'root'

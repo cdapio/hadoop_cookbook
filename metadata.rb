@@ -7,9 +7,10 @@ long_description IO.read(File.join(File.dirname(__FILE__), 'README.md'))
 version          '1.13.1'
 
 depends 'yum', '>= 3.0'
-depends 'apt'
-depends 'sysctl'
-depends 'ulimit'
+
+%w(apt selinux sysctl ulimit).each do |cb|
+  depends cb
+end
 
 recommends 'java', '~> 1.21'
 

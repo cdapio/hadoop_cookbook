@@ -1,9 +1,9 @@
 require 'spec_helper'
 
 describe 'hadoop::hive' do
-  context 'on Centos 6.5 x86_64' do
+  context 'on Centos 6.6 x86_64' do
     let(:chef_run) do
-      ChefSpec::SoloRunner.new(platform: 'centos', version: 6.5) do |node|
+      ChefSpec::SoloRunner.new(platform: 'centos', version: 6.6) do |node|
         node.automatic['domain'] = 'example.com'
         node.default['hive']['hive_site']['hive.exec.local.scratchdir'] = '/tmp/hive/scratch'
         node.default['hive']['hive_env']['hive_log_dir'] = '/data/log/hive'
@@ -14,16 +14,6 @@ describe 'hadoop::hive' do
 
     it 'installs hive package' do
       expect(chef_run).to install_package('hive')
-    end
-
-    %w(mysql-connector-java postgresql-jdbc).each do |pkg|
-      it "install #{pkg} package" do
-        expect(chef_run).to install_package(pkg)
-      end
-      it "link #{pkg}.jar" do
-        link = chef_run.link("/usr/lib/hive/lib/#{pkg}.jar")
-        expect(link).to link_to("/usr/share/java/#{pkg}.jar")
-      end
     end
 
     %w(/etc/hive/conf.chef /var/lib/hive).each do |dir|
