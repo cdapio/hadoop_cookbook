@@ -50,16 +50,6 @@ describe 'hadoop::oozie' do
       expect(chef_run).to install_package('unzip')
     end
 
-    %w(mysql-connector-java postgresql-jdbc).each do |p|
-      it "install #{p} package" do
-        expect(chef_run).to install_package(p)
-      end
-      it "link #{p}.jar" do
-        link = chef_run.link("/var/lib/oozie/#{p}.jar")
-        expect(link).to link_to("/usr/share/java/#{p}.jar")
-      end
-    end
-
     it 'creates ext-2.2.zip file' do
       expect(chef_run).to create_remote_file_if_missing('/var/lib/oozie/ext-2.2.zip')
     end
