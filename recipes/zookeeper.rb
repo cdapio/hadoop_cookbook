@@ -35,18 +35,19 @@ directory zookeeper_conf_dir do
 end
 
 # Setup jaas.conf
+my_vars = {}
 if node['zookeeper'].key?('jaas')
-  my_vars = {
-    :client => node['zookeeper']['jaas']['client'],
-    :server => node['zookeeper']['jaas']['server']
-  }
-
-  template "#{zookeeper_conf_dir}/jaas.conf" do
-    source 'jaas.conf.erb'
-    mode '0644'
-    owner 'root'
-    group 'root'
-    action :create
-    variables my_vars
+  my_vars[:client] = node['zookeeper']['jaas']['client']
+  my_vars[:server] = node['zookeeper']['jaas']['server']
+end
+template "#{zookeeper_conf_dir}/jaas.conf" do
+  source 'jaas.conf.erb'
+  mode '0644'
+  owner 'root'
+  group 'root'
+  action :create
+  variables my_vars
+  only_if do
+    node['zookeeper'].key?('jaas') && (!node['zookeeper']['jaas']['client'].empty? || !node['zookeeper']['jaas']['server'].empty)
   end
 end # End jaas.conf

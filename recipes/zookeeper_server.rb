@@ -45,140 +45,130 @@ end
 
 zookeeper_conf_dir = "/etc/zookeeper/#{node['zookeeper']['conf_dir']}"
 
-# Setup zoo.cfg
-if node['zookeeper'].key?('zoocfg')
+zookeeper_data_dir =
+  if node['zookeeper'].key?('zoocfg') && node['zookeeper']['zoocfg'].key?('dataDir')
+    node['zookeeper']['zoocfg']['dataDir']
+  else
+    '/var/lib/zookeeper'
+  end
 
-  # We need to create a data directory, if it exists
-  zookeeper_data_dir =
-    if node['zookeeper']['zoocfg'].key?('dataDir')
-      node['zookeeper']['zoocfg']['dataDir']
-    else
-      '/var/lib/zookeeper'
-    end
-  zookeeper_datalog_dir =
-    if node['zookeeper']['zoocfg'].key?('dataLogDir')
-      node['zookeeper']['zoocfg']['dataLogDir']
-    else
-      '/var/lib/zookeeper'
-    end
-  zookeeper_client_port =
-    if node['zookeeper']['zoocfg'].key?('clientPort')
-      node['zookeeper']['zoocfg']['clientPort']
-    else
-      '2181'
-    end
+zookeeper_datalog_dir =
+  if node['zookeeper'].key?('zoocfg') && node['zookeeper']['zoocfg'].key?('dataLogDir')
+    node['zookeeper']['zoocfg']['dataLogDir']
+  else
+    '/var/lib/zookeeper'
+  end
 
-  node.default['zookeeper']['zoocfg']['dataDir'] = zookeeper_data_dir
-  node.default['zookeeper']['zoocfg']['dataLogDir'] = zookeeper_datalog_dir
-  node.default['zookeeper']['zoocfg']['clientPort'] = zookeeper_client_port
-  my_vars = { :properties => node['zookeeper']['zoocfg'] }
+zookeeper_client_port =
+  if node['zookeeper'].key?('zoocfg') && node['zookeeper']['zoocfg'].key?('clientPort')
+    node['zookeeper']['zoocfg']['clientPort']
+  else
+    '2181'
+  end
 
-  directory zookeeper_data_dir do
+node.default['zookeeper']['zoocfg']['dataDir'] = zookeeper_data_dir
+node.default['zookeeper']['zoocfg']['dataLogDir'] = zookeeper_datalog_dir
+node.default['zookeeper']['zoocfg']['clientPort'] = zookeeper_client_port
+
+directory zookeeper_data_dir do
+  owner 'zookeeper'
+  group 'hadoop'
+  mode '0755'
+  recursive true
+  action :create
+end
+
+unless zookeeper_datalog_dir == zookeeper_data_dir
+  directory zookeeper_datalog_dir do
     owner 'zookeeper'
     group 'hadoop'
     mode '0755'
     recursive true
     action :create
+    only_if { node['zookeeper']['zoocfg'].key?('dataLogDir') }
   end
+end
 
-  unless zookeeper_datalog_dir == zookeeper_data_dir
-    directory zookeeper_datalog_dir do
-      owner 'zookeeper'
-      group 'hadoop'
-      mode '0755'
-      recursive true
-      action :create
-      only_if { node['zookeeper']['zoocfg'].key?('dataLogDir') }
-    end
-  end
-
-  template "#{zookeeper_conf_dir}/zoo.cfg" do
-    source 'generic.properties.erb'
-    owner 'root'
-    group 'root'
-    mode '0644'
-    action :create
-    variables my_vars
-  end
-
-  # Try and find the current node in the list of configured servers. If the node was found then write the myid file
-  myid = nil
-  1.upto(255) do |index|
-    server = node['zookeeper']['zoocfg']["server.#{index}"]
-    next if server.nil?
-    next unless server.start_with?("#{node['fqdn']}:") || server.start_with?("#{node['ipaddress']}:") || server.start_with?("#{node['hostname']}:")
-    myid = index
-    break
-  end
-
-  template "#{node['zookeeper']['zoocfg']['dataDir']}/myid" do
-    source 'zookeeper-myid.erb'
-    owner 'root'
-    group 'root'
-    mode '0644'
-    action :create
-    variables(
-      :myid => myid
-    )
-    not_if { myid.nil? }
-  end
+# Setup zoo.cfg
+template "#{zookeeper_conf_dir}/zoo.cfg" do
+  source 'generic.properties.erb'
+  owner 'root'
+  group 'root'
+  mode '0644'
+  action :create
+  variables :properties => node['zookeeper']['zoocfg']
+  only_if { node['zookeeper'].key?('zoocfg') && !node['zookeeper']['zoocfg'].empty? }
 end # End zoo.cfg
 
-# Setup zookeeper-env.sh
-if node['zookeeper'].key?('zookeeper_env')
-  my_vars = { :options => node['zookeeper']['zookeeper_env'] }
+# Try and find the current node in the list of configured servers. If the node was found then write the myid file
+myid = nil
+1.upto(255) do |index|
+  server = node['zookeeper']['zoocfg']["server.#{index}"]
+  next if server.nil?
+  next unless server.start_with?("#{node['fqdn']}:") || server.start_with?("#{node['ipaddress']}:") || server.start_with?("#{node['hostname']}:")
+  myid = index
+  break
+end
 
-  zookeeper_log_dir =
-    if node['zookeeper']['zookeeper_env'].key?('zookeeper_log_dir')
-      node['zookeeper']['zookeeper_env']['zookeeper_log_dir']
-    else
-      '/var/log/zookeeper'
-    end
+template "#{zookeeper_data_dir}/myid" do
+  source 'zookeeper-myid.erb'
+  owner 'root'
+  group 'root'
+  mode '0644'
+  action :create
+  variables :myid => myid
+  not_if { myid.nil? }
+end # End zoo.cfg
 
-  directory zookeeper_log_dir do
-    owner 'zookeeper'
-    group 'zookeeper'
-    mode '0755'
-    action :create
+zookeeper_log_dir =
+  if node['zookeeper'].key?('zookeeper_env') && node['zookeeper']['zookeeper_env'].key?('zookeeper_log_dir')
+    node['zookeeper']['zookeeper_env']['zookeeper_log_dir']
+  else
+    '/var/log/zookeeper'
+  end
+
+directory zookeeper_log_dir do
+  owner 'zookeeper'
+  group 'zookeeper'
+  mode '0755'
+  action :create
+  recursive true
+  only_if { node['zookeeper'].key?('zookeeper_env') && node['zookeeper']['zookeeper_env'].key?('zookeeper_log_dir') }
+end
+
+unless zookeeper_log_dir == '/var/log/zookeeper'
+  # Delete default directory, if we aren't set to it
+  directory '/var/log/zookeeper' do
+    action :delete
     recursive true
-    only_if { node['zookeeper']['zookeeper_env'].key?('zookeeper_log_dir') }
+    not_if 'test -L /var/log/zookeeper'
   end
+  # symlink
+  link '/var/log/zookeeper' do
+    to zookeeper_log_dir
+  end
+end
 
-  template "#{zookeeper_conf_dir}/zookeeper-env.sh" do
-    source 'generic-env.sh.erb'
-    mode '0755'
-    owner 'root'
-    group 'root'
-    action :create
-    variables my_vars
-  end
-
-  unless zookeeper_log_dir == '/var/log/zookeeper'
-    # Delete default directory, if we aren't set to it
-    directory '/var/log/zookeeper' do
-      action :delete
-      recursive true
-      not_if 'test -L /var/log/zookeeper'
-    end
-    # symlink
-    link '/var/log/zookeeper' do
-      to zookeeper_log_dir
-    end
-  end
+# Setup zookeeper-env.sh
+template "#{zookeeper_conf_dir}/zookeeper-env.sh" do
+  source 'generic-env.sh.erb'
+  mode '0755'
+  owner 'root'
+  group 'root'
+  action :create
+  variables :options => node['zookeeper']['zookeeper_env']
+  only_if { node['zookeeper'].key?('zookeeper_env') && !node['zookeeper']['zookeeper_env'].empty? }
 end # End zookeeper-env.sh
 
 # Setup log4j.properties
-if node['zookeeper'].key?('log4j')
-  my_vars = { :properties => node['zookeeper']['log4j'] }
-
-  template "#{zookeeper_conf_dir}/log4j.properties" do
-    source 'generic.properties.erb'
-    mode '0644'
-    owner 'root'
-    group 'root'
-    action :create
-    variables my_vars
-  end
+template "#{zookeeper_conf_dir}/log4j.properties" do
+  source 'generic.properties.erb'
+  mode '0644'
+  owner 'root'
+  group 'root'
+  action :create
+  variables :properties => node['zookeeper']['log4j']
+  only_if { node['zookeeper'].key?('log4j') && !node['zookeeper']['log4j'].empty? }
 end # End log4j.properties
 
 # Hack to work around broken Hortonworks release engineering
