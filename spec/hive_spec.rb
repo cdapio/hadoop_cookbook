@@ -117,8 +117,8 @@ describe 'hadoop::hive' do
       expect(chef_run).to install_package('hive')
     end
 
-    it 'creates /tmp/hive directory' do
-      expect(chef_run).to create_directory('/tmp/hive')
+    it 'does not create /tmp/hive directory' do
+      expect(chef_run).not_to create_directory('/tmp/hive')
     end
   end
 
@@ -128,6 +128,7 @@ describe 'hadoop::hive' do
         node.override['hadoop']['distribution'] = 'hdp'
         node.override['hadoop']['distribution_version'] = '2.2'
         node.default['hive']['hive_env']['hive_log_dir'] = '/data/log/hive'
+        node.default['hive']['hive_site']['hive.exec.local.scratchdir'] = '/tmp/hive'
         node.automatic['domain'] = 'example.com'
         stub_command(/test -L /).and_return(false)
         stub_command('update-alternatives --display hadoop-conf | grep best | awk \'{print $5}\' | grep /etc/hadoop/conf.chef').and_return(false)
@@ -140,6 +141,10 @@ describe 'hadoop::hive' do
         link = chef_run.link("/usr/hdp/current/hive-client/lib/#{jar}.jar")
         expect(link).to link_to("/usr/share/java/#{jar}.jar")
       end
+    end
+
+    it 'creates /tmp/hive directory' do
+      expect(chef_run).to create_directory('/tmp/hive')
     end
   end
 end
