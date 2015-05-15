@@ -12,7 +12,7 @@ describe 'hadoop::hive' do
       end.converge(described_recipe)
     end
 
-    it 'install hive package' do
+    it 'installs hive package' do
       expect(chef_run).to install_package('hive')
     end
 
@@ -112,6 +112,14 @@ describe 'hadoop::hive' do
         expect(link).to link_to("/usr/share/java/#{jar}.jar")
       end
     end
+
+    it 'installs hive package' do
+      expect(chef_run).to install_package('hive')
+    end
+
+    it 'creates /tmp/hive directory' do
+      expect(chef_run).to create_directory('/tmp/hive')
+    end
   end
 
   context 'using 12.04 HDP 2.2' do
@@ -119,7 +127,9 @@ describe 'hadoop::hive' do
       ChefSpec::SoloRunner.new(platform: 'ubuntu', version: 12.04) do |node|
         node.override['hadoop']['distribution'] = 'hdp'
         node.override['hadoop']['distribution_version'] = '2.2'
+        node.default['hive']['hive_env']['hive_log_dir'] = '/data/log/hive'
         node.automatic['domain'] = 'example.com'
+        stub_command(/test -L /).and_return(false)
         stub_command('update-alternatives --display hadoop-conf | grep best | awk \'{print $5}\' | grep /etc/hadoop/conf.chef').and_return(false)
         stub_command('update-alternatives --display hive-conf | grep best | awk \'{print $5}\' | grep /etc/hive/conf.chef').and_return(false)
       end.converge(described_recipe)
