@@ -11,6 +11,15 @@ Unreleased
 - Fix extjs link ( Issues: #164 [COOK-36](https://issues.cask.co/browse/COOK-36) )
 - Use HDP mysql-connector-java ( Issues: #166 [COOK-34](https://issues.cask.co/browse/COOK-34) )
 - Deprecate short versions ( Issue: #167 )
+- Correct status for #156 ( Issue: #168 )
+- Move SQL connectors to their own recipe ( Issue: #169 )
+- Testing updates ( Issues: #170 #171 )
+- Use Chef only_if guards over Ruby conditionals ( Issues: #172 #175 #176 #181 )
+- Disable SELinux ( Issue: #173 )
+- Install libhdfs ( Issue: #177 )
+- Support HDP 2.1.10.0 and 2.2.1.0 ( Issue: #178 )
+- Move compression libs to helper recipe ( Issues: #179 [COOK-44](https://issues.cask.co/browse/COOK-44) )
+- Ensure zookeeper user has shell access ( Issue: #180 )
 
 v.1.13.1 (Apr 15, 2015)
 -----------------------
