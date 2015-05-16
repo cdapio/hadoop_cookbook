@@ -31,7 +31,12 @@ when 'cdh'
     svcs = %w(hive-hcatalog)
   end
 when 'hdp'
-  pkgs = %w(hcatalog)
+  case node['hadoop']['distribution_version'].to_f
+  when 2.0
+    pkgs = %w(hcatalog)
+  else
+    pkgs = %w(hive-hcatalog)
+  end
   svcs = []
 end
 # rubocop:enable UselessAssignment
