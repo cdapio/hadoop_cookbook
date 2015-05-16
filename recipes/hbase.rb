@@ -19,21 +19,9 @@
 
 include_recipe 'hadoop::repo'
 include_recipe 'hadoop::zookeeper'
+include_recipe 'hadoop::_compression_libs'
 
 package 'hbase' do
-  action :install
-end
-
-# HBase needs snappy
-pkg =
-  case node['platform_family']
-  when 'debian'
-    'libsnappy1'
-  when 'rhel'
-    'snappy'
-  end
-
-package pkg do
   action :install
 end
 

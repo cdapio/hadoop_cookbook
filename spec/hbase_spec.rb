@@ -19,10 +19,6 @@ describe 'hadoop::hbase' do
       expect(chef_run).to install_package('hbase')
     end
 
-    it 'installs snappy package' do
-      expect(chef_run).to install_package('snappy')
-    end
-
     it 'creates hbase conf_dir' do
       expect(chef_run).to create_directory('/etc/hbase/conf.chef').with(
         user: 'root',
@@ -79,10 +75,6 @@ describe 'hadoop::hbase' do
 
     it 'installs hbase package' do
       expect(chef_run).to install_package('hbase')
-    end
-
-    it 'installs libsnappy1 package' do
-      expect(chef_run).to install_package('libsnappy1')
     end
   end
 end
