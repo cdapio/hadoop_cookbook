@@ -2,7 +2,7 @@
 # Cookbook Name:: hadoop
 # Recipe:: tez
 #
-# Copyright © 2013-2014 Cask Data, Inc.
+# Copyright © 2013-2015 Cask Data, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -17,7 +17,7 @@
 # limitations under the License.
 #
 
-include_recipe 'hadoop::repo'
+include_recipe 'hadoop::repo' if node['hadoop']['distribution'] == 'hdp'
 
 package 'tez' do
   action :install
@@ -26,21 +26,38 @@ end
 
 # Copy tez library into HDFS
 dfs = node['hadoop']['core_site']['fs.defaultFS']
+hdp_version =
+  if node['hadoop']['distribution_version'] == '2.2.0.0'
+    '2.2.0.0-2041'
+  elsif node['hadoop']['distribution_version'] == '2.2.1.0'
+    '2.2.1.0-2340'
+  else
+    node['hadoop']['distribution_version']
+  end
+dest =
+  if hdp_version.to_f >= 2.2
+    "#{dfs}/hdp/apps/#{hdp_version}/tez"
+  else
+    "#{dfs}/apps/tez"
+  end
+src =
+  if hdp_version.to_f >= 2.2
+    "/usr/hdp/#{hdp_version}/tez/lib/tez.tar.gz"
+  else
+    '/usr/lib/tez/*'
+  end
 execute 'tez-hdfs-appdir' do
   command <<-EOS
-  hdfs dfs -mkdir -p #{dfs}/apps/tez && \
-  hdfs dfs -copyFromLocal /usr/lib/tez/* #{dfs}/apps/tez && \
-  hdfs dfs -chown -R  hdfs:users #{dfs}/apps/tez && \
-  hdfs dfs -chmod 755 #{dfs}/apps && \
-  hdfs dfs -chmod 755 #{dfs}/apps/tez && \
-  hdfs dfs -chmod 755 #{dfs}/apps/tez/lib && \
-  hdfs dfs -chmod 644 #{dfs}/apps/tez/*.jar && \
-  hdfs dfs -chmod 644 #{dfs}/apps/tez/lib/*.jar
+  hdfs dfs -mkdir -p #{dest} && \
+  hdfs dfs -put #{src} #{dest} && \
+  hdfs dfs -chown -R hdfs:users #{dest} && \
+  hdfs dfs -chmod 555 #{dest} && \
+  hdfs dfs -chmod 444 #{dest}/*
   EOS
   timeout 300
   user 'hdfs'
   group 'hdfs'
-  not_if "hdfs dfs -test -d #{dfs}/apps/tez", :user => 'hdfs'
+  not_if "hdfs dfs -test -d #{dest}", :user => 'hdfs'
   action :nothing
 end
 
