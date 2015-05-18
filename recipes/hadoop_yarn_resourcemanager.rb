@@ -88,6 +88,32 @@ execute 'yarn-app-mapreduce-am-staging-dir' do
   action :nothing
 end
 
+# Copy MapReduce tarball to HDFS for HDP 2.2+
+dfs = node['hadoop']['core_site']['fs.defaultFS']
+hdp_version =
+  if node['hadoop']['distribution_version'] == '2.2.0.0'
+    '2.2.0.0-2041'
+  elsif node['hadoop']['distribution_version'] == '2.2.1.0'
+    '2.2.1.0-2340'
+  else
+    node['hadoop']['distribution_version']
+  end
+execute 'hdp22-mapreduce-tarball' do
+  command <<-EOS
+  hdfs dfs -mkdir -p #{dfs}/hdp/apps/#{hdp_version}/mapreduce && \
+  hdfs dfs -put /usr/hdp/current/hadoop-client/mapreduce.tar.gz /hdp/apps/#{hdp_version}/mapreduce && \
+  hdfs dfs -chown -R hdfs:hadoop /hdp && \
+  hdfs dfs -chmod -R 555 /hdp/apps/#{hdp_version}/mapreduce && \
+  hdfs dfs -chmod -R 444 /hdp/apps/#{hdp_version}/mapreduce/mapreduce.tar.gz
+  EOS
+  timeout 300
+  user 'hdfs'
+  group 'hdfs'
+  not_if "hdfs dfs -test -d #{dfs}/hdp/apps/#{hdp_version}/mapreduce", :user => 'hdfs'
+  only_if { node['hadoop']['distribution'] == 'hdp' && node['hadoop']['distribution_version'].to_f >= 2.2 }
+  action :nothing
+end
+
 service pkg do
   status_command "service #{pkg} status"
   supports [:restart => true, :reload => false, :status => true]
