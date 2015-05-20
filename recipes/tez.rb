@@ -31,6 +31,8 @@ hdp_version =
     '2.2.0.0-2041'
   elsif node['hadoop']['distribution_version'] == '2.2.1.0'
     '2.2.1.0-2340'
+  elsif node['hadoop']['distribution_version'] == '2.2.4.2'
+    '2.2.4.2-2'
   else
     node['hadoop']['distribution_version']
   end
