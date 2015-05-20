@@ -29,8 +29,8 @@ when 'rhel'
   pkgs += ['snappy', 'snappy-devel']
 end
 
-# HDP has lzo
-if node['hadoop']['distribution'] == 'hdp'
+# HDP 2.2+ has lzo
+if node['hadoop']['distribution'] == 'hdp' && node['hadoop']['distribution_version'].to_f >= 2.2
   case node['platform_family']
   when 'debian'
     pkgs += ['liblzo2-2', 'liblzo2-dev', 'hadooplzo']
