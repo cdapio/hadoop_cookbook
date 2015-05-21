@@ -39,7 +39,7 @@ describe 'hadoop::_compression_libs' do
       ChefSpec::SoloRunner.new(platform: 'ubuntu', version: 12.04).converge(described_recipe)
     end
 
-    %w(libsnappy1 libsnappy1-dev liblzo2-2 liblzo2-dev hadooplzo).each do |pkg|
+    %w(libsnappy1 libsnappy-dev liblzo2-2 liblzo2-dev hadooplzo).each do |pkg|
       it "installs #{pkg} package" do
         expect(chef_run).to install_package(pkg)
       end
@@ -54,7 +54,7 @@ describe 'hadoop::_compression_libs' do
       end.converge(described_recipe)
     end
 
-    %w(libsnappy1 libsnappy1-dev).each do |pkg|
+    %w(libsnappy1 libsnappy-dev).each do |pkg|
       it "installs #{pkg} package" do
         expect(chef_run).to install_package(pkg)
       end
