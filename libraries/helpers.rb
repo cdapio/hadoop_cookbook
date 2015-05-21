@@ -31,5 +31,18 @@ module Hadoop
         Chef::Application.fatal!('The policy_rc.d method only accepts "disable" or "enable" as arguments')
       end
     end
+
+    def hdp_version
+      case node['hadoop']['distribution_version']
+      when '2.2.0.0'
+        '2.2.0.0-2041'
+      when '2.2.1.0'
+        '2.2.1.0-2340'
+      when '2.2.4.2'
+        '2.2.4.2-2'
+      else
+        node['hadoop']['distribution_version']
+      end
+    end
   end
 end

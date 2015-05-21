@@ -88,18 +88,11 @@ execute 'yarn-app-mapreduce-am-staging-dir' do
   action :nothing
 end
 
+# Load helpers
+Chef::Resource::Execute.send(:include, Hadoop::Helpers)
+
 # Copy MapReduce tarball to HDFS for HDP 2.2+
 dfs = node['hadoop']['core_site']['fs.defaultFS']
-hdp_version =
-  if node['hadoop']['distribution_version'] == '2.2.0.0'
-    '2.2.0.0-2041'
-  elsif node['hadoop']['distribution_version'] == '2.2.1.0'
-    '2.2.1.0-2340'
-  elsif node['hadoop']['distribution_version'] == '2.2.4.2'
-    '2.2.4.2-2'
-  else
-    node['hadoop']['distribution_version']
-  end
 execute 'hdp22-mapreduce-tarball' do
   command <<-EOS
   hdfs dfs -mkdir -p #{dfs}/hdp/apps/#{hdp_version}/mapreduce && \
