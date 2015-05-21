@@ -1,4 +1,4 @@
-#!/bin/bash
+#! /bin/bash
 #
 # Licensed to the Apache Software Foundation (ASF) under one or more
 # contributor license agreements.  See the NOTICE file distributed with
@@ -14,15 +14,21 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+
+# skeleton  example file to build /etc/init.d/ scripts.
+#    This file should be used to construct scripts for /etc/init.d.
 #
+#    Written by Miquel van Smoorenburg <miquels@cistron.nl>.
+#    Modified for Debian
+#    by Ian Murdock <imurdock@gnu.ai.mit.edu>.
+#               Further changes by Javier Fernandez-Sanguino <jfs@debian.org>
 #
+# Starts a Hive server2
 #
-# Starts a Hive server
-#
-# chkconfig: 345 90 10
+# chkconfig: 345 85 15
 # description: Starts a Hive server2
 # processname: hive
-# pidfile: /var/run/hive/hive-server2.pid
+#
 ### BEGIN INIT INFO
 # Provides:          hive-server2
 # Required-Start:    $syslog $remote_fs
@@ -49,6 +55,7 @@ STATUS_RUNNING=0
 STATUS_DEAD=1
 STATUS_DEAD_AND_LOCK=2
 STATUS_NOT_RUNNING=3
+STATUS_DEBIAN_NOT_RUNNING=4
 
 ERROR_PROGRAM_NOT_INSTALLED=5
 ERROR_PROGRAM_NOT_CONFIGURED=6
@@ -71,20 +78,17 @@ TIMEOUT=3
 hive_start() {
     [ -x $EXE_FILE ] || exit $ERROR_PROGRAM_NOT_INSTALLED
 
-    service_name="server2"
+    exec_env="HADOOP_OPTS=\"-Dhive.log.dir=`dirname $LOG_FILE` -Dhive.log.file=${NAME}.log -Dhive.log.threshold=INFO\""
+    service_name="server"
     if [ $service_name = "server" ] ; then
-      service_name="hiveserver"
-      exec_env="HADOOP_OPTS=\"-Dhive.log.dir=`dirname $LOG_FILE`\""
-    fi
-    if [ $service_name = "server2" ] ; then
       service_name="hiveserver2"
-      exec_env="HADOOP_OPTS=\"-Dhive.log.dir=`dirname $LOG_FILE`\""
     fi
 
     log_success_msg "Starting $desc (${NAME}): "
-    start_daemon -u $HIVE_USER -p $PID_FILE -n $NICENESS  /bin/sh -c "cd $HIVE_HOME ; $exec_env nohup \
-           $EXE_FILE --service $service_name $PORT \
-             > $LOG_FILE 2>&1 < /dev/null & "'echo $! '"> $PID_FILE"
+    /sbin/start-stop-daemon --quiet --oknodo --start --user $HIVE_USER --name java --background \
+       --chuid $HIVE_USER --nicelevel $NICENESS --chdir $HIVE_HOME \
+       --make-pidfile --pidfile $PID_FILE --startas /bin/sh -- \
+       -c "$exec_env exec $EXE_FILE --service $service_name $PORT > $LOG_FILE 2>&1 < /dev/null"
 
     RETVAL=$?
     [ $RETVAL -eq $RETVAL_SUCCESS ] && touch $LOCKFILE
@@ -109,9 +113,9 @@ hive_restart() {
 hive_status() {
     echo -n "Checking for service $desc: "
     pidofproc -p $PID_FILE java > /dev/null
-    status=$?
+    RETVAL=$?
 
-    case "$status" in
+    case "$RETVAL" in
       $STATUS_RUNNING)
         log_success_msg "server is running"
         ;;
@@ -121,14 +125,14 @@ hive_status() {
       $STATUS_DEAD_AND_LOCK)
         log_failure_msg "server is dead and lock file exists"
         ;;
-      $STATUS_NOT_RUNNING)
+      $STATUS_NOT_RUNNING|$STATUS_DEBIAN_NOT_RUNNING)
         log_failure_msg "server is not running"
         ;;
       *)
         log_failure_msg "server status is unknown"
         ;;
     esac
-    return $status
+    return $RETVAL
 }
 
 RETVAL=0
@@ -136,12 +140,10 @@ RETVAL=0
 case "$1" in
     start)
       hive_start
-      RETVAL=$?
       ;;
 
     stop|force-stop)
       hive_stop
-      RETVAL=$?
       ;; 
 
     force-reload|condrestart|try-restart)
@@ -150,12 +152,10 @@ case "$1" in
 
     restart|reload)
       hive_restart
-      RETVAL=$?
       ;;
   
     status)
       hive_status
-      RETVAL=$?
       ;;
 
     *)
