@@ -19,11 +19,11 @@ describe 'hadoop::default' do
       end.converge(described_recipe)
     end
 
-    it 'install hadoop-client package' do
+    it 'installs hadoop-client package' do
       expect(chef_run).to install_package('hadoop-client')
     end
 
-    it 'creates Hadoop conf_dir' do
+    it 'creates hadoop conf_dir' do
       expect(chef_run).to create_directory('/etc/hadoop/conf.chef').with(
         user: 'root',
         group: 'root'
@@ -125,10 +125,6 @@ describe 'hadoop::default' do
       expect(chef_run).to render_file('/etc/hadoop/conf.chef/yarn-env.sh').with_content(
         /YARN_LOG_DIR/
       )
-    end
-
-    it 'runs execute[fix-hdp-jsvc-path]' do
-      expect(chef_run).to run_execute('fix-hdp-jsvc-path')
     end
 
     it 'sets limits for hdfs/mapred/yarn' do

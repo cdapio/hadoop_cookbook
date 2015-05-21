@@ -213,13 +213,29 @@ else
   end
 end # End hadoop.tmp.dir
 
-# Some HDP versions ship broken init scripts/config
-execute 'fix-hdp-jsvc-path' do
-  command 'sed -i -e "/JSVC_HOME=/ s:libexec:lib:" /etc/default/hadoop'
-  only_if do
-    node['hadoop']['distribution'] == 'hdp' && (node['hadoop']['distribution_version'].to_s == '2' || \
-                                                node['hadoop']['distribution_version'].to_f == 2.1)
-  end
+# Load helpers
+Chef::Recipe.send(:include, Hadoop::Helpers)
+Chef::Resource::Template.send(:include, Hadoop::Helpers)
+
+# Create /etc/default/hadoop
+template '/etc/default/hadoop' do
+  source 'generic-env.sh.erb'
+  mode '0755'
+  owner 'root'
+  group 'root'
+  action :create
+  variables :options => {
+    'hadoop_home_warn_suppress' => true,
+    'hadoop_home' => "#{lib_dir}/hadoop",
+    'hadoop_prefix' => "#{lib_dir}/hadoop",
+    'hadoop_libexec_dir' => "#{lib_dir}/hadoop/libexec",
+    'hadoop_conf_dir' => '/etc/hadoop/conf',
+    'hadoop_common_home' => "#{lib_dir}/hadoop",
+    'hadoop_hdfs_home' => "#{lib_dir}/hadoop-hdfs",
+    'hadoop_mapred_home' => "#{lib_dir}/hadoop-mapreduce",
+    'hadoop_yarn_home' => "#{lib_dir}/hadoop-yarn",
+    'jsvc_home' => '/usr/lib/bigtop-utils'
+  }
 end
 
 # limits.d settings
