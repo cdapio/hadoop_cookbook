@@ -19,6 +19,9 @@
 
 module Hadoop
   module Helpers
+    #
+    # Disable service auto-start on Debian-based platforms
+    #
     def policy_rcd(cmd)
       case cmd
       when 'disable'
@@ -32,6 +35,9 @@ module Hadoop
       end
     end
 
+    #
+    # Return HDP 2.2 version, including revision, used for building HDP 2.2+ on-disk paths
+    #
     def hdp_version
       case node['hadoop']['distribution_version']
       when '2.2.0.0'
@@ -42,6 +48,17 @@ module Hadoop
         '2.2.4.2-2'
       else
         node['hadoop']['distribution_version']
+      end
+    end
+
+    #
+    # Return parent directory for various Hadoop lib directories and homes
+    #
+    def lib_dir
+      if node['hadoop']['distribution'] == 'hdp' && node['hadoop']['distribution_version'].to_f >= 2.2
+        "/usr/hdp/#{hdp_version}"
+      else
+        '/usr/lib'
       end
     end
   end
