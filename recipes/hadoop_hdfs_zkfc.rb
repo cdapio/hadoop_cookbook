@@ -39,16 +39,6 @@ ruby_block "package-#{pkg}" do
   end
 end
 
-# Load helpers
-Chef::Resource::Link.send(:include, Hadoop::Helpers)
-
-%W(etc/default/#{pkg} etc/rc.d/init.d/#{pkg}).each do |l|
-  link "/#{l}" do
-    to "/usr/hdp/#{hdp_version}/#{l}"
-    only_if { node['hadoop']['distribution'] == 'hdp' && node['hadoop']['distribution_version'].to_f >= 2.2 }
-  end
-end
-
 service pkg do
   status_command "service #{pkg} status"
   supports [:restart => true, :reload => false, :status => true]
