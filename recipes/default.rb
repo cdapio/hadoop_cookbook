@@ -214,7 +214,6 @@ else
 end # End hadoop.tmp.dir
 
 # Load helpers
-Chef::Recipe.send(:include, Hadoop::Helpers)
 Chef::Resource::Template.send(:include, Hadoop::Helpers)
 
 # Create /etc/default/hadoop
