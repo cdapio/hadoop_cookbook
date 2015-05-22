@@ -97,6 +97,13 @@ hadoop_log_dir =
     '/var/log/hadoop-hdfs'
   end
 
+hadoop_pid_dir =
+  if node['hadoop']['distribution'] == 'hdp' && node['hadoop']['distribution_version'].to_f >= 2.2
+    '/var/run/hadoop/hdfs'
+  else
+    '/var/run/hadoop-hdfs'
+  end
+
 # Load helpers
 Chef::Resource::Template.send(:include, Hadoop::Helpers)
 
@@ -108,17 +115,17 @@ template "/etc/default/#{pkg}" do
   group 'root'
   action :create
   variables :options => {
-    'hadoop_pid_dir' => '/var/run/hadoop-hdfs',
+    'hadoop_pid_dir' => hadoop_pid_dir,
     'hadoop_log_dir' => hadoop_log_dir,
     'hadoop_namenode_user' => 'hdfs',
     'hadoop_secondarynamenode_user' => 'hdfs',
     'hadoop_datanode_user' => 'hdfs',
     'hadoop_ident_string' => 'hdfs',
     'hadoop_privileged_nfs_user' => 'hdfs',
-    'hadoop_privileged_nfs_pid_dir' => '/var/run/hadoop-hdfs',
+    'hadoop_privileged_nfs_pid_dir' => hadoop_pid_dir,
     'hadoop_privileged_nfs_log_dir' => hadoop_log_dir,
     'hadoop_secure_dn_user' => 'hdfs',
-    'hadoop_secure_dn_pid_dir' => '/var/run/hadoop-hdfs',
+    'hadoop_secure_dn_pid_dir' => hadoop_pid_dir,
     'hadoop_secure_dn_log_dir' => hadoop_log_dir
   }
 end
@@ -137,8 +144,8 @@ template "/etc/init.d/#{pkg}" do
     'args' => '--config /etc/hadoop/conf start namenode',
     'user' => 'hdfs',
     'home' => "#{lib_dir}/hadoop",
-    'pidfile' => "/var/run/hadoop-hdfs/#{pkg}.pid",
-    'logfile' => "#{hadoop_log_dir}/#{pkg}.log"
+    'pidfile' => "${HADOOP_PID_DIR}/#{pkg}.pid",
+    'logfile' => "${HADOOP_LOG_DIR}/#{pkg}.log"
   }
 end
 
