@@ -78,10 +78,11 @@ _start() {
     log_success_msg "Starting ${DESC} (${NAME}): "
 <% if node['platform_family'] == 'rhel' %>
     start_daemon -u ${PKG_USER} -n ${NICENESS} -p ${PID_FILE} /bin/sh -- \
-        -c "${SOURCE} exec ${EXE_FILE} ${EXE_ARGS} \
+        -c "cd ${PKG_HOME}; ${SOURCE} exec ${EXE_FILE} ${EXE_ARGS} \
         > ${LOG_FILE} 2>&1 < /dev/null"
 <% else %>
-    /sbin/start-stop-daemon --quiet --oknodo --start --user ${PKG_USER} --name <%= @options['process'] %> --background \
+    /sbin/start-stop-daemon --quiet --oknodo --start --user ${PKG_USER} \
+       --name <%= @options['process'] %> --background \
        --chuid ${PKG_USER} --nicelevel ${NICENESS} --chdir ${PKG_HOME} \
        --make-pidfile --pidfile ${PID_FILE} --startas /bin/sh -- \
        -c "${SOURCE} exec ${EXE_FILE} ${EXE_ARGS} \
