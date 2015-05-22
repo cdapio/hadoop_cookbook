@@ -273,6 +273,8 @@ end
 # Another Hortonworks mess to clean up
 directory '/etc/hadoop/conf' do
   action :delete
+  recursive true
+  not_if "test -L /etc/hadoop/conf"
 end
 
 # Update alternatives to point to our configuration
