@@ -70,7 +70,7 @@ PKG_HOME="<%= @options['home'] %>"
 NICENESS="+0"
 TIMEOUT=3
 
-[ -f ${SYS_FILE} ] && SOURCE=". ${SYS_FILE};"
+[ -f ${SYS_FILE} ] && SOURCE=". ${SYS_FILE};" && . ${SYS_FILE}
 
 _start() {
     [ -x ${EXE_FILE} ] || exit ${ERROR_PROGRAM_NOT_INSTALLED}
@@ -78,15 +78,13 @@ _start() {
     log_success_msg "Starting ${DESC} (${NAME}): "
 <% if node['platform_family'] == 'rhel' %>
     start_daemon -u ${PKG_USER} -n ${NICENESS} -p ${PID_FILE} /bin/sh -- \
-        -c "cd ${PKG_HOME}; ${SOURCE} exec ${EXE_FILE} ${EXE_ARGS} \
-        > ${LOG_FILE} 2>&1 < /dev/null"
+        -c "cd ${PKG_HOME}; ${SOURCE} exec ${EXE_FILE} ${EXE_ARGS}"
 <% else %>
     /sbin/start-stop-daemon --quiet --oknodo --start --user ${PKG_USER} \
        --name <%= @options['process'] %> --background \
        --chuid ${PKG_USER} --nicelevel ${NICENESS} --chdir ${PKG_HOME} \
        --make-pidfile --pidfile ${PID_FILE} --startas /bin/sh -- \
-       -c "${SOURCE} exec ${EXE_FILE} ${EXE_ARGS} \
-       > ${LOG_FILE} 2>&1 < /dev/null"
+       -c "${SOURCE} exec ${EXE_FILE} ${EXE_ARGS}"
 <% end %>
 
     RETVAL=$?
