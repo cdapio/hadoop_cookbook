@@ -1,0 +1,146 @@
+#! /bin/bash
+#
+# Licensed to the Apache Software Foundation (ASF) under one or more
+# contributor license agreements.  See the NOTICE file distributed with
+# this work for additional information regarding copyright ownership.
+# The ASF licenses this file to You under the Apache License, Version 2.0
+# (the "License"); you may not use this file except in compliance with
+# the License.  You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+#
+# Starts a <%= @options['desc'] %>
+#
+# chkconfig: 345 85 15
+# description: Starts a <%= @options['desc'] %>
+# processname: <%= @options['process'] %>
+#
+### BEGIN INIT INFO
+# Provides:          <%= @options['name'] %>
+# Required-Start:    $syslog $remote_fs
+# Should-Start:
+# Required-Stop:     $syslog $remote_fs
+# Should-Stop:
+# Default-Start:     3 4 5
+# Default-Stop:      0 1 2 6
+# Short-Description: Starts a <%= @options['desc'] %>
+### END INIT INFO
+
+. /lib/lsb/init-functions
+[ -f /etc/default/hadoop ] && . /etc/default/hadoop
+
+# Autodetect JAVA_HOME if not defined
+if [ -e /usr/libexec/bigtop-detect-javahome ]; then
+  . /usr/libexec/bigtop-detect-javahome
+elif [ -e /usr/lib/bigtop-utils/bigtop-detect-javahome ]; then
+  . /usr/lib/bigtop-utils/bigtop-detect-javahome
+fi
+
+RETVAL_SUCCESS=0
+
+STATUS_RUNNING=0
+STATUS_DEAD=1
+STATUS_DEAD_AND_LOCK=2
+STATUS_NOT_RUNNING=3
+STATUS_DEBIAN_NOT_RUNNING=4
+STATUS_OTHER_ERROR=102
+
+ERROR_PROGRAM_NOT_INSTALLED=5
+ERROR_PROGRAM_NOT_CONFIGURED=6
+
+PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
+NAME="<%= @options['name'] %>"
+DESC="<%= @options['desc'] %>"
+SYS_FILE="/etc/default/${NAME}"
+EXE_FILE="<%= @options['binary'] %>"
+EXE_ARGS="<%= @options['args'] %>"
+PID_FILE="<%= @options['pidfile'] %>"
+LOCKFILE="/var/lock/subsys/<%= @options['name'] %>"
+LOG_FILE="<%= @options['logfile'] %>"
+PKG_USER="<%= @options['user'] %>"
+PKG_HOME="<%= @options['home'] %>"
+NICENESS="+0"
+TIMEOUT=3
+
+[ -f ${SYS_FILE} ] && SOURCE=". ${SYS_FILE};"
+
+_start() {
+    [ -x ${EXE_FILE} ] || exit ${ERROR_PROGRAM_NOT_INSTALLED}
+
+    log_success_msg "Starting ${DESC} (${NAME}): "
+    start_daemon -u ${PKG_USER} -n ${NICENESS} -p ${PID_FILE} /bin/sh -- \
+        -c "${SOURCE} exec ${EXE_FILE} ${EXE_ARGS} > $LOG_FILE 2>&1 < /dev/null"
+
+    RETVAL=$?
+    [ ${RETVAL} -eq ${RETVAL_SUCCESS} ] && touch ${LOCKFILE}
+    return ${RETVAL}
+}
+
+_stop() {
+    log_success_msg "Stopping ${DESC} (${NAME}): "
+    killproc -p ${PID_FILE} <%= @options['process'] %>
+    RETVAL=$?
+
+    [ ${RETVAL} -eq ${RETVAL_SUCCESS} ] && rm -f ${LOCKFILE} ${PID_FILE}
+    return ${RETVAL}
+}
+
+_restart() {
+    _stop
+    [ -n "${TIMEOUT}" ] && sleep ${TIMEOUT}
+    _start
+}
+
+_status() {
+    echo -n "Checking for service ${DESC}: "
+    pidofproc -p ${PID_FILE} java > /dev/null
+    RETVAL=$?
+
+    case ${RETVAL} in
+      ${STATUS_RUNNING})
+        log_success_msg "${NAME} is running"
+        ;;
+      ${STATUS_DEAD})
+        log_failure_msg "${NAME} is dead and pid file exists"
+        ;;
+      ${STATUS_DEAD_AND_LOCK})
+        log_failure_msg "${NAME} is dead and lock file exists"
+        ;;
+      ${STATUS_NOT_RUNNING}|${STATUS_DEBIAN_NOT_RUNNING})
+        log_failure_msg "${NAME} is not running"
+        ;;
+      *)
+        log_failure_msg "${NAME} status is unknown"
+        ;;
+    esac
+    return ${RETVAL}
+}
+
+RETVAL=0
+
+case ${1} in
+    start) _start ;;
+
+    stop|force-stop) _stop ;;
+
+    force-reload|condrestart|try-restart) [ -e $LOCKFILE ] && _restart || : ;;
+
+    restart|reload) _restart ;;
+  
+    status) _status ;;
+
+    *)
+	N=/etc/init.d/${NAME}
+	echo "Usage: ${N} {start|stop|restart|reload|condrestart|try-restart|force-reload|status|force-stop}" >&2
+        RETVAL=1
+	;;
+esac
+
+exit ${RETVAL}

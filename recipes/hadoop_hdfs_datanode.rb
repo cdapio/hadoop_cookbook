@@ -70,14 +70,58 @@ dfs_data_dirs.split(',').each do |dir|
   end
 end
 
-# Load helpers
-Chef::Resource::Link.send(:include, Hadoop::Helpers)
-
-%W(etc/default/#{pkg} etc/rc.d/init.d/#{pkg}).each do |l|
-  link "/#{l}" do
-    to "/usr/hdp/#{hdp_version}/#{l}"
-    only_if { node['hadoop']['distribution'] == 'hdp' && node['hadoop']['distribution_version'].to_f >= 2.2 }
+hadoop_log_dir =
+  if node['hadoop'].key?('hadoop_env') && node['hadoop']['hadoop_env'].key?('hadoop_log_dir')
+    node['hadoop']['hadoop_env']['hadoop_log_dir']
+  elsif node['hadoop']['distribution'] == 'hdp' && node['hadoop']['distribution_version'].to_f >= 2.2
+    '/var/log/hadoop/hdfs'
+  else
+    '/var/log/hadoop-hdfs'
   end
+
+# Load helpers
+Chef::Resource::Template.send(:include, Hadoop::Helpers)
+
+# Create /etc/default configuration
+template "/etc/default/#{pkg}" do
+  source 'generic-env.sh.erb'
+  mode '0755'
+  owner 'root'
+  group 'root'
+  action :create
+  variables :options => {
+    'hadoop_pid_dir' => '/var/run/hadoop-hdfs',
+    'hadoop_log_dir' => hadoop_log_dir,
+    'hadoop_namenode_user' => 'hdfs',
+    'hadoop_secondarynamenode_user' => 'hdfs',
+    'hadoop_datanode_user' => 'hdfs',
+    'hadoop_ident_string' => 'hdfs',
+    'hadoop_privileged_nfs_user' => 'hdfs',
+    'hadoop_privileged_nfs_pid_dir' => '/var/run/hadoop-hdfs',
+    'hadoop_privileged_nfs_log_dir' => hadoop_log_dir,
+    'hadoop_secure_dn_user' => 'hdfs',
+    'hadoop_secure_dn_pid_dir' => '/var/run/hadoop-hdfs',
+    'hadoop_secure_dn_log_dir' => hadoop_log_dir
+  }
+end
+
+template "/etc/init.d/#{pkg}" do
+  source 'hadoop-init.erb'
+  mode '0755'
+  owner 'root'
+  group 'root'
+  action :create
+  variables :options => {
+    'desc' => 'Hadoop HDFS DataNode',
+    'name' => pkg,
+    'process' => 'java',
+    'binary' => "#{lib_dir}/hadoop/sbin/hadoop-daemon.sh",
+    'args' => '--config /etc/hadoop/conf start datanode',
+    'user' => 'hdfs',
+    'home' => "#{lib_dir}/hadoop",
+    'pidfile' => "/var/run/hadoop-hdfs/#{pkg}.pid",
+    'logfile' => "#{hadoop_log_dir}/#{pkg}.log"
+  }
 end
 
 service pkg do
