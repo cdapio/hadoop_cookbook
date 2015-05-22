@@ -42,6 +42,7 @@ if [ -e /usr/libexec/bigtop-detect-javahome ]; then
 elif [ -e /usr/lib/bigtop-utils/bigtop-detect-javahome ]; then
   . /usr/lib/bigtop-utils/bigtop-detect-javahome
 fi
+[ -f /etc/profile.d/jdk.sh ] && . /etc/profile.d/jdk.sh
 
 RETVAL_SUCCESS=0
 
@@ -78,9 +79,9 @@ _start() {
 <% if node['platform_family'] == 'rhel' %>
     start_daemon -u ${PKG_USER} -n ${NICENESS} -p ${PID_FILE} /bin/sh -- \
         -c "${SOURCE} exec ${EXE_FILE} ${EXE_ARGS} \
-        > ${LOG_FILE} 2>&1 < /dev/null & "'echo $! '"> ${PID_FILE}"
+        > ${LOG_FILE} 2>&1 < /dev/null"
 <% else %>
-    /sbin/start-stop-daemon --quiet --oknodo --start --user ${PKG_USER} --name java --background \
+    /sbin/start-stop-daemon --quiet --oknodo --start --user ${PKG_USER} --name <%= @options['process'] %> --background \
        --chuid ${PKG_USER} --nicelevel ${NICENESS} --chdir ${PKG_HOME} \
        --make-pidfile --pidfile ${PID_FILE} --startas /bin/sh -- \
        -c "${SOURCE} exec ${EXE_FILE} ${EXE_ARGS} \
@@ -109,7 +110,7 @@ _restart() {
 
 _status() {
     echo -n "Checking for service ${DESC}: "
-    pidofproc -p ${PID_FILE} java > /dev/null
+    pidofproc -p ${PID_FILE} <%= @options['process'] %> > /dev/null
     RETVAL=$?
 
     case ${RETVAL} in
