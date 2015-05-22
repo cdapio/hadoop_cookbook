@@ -270,6 +270,11 @@ file '/etc/security/limits.d/mapreduce.conf' do
   action :delete
 end
 
+# Another Hortonworks mess to clean up
+directory '/etc/hadoop/conf' do
+  action :delete
+end
+
 # Update alternatives to point to our configuration
 execute 'update hadoop-conf alternatives' do
   command "update-alternatives --install /etc/hadoop/conf hadoop-conf /etc/hadoop/#{node['hadoop']['conf_dir']} 50"
