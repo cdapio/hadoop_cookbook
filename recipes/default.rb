@@ -122,16 +122,30 @@ end # End fair-scheduler.xml
         svc
       end
     # Prevent duplicate resources
-    unless node['hadoop'][envfile]["#{svc}_log_dir"] == "/var/log/hadoop-#{log_dir}"
+    unless node['hadoop'][envfile]["#{svc}_log_dir"] == "/var/log/hadoop-#{log_dir}" || (
+           node['hadoop']['distribution'] == 'hdp' && node['hadoop']['distribution_version'].to_f >= 2.2 &&
+           node['hadoop'][envfile]["#{svc}_log_dir"] == "/var/log/hadoop/#{log_dir}"
+    )
       # Delete default directory, if we aren't set to it
       directory "/var/log/hadoop-#{log_dir}" do
         action :delete
         recursive true
         not_if "test -L /var/log/hadoop-#{log_dir}"
       end
-      # symlink
+      # HDP 2.2+ moves the default log directories
+      directory "/var/log/hadoop/#{log_dir}" do
+        action :delete
+        recursive true
+        not_if "test -L /var/log/hadoop/#{log_dir}"
+      end
+      # symlink default log directory
       link "/var/log/hadoop-#{log_dir}" do
         to node['hadoop'][envfile]["#{svc}_log_dir"]
+      end
+      # symlink HDP 2.2 log directory
+      link "/var/log/hadoop/#{log_dir}" do
+        to node['hadoop'][envfile]["#{svc}_log_dir"]
+        only_if { node['hadoop']['distribution'] == 'hdp' && node['hadoop']['distribution_version'].to_f >= 2.2 }
       end
     end
   end
