@@ -52,10 +52,17 @@ module Hadoop
     end
 
     #
+    # Return true if HDP 2.2+
+    #
+    def hdp22?
+      node['hadoop']['distribution'] == 'hdp' && node['hadoop']['distribution_version'].to_f >= 2.2
+    end
+
+    #
     # Return parent directory for various Hadoop lib directories and homes
     #
     def lib_dir
-      if node['hadoop']['distribution'] == 'hdp' && node['hadoop']['distribution_version'].to_f >= 2.2
+      if hdp22?
         "/usr/hdp/#{hdp_version}"
       else
         '/usr/lib'

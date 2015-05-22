@@ -21,6 +21,11 @@ include_recipe 'hadoop::repo'
 include_recipe 'hadoop::_hadoop_checkconfig'
 include_recipe 'hadoop::_compression_libs'
 
+# Load helpers
+Chef::Recipe.send(:include, Hadoop::Helpers)
+Chef::Resource::Link.send(:include, Hadoop::Helpers)
+Chef::Resource::Template.send(:include, Hadoop::Helpers)
+
 package 'hadoop-client' do
   action :install
 end
@@ -123,9 +128,7 @@ end # End fair-scheduler.xml
       end
     # Prevent duplicate resources
     unless node['hadoop'][envfile]["#{svc}_log_dir"] == "/var/log/hadoop-#{log_dir}" || (
-           node['hadoop']['distribution'] == 'hdp' && node['hadoop']['distribution_version'].to_f >= 2.2 &&
-           node['hadoop'][envfile]["#{svc}_log_dir"] == "/var/log/hadoop/#{log_dir}"
-    )
+           hdp22? && node['hadoop'][envfile]["#{svc}_log_dir"] == "/var/log/hadoop/#{log_dir}")
       # Delete default directory, if we aren't set to it
       directory "/var/log/hadoop-#{log_dir}" do
         action :delete
@@ -145,7 +148,7 @@ end # End fair-scheduler.xml
       # symlink HDP 2.2 log directory
       link "/var/log/hadoop/#{log_dir}" do
         to node['hadoop'][envfile]["#{svc}_log_dir"]
-        only_if { node['hadoop']['distribution'] == 'hdp' && node['hadoop']['distribution_version'].to_f >= 2.2 }
+        only_if { hdp22? }
       end
     end
   end
@@ -226,9 +229,6 @@ else
     recursive true
   end
 end # End hadoop.tmp.dir
-
-# Load helpers
-Chef::Resource::Template.send(:include, Hadoop::Helpers)
 
 # Create /etc/default/hadoop
 template '/etc/default/hadoop' do

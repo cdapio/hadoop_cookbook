@@ -105,7 +105,7 @@ execute 'hdp22-mapreduce-tarball' do
   user 'hdfs'
   group 'hdfs'
   not_if "hdfs dfs -test -d #{dfs}/hdp/apps/#{hdp_version}/mapreduce", :user => 'hdfs'
-  only_if { node['hadoop']['distribution'] == 'hdp' && node['hadoop']['distribution_version'].to_f >= 2.2 }
+  only_if { hdp22? }
   action :nothing
 end
 

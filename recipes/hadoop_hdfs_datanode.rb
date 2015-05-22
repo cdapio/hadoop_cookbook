@@ -22,6 +22,10 @@ include_recipe 'hadoop::_hadoop_hdfs_checkconfig'
 include_recipe 'hadoop::_system_tuning'
 pkg = 'hadoop-hdfs-datanode'
 
+# Load helpers
+Chef::Recipe.send(:include, Hadoop::Helpers)
+Chef::Resource::Template.send(:include, Hadoop::Helpers)
+
 package pkg do
   action :nothing
 end
@@ -73,21 +77,18 @@ end
 hadoop_log_dir =
   if node['hadoop'].key?('hadoop_env') && node['hadoop']['hadoop_env'].key?('hadoop_log_dir')
     node['hadoop']['hadoop_env']['hadoop_log_dir']
-  elsif node['hadoop']['distribution'] == 'hdp' && node['hadoop']['distribution_version'].to_f >= 2.2
+  elsif hdp22?
     '/var/log/hadoop/hdfs'
   else
     '/var/log/hadoop-hdfs'
   end
 
 hadoop_pid_dir =
-  if node['hadoop']['distribution'] == 'hdp' && node['hadoop']['distribution_version'].to_f >= 2.2
+  if hdp22?
     '/var/run/hadoop/hdfs'
   else
     '/var/run/hadoop-hdfs'
   end
-
-# Load helpers
-Chef::Resource::Template.send(:include, Hadoop::Helpers)
 
 # Create /etc/default configuration
 template "/etc/default/#{pkg}" do

@@ -30,7 +30,7 @@ Chef::Recipe.send(:include, Hadoop::Helpers)
 # Copy tez library into HDFS
 dfs = node['hadoop']['core_site']['fs.defaultFS']
 dest =
-  if hdp_version.to_f >= 2.2
+  if hdp22?
     "#{dfs}/hdp/apps/#{hdp_version}/tez"
   else
     "#{dfs}/apps/tez"
