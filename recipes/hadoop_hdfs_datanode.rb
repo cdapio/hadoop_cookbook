@@ -90,6 +90,13 @@ hadoop_pid_dir =
     '/var/run/hadoop-hdfs'
   end
 
+target_user =
+  if kerberos?
+    'root'
+  else
+    'hdfs'
+  end
+
 # Create /etc/default configuration
 template "/etc/default/#{pkg}" do
   source 'generic-env.sh.erb'
@@ -103,7 +110,7 @@ template "/etc/default/#{pkg}" do
     'hadoop_namenode_user' => 'hdfs',
     'hadoop_secondarynamenode_user' => 'hdfs',
     'hadoop_datanode_user' => 'hdfs',
-    'hadoop_ident_string' => 'hdfs',
+    'hadoop_ident_string' => target_user,
     'hadoop_privileged_nfs_user' => 'hdfs',
     'hadoop_privileged_nfs_pid_dir' => hadoop_pid_dir,
     'hadoop_privileged_nfs_log_dir' => hadoop_log_dir,
@@ -123,9 +130,9 @@ template "/etc/init.d/#{pkg}" do
     'desc' => 'Hadoop HDFS DataNode',
     'name' => pkg,
     'process' => 'java',
-    'binary' => "#{lib_dir}/hadoop/sbin/hadoop-daemon.sh",
+    'binary' => "export ${HADOOP_IDENT_STRING} ; #{lib_dir}/hadoop/sbin/hadoop-daemon.sh",
     'args' => '--config /etc/hadoop/conf start datanode',
-    'user' => 'hdfs',
+    'user' => target_user,
     'home' => "#{lib_dir}/hadoop",
     'pidfile' => "${HADOOP_PID_DIR}/#{pkg}.pid",
     'logfile' => "${HADOOP_LOG_DIR}/#{pkg}.log"
