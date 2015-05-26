@@ -9,6 +9,7 @@ describe 'hadoop::hadoop_hdfs_secondarynamenode' do
         node.default['hadoop']['hdfs_site']['dfs.namenode.checkpoint.edits.dir'] = '/tmp/hadoop-hdfs/dfs/namesecondaryedits'
         stub_command(/update-alternatives --display /).and_return(false)
         stub_command(%r{/sys/kernel/mm/(.*)transparent_hugepage/defrag}).and_return(false)
+        stub_command(/test -L /).and_return(false)
       end.converge(described_recipe)
     end
     pkg = 'hadoop-hdfs-secondarynamenode'
