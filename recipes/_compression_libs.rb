@@ -24,7 +24,7 @@ pkgs = []
 # Everybody gets snappy
 case node['platform_family']
 when 'debian'
-  pkgs += ['libsnappy1', 'libsnappy1-dev']
+  pkgs += ['libsnappy1', 'libsnappy-dev']
 when 'rhel'
   pkgs += ['snappy', 'snappy-devel']
 end

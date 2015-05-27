@@ -21,6 +21,11 @@ include_recipe 'hadoop::repo'
 include_recipe 'hadoop::_hadoop_checkconfig'
 include_recipe 'hadoop::_compression_libs'
 
+# Load helpers
+Chef::Recipe.send(:include, Hadoop::Helpers)
+Chef::Resource::Link.send(:include, Hadoop::Helpers)
+Chef::Resource::Template.send(:include, Hadoop::Helpers)
+
 package 'hadoop-client' do
   action :install
 end
@@ -122,16 +127,28 @@ end # End fair-scheduler.xml
         svc
       end
     # Prevent duplicate resources
-    unless node['hadoop'][envfile]["#{svc}_log_dir"] == "/var/log/hadoop-#{log_dir}"
+    unless node['hadoop'][envfile]["#{svc}_log_dir"] == "/var/log/hadoop-#{log_dir}" || (
+           hdp22? && node['hadoop'][envfile]["#{svc}_log_dir"] == "/var/log/hadoop/#{log_dir}")
       # Delete default directory, if we aren't set to it
       directory "/var/log/hadoop-#{log_dir}" do
         action :delete
         recursive true
         not_if "test -L /var/log/hadoop-#{log_dir}"
       end
-      # symlink
+      # HDP 2.2+ moves the default log directories
+      directory "/var/log/hadoop/#{log_dir}" do
+        action :delete
+        recursive true
+        not_if "test -L /var/log/hadoop/#{log_dir}"
+      end
+      # symlink default log directory
       link "/var/log/hadoop-#{log_dir}" do
         to node['hadoop'][envfile]["#{svc}_log_dir"]
+      end
+      # symlink HDP 2.2 log directory
+      link "/var/log/hadoop/#{log_dir}" do
+        to node['hadoop'][envfile]["#{svc}_log_dir"]
+        only_if { hdp22? }
       end
     end
   end
@@ -213,13 +230,25 @@ else
   end
 end # End hadoop.tmp.dir
 
-# Some HDP versions ship broken init scripts/config
-execute 'fix-hdp-jsvc-path' do
-  command 'sed -i -e "/JSVC_HOME=/ s:libexec:lib:" /etc/default/hadoop'
-  only_if do
-    node['hadoop']['distribution'] == 'hdp' && (node['hadoop']['distribution_version'].to_s == '2' || \
-                                                node['hadoop']['distribution_version'].to_f == 2.1)
-  end
+# Create /etc/default/hadoop
+template '/etc/default/hadoop' do
+  source 'generic-env.sh.erb'
+  mode '0755'
+  owner 'root'
+  group 'root'
+  action :create
+  variables :options => {
+    'hadoop_home_warn_suppress' => true,
+    'hadoop_home' => "#{lib_dir}/hadoop",
+    'hadoop_prefix' => "#{lib_dir}/hadoop",
+    'hadoop_libexec_dir' => "#{lib_dir}/hadoop/libexec",
+    'hadoop_conf_dir' => '/etc/hadoop/conf',
+    'hadoop_common_home' => "#{lib_dir}/hadoop",
+    'hadoop_hdfs_home' => "#{lib_dir}/hadoop-hdfs",
+    'hadoop_mapred_home' => "#{lib_dir}/hadoop-mapreduce",
+    'hadoop_yarn_home' => "#{lib_dir}/hadoop-yarn",
+    'jsvc_home' => '/usr/lib/bigtop-utils'
+  }
 end
 
 # limits.d settings
@@ -239,6 +268,13 @@ end # End limits.d
 # Remove extra mapreduce file, if it exists
 file '/etc/security/limits.d/mapreduce.conf' do
   action :delete
+end
+
+# Another Hortonworks mess to clean up, their packages force-install blank configs here
+directory '/etc/hadoop/conf' do
+  action :delete
+  recursive true
+  not_if 'test -L /etc/hadoop/conf'
 end
 
 # Update alternatives to point to our configuration

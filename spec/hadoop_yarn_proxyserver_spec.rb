@@ -7,6 +7,7 @@ describe 'hadoop::hadoop_yarn_proxyserver' do
         node.automatic['domain'] = 'example.com'
         node.default['hadoop']['yarn_site']['yarn.web-proxy.address'] = '127.0.0.1'
         stub_command(/update-alternatives --display /).and_return(false)
+        stub_command(/test -L /).and_return(false)
       end.converge(described_recipe)
     end
     pkg = 'hadoop-yarn-proxyserver'
@@ -17,6 +18,15 @@ describe 'hadoop::hadoop_yarn_proxyserver' do
 
     it "runs package-#{pkg} ruby_block" do
       expect(chef_run).to run_ruby_block("package-#{pkg}")
+    end
+
+    %W(
+      /etc/default/#{pkg}
+      /etc/init.d/#{pkg}
+    ).each do |file|
+      it "creates #{file} from template" do
+        expect(chef_run).to create_template(file)
+      end
     end
 
     it "creates #{pkg} service resource, but does not run it" do

@@ -24,18 +24,13 @@ package 'tez' do
   only_if { node['hadoop']['distribution'] == 'hdp' }
 end
 
+# Load helpers
+Chef::Recipe.send(:include, Hadoop::Helpers)
+
 # Copy tez library into HDFS
 dfs = node['hadoop']['core_site']['fs.defaultFS']
-hdp_version =
-  if node['hadoop']['distribution_version'] == '2.2.0.0'
-    '2.2.0.0-2041'
-  elsif node['hadoop']['distribution_version'] == '2.2.1.0'
-    '2.2.1.0-2340'
-  else
-    node['hadoop']['distribution_version']
-  end
 dest =
-  if hdp_version.to_f >= 2.2
+  if hdp22?
     "#{dfs}/hdp/apps/#{hdp_version}/tez"
   else
     "#{dfs}/apps/tez"

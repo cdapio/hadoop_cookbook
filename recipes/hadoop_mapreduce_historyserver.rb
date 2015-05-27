@@ -20,6 +20,10 @@
 include_recipe 'hadoop::default'
 pkg = 'hadoop-mapreduce-historyserver'
 
+# Load helpers
+Chef::Recipe.send(:include, Hadoop::Helpers)
+Chef::Resource::Template.send(:include, Hadoop::Helpers)
+
 package pkg do
   action :nothing
 end
@@ -74,6 +78,65 @@ execute 'mapreduce-jobhistory-done-dir' do
   group 'hdfs'
   not_if "hdfs dfs -test -d #{jhs_done_dir}", :user => 'hdfs'
   action :nothing
+end
+
+# Default HADOOP_MAPRED_LOG_DIR
+hadoop_log_dir =
+  if node['hadoop'].key?('hadoop_env') && node['hadoop']['hadoop_env'].key?('hadoop_mapred_log_dir')
+    node['hadoop']['hadoop_env']['hadoop_mapred_log_dir']
+  elsif hdp22?
+    '/var/log/hadoop/mapreduce'
+  else
+    '/var/log/hadoop-mapreduce'
+  end
+
+hadoop_pid_dir =
+  if hdp22?
+    '/var/run/hadoop/mapreduce'
+  else
+    '/var/run/hadoop-mapreduce'
+  end
+
+hadoop_mapred_home =
+  if hdp22?
+    "#{lib_dir}/mapreduce"
+  else
+    '/usr/lib/hadoop-mapreduce'
+  end
+
+# Create /etc/default configuration
+template "/etc/default/#{pkg}" do
+  source 'generic-env.sh.erb'
+  mode '0755'
+  owner 'root'
+  group 'root'
+  action :create
+  variables :options => {
+    'hadoop_mapred_pid_dir' => hadoop_pid_dir,
+    'hadoop_mapred_log_dir' => hadoop_log_dir,
+    'hadoop_mapred_ident_string' => 'mapred',
+    'hadoop_mapred_home' => hadoop_mapred_home,
+    'hadoop_log_dir' => hadoop_log_dir
+  }
+end
+
+template "/etc/init.d/#{pkg}" do
+  source 'hadoop-init.erb'
+  mode '0755'
+  owner 'root'
+  group 'root'
+  action :create
+  variables :options => {
+    'desc' => 'Hadoop MapReduce JobHistory Server',
+    'name' => pkg,
+    'process' => 'java',
+    'binary' => "#{lib_dir}/hadoop-mapreduce/sbin/mr-jobhistory-daemon.sh",
+    'args' => '--config /etc/hadoop/conf start historyserver',
+    'user' => 'mapred',
+    'home' => "#{lib_dir}/hadoop",
+    'pidfile' => "${HADOOP_MAPRED_PID_DIR}/#{pkg}.pid",
+    'logfile' => "${HADOOP_MAPRED_LOG_DIR}/#{pkg}.log"
+  }
 end
 
 service pkg do

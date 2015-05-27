@@ -26,6 +26,10 @@ else
 end
 pkg = 'hadoop-yarn-proxyserver'
 
+# Load helpers
+Chef::Recipe.send(:include, Hadoop::Helpers)
+Chef::Resource::Template.send(:include, Hadoop::Helpers)
+
 package pkg do
   action :nothing
 end
@@ -41,6 +45,56 @@ ruby_block "package-#{pkg}" do
       policy_rcd('enable') if node['platform_family'] == 'debian'
     end
   end
+end
+
+yarn_log_dir =
+  if node['hadoop'].key?('yarn_env') && node['hadoop']['yarn_env'].key?('yarn_log_dir')
+    node['hadoop']['yarn_env']['yarn_log_dir']
+  elsif hdp22?
+    '/var/log/hadoop/yarn'
+  else
+    '/var/log/hadoop-yarn'
+  end
+
+yarn_pid_dir =
+  if hdp22?
+    '/var/run/hadoop/yarn'
+  else
+    '/var/run/hadoop-yarn'
+  end
+
+# Create /etc/default configuration
+template "/etc/default/#{pkg}" do
+  source 'generic-env.sh.erb'
+  mode '0755'
+  owner 'root'
+  group 'root'
+  action :create
+  variables :options => {
+    'yarn_pid_dir' => yarn_pid_dir,
+    'yarn_log_dir' => yarn_log_dir,
+    'yarn_ident_string' => 'yarn',
+    'yarn_conf_dir' => '/etc/hadoop/conf'
+  }
+end
+
+template "/etc/init.d/#{pkg}" do
+  source 'hadoop-init.erb'
+  mode '0755'
+  owner 'root'
+  group 'root'
+  action :create
+  variables :options => {
+    'desc' => 'Hadoop YARN Proxy Server',
+    'name' => pkg,
+    'process' => 'java',
+    'binary' => "#{lib_dir}/hadoop-yarn/sbin/yarn-daemon.sh",
+    'args' => '--config /etc/hadoop/conf start proxyserver',
+    'user' => 'yarn',
+    'home' => "#{lib_dir}/hadoop",
+    'pidfile' => "${YARN_PID_DIR}/#{pkg}.pid",
+    'logfile' => "${YARN_LOG_DIR}/#{pkg}.log"
+  }
 end
 
 service pkg do
