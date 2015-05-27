@@ -140,5 +140,65 @@ describe 'hadoop::default' do
     it 'runs execute[update hadoop-conf alternatives]' do
       expect(chef_run).to run_execute('update hadoop-conf alternatives')
     end
+
+    it 'installs hadoop-libhdfs package' do
+      expect(chef_run).to install_package('hadoop-libhdfs')
+    end
+
+    it 'creates /etc/default/hadoop from template' do
+      expect(chef_run).to create_template('/etc/default/hadoop')
+    end
+  end
+
+  context 'on HDP 2.2' do
+    let(:chef_run) do
+      ChefSpec::SoloRunner.new(platform: 'centos', version: 6.6) do |node|
+        node.automatic['domain'] = 'example.com'
+        node.override['hadoop']['distribution'] = 'hdp'
+        node.override['hadoop']['distribution_version'] = '2.2.4.2'
+        stub_command(/update-alternatives --display /).and_return(false)
+        stub_command(/test -L /).and_return(false)
+      end.converge(described_recipe)
+    end
+
+    ### TODO: update this when default recipe changes to be more inline with others
+    # it 'creates /var/log/hadoop/hdfs for HADOOP_LOG_DIR' do
+    #   expect(chef_run).to create_directory('/var/log/hadoop/hdfs')
+    # end
+
+    it 'does not link /var/log/hadoop/hdfs' do
+      link = chef_run.link('/var/log/hadoop/hdfs')
+      expect(link).not_to link_to('/var/log/hadoop/hdfs')
+    end
+
+    it 'deletes /etc/hadoop/conf directory' do
+      expect(chef_run).to delete_directory('/etc/hadoop/conf')
+    end
+  end
+
+  context 'on HDP 2.2 with custom HADOOP_LOG_DIR' do
+    let(:chef_run) do
+      ChefSpec::SoloRunner.new(platform: 'centos', version: 6.6) do |node|
+        node.automatic['domain'] = 'example.com'
+        node.override['hadoop']['distribution'] = 'hdp'
+        node.override['hadoop']['distribution_version'] = '2.2.4.2'
+        node.override['hadoop']['hadoop_env']['hadoop_log_dir'] = '/data/logs/hdfs'
+        stub_command(/update-alternatives --display /).and_return(false)
+        stub_command(/test -L /).and_return(false)
+      end.converge(described_recipe)
+    end
+
+    it 'creates /data/logs/hdfs for HADOOP_LOG_DIR' do
+      expect(chef_run).to create_directory('/data/logs/hdfs')
+    end
+
+    it 'deletes /var/log/hadoop/hdfs directory' do
+      expect(chef_run).to delete_directory('/var/log/hadoop/hdfs')
+    end
+
+    it 'creates /var/log/hadoop/hdfs symlink' do
+      link = chef_run.link('/var/log/hadoop/hdfs')
+      expect(link).to link_to('/data/logs/hdfs')
+    end
   end
 end
