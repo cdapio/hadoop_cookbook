@@ -21,6 +21,10 @@ include_recipe 'hadoop::repo'
 include_recipe 'hadoop::zookeeper'
 pkg = 'zookeeper-server'
 
+# Load helpers
+Chef::Recipe.send(:include, Hadoop::Helpers)
+Chef::Resource::Template.send(:include, Hadoop::Helpers)
+
 package pkg do
   action :nothing
 end
@@ -209,6 +213,39 @@ if node['hadoop']['distribution'] == 'hdp' &&
     not_if 'test -e /usr/lib/bigtop-utils/bigtop-detect-javahome'
   end
 end # HDP 2.1 hack
+
+# Create /etc/default configuration
+template "/etc/default/#{pkg}" do
+  source 'generic-env.sh.erb'
+  mode '0755'
+  owner 'root'
+  group 'root'
+  action :create
+  variables :options => {
+    'zookeeper_home' => "#{lib_dir}/zookeeper",
+    'zookeeper_pid_dir' => '/var/run/zookeeper',
+    'zookeeper_log_dir' => zookeeper_log_dir
+  }
+end
+
+template "/etc/init.d/#{pkg}" do
+  source 'hadoop-init.erb'
+  mode '0755'
+  owner 'root'
+  group 'root'
+  action :create
+  variables :options => {
+    'desc' => 'ZooKeeper Server',
+    'name' => pkg,
+    'process' => 'java',
+    'binary' => "/usr/bin/#{pkg}",
+    'args' => 'start',
+    'user' => 'zookeeper',
+    'home' => "#{lib_dir}/zookeeper",
+    'pidfile' => "${ZOOKEEPER_PID_DIR}/#{pkg}.pid",
+    'logfile' => "${ZOOKEEPER_LOG_DIR}/#{pkg}.log"
+  }
+end
 
 service pkg do
   status_command "service #{pkg} status"
