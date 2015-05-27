@@ -19,6 +19,9 @@
 
 module Hadoop
   module Helpers
+    #
+    # Disable service auto-start on Debian-based platforms
+    #
     def policy_rcd(cmd)
       case cmd
       when 'disable'
@@ -29,6 +32,52 @@ module Hadoop
         ::File.delete('/usr/sbin/policy-rc.d') if ::File.exist?('/usr/sbin/policy-rc.d')
       else
         Chef::Application.fatal!('The policy_rc.d method only accepts "disable" or "enable" as arguments')
+      end
+    end
+
+    #
+    # Return HDP 2.2 version, including revision, used for building HDP 2.2+ on-disk paths
+    #
+    def hdp_version
+      case node['hadoop']['distribution_version']
+      when '2.2.0.0'
+        '2.2.0.0-2041'
+      when '2.2.1.0'
+        '2.2.1.0-2340'
+      when '2.2.4.2'
+        '2.2.4.2-2'
+      else
+        node['hadoop']['distribution_version']
+      end
+    end
+
+    #
+    # Return true if HDP 2.2+
+    #
+    def hdp22?
+      node['hadoop']['distribution'] == 'hdp' && node['hadoop']['distribution_version'].to_f >= 2.2
+    end
+
+    #
+    # Return true if Kerberos is enabled
+    #
+    # rubocop: disable Metrics/AbcSize
+    def kerberos?
+      node['hadoop']['core_site'].key?('hadoop.security.authorization') &&
+        node['hadoop']['core_site'].key?('hadoop.security.authentication') &&
+        node['hadoop']['core_site']['hadoop.security.authorization'].to_s == 'true' &&
+        node['hadoop']['core_site']['hadoop.security.authentication'] == 'kerberos'
+    end
+    # rubocop: enable Metrics/AbcSize
+
+    #
+    # Return parent directory for various Hadoop lib directories and homes
+    #
+    def lib_dir
+      if hdp22?
+        "/usr/hdp/#{hdp_version}"
+      else
+        '/usr/lib'
       end
     end
   end
