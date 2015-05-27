@@ -196,6 +196,14 @@ when 'cdh'
     apt_repo_url = node['hadoop']['apt_repo_url'] ? node['hadoop']['apt_repo_url'] : "#{apt_base_url}/#{codename}/amd64/cdh"
     apt_repo_key_url = node['hadoop']['apt_repo_key_url'] ? node['hadoop']['apt_repo_key_url'] : "#{apt_base_url}/#{codename}/amd64/cdh/archive.key"
 
+    file '/etc/apt/preferences.d/cdh' do
+      content <<-EOT
+Package: *
+Pin: origin archive.cloudera.com
+Pin-Priority: 700
+EOT
+    end
+
     apt_repository "cloudera-cdh#{cdh_release}" do
       uri apt_repo_url
       key apt_repo_key_url
