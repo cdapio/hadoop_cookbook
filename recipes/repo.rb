@@ -206,7 +206,7 @@ when 'cdh'
       action :add
     end
 
-    apt_prefrence 'clodera_repo' do
+    apt_prefrence 'cloudera_repo' do
       glob '*'
       pin "origin #{apt_domain_name}"
       pin_priority '700'
