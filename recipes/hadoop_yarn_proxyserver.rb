@@ -85,11 +85,11 @@ template "/etc/init.d/#{pkg}" do
   group 'root'
   action :create
   variables :options => {
-    'desc' => 'Hadoop YARN NodeManager',
+    'desc' => 'Hadoop YARN Proxy Server',
     'name' => pkg,
     'process' => 'java',
     'binary' => "#{lib_dir}/hadoop-yarn/sbin/yarn-daemon.sh",
-    'args' => '--config /etc/hadoop/conf start nodemanager',
+    'args' => '--config /etc/hadoop/conf start proxyserver',
     'user' => 'yarn',
     'home' => "#{lib_dir}/hadoop",
     'pidfile' => "${YARN_PID_DIR}/#{pkg}.pid",

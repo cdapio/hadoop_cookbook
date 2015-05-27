@@ -270,7 +270,7 @@ file '/etc/security/limits.d/mapreduce.conf' do
   action :delete
 end
 
-# Another Hortonworks mess to clean up
+# Another Hortonworks mess to clean up, their packages force-install blank configs here
 directory '/etc/hadoop/conf' do
   action :delete
   recursive true

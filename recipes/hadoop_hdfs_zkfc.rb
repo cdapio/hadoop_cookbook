@@ -85,7 +85,7 @@ template "/etc/init.d/#{pkg}" do
   group 'root'
   action :create
   variables :options => {
-    'desc' => 'Hadoop HDFS NameNode',
+    'desc' => 'Hadoop HDFS ZooKeeper Failover Controller',
     'name' => pkg,
     'process' => 'java',
     'binary' => "#{lib_dir}/hadoop/sbin/hadoop-daemon.sh",
