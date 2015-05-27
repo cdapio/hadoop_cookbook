@@ -116,7 +116,7 @@ template "/etc/default/#{pkg}" do
     'hadoop_mapred_log_dir' => hadoop_log_dir,
     'hadoop_mapred_ident_string' => 'mapred',
     'hadoop_mapred_home' => hadoop_mapred_home,
-    'hadoop_log_dir' => hadoop_log_dir,
+    'hadoop_log_dir' => hadoop_log_dir
   }
 end
 
