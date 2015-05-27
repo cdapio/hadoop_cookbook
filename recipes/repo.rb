@@ -192,17 +192,10 @@ when 'cdh'
     end
     # rubocop: enable Metrics/BlockNesting
 
-    apt_base_url = "http://archive.cloudera.com/cdh#{cdh_release}/#{node['platform']}"
+    apt_domain_name = 'archive.cloudera.com'
+    apt_base_url = "http://#{apt_domain_name}/cdh#{cdh_release}/#{node['platform']}"
     apt_repo_url = node['hadoop']['apt_repo_url'] ? node['hadoop']['apt_repo_url'] : "#{apt_base_url}/#{codename}/amd64/cdh"
     apt_repo_key_url = node['hadoop']['apt_repo_key_url'] ? node['hadoop']['apt_repo_key_url'] : "#{apt_base_url}/#{codename}/amd64/cdh/archive.key"
-
-    file '/etc/apt/preferences.d/cdh' do
-      content <<-EOT
-Package: *
-Pin: origin archive.cloudera.com
-Pin-Priority: 700
-EOT
-    end
 
     apt_repository "cloudera-cdh#{cdh_release}" do
       uri apt_repo_url
@@ -211,6 +204,12 @@ EOT
       components ['contrib']
       arch 'amd64'
       action :add
+    end
+
+    apt_prefrence 'clodera_repo' do
+      glob '*'
+      pin "origin #{apt_domain_name}"
+      pin_priority '700'
     end
   end # End cdh
 
