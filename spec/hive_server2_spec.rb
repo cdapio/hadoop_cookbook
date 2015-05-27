@@ -17,6 +17,15 @@ describe 'hadoop::hive_server2' do
       expect(chef_run).not_to install_package(pkg)
     end
 
+    %W(
+      /etc/default/#{pkg}
+      /etc/init.d/#{pkg}
+    ).each do |file|
+      it "creates #{file} from template" do
+        expect(chef_run).to create_template(file)
+      end
+    end
+
     it "creates #{pkg} service resource, but does not run it" do
       expect(chef_run).to_not disable_service(pkg)
       expect(chef_run).to_not enable_service(pkg)
@@ -28,10 +37,6 @@ describe 'hadoop::hive_server2' do
 
     it 'does not install hive-server2 package' do
       expect(chef_run).not_to install_package('hive-server2')
-    end
-
-    it 'creates /etc/init.d/hive-server2 from template' do
-      expect(chef_run).to create_template('/etc/init.d/hive-server2')
     end
   end
 

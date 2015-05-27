@@ -23,6 +23,10 @@ include_recipe 'hadoop::_system_tuning'
 include_recipe 'hadoop::zookeeper'
 pkg = 'hive-server2'
 
+# Load helpers
+Chef::Recipe.send(:include, Hadoop::Helpers)
+Chef::Resource::Template.send(:include, Hadoop::Helpers)
+
 package pkg do
   action :nothing
 end
@@ -40,15 +44,6 @@ ruby_block "package-#{pkg}" do
   end
   # Hortonworks ships this as part of the hive package
   not_if { node['hadoop']['distribution'] == 'hdp' }
-end
-
-template "/etc/init.d/#{pkg}" do
-  source "#{pkg}.erb"
-  mode '0755'
-  owner 'root'
-  group 'root'
-  action :create
-  only_if { node['hadoop']['distribution'] == 'hdp' }
 end
 
 hive_conf_dir = "/etc/hive/#{node['hive']['conf_dir']}"
@@ -69,6 +64,47 @@ if node['hive'].key?('jaas')
     variables my_vars
   end
 end # End jaas.conf
+
+hive_log_dir =
+  if node['hive'].key?('hive_env') && node['hive']['hive_env'].key?('hive_log_dir')
+    node['hive']['hive_env']['hive_log_dir']
+  else
+    '/var/log/hive'
+  end
+
+# Create /etc/default configuration
+template "/etc/default/#{pkg}" do
+  source 'generic-env.sh.erb'
+  mode '0755'
+  owner 'root'
+  group 'root'
+  action :create
+  variables :options => {
+    'hive_home' => "#{lib_dir}/hive",
+    'hive_pid_dir' => '/var/run/hive',
+    'hive_log_dir' => hive_log_dir,
+    'hive_ident_string' => 'hive'
+  }
+end
+
+template "/etc/init.d/#{pkg}" do
+  source 'hadoop-init.erb'
+  mode '0755'
+  owner 'root'
+  group 'root'
+  action :create
+  variables :options => {
+    'desc' => 'Hive Server2',
+    'name' => pkg,
+    'process' => 'java',
+    'binary' => "#{lib_dir}/hive/bin/hive",
+    'args' => '--config /etc/hive/conf --service server2',
+    'user' => 'hive',
+    'home' => "#{lib_dir}/hive",
+    'pidfile' => "${HIVE_PID_DIR}/#{pkg}.pid",
+    'logfile' => "${HIVE_LOG_DIR}/#{pkg}.log"
+  }
+end
 
 service pkg do
   status_command "service #{pkg} status"
