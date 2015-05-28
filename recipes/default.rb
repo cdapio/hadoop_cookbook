@@ -21,11 +21,6 @@ include_recipe 'hadoop::repo'
 include_recipe 'hadoop::_hadoop_checkconfig'
 include_recipe 'hadoop::_compression_libs'
 
-# Load helpers
-Chef::Recipe.send(:include, Hadoop::Helpers)
-Chef::Resource::Link.send(:include, Hadoop::Helpers)
-Chef::Resource::Template.send(:include, Hadoop::Helpers)
-
 package 'hadoop-client' do
   action :install
 end

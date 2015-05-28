@@ -82,3 +82,7 @@ module Hadoop
     end
   end
 end
+
+# Load helpers
+Chef::Recipe.send(:include, Hadoop::Helpers)
+Chef::Resource.send(:include, Hadoop::Helpers)

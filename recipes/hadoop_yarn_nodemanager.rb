@@ -21,10 +21,6 @@ include_recipe 'hadoop::default'
 include_recipe 'hadoop::_system_tuning'
 pkg = 'hadoop-yarn-nodemanager'
 
-# Load helpers
-Chef::Recipe.send(:include, Hadoop::Helpers)
-Chef::Resource::Template.send(:include, Hadoop::Helpers)
-
 package pkg do
   action :nothing
 end
@@ -33,7 +29,6 @@ end
 ruby_block "package-#{pkg}" do
   block do
     begin
-      Chef::Resource::RubyBlock.send(:include, Hadoop::Helpers)
       policy_rcd('disable') if node['platform_family'] == 'debian'
       resources("package[#{pkg}]").run_action(:install)
     ensure

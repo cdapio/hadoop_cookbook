@@ -24,9 +24,6 @@ package 'tez' do
   only_if { node['hadoop']['distribution'] == 'hdp' }
 end
 
-# Load helpers
-Chef::Recipe.send(:include, Hadoop::Helpers)
-
 # Copy tez library into HDFS
 dfs = node['hadoop']['core_site']['fs.defaultFS']
 dest =
