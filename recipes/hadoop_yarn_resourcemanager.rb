@@ -92,7 +92,7 @@ dfs = node['hadoop']['core_site']['fs.defaultFS']
 execute 'hdp22-mapreduce-tarball' do
   command <<-EOS
   hdfs dfs -mkdir -p #{dfs}/hdp/apps/#{hdp_version}/mapreduce && \
-  hdfs dfs -put /usr/hdp/current/hadoop-client/mapreduce.tar.gz /hdp/apps/#{hdp_version}/mapreduce && \
+  hdfs dfs -put #{hadoop_lib_dir}/hadoop/mapreduce.tar.gz /hdp/apps/#{hdp_version}/mapreduce && \
   hdfs dfs -chown -R hdfs:hadoop /hdp && \
   hdfs dfs -chmod -R 555 /hdp/apps/#{hdp_version}/mapreduce && \
   hdfs dfs -chmod -R 444 /hdp/apps/#{hdp_version}/mapreduce/mapreduce.tar.gz
