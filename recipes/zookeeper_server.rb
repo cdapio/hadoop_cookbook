@@ -198,22 +198,6 @@ template "#{zookeeper_conf_dir}/log4j.properties" do
   only_if { node['zookeeper'].key?('log4j') && !node['zookeeper']['log4j'].empty? }
 end # End log4j.properties
 
-# Hack to work around broken Hortonworks release engineering
-if node['hadoop']['distribution'] == 'hdp' &&
-   (node['hadoop']['distribution_version'].to_f == 2.1 || node['hadoop']['distribution_version'].to_s == '2')
-  log 'hdp-2.1 release engineering fix' do
-    level :warn
-    message 'Performing workaround for broken zookeeper-server init script on HDP 2.1'
-  end
-  directory '/usr/lib/bigtop-utils' do
-    action :create
-  end
-  file '/usr/lib/bigtop-utils/bigtop-detect-javahome' do
-    action :touch
-    not_if 'test -e /usr/lib/bigtop-utils/bigtop-detect-javahome'
-  end
-end # HDP 2.1 hack
-
 # Create /etc/default configuration
 template "/etc/default/#{pkg}" do
   source 'generic-env.sh.erb'
