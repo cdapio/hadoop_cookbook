@@ -64,7 +64,7 @@ describe 'hadoop::hive_metastore' do
     end
 
     it 'link mysql-connector-java.jar' do
-      link = chef_run.link('/usr/hdp/current/hive-client/lib/mysql-connector-java.jar')
+      link = chef_run.link('/usr/hdp/2.2.4.2-2/hive/lib/mysql-connector-java.jar')
       expect(link).to link_to('/usr/share/java/mysql-connector-java.jar')
     end
   end
@@ -107,7 +107,7 @@ describe 'hadoop::hive_metastore' do
     end
 
     it 'link postgresql-jdbc4.jar' do
-      link = chef_run.link('/usr/hdp/current/hive-client/lib/postgresql-jdbc4.jar')
+      link = chef_run.link('/usr/hdp/2.2.4.2-2/hive/lib/postgresql-jdbc4.jar')
       expect(link).to link_to('/usr/share/java/postgresql-jdbc4.jar')
     end
   end
