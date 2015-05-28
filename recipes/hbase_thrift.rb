@@ -56,7 +56,7 @@ template "/etc/default/#{pkg}" do
   group 'root'
   action :create
   variables :options => {
-    'hbase_home' => "#{lib_dir}/hbase",
+    'hbase_home' => "#{hadoop_lib_dir}/hbase",
     'hbase_pid_dir' => '/var/run/hbase',
     'hbase_log_dir' => hbase_log_dir,
     'hbase_ident_string' => 'hbase',
@@ -74,10 +74,10 @@ template "/etc/init.d/#{pkg}" do
     'desc' => 'HBase Thrift Interface',
     'name' => pkg,
     'process' => 'java',
-    'binary' => "#{lib_dir}/hbase/bin/hbase-daemon.sh",
+    'binary' => "#{hadoop_lib_dir}/hbase/bin/hbase-daemon.sh",
     'args' => '--config /etc/hbase/conf start thrift',
     'user' => 'hbase',
-    'home' => "#{lib_dir}/hbase",
+    'home' => "#{hadoop_lib_dir}/hbase",
     'pidfile' => "${HBASE_PID_DIR}/#{pkg}.pid",
     'logfile' => "${HBASE_LOG_DIR}/#{pkg}.log"
   }

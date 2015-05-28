@@ -57,7 +57,7 @@ template "/etc/default/#{pkg}" do
   group 'root'
   action :create
   variables :options => {
-    'hive_home' => "#{lib_dir}/hive",
+    'hive_home' => "#{hadoop_lib_dir}/hive",
     'hive_pid_dir' => '/var/run/hive',
     'hive_log_dir' => hive_log_dir,
     'hive_ident_string' => 'hive'
@@ -74,10 +74,10 @@ template "/etc/init.d/#{pkg}" do
     'desc' => 'Hive Server',
     'name' => pkg,
     'process' => 'java',
-    'binary' => "#{lib_dir}/hive/bin/hive",
+    'binary' => "#{hadoop_lib_dir}/hive/bin/hive",
     'args' => '--config /etc/hive/conf --service server',
     'user' => 'hive',
-    'home' => "#{lib_dir}/hive",
+    'home' => "#{hadoop_lib_dir}/hive",
     'pidfile' => "${HIVE_PID_DIR}/#{pkg}.pid",
     'logfile' => "${HIVE_LOG_DIR}/#{pkg}.log"
   }

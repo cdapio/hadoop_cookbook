@@ -130,10 +130,10 @@ template "/etc/init.d/#{pkg}" do
     'desc' => 'Hadoop HDFS DataNode',
     'name' => pkg,
     'process' => 'java',
-    'binary' => "#{lib_dir}/hadoop/sbin/hadoop-daemon.sh",
+    'binary' => "#{hadoop_lib_dir}/hadoop/sbin/hadoop-daemon.sh",
     'args' => '--config /etc/hadoop/conf start datanode',
     'user' => target_user,
-    'home' => "#{lib_dir}/hadoop",
+    'home' => "#{hadoop_lib_dir}/hadoop",
     'pidfile' => "${HADOOP_PID_DIR}/#{pkg}.pid",
     'logfile' => "${HADOOP_LOG_DIR}/#{pkg}.log"
   }

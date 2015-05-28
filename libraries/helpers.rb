@@ -73,7 +73,7 @@ module Hadoop
     #
     # Return parent directory for various Hadoop lib directories and homes
     #
-    def lib_dir
+    def hadoop_lib_dir
       if hdp22?
         "/usr/hdp/#{hdp_version}"
       else

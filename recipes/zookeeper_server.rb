@@ -206,7 +206,7 @@ template "/etc/default/#{pkg}" do
   group 'root'
   action :create
   variables :options => {
-    'zookeeper_home' => "#{lib_dir}/zookeeper",
+    'zookeeper_home' => "#{hadoop_lib_dir}/zookeeper",
     'zookeeper_pid_dir' => '/var/run/zookeeper',
     'zookeeper_log_dir' => zookeeper_log_dir
   }
@@ -225,7 +225,7 @@ template "/etc/init.d/#{pkg}" do
     'binary' => "/usr/bin/#{pkg}",
     'args' => 'start',
     'user' => 'zookeeper',
-    'home' => "#{lib_dir}/zookeeper",
+    'home' => "#{hadoop_lib_dir}/zookeeper",
     'pidfile' => "${ZOOKEEPER_PID_DIR}/#{pkg}.pid",
     'logfile' => "${ZOOKEEPER_LOG_DIR}/#{pkg}.log"
   }
