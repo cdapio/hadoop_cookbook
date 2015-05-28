@@ -91,7 +91,7 @@ hadoop_pid_dir =
   end
 
 target_user =
-  if kerberos?
+  if hadoop_kerberos?
     'root'
   else
     'hdfs'
