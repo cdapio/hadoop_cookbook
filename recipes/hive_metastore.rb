@@ -141,7 +141,7 @@ template "/etc/init.d/#{pkg}" do
     'name' => pkg,
     'process' => 'java',
     'binary' => "#{lib_dir}/hive/bin/hive",
-    'args' => '--config /etc/hive/conf --service metastore',
+    'args' => '--config /etc/hive/conf --service metastore > ${LOG_FILE} & < /dev/null',
     'user' => 'hive',
     'home' => "#{lib_dir}/hive",
     'pidfile' => "${HIVE_PID_DIR}/#{pkg}.pid",
