@@ -97,13 +97,6 @@ hadoop_pid_dir =
     '/var/run/hadoop-mapreduce'
   end
 
-hadoop_mapred_home =
-  if hdp22?
-    "#{lib_dir}/mapreduce"
-  else
-    '/usr/lib/hadoop-mapreduce'
-  end
-
 # Create /etc/default configuration
 template "/etc/default/#{pkg}" do
   source 'generic-env.sh.erb'
@@ -115,7 +108,7 @@ template "/etc/default/#{pkg}" do
     'hadoop_mapred_pid_dir' => hadoop_pid_dir,
     'hadoop_mapred_log_dir' => hadoop_log_dir,
     'hadoop_mapred_ident_string' => 'mapred',
-    'hadoop_mapred_home' => hadoop_mapred_home,
+    'hadoop_mapred_home' => "#{lib_dir}/hadoop-mapreduce",
     'hadoop_log_dir' => hadoop_log_dir
   }
 end
