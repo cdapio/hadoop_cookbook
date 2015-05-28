@@ -84,8 +84,25 @@ directory zookeeper_data_dir do
   action :create
 end
 
+directory "#{zookeeper_data_dir}/version-2" do
+  owner 'zookeeper'
+  group 'hadoop'
+  mode '0755'
+  recursive true
+  action :create
+end
+
 unless zookeeper_datalog_dir == zookeeper_data_dir
   directory zookeeper_datalog_dir do
+    owner 'zookeeper'
+    group 'hadoop'
+    mode '0755'
+    recursive true
+    action :create
+    only_if { node['zookeeper']['zoocfg'].key?('dataLogDir') }
+  end
+
+  directory "#{zookeeper_datalog_dir}/version-2" do
     owner 'zookeeper'
     group 'hadoop'
     mode '0755'
