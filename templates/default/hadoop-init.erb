@@ -60,6 +60,9 @@ PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
 NAME="<%= @options['name'] %>"
 DESC="<%= @options['desc'] %>"
 SYS_FILE="/etc/default/${NAME}"
+
+[ -f ${SYS_FILE} ] && SOURCE=". ${SYS_FILE};" && . ${SYS_FILE}
+
 EXE_FILE="<%= @options['binary'] %>"
 EXE_ARGS="<%= @options['args'] %>"
 PID_FILE="<%= @options['pidfile'] %>"
@@ -69,8 +72,6 @@ PKG_USER="<%= @options['user'] %>"
 PKG_HOME="<%= @options['home'] %>"
 NICENESS="+0"
 TIMEOUT=3
-
-[ -f ${SYS_FILE} ] && SOURCE=". ${SYS_FILE};" && . ${SYS_FILE}
 
 _start() {
     [ -x ${EXE_FILE} ] || exit ${ERROR_PROGRAM_NOT_INSTALLED}
