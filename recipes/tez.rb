@@ -36,10 +36,10 @@ dest =
     "#{dfs}/apps/tez"
   end
 src =
-  if hdp_version.to_f >= 2.2
-    "/usr/hdp/#{hdp_version}/tez/lib/tez.tar.gz"
+  if hdp22?
+    "#{lib_dir}/tez/lib/tez.tar.gz"
   else
-    '/usr/lib/tez/*'
+    "#{lib_dir}/tez/*"
   end
 execute 'tez-hdfs-appdir' do
   command <<-EOS
@@ -104,7 +104,7 @@ if node.recipe?('hadoop::hive') && node['hive']['hive_site']['hive.execution.eng
   execute 'hive-hdfs-appdir' do
     command <<-EOS
     hdfs dfs -mkdir -p #{dfs}/apps/hive/install && \
-    hdfs dfs -copyFromLocal /usr/lib/hive/lib/hive-exec-* #{dfs}/apps/hive/install/
+    hdfs dfs -copyFromLocal #{lib_dir}/hive/lib/hive-exec-* #{dfs}/apps/hive/install/
     EOS
     timeout 300
     user 'hdfs'
