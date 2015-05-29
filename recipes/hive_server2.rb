@@ -78,7 +78,8 @@ template "/etc/default/#{pkg}" do
     'hive_home' => "#{hadoop_lib_dir}/hive",
     'hive_pid_dir' => '/var/run/hive',
     'hive_log_dir' => hive_log_dir,
-    'hive_ident_string' => 'hive'
+    'hive_ident_string' => 'hive',
+    'hive_conf_dir' => hive_conf_dir
   }
 end
 
@@ -93,7 +94,8 @@ template "/etc/init.d/#{pkg}" do
     'name' => pkg,
     'process' => 'java',
     'binary' => "#{hadoop_lib_dir}/hive/bin/hive",
-    'args' => '--config /etc/hive/conf --service server2',
+    'args' => '--config ${CONF_DIR} --service server2',
+    'confdir' => '${HIVE_CONF_DIR}',
     'user' => 'hive',
     'home' => "#{hadoop_lib_dir}/hive",
     'pidfile' => "${HIVE_PID_DIR}/#{pkg}.pid",

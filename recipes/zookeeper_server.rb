@@ -203,7 +203,8 @@ template "/etc/default/#{pkg}" do
   variables :options => {
     'zookeeper_home' => "#{hadoop_lib_dir}/zookeeper",
     'zookeeper_pid_dir' => '/var/run/zookeeper',
-    'zookeeper_log_dir' => zookeeper_log_dir
+    'zookeeper_log_dir' => zookeeper_log_dir,
+    'zookeeper_conf_dir' => zookeeper_conf_dir
   }
 end
 
@@ -219,6 +220,7 @@ template "/etc/init.d/#{pkg}" do
     'process' => 'java',
     'binary' => "/usr/bin/#{pkg}",
     'args' => 'start',
+    'confdir' => '${ZOOKEEPER_CONF_DIR}',
     'user' => 'zookeeper',
     'home' => "#{hadoop_lib_dir}/zookeeper",
     'pidfile' => "${ZOOKEEPER_PID_DIR}/#{pkg}.pid",

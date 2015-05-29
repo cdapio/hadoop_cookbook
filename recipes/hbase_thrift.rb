@@ -55,6 +55,7 @@ template "/etc/default/#{pkg}" do
     'hbase_pid_dir' => '/var/run/hbase',
     'hbase_log_dir' => hbase_log_dir,
     'hbase_ident_string' => 'hbase',
+    'hbase_conf_dir' => '/etc/hbase/conf',
     'hbase_thrift_mode' => '-nonblocking'
   }
 end
@@ -70,7 +71,8 @@ template "/etc/init.d/#{pkg}" do
     'name' => pkg,
     'process' => 'java',
     'binary' => "#{hadoop_lib_dir}/hbase/bin/hbase-daemon.sh",
-    'args' => '--config /etc/hbase/conf start thrift',
+    'args' => '--config ${CONF_DIR} start thrift',
+    'confdir' => '${HBASE_CONF_DIR}',
     'user' => 'hbase',
     'home' => "#{hadoop_lib_dir}/hbase",
     'pidfile' => "${HBASE_PID_DIR}/#{pkg}.pid",
