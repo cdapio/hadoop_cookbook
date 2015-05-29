@@ -26,7 +26,7 @@ Unreleased
 - Sort XML configuration keys, per @mbautin ( Issue: #184 )
 - HDP 2.2 hadooplzo support ( Issue: #185 )
 - Fix Java 7 type checking, per @TD-4242 ( Issue: #188 )
-- Replace init scripts with template-based scripts ( Issues: #190 #194 )
+- Template-based init scripts ( Issues: #190 #194 [COOK-52](https://issues.cask.co/browse/COOK-52) [COOK-53](https://issues.cask.co/browse/COOK-53) )
 - Fix HDFS HA checkconfig, per @TD-4242 ( Issue: #192 )
 - Initialize ZooKeeper `version-2` directories ( Issue: #193 )
 
