@@ -33,7 +33,7 @@ end
 
 package 'spark-python' do
   action :install
-  only_if { hdp22? }
+  only_if { (node['hadoop']['distribution'] == 'cdh' || hdp22?) && node['spark']['release']['install'].to_s == 'false' }
 end
 
 # Spark MLib requires this
