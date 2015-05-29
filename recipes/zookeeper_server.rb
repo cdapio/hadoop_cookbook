@@ -218,7 +218,7 @@ template "/etc/init.d/#{pkg}" do
     'desc' => 'ZooKeeper Server',
     'name' => pkg,
     'process' => 'java',
-    'binary' => "/usr/bin/#{pkg}",
+    'binary' => "#{hadoop_lib_dir}/zookeeper/bin/#{pkg}",
     'args' => 'start',
     'confdir' => '${ZOOKEEPER_CONF_DIR}',
     'user' => 'zookeeper',
