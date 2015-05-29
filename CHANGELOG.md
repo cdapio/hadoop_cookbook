@@ -3,7 +3,7 @@ hadoop CHANGELOG
 
 Unreleased
 ----------
-- Transparent Hugepages are not universally available ( Issue: #156 )
+- Transparent Hugepages are not universally available, per @jdecello and @taverentech ( Issue: #156 )
 - Support HDP 2.2.4.2 repo ( Issues: #160 #186 )
 - Fix YARN/Hive/Oozie PATHs for HDP 2.2 ( Issue: #161 )
 - Official CDH5 repo for Trusty ( Issue: #162 )
