@@ -21,22 +21,6 @@ include_recipe 'hadoop::repo'
 include_recipe 'hadoop::zookeeper'
 pkg = 'zookeeper-server'
 
-package pkg do
-  action :nothing
-end
-
-# Hack to prevent auto-start of services, see COOK-26
-ruby_block "package-#{pkg}" do
-  block do
-    begin
-      policy_rcd('disable') if node['platform_family'] == 'debian'
-      resources("package[#{pkg}]").run_action(:install)
-    ensure
-      policy_rcd('enable') if node['platform_family'] == 'debian'
-    end
-  end
-end
-
 # HDP 2.0.11.0 (maybe others) doesn't create zookeeper group
 group 'zookeeper' do
   action :create

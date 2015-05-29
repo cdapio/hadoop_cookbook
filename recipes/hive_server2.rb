@@ -23,24 +23,6 @@ include_recipe 'hadoop::_system_tuning'
 include_recipe 'hadoop::zookeeper'
 pkg = 'hive-server2'
 
-package pkg do
-  action :nothing
-end
-
-# Hack to prevent auto-start of services, see COOK-26
-ruby_block "package-#{pkg}" do
-  block do
-    begin
-      policy_rcd('disable') if node['platform_family'] == 'debian'
-      resources("package[#{pkg}]").run_action(:install)
-    ensure
-      policy_rcd('enable') if node['platform_family'] == 'debian'
-    end
-  end
-  # Hortonworks ships this as part of the hive package
-  not_if { node['hadoop']['distribution'] == 'hdp' }
-end
-
 hive_conf_dir = "/etc/hive/#{node['hive']['conf_dir']}"
 
 # Setup jaas.conf

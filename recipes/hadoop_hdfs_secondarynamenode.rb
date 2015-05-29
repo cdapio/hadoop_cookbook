@@ -22,22 +22,6 @@ include_recipe 'hadoop::_hadoop_hdfs_checkconfig'
 include_recipe 'hadoop::_system_tuning'
 pkg = 'hadoop-hdfs-secondarynamenode'
 
-package pkg do
-  action :nothing
-end
-
-# Hack to prevent auto-start of services, see COOK-26
-ruby_block "package-#{pkg}" do
-  block do
-    begin
-      policy_rcd('disable') if node['platform_family'] == 'debian'
-      resources("package[#{pkg}]").run_action(:install)
-    ensure
-      policy_rcd('enable') if node['platform_family'] == 'debian'
-    end
-  end
-end
-
 fs_checkpoint_dirs =
   if node['hadoop'].key?('hdfs_site') && node['hadoop']['hdfs_site'].key?('dfs.namenode.checkpoint.dir')
     node['hadoop']['hdfs_site']['dfs.namenode.checkpoint.dir']

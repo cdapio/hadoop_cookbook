@@ -21,22 +21,6 @@ include_recipe 'hadoop::hive'
 include_recipe 'hadoop::_system_tuning'
 pkg = 'hive-server'
 
-package pkg do
-  action :nothing
-end
-
-# Hack to prevent auto-start of services, see COOK-26
-ruby_block "package-#{pkg}" do
-  block do
-    begin
-      policy_rcd('disable') if node['platform_family'] == 'debian'
-      resources("package[#{pkg}]").run_action(:install)
-    ensure
-      policy_rcd('enable') if node['platform_family'] == 'debian'
-    end
-  end
-end
-
 hive_log_dir =
   if node['hive'].key?('hive_env') && node['hive']['hive_env'].key?('hive_log_dir')
     node['hive']['hive_env']['hive_log_dir']

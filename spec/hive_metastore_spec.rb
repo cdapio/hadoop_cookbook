@@ -11,14 +11,6 @@ describe 'hadoop::hive_metastore' do
     end
     pkg = 'hive-metastore'
 
-    it "does not install #{pkg} package" do
-      expect(chef_run).not_to install_package(pkg)
-    end
-
-    it "runs package-#{pkg} ruby_block" do
-      expect(chef_run).to run_ruby_block("package-#{pkg}")
-    end
-
     %w(mysql-connector-java postgresql-jdbc).each do |p|
       it "does not install #{p} package" do
         expect(chef_run).not_to install_package(p)
@@ -63,7 +55,7 @@ describe 'hadoop::hive_metastore' do
       end.converge(described_recipe)
     end
 
-    it 'link mysql-connector-java.jar' do
+    it 'creates mysql-connector-java.jar symlink' do
       link = chef_run.link('/usr/hdp/2.2.4.2-2/hive/lib/mysql-connector-java.jar')
       expect(link).to link_to('/usr/share/java/mysql-connector-java.jar')
     end
@@ -78,17 +70,8 @@ describe 'hadoop::hive_metastore' do
         stub_command(%r{/sys/kernel/mm/(.*)transparent_hugepage/defrag}).and_return(false)
       end.converge(described_recipe)
     end
-    pkg = 'hive-metastore'
 
-    it "does not install #{pkg} package" do
-      expect(chef_run).not_to install_package(pkg)
-    end
-
-    it "runs package-#{pkg} ruby_block" do
-      expect(chef_run).to run_ruby_block("package-#{pkg}")
-    end
-
-    it 'link postgresql-jdbc4.jar' do
+    it 'creates postgresql-jdbc4.jar symlink' do
       link = chef_run.link('/usr/lib/hive/lib/postgresql-jdbc4.jar')
       expect(link).to link_to('/usr/share/java/postgresql-jdbc4.jar')
     end
@@ -106,7 +89,7 @@ describe 'hadoop::hive_metastore' do
       end.converge(described_recipe)
     end
 
-    it 'link postgresql-jdbc4.jar' do
+    it 'creates postgresql-jdbc4.jar symlink' do
       link = chef_run.link('/usr/hdp/2.2.4.2-2/hive/lib/postgresql-jdbc4.jar')
       expect(link).to link_to('/usr/share/java/postgresql-jdbc4.jar')
     end

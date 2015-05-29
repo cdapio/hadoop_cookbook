@@ -20,23 +20,6 @@
 include_recipe 'hadoop::spark'
 pkg = 'spark-history-server'
 
-package pkg do
-  action :nothing
-end
-
-# Hack to prevent auto-start of services, see COOK-26
-ruby_block "package-#{pkg}" do
-  block do
-    begin
-      policy_rcd('disable') if node['platform_family'] == 'debian'
-      resources("package[#{pkg}]").run_action(:install)
-    ensure
-      policy_rcd('enable') if node['platform_family'] == 'debian'
-    end
-  end
-  only_if { node['hadoop']['distribution'] == 'cdh' }
-end
-
 dfs = node['hadoop']['core_site']['fs.defaultFS']
 
 execute 'hdfs-spark-userdir' do

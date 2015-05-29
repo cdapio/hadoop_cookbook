@@ -12,10 +12,6 @@ describe 'hadoop::spark_historyserver' do
     end
     pkg = 'spark-history-server'
 
-    it "does not install #{pkg} package" do
-      expect(chef_run).not_to install_package(pkg)
-    end
-
     %W(
       /etc/default/#{pkg}
       /etc/init.d/#{pkg}
@@ -40,45 +36,6 @@ describe 'hadoop::spark_historyserver' do
 
     it 'creates hdfs-spark-eventlog-dir execute resource, but does not run it' do
       expect(chef_run).to_not run_execute('hdfs-spark-eventlog-dir').with(user: 'hdfs')
-    end
-  end
-
-  context 'using CDH 5' do
-    let(:chef_run) do
-      ChefSpec::SoloRunner.new(platform: 'centos', version: 6.6) do |node|
-        node.automatic['domain'] = 'example.com'
-        node.override['hadoop']['distribution'] = 'cdh'
-        node.override['hadoop']['distribution_version'] = '5.3.2'
-        stub_command(/test -L /).and_return(false)
-        stub_command(/update-alternatives --display /).and_return(false)
-      end.converge(described_recipe)
-    end
-    pkg = 'spark-history-server'
-
-    it "does not install #{pkg} package" do
-      expect(chef_run).not_to install_package(pkg)
-    end
-
-    it "runs package-#{pkg} ruby_block" do
-      expect(chef_run).to run_ruby_block("package-#{pkg}")
-    end
-
-    %W(
-      /etc/default/#{pkg}
-      /etc/init.d/#{pkg}
-    ).each do |file|
-      it "creates #{file} from template" do
-        expect(chef_run).to create_template(file)
-      end
-    end
-
-    it "creates #{pkg} service resource, but does not run it" do
-      expect(chef_run).to_not disable_service(pkg)
-      expect(chef_run).to_not enable_service(pkg)
-      expect(chef_run).to_not reload_service(pkg)
-      expect(chef_run).to_not restart_service(pkg)
-      expect(chef_run).to_not start_service(pkg)
-      expect(chef_run).to_not stop_service(pkg)
     end
   end
 end

@@ -22,22 +22,6 @@ include_recipe 'hadoop::_hbase_checkconfig'
 include_recipe 'hadoop::_system_tuning'
 pkg = 'hbase-regionserver'
 
-package pkg do
-  action :nothing
-end
-
-# Hack to prevent auto-start of services, see COOK-26
-ruby_block "package-#{pkg}" do
-  block do
-    begin
-      policy_rcd('disable') if node['platform_family'] == 'debian'
-      resources("package[#{pkg}]").run_action(:install)
-    ensure
-      policy_rcd('enable') if node['platform_family'] == 'debian'
-    end
-  end
-end
-
 hbase_log_dir =
   if node['hbase'].key?('hbase_env') && node['hbase']['hbase_env'].key?('hbase_log_dir')
     node['hbase']['hbase_env']['hbase_log_dir']

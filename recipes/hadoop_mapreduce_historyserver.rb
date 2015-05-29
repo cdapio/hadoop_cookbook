@@ -20,22 +20,6 @@
 include_recipe 'hadoop::default'
 pkg = 'hadoop-mapreduce-historyserver'
 
-package pkg do
-  action :nothing
-end
-
-# Hack to prevent auto-start of services, see COOK-26
-ruby_block "package-#{pkg}" do
-  block do
-    begin
-      policy_rcd('disable') if node['platform_family'] == 'debian'
-      resources("package[#{pkg}]").run_action(:install)
-    ensure
-      policy_rcd('enable') if node['platform_family'] == 'debian'
-    end
-  end
-end
-
 am_staging_dir =
   if node['hadoop'].key?('mapred_site') && node['hadoop']['mapred_site'].key?('yarn.app.mapreduce.am.staging-dir')
     node['hadoop']['mapred_site']['yarn.app.mapreduce.am.staging-dir']

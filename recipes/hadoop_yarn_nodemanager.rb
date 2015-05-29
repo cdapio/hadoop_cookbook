@@ -21,22 +21,6 @@ include_recipe 'hadoop::default'
 include_recipe 'hadoop::_system_tuning'
 pkg = 'hadoop-yarn-nodemanager'
 
-package pkg do
-  action :nothing
-end
-
-# Hack to prevent auto-start of services, see COOK-26
-ruby_block "package-#{pkg}" do
-  block do
-    begin
-      policy_rcd('disable') if node['platform_family'] == 'debian'
-      resources("package[#{pkg}]").run_action(:install)
-    ensure
-      policy_rcd('enable') if node['platform_family'] == 'debian'
-    end
-  end
-end
-
 %w(yarn.nodemanager.local-dirs yarn.nodemanager.log-dirs).each do |opt|
   next unless node['hadoop'].key?('yarn_site') && node['hadoop']['yarn_site'].key?(opt)
   node['hadoop']['yarn_site'][opt].split(',').each do |dir|
