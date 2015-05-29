@@ -22,6 +22,15 @@ describe 'hadoop::hbase_thrift' do
       expect(chef_run).to run_ruby_block("package-#{pkg}")
     end
 
+    %W(
+      /etc/default/#{pkg}
+      /etc/init.d/#{pkg}
+    ).each do |file|
+      it "creates #{file} from template" do
+        expect(chef_run).to create_template(file)
+      end
+    end
+
     it "creates #{pkg} service resource, but does not run it" do
       expect(chef_run).to_not disable_service(pkg)
       expect(chef_run).to_not enable_service(pkg)

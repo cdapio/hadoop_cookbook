@@ -11,7 +11,6 @@ describe 'hadoop::zookeeper_server' do
         node.default['zookeeper']['zookeeper_env']['zookeeper_log_dir'] = '/data/log/zookeeper'
         stub_command(/test -L /).and_return(false)
         stub_command(/update-alternatives --display /).and_return(false)
-        stub_command('test -e /usr/lib/bigtop-utils/bigtop-detect-javahome').and_return(false)
       end.converge(described_recipe)
     end
     pkg = 'zookeeper-server'
@@ -96,20 +95,32 @@ describe 'hadoop::zookeeper_server' do
       expect(chef_run).to create_template('/etc/zookeeper/conf.chef/zookeeper-env.sh')
     end
 
-    it 'creates /usr/lib/bigtop-utils directory' do
-      expect(chef_run).to create_directory('/usr/lib/bigtop-utils')
-    end
-
-    it 'creates file /usr/lib/bigtop-utils/bigtop-detect-javahome' do
-      expect(chef_run).to touch_file('/usr/lib/bigtop-utils/bigtop-detect-javahome')
-    end
-
-    it 'logs hdp-2.1 release engineering fix' do
-      expect(chef_run).to write_log('Performing workaround for broken zookeeper-server init script on HDP 2.1')
+    it 'creates /var/lib/zookeeper/version-2 directory' do
+      expect(chef_run).to create_directory('/var/lib/zookeeper/version-2')
     end
 
     it 'runs execute[update zookeeper-conf alternatives]' do
       expect(chef_run).to run_execute('update zookeeper-conf alternatives')
+    end
+  end
+
+  context 'on Centos 6.6 with split dataDir/dataLogDir' do
+    let(:chef_run) do
+      ChefSpec::SoloRunner.new(platform: 'centos', version: 6.6) do |node|
+        node.automatic['domain'] = 'example.com'
+        node.automatic['hostname'] = 'localhost'
+        node.default['zookeeper']['zoocfg']['dataLogDir'] = '/tmp/zk-logdir'
+        stub_command(/test -L /).and_return(false)
+        stub_command(/update-alternatives --display /).and_return(false)
+      end.converge(described_recipe)
+    end
+
+    it 'creates /tmp/zk-logdir directory' do
+      expect(chef_run).to create_directory('/tmp/zk-logdir')
+    end
+
+    it 'creates /tmp/zk-logdir/version-2 directory' do
+      expect(chef_run).to create_directory('/tmp/zk-logdir/version-2')
     end
   end
 end

@@ -25,6 +25,15 @@ describe 'hadoop::hive_metastore' do
       end
     end
 
+    %W(
+      /etc/default/#{pkg}
+      /etc/init.d/#{pkg}
+    ).each do |file|
+      it "creates #{file} from template" do
+        expect(chef_run).to create_template(file)
+      end
+    end
+
     it "creates #{pkg} service resource, but does not run it" do
       expect(chef_run).to_not disable_service(pkg)
       expect(chef_run).to_not enable_service(pkg)
@@ -32,10 +41,6 @@ describe 'hadoop::hive_metastore' do
       expect(chef_run).to_not restart_service(pkg)
       expect(chef_run).to_not start_service(pkg)
       expect(chef_run).to_not stop_service(pkg)
-    end
-
-    it "creates /etc/init.d/#{pkg} from template" do
-      expect(chef_run).to create_template('/etc/init.d/hive-metastore')
     end
 
     it 'does not run execute[hive-hdfs-warehousedir]' do
