@@ -68,7 +68,7 @@ PKG_USER="<%= @options['user'] %>"
 PKG_HOME="<%= @options['home'] %>"
 CONF_DIR="<%= @options['confdir'] %>"
 
-[ -f ${CONF_DIR}/${NAME} ] && . ${CONF_DIR}/${NAME}
+[ -f ${CONF_DIR}/${NAME}-env.sh ] && . ${CONF_DIR}/${NAME}-env.sh
 
 EXE_FILE="<%= @options['binary'] %>"
 EXE_ARGS="<%= @options['args'] %>"
