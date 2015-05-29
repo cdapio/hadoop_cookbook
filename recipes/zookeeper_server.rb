@@ -204,7 +204,9 @@ template "/etc/default/#{pkg}" do
     'zookeeper_home' => "#{hadoop_lib_dir}/zookeeper",
     'zookeeper_pid_dir' => '/var/run/zookeeper',
     'zookeeper_log_dir' => zookeeper_log_dir,
-    'zookeeper_conf_dir' => zookeeper_conf_dir
+    'zookeeper_conf_dir' => zookeeper_conf_dir,
+    'zoo_log_dir' => zookeeper_log_dir,
+    'zoocfgdir' => zookeeper_conf_dir
   }
 end
 
