@@ -62,17 +62,52 @@ execute 'hdfs-spark-eventlog-dir' do
   action :nothing
 end
 
-if node['hadoop']['distribution'] == 'cdh'
-  s_cmd = "service #{pkg}"
-else
-  s_cmd = 'true #' # Ends with # to make arguments a comment, versus part of command line
+spark_log_dir =
+  if node['spark'].key?('spark_env') && node['spark']['spark_env'].key?('spark_log_dir')
+    node['spark']['spark_env']['spark_log_dir']
+  else
+    '/var/log/spark'
+  end
+
+# Create /etc/default configuration
+template "/etc/default/#{pkg}" do
+  source 'generic-env.sh.erb'
+  mode '0755'
+  owner 'root'
+  group 'root'
+  action :create
+  variables :options => {
+    'spark_home' => "#{hadoop_lib_dir}/hbase",
+    'spark_pid_dir' => '/var/run/spark',
+    'spark_log_dir' => spark_log_dir,
+    'spark_ident_string' => 'spark',
+    'spark_history_server_log_dir' => eventlog_dir,
+    'spark_history_opts' => '$SPARK_HISTORY_OPTS -Dspark.history.fs.logDirectory=${SPARK_HISTORY_SERVER_LOG_DIR}',
+    'spark_conf_dir' => '/etc/spark/conf'
+  }
 end
 
-service 'spark-history-server' do
-  status_command "#{s_cmd} status"
-  start_command "#{s_cmd} start"
-  stop_command "#{s_cmd} stop"
-  restart_command "#{s_cmd} restart"
+template "/etc/init.d/#{pkg}" do
+  source 'hadoop-init.erb'
+  mode '0755'
+  owner 'root'
+  group 'root'
+  action :create
+  variables :options => {
+    'desc' => 'Spark History Server',
+    'name' => pkg,
+    'process' => 'java',
+    'binary' => "#{hadoop_lib_dir}/spark/bin/spark-class",
+    'args' => 'org.apache.spark.deploy.history.HistoryServer > ${LOG_FILE} < /dev/null &',
+    'user' => 'spark',
+    'home' => "#{hadoop_lib_dir}/spark",
+    'pidfile' => "${SPARK_PID_DIR}/#{pkg}.pid",
+    'logfile' => "${SPARK_LOG_DIR}/#{pkg}.log"
+  }
+end
+
+service pkg do
+  status_command "service #{pkg} status"
   supports [:restart => true, :reload => false, :status => true]
   action :nothing
 end

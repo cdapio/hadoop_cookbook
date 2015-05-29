@@ -21,7 +21,7 @@ include_recipe 'hadoop::spark'
 include_recipe 'hadoop::_system_tuning'
 pkg = 'spark-worker'
 
-if node['hadoop']['distribution'] == 'cdh'
+if node['hadoop']['distribution'] == 'cdh' || hdp22?
 
   package pkg do
     action :nothing
@@ -38,12 +38,6 @@ if node['hadoop']['distribution'] == 'cdh'
       end
     end
   end
-
-  service pkg do
-    status_command "service #{pkg} status"
-    supports [:restart => true, :reload => false, :status => true]
-    action :nothing
-  end
 end
 
 worker_dir =
@@ -59,4 +53,62 @@ directory worker_dir do
   group 'spark'
   recursive true
   action :create
+end
+
+spark_log_dir =
+  if node['spark'].key?('spark_env') && node['spark']['spark_env'].key?('spark_log_dir')
+    node['spark']['spark_env']['spark_log_dir']
+  else
+    '/var/log/spark'
+  end
+
+eventlog_dir =
+  if node['spark']['spark_defaults'].key?('spark.eventLog.dir')
+    node['spark']['spark_defaults']['spark.eventLog.dir']
+  else
+    '/user/spark/applicationHistory'
+  end
+
+# Create /etc/default configuration
+template "/etc/default/#{pkg}" do
+  source 'generic-env.sh.erb'
+  mode '0755'
+  owner 'root'
+  group 'root'
+  action :create
+  variables :options => {
+    'spark_home' => "#{hadoop_lib_dir}/hbase",
+    'spark_pid_dir' => '/var/run/spark',
+    'spark_log_dir' => spark_log_dir,
+    'spark_ident_string' => 'spark',
+    'spark_history_server_log_dir' => eventlog_dir,
+    'spark_history_opts' => '$SPARK_HISTORY_OPTS -Dspark.history.fs.logDirectory=${SPARK_HISTORY_SERVER_LOG_DIR}',
+    'spark_conf_dir' => '/etc/spark/conf'
+  }
+end
+
+template "/etc/init.d/#{pkg}" do
+  source 'hadoop-init.erb'
+  mode '0755'
+  owner 'root'
+  group 'root'
+  action :create
+  variables :options => {
+    'desc' => 'Spark Worker',
+    'name' => pkg,
+    'process' => 'java',
+    'binary' => "#{hadoop_lib_dir}/spark/bin/spark-class",
+    'args' => 'org.apache.spark.deploy.worker.Worker spark://${STANDALONE_SPARK_MASTER_HOST}:${SPARK_MASTER_PORT} > ${LOG_FILE} < /dev/null &',
+    'confdir' => '${SPARK_CONF_DIR}',
+    'user' => 'spark',
+    'home' => "#{hadoop_lib_dir}/spark",
+    'pidfile' => "${SPARK_PID_DIR}/#{pkg}.pid",
+    'logfile' => "${SPARK_LOG_DIR}/#{pkg}.log"
+  }
+end
+
+service pkg do
+  status_command "service #{pkg} status"
+  supports [:restart => true, :reload => false, :status => true]
+  action :nothing
 end
