@@ -4,7 +4,7 @@ hadoop CHANGELOG
 Unreleased
 ----------
 - Transparent Hugepages are not universally available ( Issue: #156 )
-- Support HDP 2.2.4.2 repo ( Issue: #160 )
+- Support HDP 2.2.4.2 repo ( Issues: #160 #186 )
 - Fix YARN/Hive/Oozie PATHs for HDP 2.2 ( Issue: #161 )
 - Official CDH5 repo for Trusty ( Issue: #162 )
 - Set user limits by attribute ( Issues: #163 #165 [COOK-35](https://issues.cask.co/browse/COOK-35) )
@@ -18,8 +18,17 @@ Unreleased
 - Disable SELinux ( Issue: #173 )
 - Install libhdfs ( Issue: #177 )
 - Support HDP 2.1.10.0 and 2.2.1.0 ( Issue: #178 )
-- Move compression libs to helper recipe ( Issues: #179 [COOK-44](https://issues.cask.co/browse/COOK-44) )
+- Move compression libs to helper recipe ( Issues: #179 #187 [COOK-44](https://issues.cask.co/browse/COOK-44) )
 - Ensure zookeeper user has shell access ( Issue: #180 )
+- Use `variables` directly over local variable ( Issue: #181 )
+- HDP 2.2 MR DistributedCache ( Issue: #182 [COOK-40](https://issues.cask.co/browse/COOK-40) )
+- HDP 2.2 Tez DistributedCache ( Issue: #183 [COOK-49](https://issues.cask.co/browse/COOK-49) )
+- Sort XML configuration keys, per @mbautin ( Issue: #184 )
+- HDP 2.2 hadooplzo support ( Issue: #185 )
+- Fix Java 7 type checking, per @TD-4242 ( Issue: #188 )
+- Replace init scripts with template-based scripts ( Issues: #190 #194 )
+- Fix HDFS HA checkconfig, per @TD-4242 ( Issue: #192 )
+- Initialize ZooKeeper `version-2` directories ( Issue: #193 )
 
 v.1.13.1 (Apr 15, 2015)
 -----------------------
