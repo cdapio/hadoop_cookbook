@@ -52,6 +52,10 @@ describe 'hadoop::spark' do
       end
     end
 
+    it 'deletes /etc/spark/conf directory' do
+      expect(chef_run).to delete_directory('/etc/spark/conf')
+    end
+
     it 'runs execute[update spark-conf alternatives]' do
       expect(chef_run).to run_execute('update spark-conf alternatives')
     end

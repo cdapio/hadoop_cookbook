@@ -56,6 +56,10 @@ describe 'hadoop::hive' do
       end
     end
 
+    it 'deletes /etc/hive/conf directory' do
+      expect(chef_run).to delete_directory('/etc/hive/conf')
+    end
+
     it 'creates /tmp/hive/scratch directory' do
       expect(chef_run).to create_directory('/tmp/hive/scratch')
     end
@@ -66,8 +70,8 @@ describe 'hadoop::hive' do
       ChefSpec::SoloRunner.new(platform: 'centos', version: 6.6) do |node|
         node.automatic['domain'] = 'example.com'
         node.default['hive']['hive_env']['hive_log_dir'] = '/data/log/hive'
-        stub_command('test -L /var/log/hive').and_return(false)
-        stub_command('update-alternatives --display hive-conf | grep best | awk \'{print $5}\' | grep /etc/hive/conf.chef').and_return(false)
+        stub_command(/test -L /).and_return(false)
+        stub_command(/update-alternatives --display /).and_return(false)
       end.converge(described_recipe)
     end
 
@@ -82,8 +86,7 @@ describe 'hadoop::hive' do
         node.default['hive']['hive_site']['hive.exec.local.scratchdir'] = '/tmp/hive'
         node.automatic['domain'] = 'example.com'
         stub_command(/test -L /).and_return(false)
-        stub_command('update-alternatives --display hadoop-conf | grep best | awk \'{print $5}\' | grep /etc/hadoop/conf.chef').and_return(false)
-        stub_command('update-alternatives --display hive-conf | grep best | awk \'{print $5}\' | grep /etc/hive/conf.chef').and_return(false)
+        stub_command(/update-alternatives --display /).and_return(false)
       end.converge(described_recipe)
     end
 

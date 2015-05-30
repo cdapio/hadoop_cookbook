@@ -142,6 +142,13 @@ file '/etc/default/hbase' do
   action :delete
 end
 
+# Another Hortonworks mess to clean up, their packages force-install blank configs here
+directory '/etc/hbase/conf' do
+  action :delete
+  recursive true
+  not_if 'test -L /etc/hbase/conf'
+end
+
 # Update alternatives to point to our configuration
 execute 'update hbase-conf alternatives' do
   command "update-alternatives --install /etc/hbase/conf hbase-conf /etc/hbase/#{node['hbase']['conf_dir']} 50"

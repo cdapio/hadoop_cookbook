@@ -5,6 +5,7 @@ describe 'hadoop::hive_metastore' do
     let(:chef_run) do
       ChefSpec::SoloRunner.new(platform: 'centos', version: 6.6) do |node|
         node.automatic['domain'] = 'example.com'
+        stub_command(/test -L /).and_return(false)
         stub_command(/update-alternatives --display /).and_return(false)
         stub_command(%r{/sys/kernel/mm/(.*)transparent_hugepage/defrag}).and_return(false)
       end.converge(described_recipe)
@@ -49,8 +50,8 @@ describe 'hadoop::hive_metastore' do
         node.automatic['domain'] = 'example.com'
         node.default['hive']['hive_env']['hive_log_dir'] = '/data/log/hive'
         node.default['hive']['hive_site']['hive.exec.local.scratchdir'] = '/tmp/hive/scratch'
-        stub_command('test -L /var/log/hive').and_return(false)
-        stub_command('update-alternatives --display hive-conf | grep best | awk \'{print $5}\' | grep /etc/hive/conf.chef').and_return(false)
+        stub_command(/test -L /).and_return(false)
+        stub_command(/update-alternatives --display /).and_return(false)
         stub_command(%r{/sys/kernel/mm/(.*)transparent_hugepage/defrag}).and_return(false)
       end.converge(described_recipe)
     end
@@ -66,7 +67,8 @@ describe 'hadoop::hive_metastore' do
       ChefSpec::SoloRunner.new(platform: 'ubuntu', version: 12.04) do |node|
         node.override['hive']['hive_site']['javax.jdo.option.ConnectionURL'] = 'jdbc:postgresql:localhost/hive'
         node.automatic['domain'] = 'example.com'
-        stub_command('update-alternatives --display hive-conf | grep best | awk \'{print $5}\' | grep /etc/hive/conf.chef').and_return(false)
+        stub_command(/test -L /).and_return(false)
+        stub_command(/update-alternatives --display /).and_return(false)
         stub_command(%r{/sys/kernel/mm/(.*)transparent_hugepage/defrag}).and_return(false)
       end.converge(described_recipe)
     end
@@ -84,7 +86,8 @@ describe 'hadoop::hive_metastore' do
         node.override['hadoop']['distribution_version'] = '2.2.4.2'
         node.override['hive']['hive_site']['javax.jdo.option.ConnectionURL'] = 'jdbc:postgresql:localhost/hive'
         node.automatic['domain'] = 'example.com'
-        stub_command('update-alternatives --display hive-conf | grep best | awk \'{print $5}\' | grep /etc/hive/conf.chef').and_return(false)
+        stub_command(/test -L /).and_return(false)
+        stub_command(/update-alternatives --display /).and_return(false)
         stub_command(%r{/sys/kernel/mm/(.*)transparent_hugepage/defrag}).and_return(false)
       end.converge(described_recipe)
     end

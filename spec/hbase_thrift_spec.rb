@@ -9,6 +9,7 @@ describe 'hadoop::hbase_thrift' do
         node.default['hbase']['hbase_site']['hbase.rootdir'] = 'hdfs://localhost:8020/hbase'
         node.default['hbase']['hbase_site']['hbase.zookeeper.quorum'] = 'localhost'
         node.default['hbase']['hbase_site']['hbase.cluster.distributed'] = 'true'
+        stub_command(/test -L /).and_return(false)
         stub_command(/update-alternatives --display /).and_return(false)
       end.converge(described_recipe)
     end

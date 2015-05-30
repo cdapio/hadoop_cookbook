@@ -63,6 +63,10 @@ describe 'hadoop::hbase' do
       expect(chef_run).to delete_file('/etc/default/hbase')
     end
 
+    it 'deletes /etc/hbase/conf directory' do
+      expect(chef_run).to delete_directory('/etc/hbase/conf')
+    end
+
     it 'runs execute[update hbase-conf alternatives]' do
       expect(chef_run).to run_execute('update hbase-conf alternatives')
     end
@@ -73,6 +77,7 @@ describe 'hadoop::hbase' do
       ChefSpec::SoloRunner.new(platform: 'ubuntu', version: 12.04) do |node|
         node.automatic['domain'] = 'example.com'
         node.default['hadoop']['hdfs_site']['dfs.datanode.max.xcievers'] = '4096'
+        stub_command(/test -L /).and_return(false)
         stub_command(/update-alternatives --display /).and_return(false)
       end.converge(described_recipe)
     end

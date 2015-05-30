@@ -220,6 +220,13 @@ service pkg do
   action :nothing
 end
 
+# Another Hortonworks mess to clean up, their packages force-install blank configs here
+directory '/etc/zookeeper/conf' do
+  action :delete
+  recursive true
+  not_if 'test -L /etc/zookeeper/conf'
+end
+
 # Update alternatives to point to our configuration
 execute 'update zookeeper-conf alternatives' do
   command "update-alternatives --install /etc/zookeeper/conf zookeeper-conf /etc/zookeeper/#{node['zookeeper']['conf_dir']} 50"
