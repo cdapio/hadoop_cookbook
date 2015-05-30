@@ -22,10 +22,6 @@ include_recipe 'hadoop::_hadoop_hdfs_checkconfig'
 include_recipe 'hadoop::_system_tuning'
 pkg = 'hadoop-hdfs-namenode'
 
-# Load helpers
-Chef::Recipe.send(:include, Hadoop::Helpers)
-Chef::Resource::Template.send(:include, Hadoop::Helpers)
-
 package pkg do
   action :nothing
 end
@@ -34,7 +30,6 @@ end
 ruby_block "package-#{pkg}" do
   block do
     begin
-      Chef::Resource::RubyBlock.send(:include, Hadoop::Helpers)
       policy_rcd('disable') if node['platform_family'] == 'debian'
       resources("package[#{pkg}]").run_action(:install)
     ensure
@@ -141,10 +136,10 @@ template "/etc/init.d/#{pkg}" do
     'desc' => 'Hadoop HDFS NameNode',
     'name' => pkg,
     'process' => 'java',
-    'binary' => "#{lib_dir}/hadoop/sbin/hadoop-daemon.sh",
+    'binary' => "#{hadoop_lib_dir}/hadoop/sbin/hadoop-daemon.sh",
     'args' => '--config /etc/hadoop/conf start namenode',
     'user' => 'hdfs',
-    'home' => "#{lib_dir}/hadoop",
+    'home' => "#{hadoop_lib_dir}/hadoop",
     'pidfile' => "${HADOOP_PID_DIR}/#{pkg}.pid",
     'logfile' => "${HADOOP_LOG_DIR}/#{pkg}.log"
   }

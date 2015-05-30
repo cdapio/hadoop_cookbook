@@ -21,10 +21,6 @@ include_recipe 'hadoop::hive'
 include_recipe 'hadoop::_system_tuning'
 pkg = 'hive-metastore'
 
-# Load helpers
-Chef::Recipe.send(:include, Hadoop::Helpers)
-Chef::Resource::Template.send(:include, Hadoop::Helpers)
-
 package pkg do
   action :nothing
 end
@@ -33,7 +29,6 @@ end
 ruby_block "package-#{pkg}" do
   block do
     begin
-      Chef::Resource::RubyBlock.send(:include, Hadoop::Helpers)
       policy_rcd('disable') if node['platform_family'] == 'debian'
       resources("package[#{pkg}]").run_action(:install)
     ensure
@@ -41,14 +36,6 @@ ruby_block "package-#{pkg}" do
     end
   end
 end
-
-hive_data_dir =
-  if node['hadoop']['distribution'] == 'hdp' && (node['hadoop']['distribution_version'].to_s == '2' || \
-                                                 node['hadoop']['distribution_version'].to_f == 2.2)
-    '/usr/hdp/current/hive-client/lib'
-  else
-    '/usr/lib/hive/lib'
-  end
 
 hive_sql =
   if node['hive'].key?('hive_site') && node['hive']['hive_site'].key?('javax.jdo.option.ConnectionURL')
@@ -64,7 +51,7 @@ java_share_dir = '/usr/share/java'
 jars = node['hadoop']['sql_jars']
 
 jars.each do |jar|
-  link "#{hive_data_dir}/#{jar}.jar" do
+  link "#{hadoop_lib_dir}/hive/lib/#{jar}.jar" do
     to "#{java_share_dir}/#{jar}.jar"
   end
 end
@@ -123,7 +110,7 @@ template "/etc/default/#{pkg}" do
   group 'root'
   action :create
   variables :options => {
-    'hive_home' => "#{lib_dir}/hive",
+    'hive_home' => "#{hadoop_lib_dir}/hive",
     'hive_pid_dir' => '/var/run/hive',
     'hive_log_dir' => hive_log_dir,
     'hive_ident_string' => 'hive'
@@ -140,10 +127,10 @@ template "/etc/init.d/#{pkg}" do
     'desc' => 'Hive MetaStore',
     'name' => pkg,
     'process' => 'java',
-    'binary' => "#{lib_dir}/hive/bin/hive",
+    'binary' => "#{hadoop_lib_dir}/hive/bin/hive",
     'args' => '--config /etc/hive/conf --service metastore > ${LOG_FILE} & < /dev/null',
     'user' => 'hive',
-    'home' => "#{lib_dir}/hive",
+    'home' => "#{hadoop_lib_dir}/hive",
     'pidfile' => "${HIVE_PID_DIR}/#{pkg}.pid",
     'logfile' => "${HIVE_LOG_DIR}/#{pkg}.log"
   }

@@ -21,10 +21,6 @@ include_recipe 'hadoop::default'
 include_recipe 'hadoop::_system_tuning'
 pkg = 'hadoop-yarn-nodemanager'
 
-# Load helpers
-Chef::Recipe.send(:include, Hadoop::Helpers)
-Chef::Resource::Template.send(:include, Hadoop::Helpers)
-
 package pkg do
   action :nothing
 end
@@ -33,7 +29,6 @@ end
 ruby_block "package-#{pkg}" do
   block do
     begin
-      Chef::Resource::RubyBlock.send(:include, Hadoop::Helpers)
       policy_rcd('disable') if node['platform_family'] == 'debian'
       resources("package[#{pkg}]").run_action(:install)
     ensure
@@ -56,15 +51,7 @@ end
 end
 
 # Ensure permissions for secure Hadoop... this *should* be no-op
-container_executor_path =
-  if node['hadoop']['distribution'] == 'hdp' && (node['hadoop']['distribution_version'].to_s == '2' || \
-                                                 node['hadoop']['distribution_version'].to_f == 2.2)
-    '/usr/hdp/current/hadoop-yarn-nodemanager/bin'
-  else
-    '/usr/lib/hadoop-yarn/bin'
-  end
-
-file "#{container_executor_path}/container-executor" do
+file "#{hadoop_lib_dir}/hadoop-yarn/bin/container-executor" do
   owner 'root'
   group 'yarn'
   mode '6050'
@@ -111,10 +98,10 @@ template "/etc/init.d/#{pkg}" do
     'desc' => 'Hadoop YARN NodeManager',
     'name' => pkg,
     'process' => 'java',
-    'binary' => "#{lib_dir}/hadoop-yarn/sbin/yarn-daemon.sh",
+    'binary' => "#{hadoop_lib_dir}/hadoop-yarn/sbin/yarn-daemon.sh",
     'args' => '--config /etc/hadoop/conf start nodemanager',
     'user' => 'yarn',
-    'home' => "#{lib_dir}/hadoop",
+    'home' => "#{hadoop_lib_dir}/hadoop",
     'pidfile' => "${YARN_PID_DIR}/#{pkg}.pid",
     'logfile' => "${YARN_LOG_DIR}/#{pkg}.log"
   }

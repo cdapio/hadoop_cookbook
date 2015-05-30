@@ -21,18 +21,18 @@ describe 'hadoop::spark' do
       expect(chef_run).to install_package('libgfortran')
     end
 
-    it 'creates Spark conf_dir' do
+    it 'creates spark conf_dir' do
       expect(chef_run).to create_directory('/etc/spark/conf.chef').with(
         user: 'root',
         group: 'root'
       )
     end
 
-    it 'deletes /var/log/spark' do
+    it 'deletes /var/log/spark directory' do
       expect(chef_run).to delete_directory('/var/log/spark')
     end
 
-    it 'creates /data/log/spark' do
+    it 'creates /data/log/spark directory' do
       expect(chef_run).to create_directory('/data/log/spark').with(
         mode: '0755'
       )

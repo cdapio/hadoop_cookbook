@@ -21,11 +21,6 @@ include_recipe 'hadoop::repo'
 include_recipe 'hadoop::_hadoop_checkconfig'
 include_recipe 'hadoop::_compression_libs'
 
-# Load helpers
-Chef::Recipe.send(:include, Hadoop::Helpers)
-Chef::Resource::Link.send(:include, Hadoop::Helpers)
-Chef::Resource::Template.send(:include, Hadoop::Helpers)
-
 package 'hadoop-client' do
   action :install
 end
@@ -239,14 +234,14 @@ template '/etc/default/hadoop' do
   action :create
   variables :options => {
     'hadoop_home_warn_suppress' => true,
-    'hadoop_home' => "#{lib_dir}/hadoop",
-    'hadoop_prefix' => "#{lib_dir}/hadoop",
-    'hadoop_libexec_dir' => "#{lib_dir}/hadoop/libexec",
+    'hadoop_home' => "#{hadoop_lib_dir}/hadoop",
+    'hadoop_prefix' => "#{hadoop_lib_dir}/hadoop",
+    'hadoop_libexec_dir' => "#{hadoop_lib_dir}/hadoop/libexec",
     'hadoop_conf_dir' => '/etc/hadoop/conf',
-    'hadoop_common_home' => "#{lib_dir}/hadoop",
-    'hadoop_hdfs_home' => "#{lib_dir}/hadoop-hdfs",
-    'hadoop_mapred_home' => "#{lib_dir}/hadoop-mapreduce",
-    'hadoop_yarn_home' => "#{lib_dir}/hadoop-yarn",
+    'hadoop_common_home' => "#{hadoop_lib_dir}/hadoop",
+    'hadoop_hdfs_home' => "#{hadoop_lib_dir}/hadoop-hdfs",
+    'hadoop_mapred_home' => "#{hadoop_lib_dir}/hadoop-mapreduce",
+    'hadoop_yarn_home' => "#{hadoop_lib_dir}/hadoop-yarn",
     'jsvc_home' => '/usr/lib/bigtop-utils'
   }
 end

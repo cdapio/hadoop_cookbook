@@ -2,7 +2,7 @@
 # Cookbook Name:: hadoop
 # Recipe:: spark
 #
-# Copyright © 2013-2014 Cask Data, Inc.
+# Copyright © 2013-2015 Cask Data, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -19,9 +19,21 @@
 
 include_recipe 'hadoop::repo' if node['spark']['release']['install'].to_s == 'false'
 
-package 'spark-core' do
+pkg =
+  if node['hadoop']['distribution'] == 'cdh'
+    'spark-core'
+  else
+    'spark'
+  end
+
+package pkg do
   action :install
-  only_if { node['hadoop']['distribution'] == 'cdh' && node['spark']['release']['install'].to_s == 'false' }
+  only_if { (node['hadoop']['distribution'] == 'cdh' || hdp22?) && node['spark']['release']['install'].to_s == 'false' }
+end
+
+package 'spark-python' do
+  action :install
+  only_if { (node['hadoop']['distribution'] == 'cdh' || hdp22?) && node['spark']['release']['install'].to_s == 'false' }
 end
 
 # Spark MLib requires this

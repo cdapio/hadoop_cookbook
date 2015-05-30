@@ -26,10 +26,6 @@ else
 end
 pkg = 'hadoop-yarn-proxyserver'
 
-# Load helpers
-Chef::Recipe.send(:include, Hadoop::Helpers)
-Chef::Resource::Template.send(:include, Hadoop::Helpers)
-
 package pkg do
   action :nothing
 end
@@ -38,7 +34,6 @@ end
 ruby_block "package-#{pkg}" do
   block do
     begin
-      Chef::Resource::RubyBlock.send(:include, Hadoop::Helpers)
       policy_rcd('disable') if node['platform_family'] == 'debian'
       resources("package[#{pkg}]").run_action(:install)
     ensure
@@ -88,10 +83,10 @@ template "/etc/init.d/#{pkg}" do
     'desc' => 'Hadoop YARN Proxy Server',
     'name' => pkg,
     'process' => 'java',
-    'binary' => "#{lib_dir}/hadoop-yarn/sbin/yarn-daemon.sh",
+    'binary' => "#{hadoop_lib_dir}/hadoop-yarn/sbin/yarn-daemon.sh",
     'args' => '--config /etc/hadoop/conf start proxyserver',
     'user' => 'yarn',
-    'home' => "#{lib_dir}/hadoop",
+    'home' => "#{hadoop_lib_dir}/hadoop",
     'pidfile' => "${YARN_PID_DIR}/#{pkg}.pid",
     'logfile' => "${YARN_LOG_DIR}/#{pkg}.log"
   }

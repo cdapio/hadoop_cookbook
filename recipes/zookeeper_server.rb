@@ -21,10 +21,6 @@ include_recipe 'hadoop::repo'
 include_recipe 'hadoop::zookeeper'
 pkg = 'zookeeper-server'
 
-# Load helpers
-Chef::Recipe.send(:include, Hadoop::Helpers)
-Chef::Resource::Template.send(:include, Hadoop::Helpers)
-
 package pkg do
   action :nothing
 end
@@ -33,7 +29,6 @@ end
 ruby_block "package-#{pkg}" do
   block do
     begin
-      Chef::Resource::RubyBlock.send(:include, Hadoop::Helpers)
       policy_rcd('disable') if node['platform_family'] == 'debian'
       resources("package[#{pkg}]").run_action(:install)
     ensure
@@ -206,7 +201,7 @@ template "/etc/default/#{pkg}" do
   group 'root'
   action :create
   variables :options => {
-    'zookeeper_home' => "#{lib_dir}/zookeeper",
+    'zookeeper_home' => "#{hadoop_lib_dir}/zookeeper",
     'zookeeper_pid_dir' => '/var/run/zookeeper',
     'zookeeper_log_dir' => zookeeper_log_dir
   }
@@ -225,7 +220,7 @@ template "/etc/init.d/#{pkg}" do
     'binary' => "/usr/bin/#{pkg}",
     'args' => 'start',
     'user' => 'zookeeper',
-    'home' => "#{lib_dir}/zookeeper",
+    'home' => "#{hadoop_lib_dir}/zookeeper",
     'pidfile' => "${ZOOKEEPER_PID_DIR}/#{pkg}.pid",
     'logfile' => "${ZOOKEEPER_LOG_DIR}/#{pkg}.log"
   }

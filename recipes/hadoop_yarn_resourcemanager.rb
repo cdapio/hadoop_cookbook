@@ -21,11 +21,6 @@ include_recipe 'hadoop::default'
 include_recipe 'hadoop::_system_tuning'
 pkg = 'hadoop-yarn-resourcemanager'
 
-# Load helpers
-Chef::Recipe.send(:include, Hadoop::Helpers)
-Chef::Resource::Execute.send(:include, Hadoop::Helpers)
-Chef::Resource::Template.send(:include, Hadoop::Helpers)
-
 package pkg do
   action :nothing
 end
@@ -34,7 +29,6 @@ end
 ruby_block "package-#{pkg}" do
   block do
     begin
-      Chef::Resource::RubyBlock.send(:include, Hadoop::Helpers)
       policy_rcd('disable') if node['platform_family'] == 'debian'
       resources("package[#{pkg}]").run_action(:install)
     ensure
@@ -98,7 +92,7 @@ dfs = node['hadoop']['core_site']['fs.defaultFS']
 execute 'hdp22-mapreduce-tarball' do
   command <<-EOS
   hdfs dfs -mkdir -p #{dfs}/hdp/apps/#{hdp_version}/mapreduce && \
-  hdfs dfs -put /usr/hdp/current/hadoop-client/mapreduce.tar.gz /hdp/apps/#{hdp_version}/mapreduce && \
+  hdfs dfs -put #{hadoop_lib_dir}/hadoop/mapreduce.tar.gz /hdp/apps/#{hdp_version}/mapreduce && \
   hdfs dfs -chown -R hdfs:hadoop /hdp && \
   hdfs dfs -chmod -R 555 /hdp/apps/#{hdp_version}/mapreduce && \
   hdfs dfs -chmod -R 444 /hdp/apps/#{hdp_version}/mapreduce/mapreduce.tar.gz
@@ -152,10 +146,10 @@ template "/etc/init.d/#{pkg}" do
     'desc' => 'Hadoop YARN ResourceManager',
     'name' => pkg,
     'process' => 'java',
-    'binary' => "#{lib_dir}/hadoop-yarn/sbin/yarn-daemon.sh",
+    'binary' => "#{hadoop_lib_dir}/hadoop-yarn/sbin/yarn-daemon.sh",
     'args' => '--config /etc/hadoop/conf start resourcemanager',
     'user' => 'yarn',
-    'home' => "#{lib_dir}/hadoop",
+    'home' => "#{hadoop_lib_dir}/hadoop",
     'pidfile' => "${YARN_PID_DIR}/#{pkg}.pid",
     'logfile' => "${YARN_LOG_DIR}/#{pkg}.log"
   }

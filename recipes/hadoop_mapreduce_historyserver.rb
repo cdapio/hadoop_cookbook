@@ -20,10 +20,6 @@
 include_recipe 'hadoop::default'
 pkg = 'hadoop-mapreduce-historyserver'
 
-# Load helpers
-Chef::Recipe.send(:include, Hadoop::Helpers)
-Chef::Resource::Template.send(:include, Hadoop::Helpers)
-
 package pkg do
   action :nothing
 end
@@ -32,7 +28,6 @@ end
 ruby_block "package-#{pkg}" do
   block do
     begin
-      Chef::Resource::RubyBlock.send(:include, Hadoop::Helpers)
       policy_rcd('disable') if node['platform_family'] == 'debian'
       resources("package[#{pkg}]").run_action(:install)
     ensure
@@ -108,7 +103,7 @@ template "/etc/default/#{pkg}" do
     'hadoop_mapred_pid_dir' => hadoop_pid_dir,
     'hadoop_mapred_log_dir' => hadoop_log_dir,
     'hadoop_mapred_ident_string' => 'mapred',
-    'hadoop_mapred_home' => "#{lib_dir}/hadoop-mapreduce",
+    'hadoop_mapred_home' => "#{hadoop_lib_dir}/hadoop-mapreduce",
     'hadoop_log_dir' => hadoop_log_dir
   }
 end
@@ -123,10 +118,10 @@ template "/etc/init.d/#{pkg}" do
     'desc' => 'Hadoop MapReduce JobHistory Server',
     'name' => pkg,
     'process' => 'java',
-    'binary' => "#{lib_dir}/hadoop-mapreduce/sbin/mr-jobhistory-daemon.sh",
+    'binary' => "#{hadoop_lib_dir}/hadoop-mapreduce/sbin/mr-jobhistory-daemon.sh",
     'args' => '--config /etc/hadoop/conf start historyserver',
     'user' => 'mapred',
-    'home' => "#{lib_dir}/hadoop",
+    'home' => "#{hadoop_lib_dir}/hadoop",
     'pidfile' => "${HADOOP_MAPRED_PID_DIR}/#{pkg}.pid",
     'logfile' => "${HADOOP_MAPRED_LOG_DIR}/#{pkg}.log"
   }

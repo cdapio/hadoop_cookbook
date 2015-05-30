@@ -62,7 +62,7 @@ module Hadoop
     # Return true if Kerberos is enabled
     #
     # rubocop: disable Metrics/AbcSize
-    def kerberos?
+    def hadoop_kerberos?
       node['hadoop']['core_site'].key?('hadoop.security.authorization') &&
         node['hadoop']['core_site'].key?('hadoop.security.authentication') &&
         node['hadoop']['core_site']['hadoop.security.authorization'].to_s == 'true' &&
@@ -73,7 +73,7 @@ module Hadoop
     #
     # Return parent directory for various Hadoop lib directories and homes
     #
-    def lib_dir
+    def hadoop_lib_dir
       if hdp22?
         "/usr/hdp/#{hdp_version}"
       else
@@ -82,3 +82,7 @@ module Hadoop
     end
   end
 end
+
+# Load helpers
+Chef::Recipe.send(:include, Hadoop::Helpers)
+Chef::Resource.send(:include, Hadoop::Helpers)
