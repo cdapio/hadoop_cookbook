@@ -135,7 +135,7 @@ template "/etc/init.d/#{pkg}" do
     'confdir' => '${HADOOP_CONF_DIR}',
     'user' => 'yarn',
     'home' => "#{hadoop_lib_dir}/hadoop",
-    'pidfile' => "${YARN_PID_DIR}/yarn-yarn-resourcemanager.pid",
+    'pidfile' => '${YARN_PID_DIR}/yarn-yarn-resourcemanager.pid',
     'logfile' => "${YARN_LOG_DIR}/#{pkg}.log"
   }
 end
