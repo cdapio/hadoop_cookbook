@@ -70,9 +70,9 @@ CONF_DIR="<%= @options['confdir'] %>"
 
 [ -f ${CONF_DIR}/${NAME}-env.sh ] && . ${CONF_DIR}/${NAME}-env.sh
 
+PID_FILE="<%= @options['pidfile'] %>"
 EXE_FILE="<%= @options['binary'] %>"
 EXE_ARGS="<%= @options['args'] %>"
-PID_FILE="<%= @options['pidfile'] %>"
 LOCKFILE="/var/lock/subsys/<%= @options['name'] %>"
 NICENESS="+0"
 TIMEOUT=3
