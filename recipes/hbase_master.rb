@@ -106,7 +106,7 @@ template "/etc/init.d/#{pkg}" do
     'confdir' => '${HBASE_CONF_DIR}',
     'user' => 'hbase',
     'home' => "#{hadoop_lib_dir}/hbase",
-    'pidfile' => "${HBASE_PID_DIR}/#{pkg}.pid",
+    'pidfile' => "${HBASE_PID_DIR}/hbase-#{pkg}.pid",
     'logfile' => "${HBASE_LOG_DIR}/#{pkg}.log"
   }
 end
