@@ -40,9 +40,26 @@ end
 ###
 # MR settings for HDP 2.2+
 ###
+hdp_version =
+  if node['hadoop']['distribution_version'] == '2.2.0.0'
+    '2.2.0.0-2041'
+  elsif node['hadoop']['distribution_version'] == '2.2.1.0'
+    '2.2.1.0-2340'
+  elsif node['hadoop']['distribution_version'] == '2.2.4.2'
+    '2.2.4.2-2'
+  else
+    node['hadoop']['distribution_version']
+  end
+
 if node['hadoop']['distribution'] == 'hdp' && node['hadoop']['distribution_version'].to_f >= 2.2
+  default['hadoop']['hadoop_env']['hadoop_opts'] = "-Dhdp.version=#{hdp_version} -Djava.net.preferIPv4Stack=true ${HADOOP_OPTS}"
+  default['hadoop']['mapred_env']['hadoop_opts'] = "-Dhdp.version=#{hdp_version} -Djava.net.preferIPv4Stack=true ${HADOOP_OPTS}"
   default['hadoop']['mapred_site']['mapreduce.admin.map.child.java.opts'] = '-server -Djava.net.preferIPv4Stack=true -Dhdp.version=${hdp.version}'
   default['hadoop']['mapred_site']['mapreduce.admin.user.env'] = 'LD_LIBRARY_PATH=/usr/hdp/${hdp.version}/hadoop/lib/native:/usr/hdp/${hdp.version}/hadoop/lib/native/Linux-amd64-64'
   default['hadoop']['mapred_site']['mapreduce.application.framework.path'] = '/hdp/apps/${hdp.version}/mapreduce/mapreduce.tar.gz#mr-framework'
   default['hadoop']['mapred_site']['mapreduce.application.classpath'] = '$PWD/mr-framework/hadoop/share/hadoop/mapreduce/*:$PWD/mr-framework/hadoop/share/hadoop/mapreduce/lib/*:$PWD/mr-framework/hadoop/share/hadoop/common/*:$PWD/mr-framework/hadoop/share/hadoop/common/lib/*:$PWD/mr-framework/hadoop/share/hadoop/yarn/*:$PWD/mr-framework/hadoop/share/hadoop/yarn/lib/*:$PWD/mr-framework/hadoop/share/hadoop/hdfs/*:$PWD/mr-framework/hadoop/share/hadoop/hdfs/lib/*:/usr/hdp/${hdp.version}/hadoop/lib/hadoop-lzo-0.6.0.${hdp.version}.jar:/etc/hadoop/conf/secure'
+  default['hadoop']['mapred_site']['yarn.app.mapreduce.am.admin-command-opts'] = '-Dhdp.version=${hdp.version}'
+else
+  default['hadoop']['hadoop_env']['hadoop_opts'] = '-Djava.net.preferIPv4Stack=true ${HADOOP_OPTS}'
+  default['hadoop']['mapred_env']['hadoop_opts'] = '-Djava.net.preferIPv4Stack=true ${HADOOP_OPTS}'
 end
