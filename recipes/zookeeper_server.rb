@@ -194,6 +194,8 @@ template "/etc/default/#{pkg}" do
   }
 end
 
+binary = hdp22? ? "#{hadoop_lib_dir}/zookeeper/bin/#{pkg}" : "/usr/bin/#{pkg}"
+
 template "/etc/init.d/#{pkg}" do
   source 'hadoop-init.erb'
   mode '0755'
@@ -204,7 +206,7 @@ template "/etc/init.d/#{pkg}" do
     'desc' => 'ZooKeeper Server',
     'name' => pkg,
     'process' => 'java',
-    'binary' => "#{hadoop_lib_dir}/zookeeper/bin/#{pkg}",
+    'binary' => binary,
     'args' => 'start',
     'confdir' => '${ZOOKEEPER_CONF_DIR}',
     'user' => 'zookeeper',
