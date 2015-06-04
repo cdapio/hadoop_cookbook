@@ -27,6 +27,7 @@ Unreleased
 - HDP 2.2 hadooplzo support ( Issue: #185 )
 - Fix Java 7 type checking, per @TD-4242 ( Issue: #188 )
 - Template-based init scripts ( Issues: #190 #194 #195 #196 [COOK-52](https://issues.cask.co/browse/COOK-52) [COOK-53](https://issues.cask.co/browse/COOK-53) )
+- Set debian repository priority ( Issues: #191 #198 )
 - Fix HDFS HA checkconfig, per @TD-4242 ( Issue: #192 )
 - Initialize ZooKeeper `version-2` directories ( Issue: #193 )
 - Support hadoop-metrics2.properties ( Issue: #197 )
