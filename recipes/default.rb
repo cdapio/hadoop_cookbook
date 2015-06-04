@@ -160,8 +160,8 @@ end # End fair-scheduler.xml
   end
 end # End hadoop-env.sh yarn-env.sh
 
-# Setup hadoop-metrics.properties log4j.properties
-%w(hadoop_metrics log4j).each do |propfile|
+# Setup hadoop-metrics.properties hadoop-metrics2.properties log4j.properties
+%w(hadoop_metrics hadoop_metrics2 log4j).each do |propfile|
   template "#{hadoop_conf_dir}/#{propfile.gsub('_', '-')}.properties" do
     source 'generic.properties.erb'
     mode '0644'
@@ -171,7 +171,7 @@ end # End hadoop-env.sh yarn-env.sh
     variables :properties => node['hadoop'][propfile]
     only_if { node['hadoop'].key?(propfile) && !node['hadoop'][propfile].empty? }
   end
-end # End hadoop-metrics.properties log4j.properties
+end # End hadoop-metrics.properties hadoop-metrics2.properties log4j.properties
 
 # Setup container-executor.cfg
 template "#{hadoop_conf_dir}/container-executor.cfg" do
