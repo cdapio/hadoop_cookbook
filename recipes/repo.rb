@@ -117,7 +117,8 @@ when 'hdp'
     end
 
   when 'debian'
-    apt_base_url = 'http://public-repo-1.hortonworks.com/HDP'
+    apt_domain_name = 'public-repo-1.hortonworks.com'
+    apt_base_url = "http://#{apt_domain_name}/HDP"
     # HDP only supports Debian 6 and Ubuntu 12
     case node['platform']
     when 'debian'
@@ -153,6 +154,11 @@ when 'hdp'
       distribution 'HDP-UTILS'
       components ['main']
       action :add
+    end
+    apt_preference 'hdp' do
+      glob '*'
+      pin "origin #{apt_domain_name}"
+      pin_priority '700'
     end
   end # End hdp
 
@@ -206,7 +212,7 @@ when 'cdh'
       action :add
     end
 
-    apt_preference 'cloudera_repo' do
+    apt_preference "cloudera-cdh#{cdh_release}" do
       glob '*'
       pin "origin #{apt_domain_name}"
       pin_priority '700'
@@ -255,7 +261,8 @@ when 'bigtop'
     # for bigtop, we do not validate codename, to support developing against custom repositories
     codename = node['lsb']['codename']
 
-    apt_base_url = "http://bigtop.s3.amazonaws.com/releases/#{bigtop_release}/#{node['platform']}"
+    apt_domain_name = 'bigtop.s3.amazonaws.com'
+    apt_base_url = "http://#{apt_domain_name}/releases/#{bigtop_release}/#{node['platform']}"
     apt_repo_url = node['hadoop']['apt_repo_url'] ? node['hadoop']['apt_repo_url'] : "#{apt_base_url}/#{codename}/#{node['kernel']['machine']}"
     apt_repo_key_url = node['hadoop']['apt_repo_key_url'] ? node['hadoop']['apt_repo_key_url'] : 'http://archive.apache.org/dist/bigtop/KEYS'
 
@@ -266,6 +273,11 @@ when 'bigtop'
       distribution 'bigtop'
       components ['contrib']
       action :add
+    end
+    apt_preference "bigtop-#{bigtop_release}" do
+      glob '*'
+      pin "origin #{apt_domain_name}"
+      pin_priority '700'
     end
   end
 else
