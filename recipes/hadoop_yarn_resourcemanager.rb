@@ -67,7 +67,6 @@ execute 'yarn-app-mapreduce-am-staging-dir' do
   timeout 300
   user 'hdfs'
   group 'hdfs'
-  not_if "hdfs dfs -ls #{::File.dirname(am_staging_dir)} | grep #{am_staging_dir} | awk '{print $1,$3,$4}' | grep 'drwxrwxrwt yarn hadoop'", :user => 'hdfs'
   action :nothing
 end
 
