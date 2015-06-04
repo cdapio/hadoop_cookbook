@@ -11,14 +11,6 @@ describe 'hadoop::hadoop_mapreduce_historyserver' do
     end
     pkg = 'hadoop-mapreduce-historyserver'
 
-    it "does not install #{pkg} package" do
-      expect(chef_run).not_to install_package(pkg)
-    end
-
-    it "runs package-#{pkg} ruby_block" do
-      expect(chef_run).to run_ruby_block("package-#{pkg}")
-    end
-
     %W(
       /etc/default/#{pkg}
       /etc/init.d/#{pkg}

@@ -120,6 +120,13 @@ execute 'hive-hdfs-homedir' do
   action :nothing
 end
 
+# Another Hortonworks mess to clean up, their packages force-install blank configs here
+directory '/etc/hive/conf' do
+  action :delete
+  recursive true
+  not_if 'test -L /etc/hive/conf'
+end
+
 # Update alternatives to point to our configuration
 execute 'update hive-conf alternatives' do
   command "update-alternatives --install /etc/hive/conf hive-conf /etc/hive/#{node['hive']['conf_dir']} 50"

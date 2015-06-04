@@ -21,22 +21,6 @@ include_recipe 'hadoop::repo'
 include_recipe 'hadoop::zookeeper'
 pkg = 'zookeeper-server'
 
-package pkg do
-  action :nothing
-end
-
-# Hack to prevent auto-start of services, see COOK-26
-ruby_block "package-#{pkg}" do
-  block do
-    begin
-      policy_rcd('disable') if node['platform_family'] == 'debian'
-      resources("package[#{pkg}]").run_action(:install)
-    ensure
-      policy_rcd('enable') if node['platform_family'] == 'debian'
-    end
-  end
-end
-
 # HDP 2.0.11.0 (maybe others) doesn't create zookeeper group
 group 'zookeeper' do
   action :create
@@ -203,9 +187,14 @@ template "/etc/default/#{pkg}" do
   variables :options => {
     'zookeeper_home' => "#{hadoop_lib_dir}/zookeeper",
     'zookeeper_pid_dir' => '/var/run/zookeeper',
-    'zookeeper_log_dir' => zookeeper_log_dir
+    'zookeeper_log_dir' => zookeeper_log_dir,
+    'zookeeper_conf_dir' => zookeeper_conf_dir,
+    'zoo_log_dir' => zookeeper_log_dir,
+    'zoocfgdir' => zookeeper_conf_dir
   }
 end
+
+binary = hdp22? ? "#{hadoop_lib_dir}/zookeeper/bin/#{pkg}" : "/usr/bin/#{pkg}"
 
 template "/etc/init.d/#{pkg}" do
   source 'hadoop-init.erb'
@@ -217,8 +206,9 @@ template "/etc/init.d/#{pkg}" do
     'desc' => 'ZooKeeper Server',
     'name' => pkg,
     'process' => 'java',
-    'binary' => "/usr/bin/#{pkg}",
+    'binary' => binary,
     'args' => 'start',
+    'confdir' => '${ZOOKEEPER_CONF_DIR}',
     'user' => 'zookeeper',
     'home' => "#{hadoop_lib_dir}/zookeeper",
     'pidfile' => "${ZOOKEEPER_PID_DIR}/#{pkg}.pid",
@@ -230,6 +220,13 @@ service pkg do
   status_command "service #{pkg} status"
   supports [:restart => true, :reload => false, :status => true]
   action :nothing
+end
+
+# Another Hortonworks mess to clean up, their packages force-install blank configs here
+directory '/etc/zookeeper/conf' do
+  action :delete
+  recursive true
+  not_if 'test -L /etc/zookeeper/conf'
 end
 
 # Update alternatives to point to our configuration

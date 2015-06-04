@@ -70,9 +70,9 @@ CONF_DIR="<%= @options['confdir'] %>"
 
 [ -f ${CONF_DIR}/${NAME}-env.sh ] && . ${CONF_DIR}/${NAME}-env.sh
 
+PID_FILE="<%= @options['pidfile'] %>"
 EXE_FILE="<%= @options['binary'] %>"
 EXE_ARGS="<%= @options['args'] %>"
-PID_FILE="<%= @options['pidfile'] %>"
 LOCKFILE="/var/lock/subsys/<%= @options['name'] %>"
 NICENESS="+0"
 TIMEOUT=3
@@ -82,7 +82,7 @@ _start() {
 
     log_success_msg "Starting ${DESC} (${NAME}): "
 <% if node['platform_family'] == 'rhel' %>
-    start_daemon -u ${PKG_USER} -n ${NICENESS} -p ${PID_FILE} /bin/sh -- \
+    start_daemon -u ${PKG_USER} -n ${NICENESS} -p ${PID_FILE} /bin/sh \
         -c "cd ${PKG_HOME}; ${SOURCE} exec ${EXE_FILE} ${EXE_ARGS}"
 <% else %>
     /sbin/start-stop-daemon --quiet --oknodo --start --user ${PKG_USER} \

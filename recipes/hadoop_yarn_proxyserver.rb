@@ -26,22 +26,6 @@ else
 end
 pkg = 'hadoop-yarn-proxyserver'
 
-package pkg do
-  action :nothing
-end
-
-# Hack to prevent auto-start of services, see COOK-26
-ruby_block "package-#{pkg}" do
-  block do
-    begin
-      policy_rcd('disable') if node['platform_family'] == 'debian'
-      resources("package[#{pkg}]").run_action(:install)
-    ensure
-      policy_rcd('enable') if node['platform_family'] == 'debian'
-    end
-  end
-end
-
 yarn_log_dir =
   if node['hadoop'].key?('yarn_env') && node['hadoop']['yarn_env'].key?('yarn_log_dir')
     node['hadoop']['yarn_env']['yarn_log_dir']
@@ -84,10 +68,11 @@ template "/etc/init.d/#{pkg}" do
     'name' => pkg,
     'process' => 'java',
     'binary' => "#{hadoop_lib_dir}/hadoop-yarn/sbin/yarn-daemon.sh",
-    'args' => '--config /etc/hadoop/conf start proxyserver',
+    'args' => '--config ${CONF_DIR} start proxyserver',
+    'confdir' => '${HADOOP_CONF_DIR}',
     'user' => 'yarn',
     'home' => "#{hadoop_lib_dir}/hadoop",
-    'pidfile' => "${YARN_PID_DIR}/#{pkg}.pid",
+    'pidfile' => '${YARN_PID_DIR}/yarn-yarn-proxyserver.pid',
     'logfile' => "${YARN_LOG_DIR}/#{pkg}.log"
   }
 end

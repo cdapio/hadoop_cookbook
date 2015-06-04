@@ -9,19 +9,12 @@ describe 'hadoop::hbase_master' do
         node.default['hbase']['hbase_site']['hbase.rootdir'] = 'hdfs://localhost:8020/hbase'
         node.default['hbase']['hbase_site']['hbase.zookeeper.quorum'] = 'localhost'
         node.default['hbase']['hbase_site']['hbase.cluster.distributed'] = 'true'
+        stub_command(/test -L /).and_return(false)
         stub_command(/update-alternatives --display /).and_return(false)
         stub_command(%r{/sys/kernel/mm/(.*)transparent_hugepage/defrag}).and_return(false)
       end.converge(described_recipe)
     end
     pkg = 'hbase-master'
-
-    it "does not install #{pkg} package" do
-      expect(chef_run).not_to install_package(pkg)
-    end
-
-    it "runs package-#{pkg} ruby_block" do
-      expect(chef_run).to run_ruby_block("package-#{pkg}")
-    end
 
     %W(
       /etc/default/#{pkg}
@@ -58,6 +51,7 @@ describe 'hadoop::hbase_master' do
         node.override['hbase']['hbase_site']['hbase.rootdir'] = 'file:///tmp/hbase'
         node.default['hbase']['hbase_site']['hbase.zookeeper.quorum'] = 'localhost'
         node.default['hbase']['hbase_site']['hbase.cluster.distributed'] = 'false'
+        stub_command(/test -L /).and_return(false)
         stub_command(/update-alternatives --display /).and_return(false)
         stub_command(%r{/sys/kernel/mm/(.*)transparent_hugepage/defrag}).and_return(false)
       end.converge(described_recipe)

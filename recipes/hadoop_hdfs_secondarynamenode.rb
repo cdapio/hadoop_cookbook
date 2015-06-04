@@ -22,22 +22,6 @@ include_recipe 'hadoop::_hadoop_hdfs_checkconfig'
 include_recipe 'hadoop::_system_tuning'
 pkg = 'hadoop-hdfs-secondarynamenode'
 
-package pkg do
-  action :nothing
-end
-
-# Hack to prevent auto-start of services, see COOK-26
-ruby_block "package-#{pkg}" do
-  block do
-    begin
-      policy_rcd('disable') if node['platform_family'] == 'debian'
-      resources("package[#{pkg}]").run_action(:install)
-    ensure
-      policy_rcd('enable') if node['platform_family'] == 'debian'
-    end
-  end
-end
-
 fs_checkpoint_dirs =
   if node['hadoop'].key?('hdfs_site') && node['hadoop']['hdfs_site'].key?('dfs.namenode.checkpoint.dir')
     node['hadoop']['hdfs_site']['dfs.namenode.checkpoint.dir']
@@ -128,7 +112,8 @@ template "/etc/init.d/#{pkg}" do
     'name' => pkg,
     'process' => 'java',
     'binary' => "#{hadoop_lib_dir}/hadoop/sbin/hadoop-daemon.sh",
-    'args' => '--config /etc/hadoop/conf start secondarynamenode',
+    'args' => '--config ${CONF_DIR} start secondarynamenode',
+    'confdir' => '${HADOOP_CONF_DIR}',
     'user' => 'hdfs',
     'home' => "#{hadoop_lib_dir}/hadoop",
     'pidfile' => "${HADOOP_PID_DIR}/#{pkg}.pid",

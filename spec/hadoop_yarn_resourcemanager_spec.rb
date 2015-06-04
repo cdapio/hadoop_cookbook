@@ -12,14 +12,6 @@ describe 'hadoop::hadoop_yarn_resourcemanager' do
     end
     pkg = 'hadoop-yarn-resourcemanager'
 
-    it "does not install #{pkg} package" do
-      expect(chef_run).not_to install_package(pkg)
-    end
-
-    it "runs package-#{pkg} ruby_block" do
-      expect(chef_run).to run_ruby_block("package-#{pkg}")
-    end
-
     %W(
       /etc/default/#{pkg}
       /etc/init.d/#{pkg}

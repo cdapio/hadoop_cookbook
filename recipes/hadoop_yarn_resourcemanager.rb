@@ -21,22 +21,6 @@ include_recipe 'hadoop::default'
 include_recipe 'hadoop::_system_tuning'
 pkg = 'hadoop-yarn-resourcemanager'
 
-package pkg do
-  action :nothing
-end
-
-# Hack to prevent auto-start of services, see COOK-26
-ruby_block "package-#{pkg}" do
-  block do
-    begin
-      policy_rcd('disable') if node['platform_family'] == 'debian'
-      resources("package[#{pkg}]").run_action(:install)
-    ensure
-      policy_rcd('enable') if node['platform_family'] == 'debian'
-    end
-  end
-end
-
 # TODO: check for these and set them up
 # mapreduce.cluster.local.dir = #{hadoop_tmp_dir}/mapred/local
 # mapreduce.cluster.temp.dir = #{hadoop_tmp_dir}/mapred/temp
@@ -147,10 +131,11 @@ template "/etc/init.d/#{pkg}" do
     'name' => pkg,
     'process' => 'java',
     'binary' => "#{hadoop_lib_dir}/hadoop-yarn/sbin/yarn-daemon.sh",
-    'args' => '--config /etc/hadoop/conf start resourcemanager',
+    'args' => '--config ${CONF_DIR} start resourcemanager',
+    'confdir' => '${HADOOP_CONF_DIR}',
     'user' => 'yarn',
     'home' => "#{hadoop_lib_dir}/hadoop",
-    'pidfile' => "${YARN_PID_DIR}/#{pkg}.pid",
+    'pidfile' => '${YARN_PID_DIR}/yarn-yarn-resourcemanager.pid',
     'logfile' => "${YARN_LOG_DIR}/#{pkg}.log"
   }
 end

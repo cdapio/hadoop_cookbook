@@ -20,22 +20,6 @@
 include_recipe 'hadoop::hbase'
 pkg = 'hbase-thrift'
 
-package pkg do
-  action :nothing
-end
-
-# Hack to prevent auto-start of services, see COOK-26
-ruby_block "package-#{pkg}" do
-  block do
-    begin
-      policy_rcd('disable') if node['platform_family'] == 'debian'
-      resources("package[#{pkg}]").run_action(:install)
-    ensure
-      policy_rcd('enable') if node['platform_family'] == 'debian'
-    end
-  end
-end
-
 hbase_log_dir =
   if node['hbase'].key?('hbase_env') && node['hbase']['hbase_env'].key?('hbase_log_dir')
     node['hbase']['hbase_env']['hbase_log_dir']
@@ -55,6 +39,7 @@ template "/etc/default/#{pkg}" do
     'hbase_pid_dir' => '/var/run/hbase',
     'hbase_log_dir' => hbase_log_dir,
     'hbase_ident_string' => 'hbase',
+    'hbase_conf_dir' => '/etc/hbase/conf',
     'hbase_thrift_mode' => '-nonblocking'
   }
 end
@@ -70,10 +55,11 @@ template "/etc/init.d/#{pkg}" do
     'name' => pkg,
     'process' => 'java',
     'binary' => "#{hadoop_lib_dir}/hbase/bin/hbase-daemon.sh",
-    'args' => '--config /etc/hbase/conf start thrift',
+    'args' => '--config ${CONF_DIR} start thrift',
+    'confdir' => '${HBASE_CONF_DIR}',
     'user' => 'hbase',
     'home' => "#{hadoop_lib_dir}/hbase",
-    'pidfile' => "${HBASE_PID_DIR}/#{pkg}.pid",
+    'pidfile' => "${HBASE_PID_DIR}/hbase-#{pkg}.pid",
     'logfile' => "${HBASE_LOG_DIR}/#{pkg}.log"
   }
 end

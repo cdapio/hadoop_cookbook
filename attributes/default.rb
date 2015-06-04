@@ -1,3 +1,22 @@
+#
+# Cookbook Name:: hadoop
+# Attribute:: default
+#
+# Copyright © 2013-2015 Cask Data, Inc.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#    http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+
 ###
 # cookbook settings
 ###
@@ -37,12 +56,39 @@ else
   default['hadoop']['yarn_site']['yarn.application.classpath'] = '$HADOOP_CONF_DIR, $HADOOP_COMMON_HOME/*, $HADOOP_COMMON_HOME/lib/*, $HADOOP_HDFS_HOME/*, $HADOOP_HDFS_HOME/lib/*, $HADOOP_MAPRED_HOME/*, $HADOOP_MAPRED_HOME/lib/*, $HADOOP_YARN_HOME/*, $HADOOP_YARN_HOME/lib/*'
 end
 
+# Do the right thing, based on distribution
+if node['hadoop']['distribution'] == 'cdh' && node['hadoop']['distribution_version'].to_i == 4
+  # CDH4 doesn't have https://issues.apache.org/jira/browse/YARN-1229 fixed
+  default['hadoop']['yarn_site']['yarn.nodemanager.aux-services'] = 'mapreduce.shuffle'
+  default['hadoop']['yarn_site']['yarn.nodemanager.aux-services.mapreduce.shuffle.class'] = 'org.apache.hadoop.mapred.ShuffleHandler'
+else
+  default['hadoop']['yarn_site']['yarn.nodemanager.aux-services'] = 'mapreduce_shuffle'
+  default['hadoop']['yarn_site']['yarn.nodemanager.aux-services.mapreduce_shuffle.class'] = 'org.apache.hadoop.mapred.ShuffleHandler'
+end
+
 ###
 # MR settings for HDP 2.2+
 ###
+hdp_version =
+  if node['hadoop']['distribution_version'] == '2.2.0.0'
+    '2.2.0.0-2041'
+  elsif node['hadoop']['distribution_version'] == '2.2.1.0'
+    '2.2.1.0-2340'
+  elsif node['hadoop']['distribution_version'] == '2.2.4.2'
+    '2.2.4.2-2'
+  else
+    node['hadoop']['distribution_version']
+  end
+
 if node['hadoop']['distribution'] == 'hdp' && node['hadoop']['distribution_version'].to_f >= 2.2
+  default['hadoop']['hadoop_env']['hadoop_opts'] = "-Dhdp.version=#{hdp_version} -Djava.net.preferIPv4Stack=true ${HADOOP_OPTS}"
+  default['hadoop']['mapred_env']['hadoop_opts'] = "-Dhdp.version=#{hdp_version} -Djava.net.preferIPv4Stack=true ${HADOOP_OPTS}"
   default['hadoop']['mapred_site']['mapreduce.admin.map.child.java.opts'] = '-server -Djava.net.preferIPv4Stack=true -Dhdp.version=${hdp.version}'
   default['hadoop']['mapred_site']['mapreduce.admin.user.env'] = 'LD_LIBRARY_PATH=/usr/hdp/${hdp.version}/hadoop/lib/native:/usr/hdp/${hdp.version}/hadoop/lib/native/Linux-amd64-64'
   default['hadoop']['mapred_site']['mapreduce.application.framework.path'] = '/hdp/apps/${hdp.version}/mapreduce/mapreduce.tar.gz#mr-framework'
   default['hadoop']['mapred_site']['mapreduce.application.classpath'] = '$PWD/mr-framework/hadoop/share/hadoop/mapreduce/*:$PWD/mr-framework/hadoop/share/hadoop/mapreduce/lib/*:$PWD/mr-framework/hadoop/share/hadoop/common/*:$PWD/mr-framework/hadoop/share/hadoop/common/lib/*:$PWD/mr-framework/hadoop/share/hadoop/yarn/*:$PWD/mr-framework/hadoop/share/hadoop/yarn/lib/*:$PWD/mr-framework/hadoop/share/hadoop/hdfs/*:$PWD/mr-framework/hadoop/share/hadoop/hdfs/lib/*:/usr/hdp/${hdp.version}/hadoop/lib/hadoop-lzo-0.6.0.${hdp.version}.jar:/etc/hadoop/conf/secure'
+  default['hadoop']['mapred_site']['yarn.app.mapreduce.am.admin-command-opts'] = '-Dhdp.version=${hdp.version}'
+else
+  default['hadoop']['hadoop_env']['hadoop_opts'] = '-Djava.net.preferIPv4Stack=true ${HADOOP_OPTS}'
+  default['hadoop']['mapred_env']['hadoop_opts'] = '-Djava.net.preferIPv4Stack=true ${HADOOP_OPTS}'
 end

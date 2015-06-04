@@ -21,22 +21,6 @@ include_recipe 'hadoop::hive'
 include_recipe 'hadoop::_system_tuning'
 pkg = 'hive-metastore'
 
-package pkg do
-  action :nothing
-end
-
-# Hack to prevent auto-start of services, see COOK-26
-ruby_block "package-#{pkg}" do
-  block do
-    begin
-      policy_rcd('disable') if node['platform_family'] == 'debian'
-      resources("package[#{pkg}]").run_action(:install)
-    ensure
-      policy_rcd('enable') if node['platform_family'] == 'debian'
-    end
-  end
-end
-
 hive_sql =
   if node['hive'].key?('hive_site') && node['hive']['hive_site'].key?('javax.jdo.option.ConnectionURL')
     node['hive']['hive_site']['javax.jdo.option.ConnectionURL'].split(':')[1]
@@ -113,7 +97,8 @@ template "/etc/default/#{pkg}" do
     'hive_home' => "#{hadoop_lib_dir}/hive",
     'hive_pid_dir' => '/var/run/hive',
     'hive_log_dir' => hive_log_dir,
-    'hive_ident_string' => 'hive'
+    'hive_ident_string' => 'hive',
+    'hive_conf_dir' => '/etc/hive/conf'
   }
 end
 
@@ -128,7 +113,8 @@ template "/etc/init.d/#{pkg}" do
     'name' => pkg,
     'process' => 'java',
     'binary' => "#{hadoop_lib_dir}/hive/bin/hive",
-    'args' => '--config /etc/hive/conf --service metastore > ${LOG_FILE} & < /dev/null',
+    'args' => '--config ${CONF_DIR} --service metastore > ${LOG_FILE} 2>&1 < /dev/null & "\'echo $! \'"> ${PID_FILE}',
+    'confdir' => '${HIVE_CONF_DIR}',
     'user' => 'hive',
     'home' => "#{hadoop_lib_dir}/hive",
     'pidfile' => "${HIVE_PID_DIR}/#{pkg}.pid",

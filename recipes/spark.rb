@@ -168,6 +168,13 @@ end # End spark-defaults.xml
   end
 end # End metrics.properties log4j.properties
 
+# Another Hortonworks mess to clean up, their packages force-install blank configs here
+directory '/etc/spark/conf' do
+  action :delete
+  recursive true
+  not_if 'test -L /etc/spark/conf'
+end
+
 # Update alternatives to point to our configuration
 execute 'update spark-conf alternatives' do
   command "update-alternatives --install /etc/spark/conf spark-conf /etc/spark/#{node['spark']['conf_dir']} 50"

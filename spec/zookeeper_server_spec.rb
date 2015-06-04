@@ -15,14 +15,6 @@ describe 'hadoop::zookeeper_server' do
     end
     pkg = 'zookeeper-server'
 
-    it "does not install #{pkg} package" do
-      expect(chef_run).not_to install_package(pkg)
-    end
-
-    it "runs package-#{pkg} ruby_block" do
-      expect(chef_run).to run_ruby_block("package-#{pkg}")
-    end
-
     %W(
       /etc/default/#{pkg}
       /etc/init.d/#{pkg}
@@ -106,6 +98,10 @@ describe 'hadoop::zookeeper_server' do
 
     it 'creates /var/lib/zookeeper/version-2 directory' do
       expect(chef_run).to create_directory('/var/lib/zookeeper/version-2')
+    end
+
+    it 'deletes /etc/zookeeper/conf directory' do
+      expect(chef_run).to delete_directory('/etc/zookeeper/conf')
     end
 
     it 'runs execute[update zookeeper-conf alternatives]' do
