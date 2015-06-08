@@ -1,8 +1,8 @@
 hadoop CHANGELOG
 ===============
 
-Unreleased
-----------
+v2.0.0 (Jun 8, 2015)
+--------------------
 - Transparent Hugepages are not universally available, per @jdecello and @taverentech ( Issue: #156 )
 - Support HDP 2.2.4.2 repo ( Issues: #160 #186 )
 - Fix YARN/Hive/Oozie PATHs for HDP 2.2 ( Issue: #161 )
@@ -31,8 +31,9 @@ Unreleased
 - Fix HDFS HA checkconfig, per @TD-4242 ( Issue: #192 )
 - Initialize ZooKeeper `version-2` directories ( Issue: #193 )
 - Support hadoop-metrics2.properties ( Issue: #197 )
+- Remove guard on execute block with action :nothing ( Issue: #198 )
 
-v.1.13.1 (Apr 15, 2015)
+v1.13.1 (Apr 15, 2015)
 -----------------------
 - Fix YARN AM staging dir ( Issues: #157 [COOK-30](https://issues.cask.co/browse/COOK-30) )
 - Support HDP 2.0.13.0 and bump HDP-UTILS to 1.1.0.20 ( Issue: #158 )
