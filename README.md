@@ -133,13 +133,15 @@ Author:: Cask Data, Inc. (<ops@cask.co>)
 # Testing
 
 This cookbook has several ways to test it. It includes code tests, which are done using `foodcritic`, `rubocop`, and `chefspec`.
-It, also, includes functionality testing, provided by `vagrant`.
+It, also, includes functionality testing, provided by `kitchen`.
 
 ```text
-rake foodcritic
-rake rubocop
-rake chefspec
-rake vagrant
+rake chefspec     # Run RSpec code examples
+rake foodcritic   # Foodcritic linter
+rake integration  # Run Test Kitchen integration tests
+rake metadata     # Create metadata.json from metadata.rb
+rake rubocop      # Ruby style guide linter
+rake share        # Share cookbook to community site
 ```
 
 This cookbook requires the `vagrant-omnibus` and `vagrant-berkshelf` Vagrant plugins to be installed.

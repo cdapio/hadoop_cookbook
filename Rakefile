@@ -30,12 +30,6 @@ task :share do
   sh 'knife cookbook site share hadoop databases'
 end
 
-# run vagrant test
-desc 'Run vagrant tests'
-task :vagrant do
-  sh 'vagrant up'
-end
-
 # test-kitchen
 begin
   require 'kitchen/rake_tasks'
