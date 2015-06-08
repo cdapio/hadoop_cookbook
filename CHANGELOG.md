@@ -31,7 +31,7 @@ v2.0.0 (Jun 8, 2015)
 - Fix HDFS HA checkconfig, per @TD-4242 ( Issue: #192 )
 - Initialize ZooKeeper `version-2` directories ( Issue: #193 )
 - Support hadoop-metrics2.properties ( Issue: #197 )
-- Remove guard on execute block with action :nothing ( Issue: #198 )
+- Remove guard on execute block with action :nothing ( Issue: #199 )
 
 v1.13.1 (Apr 15, 2015)
 -----------------------
