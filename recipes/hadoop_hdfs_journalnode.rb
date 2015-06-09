@@ -60,7 +60,7 @@ hadoop_pid_dir =
 # Create /etc/default configuration
 template "/etc/default/#{pkg}" do
   source 'generic-env.sh.erb'
-  mode '0755'
+  mode '0644'
   owner 'root'
   group 'root'
   action :create
