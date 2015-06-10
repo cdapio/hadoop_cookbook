@@ -59,10 +59,6 @@ describe 'hadoop::hbase' do
       expect(chef_run).to create_ulimit_domain('hbase')
     end
 
-    it 'deletes /etc/default/hbase' do
-      expect(chef_run).to delete_file('/etc/default/hbase')
-    end
-
     it 'deletes /etc/hbase/conf directory' do
       expect(chef_run).to delete_directory('/etc/hbase/conf')
     end

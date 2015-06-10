@@ -137,9 +137,20 @@ ulimit_domain 'hbase' do
   only_if { node['hbase'].key?('limits') && !node['hbase']['limits'].empty? }
 end # End limits.d
 
-# Remove extra hbase file, if it exists, since we do service-specific configs
-file '/etc/default/hbase' do
-  action :delete
+# Create /etc/default configuration
+template '/etc/default/hbase' do
+  source 'generic-env.sh.erb'
+  mode '0755'
+  owner 'root'
+  group 'root'
+  action :create
+  variables :options => {
+    'hbase_home' => "#{hadoop_lib_dir}/hbase",
+    'hbase_pid_dir' => '/var/run/hbase',
+    'hbase_log_dir' => hbase_log_dir,
+    'hbase_ident_string' => 'hbase',
+    'hbase_conf_dir' => '/etc/hbase/conf'
+  }
 end
 
 # Another Hortonworks mess to clean up, their packages force-install blank configs here
