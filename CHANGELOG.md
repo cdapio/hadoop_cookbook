@@ -1,6 +1,10 @@
 hadoop CHANGELOG
 ===============
 
+v2.0.1 (Jun 9, 2015)
+--------------------
+- Supply /etc/default/hbase for hbase binary ( Issue: #200 )
+
 v2.0.0 (Jun 8, 2015)
 --------------------
 - Transparent Hugepages are not universally available, per @jdecello and @taverentech ( Issue: #156 )
