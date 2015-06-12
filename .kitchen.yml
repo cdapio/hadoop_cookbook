@@ -56,6 +56,7 @@ platforms:
 suites:
   - name: cdh4
     run_list:
+      - recipe[java::default]
       - recipe[hadoop::default]
       - recipe[hadoop::hadoop_hdfs_namenode]
       - recipe[hadoop::hadoop_hdfs_secondarynamenode]
@@ -81,6 +82,7 @@ suites:
     attributes: { hadoop: { distribution: 'cdh', distribution_version: 4 } }
   - name: cdh5
     run_list:
+      - recipe[java::default]
       - recipe[hadoop::default]
       - recipe[hadoop::hadoop_hdfs_namenode]
       - recipe[hadoop::hadoop_hdfs_secondarynamenode]
@@ -109,6 +111,7 @@ suites:
     attributes: { hadoop: { distribution: 'cdh', distribution_version: 5 } }
   - name: hdp20
     run_list:
+      - recipe[java::default]
       - recipe[hadoop::default]
       - recipe[hadoop::hadoop_hdfs_namenode]
       - recipe[hadoop::hadoop_hdfs_secondarynamenode]
@@ -132,6 +135,7 @@ suites:
     attributes: { hadoop: { distribution: 'hdp', distribution_version: '2.0' } }
   - name: hdp21
     run_list:
+      - recipe[java::default]
       - recipe[hadoop::default]
       - recipe[hadoop::hadoop_hdfs_namenode]
       - recipe[hadoop::hadoop_hdfs_secondarynamenode]
@@ -155,6 +159,7 @@ suites:
     attributes: { hadoop: { distribution: 'hdp', distribution_version: '2.1' } }
   - name: hdp22
     run_list:
+      - recipe[java::default]
       - recipe[hadoop::default]
       - recipe[hadoop::hadoop_hdfs_namenode]
       - recipe[hadoop::hadoop_hdfs_secondarynamenode]
@@ -179,6 +184,7 @@ suites:
   - name: bigtop080
     excludes: debian-6.0.10, ubuntu-14.04
     run_list:
+      - recipe[java::default]
       - recipe[hadoop::default]
       - recipe[hadoop::hadoop_hdfs_namenode]
       - recipe[hadoop::hadoop_hdfs_secondarynamenode]
