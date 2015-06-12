@@ -73,7 +73,12 @@ CONF_DIR="<%= @options['confdir'] %>"
 PID_FILE="<%= @options['pidfile'] %>"
 EXE_FILE="<%= @options['binary'] %>"
 EXE_ARGS="<%= @options['args'] %>"
+<% if node['platform_family'] == 'rhel' %>
 LOCKFILE="/var/lock/subsys/<%= @options['name'] %>"
+<% else %>
+LOCKFILE="/var/lock/<%= @options['name'] %>"
+<% end %>
+
 NICENESS="+0"
 TIMEOUT=3
 
@@ -81,16 +86,10 @@ _start() {
     [ -x ${EXE_FILE} ] || exit ${ERROR_PROGRAM_NOT_INSTALLED}
 
     log_success_msg "Starting ${DESC} (${NAME}): "
-<% if node['platform_family'] == 'rhel' %>
-    start_daemon -u ${PKG_USER} -n ${NICENESS} -p ${PID_FILE} /bin/sh \
-        -c "cd ${PKG_HOME}; ${SOURCE} exec ${EXE_FILE} ${EXE_ARGS}"
-<% else %>
-    /sbin/start-stop-daemon --quiet --oknodo --start --user ${PKG_USER} \
-       --name <%= @options['process'] %> --background \
-       --chuid ${PKG_USER} --nicelevel ${NICENESS} --chdir ${PKG_HOME} \
-       --make-pidfile --pidfile ${PID_FILE} --startas /bin/sh -- \
-       -c "${SOURCE} exec ${EXE_FILE} ${EXE_ARGS}"
-<% end %>
+
+    mkdir -p `dirname ${PID_FILE}` `dirname ${LOG_FILE}`
+    chown ${PKG_USER} `dirname ${PID_FILE}` `dirname ${LOG_FILE}`
+    su -s /bin/bash ${PKG_USER} -c "cd ${PKG_HOME}; ${SOURCE} exec nice -n ${NICENESS} ${EXE_FILE} ${EXE_ARGS}; echo $! > ${PID_FILE}"
 
     RETVAL=$?
     [ ${RETVAL} -eq ${RETVAL_SUCCESS} ] && touch ${LOCKFILE}
