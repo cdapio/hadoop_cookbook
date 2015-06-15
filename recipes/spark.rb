@@ -160,8 +160,8 @@ end # End spark-defaults.xml
   template "#{spark_conf_dir}/#{propfile.gsub('_', '-')}.properties" do
     source 'generic.properties.erb'
     mode '0644'
-    owner 'spark'
-    group 'spark'
+    owner 'root'
+    group 'root'
     action :create
     variables :properties => node['spark'][propfile]
     only_if { node['spark'].key?(propfile) && !node['spark'][propfile].empty? }
