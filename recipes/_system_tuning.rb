@@ -26,16 +26,16 @@ sysctl_param 'vm.swappiness' do
   value 0
 end
 
-# select transparent_hugepage file
-case node['platform_family']
-when 'debian', 'suse'
-  thp_defrag = '/sys/kernel/mm/transparent_hugepage/defrag'
-when 'rhel'
-  thp_defrag = '/sys/kernel/mm/redhat_transparent_hugepage/defrag'
-end
+# Disable transparent_hugepage compaction
+# COOK-57 location can vary within CentOS
+%w(transparent_hugepage redhat_transparent_hugepage).each do |dir|
+  thp_defrag = "/sys/kernel/mm/#{dir}/defrag"
+  next unless ::File.file?(thp_defrag)
 
-# disable transparent_hugepage (if exists, file missing on AWS Ubuntu images)
-execute 'disable-transparent-hugepage-compaction' do
-  command "(ls #{thp_defrag} && echo never #{thp_defrag}) || (ls #{thp_defrag} || exit 0)"
-  not_if "(ls #{thp_defrag} && grep '\[never\]' #{thp_defrag}) || (ls #{thp_defrag} || exit 0)"
+  # disable transparent_hugepage (if not already disabled)
+  execute 'disable-transparent-hugepage-compaction' do
+    command "echo never > #{thp_defrag}"
+    not_if "grep '\\[never\\]' #{thp_defrag}"
+  end
+  break
 end
