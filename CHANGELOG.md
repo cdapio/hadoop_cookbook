@@ -5,7 +5,7 @@ v2.0.3 (Jun 25, 2015)
 ---------------------
 - Config files should be root owned ( Issue: #204 )
 - Fix disable THP Compaction ( Issues: #205 [COOK-57](https://issues.cask.co/browse/COOK-57) )
-- Fix init for EXE_ARGS ending in ampersand ( Issue: #206 )
+- Fix init for EXE_ARGS ending in ampersand ( Issues: #206 [COOK-59](https://issues.cask.co/browse/COOK-59) )
 
 v2.0.2 (Jun 12, 2015)
 ---------------------
