@@ -70,12 +70,17 @@ end
 # MR settings for HDP 2.2+
 ###
 hdp_version =
-  if node['hadoop']['distribution_version'] == '2.2.0.0'
+  case node['hadoop']['distribution_version']
+  when '2.2.0.0'
     '2.2.0.0-2041'
-  elsif node['hadoop']['distribution_version'] == '2.2.1.0'
+  when '2.2.1.0'
     '2.2.1.0-2340'
-  elsif node['hadoop']['distribution_version'] == '2.2.4.2'
+  when '2.2.4.2'
     '2.2.4.2-2'
+  when '2.2.4.4'
+    '2.2.4.4-16'
+  when '2.2.6.0'
+    '2.2.6.0-2800'
   else
     node['hadoop']['distribution_version']
   end
