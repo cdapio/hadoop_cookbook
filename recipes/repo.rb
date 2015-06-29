@@ -33,7 +33,7 @@ node.default['hadoop']['distribution_version'] =
   if node['hadoop']['distribution'] == 'hdp'
     '2.1.15.0'
   elsif node['hadoop']['distribution'] == 'cdh'
-    '5.3.4'
+    '5.3.5'
   elsif node['hadoop']['distribution'] == 'bigtop'
     '0.8.0'
   end
