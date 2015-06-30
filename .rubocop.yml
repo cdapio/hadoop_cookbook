@@ -10,3 +10,5 @@ SingleSpaceBeforeFirstArg:
   Enabled: false
 AsciiComments:
   Enabled: false
+Metrics/MethodLength:
+  Max: 15
