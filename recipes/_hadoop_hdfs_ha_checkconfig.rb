@@ -27,7 +27,7 @@ end
 # We have dfs.nameservices, and now need to check them
 dfs_nameservices.each do |ns|
   # Start namenode checks
-  Chef::Application.fatal!("Set dfs.ha.namenodes.nameservice")  unless node['hadoop']['hdfs_site'].key?("dfs\.ha\.namenodes\.#{ns}")
+  Chef::Application.fatal!("Set dfs.ha.namenodes.#{ns}")  unless node['hadoop']['hdfs_site'].key?("dfs\.ha\.namenodes\.#{ns}")
   # We need two and only two NameNodes
   namenodes = node['hadoop']['hdfs_site']["dfs\.ha\.namenodes\.#{ns}"].split(',')
   if namenodes.size != 2
