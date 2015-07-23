@@ -1,6 +1,12 @@
 hadoop CHANGELOG
 ===============
 
+Unreleased
+----------
+- Fix ChefSpec ( Issue: #207 )
+- Support HDP 2.1.15.0, 2.2.4.4, and 2.2.6.0 ( Issue: #208 )
+- HiveServer2 process fix per @jsh2134 ( Issue: #210 )
+
 v2.0.3 (Jun 25, 2015)
 ---------------------
 - Config files should be root owned ( Issue: #204 )
