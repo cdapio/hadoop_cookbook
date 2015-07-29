@@ -1,6 +1,9 @@
 hadoop CHANGELOG
 ===============
 
+Unreleased
+----------
+
 v2.0.4 (Jul 23, 2015)
 ---------------------
 - Fix ChefSpec ( Issue: #207 )
