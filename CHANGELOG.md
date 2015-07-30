@@ -1,8 +1,11 @@
 hadoop CHANGELOG
 ===============
 
-Unreleased
-----------
+v2.0.5 (Jul 30, 2015)
+---------------------
+- Support HDP 2.2.6.3 ( Issue: #212 )
+- Keep HADOOP_CLASSPATH before Tez's CLASSPATH ( Issue: #213 )
+- Support HDP 2.3.0.0 ( Issue: #214 )
 
 v2.0.4 (Jul 23, 2015)
 ---------------------
