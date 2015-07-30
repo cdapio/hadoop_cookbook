@@ -25,7 +25,7 @@ else
 end
 
 if node['hadoop'].key?('hadoop_env') && node['hadoop']['hadoop_env'].key?('hadoop_classpath')
-  default['hadoop']['hadoop_env']['hadoop_classpath'] = "#{node['tez']['tez_env']['tez_conf_dir']}:#{node['tez']['tez_env']['tez_jars']}:$HADOOP_CLASSPATH:#{default['hadoop']['hadoop_env']['hadoop_classpath']}"
+  default['hadoop']['hadoop_env']['hadoop_classpath'] = "$HADOOP_CLASSPATH:#{default['hadoop']['hadoop_env']['hadoop_classpath']}:#{node['tez']['tez_env']['tez_conf_dir']}:#{node['tez']['tez_env']['tez_jars']}"
 else
-  default['hadoop']['hadoop_env']['hadoop_classpath'] = "#{node['tez']['tez_env']['tez_conf_dir']}:#{node['tez']['tez_env']['tez_jars']}:$HADOOP_CLASSPATH"
+  default['hadoop']['hadoop_env']['hadoop_classpath'] = "$HADOOP_CLASSPATH:#{node['tez']['tez_env']['tez_conf_dir']}:#{node['tez']['tez_env']['tez_jars']}"
 end
