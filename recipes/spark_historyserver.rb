@@ -82,6 +82,7 @@ template "/etc/init.d/#{pkg}" do
     'process' => 'java',
     'binary' => "#{hadoop_lib_dir}/spark/bin/spark-class",
     'args' => 'org.apache.spark.deploy.history.HistoryServer > ${LOG_FILE} < /dev/null &',
+    'confdir' => '${SPARK_CONF_DIR}',
     'user' => 'spark',
     'home' => "#{hadoop_lib_dir}/spark",
     'pidfile' => "${SPARK_PID_DIR}/#{pkg}.pid",
