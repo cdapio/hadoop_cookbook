@@ -1,6 +1,10 @@
 hadoop CHANGELOG
 ===============
 
+v2.0.6 (Jul 30, 2015)
+---------------------
+- Fix Spark CONF_DIR ( Issue: #215 )
+
 v2.0.5 (Jul 30, 2015)
 ---------------------
 - Support HDP 2.2.6.3 ( Issue: #212 )
