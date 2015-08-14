@@ -32,11 +32,12 @@ if node['hadoop'].key?('sql_connector')
     else
       if node['platform_family'] == 'debian' && node['hadoop']['distribution'] != 'hdp'
         pkgs = ['libmysql-java']
+        jars = ['mysql-connector-java']
       else
         pkgs = ['mysql-connector-java']
+        jars = pkgs
       end
     end
-    jars = pkgs
   when 'postgresql'
     if node['platform_family'] == 'rhel'
       if node['platform_version'].to_i == '5'
