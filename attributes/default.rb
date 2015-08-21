@@ -48,6 +48,11 @@ default['hadoop']['core_site']['fs.defaultFS'] = "hdfs://#{node['fqdn']}"
 # yarn-site.xml settings
 ###
 default['hadoop']['yarn_site']['yarn.resourcemanager.hostname'] = node['fqdn']
+default['hadoop']['yarn_site']['yarn.scheduler.increment-allocation-vcores'] = '1'
+
+# Ensure yarn.scheduler.minimum-allocation-mb >= yarn.scheduler.increment-allocation-mb
+default['hadoop']['yarn_site']['yarn.scheduler.minimum-allocation-mb'] = '1024'
+default['hadoop']['yarn_site']['yarn.scheduler.increment-allocation-mb'] = node['hadoop']['yarn_site']['yarn.scheduler.minimum-allocation-mb']
 
 # Set yarn.application.classpath
 if node['hadoop']['distribution'] == 'hdp' && node['hadoop']['distribution_version'].to_f >= 2.2
