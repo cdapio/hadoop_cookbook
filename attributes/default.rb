@@ -52,7 +52,12 @@ default['hadoop']['yarn_site']['yarn.scheduler.increment-allocation-vcores'] = '
 
 # Ensure yarn.scheduler.minimum-allocation-mb >= yarn.scheduler.increment-allocation-mb
 default['hadoop']['yarn_site']['yarn.scheduler.minimum-allocation-mb'] = '1024'
-default['hadoop']['yarn_site']['yarn.scheduler.increment-allocation-mb'] = node['hadoop']['yarn_site']['yarn.scheduler.minimum-allocation-mb']
+default['hadoop']['yarn_site']['yarn.scheduler.increment-allocation-mb'] =
+  if node['hadoop']['yarn_site']['yarn.scheduler.minimum-allocation-mb'].to_i < 1024
+    node['hadoop']['yarn_site']['yarn.scheduler.minimum-allocation-mb']
+  else
+    '1024'
+  end
 
 # Set yarn.application.classpath
 if node['hadoop']['distribution'] == 'hdp' && node['hadoop']['distribution_version'].to_f >= 2.2
