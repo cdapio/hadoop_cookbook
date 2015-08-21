@@ -1,6 +1,12 @@
 hadoop CHANGELOG
 ===============
 
+v2.0.7 (Aug 21, 2015)
+---------------------
+- Fix Hive sql_connector jar on Ubuntu ( Issues: #216 [COOK-65](https://issues.cask.co/browse/COOK-65) )
+- Style updates ( Issue: #217 )
+- Set Yarn increment-allocation appropriately for Fair Scheduler ( Issues: #218 [COOK-67](https://issues.cask.co/browse/COOK-67) )
+
 v2.0.6 (Jul 30, 2015)
 ---------------------
 - Fix Spark CONF_DIR ( Issue: #215 )
