@@ -157,7 +157,7 @@ end # End spark-defaults.xml
 
 # Setup metrics.properties log4j.properties
 %w(metrics log4j).each do |propfile|
-  template "#{spark_conf_dir}/#{propfile.gsub('_', '-')}.properties" do
+  template "#{spark_conf_dir}/#{propfile.tr('_', '-')}.properties" do
     source 'generic.properties.erb'
     mode '0644'
     owner 'root'

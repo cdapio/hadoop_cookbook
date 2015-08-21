@@ -39,7 +39,7 @@ end
 %w(hbase_policy hbase_site).each do |sitefile|
   my_vars = { :options => node['hbase'][sitefile] }
 
-  template "#{hbase_conf_dir}/#{sitefile.gsub('_', '-')}.xml" do
+  template "#{hbase_conf_dir}/#{sitefile.tr('_', '-')}.xml" do
     source 'generic-site.xml.erb'
     mode '0644'
     owner 'root'
@@ -96,7 +96,7 @@ end # End hbase-env.sh
 %w(hadoop_metrics log4j).each do |propfile|
   my_vars = { :properties => node['hbase'][propfile] }
 
-  template "#{hbase_conf_dir}/#{propfile.gsub('_', '-')}.properties" do
+  template "#{hbase_conf_dir}/#{propfile.tr('_', '-')}.properties" do
     source 'generic.properties.erb'
     mode '0644'
     owner 'hbase'

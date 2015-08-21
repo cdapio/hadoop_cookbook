@@ -48,7 +48,7 @@ end
 
 # Setup capacity-scheduler.xml core-site.xml hadoop-policy.xml hdfs-site.xml mapred-site.xml yarn-site.xml
 %w(capacity_scheduler core_site hadoop_policy hdfs_site mapred_site yarn_site).each do |sitefile|
-  template "#{hadoop_conf_dir}/#{sitefile.gsub('_', '-')}.xml" do
+  template "#{hadoop_conf_dir}/#{sitefile.tr('_', '-')}.xml" do
     source 'generic-site.xml.erb'
     mode '0644'
     owner 'root'
@@ -149,7 +149,7 @@ end # End fair-scheduler.xml
   end
   # rubocop:enable Style/Next
 
-  template "#{hadoop_conf_dir}/#{envfile.gsub('_', '-')}.sh" do
+  template "#{hadoop_conf_dir}/#{envfile.tr('_', '-')}.sh" do
     source 'generic-env.sh.erb'
     mode '0755'
     owner 'root'
@@ -162,7 +162,7 @@ end # End hadoop-env.sh yarn-env.sh
 
 # Setup hadoop-metrics.properties hadoop-metrics2.properties log4j.properties
 %w(hadoop_metrics hadoop_metrics2 log4j).each do |propfile|
-  template "#{hadoop_conf_dir}/#{propfile.gsub('_', '-')}.properties" do
+  template "#{hadoop_conf_dir}/#{propfile.tr('_', '-')}.properties" do
     source 'generic.properties.erb'
     mode '0644'
     owner 'root'
