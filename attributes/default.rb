@@ -111,3 +111,5 @@ else
   default['hadoop']['hadoop_env']['hadoop_opts'] = '-Djava.net.preferIPv4Stack=true ${HADOOP_OPTS}'
   default['hadoop']['mapred_env']['hadoop_opts'] = '-Djava.net.preferIPv4Stack=true ${HADOOP_OPTS}'
 end
+
+default['hadoop']['package_versions'] = {}
