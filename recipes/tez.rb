@@ -22,6 +22,9 @@ include_recipe 'hadoop::repo' if node['hadoop']['distribution'] == 'hdp'
 package 'tez' do
   action :install
   only_if { node['hadoop']['distribution'] == 'hdp' }
+  if node['hadoop']['package_versions']['tez']
+    version node['hadoop']['package_versions']['tez']
+  end
 end
 
 # Copy tez library into HDFS

@@ -23,6 +23,9 @@ include_recipe 'hadoop::_compression_libs'
 
 package 'hadoop-client' do
   action :install
+  if node['hadoop']['package_versions']['hadoop-client']
+    version node['hadoop']['package_versions']['hadoop-client']
+  end
 end
 
 libhdfs =
@@ -34,6 +37,9 @@ libhdfs =
 
 package libhdfs do
   action :install
+  if node['hadoop']['package_versions'][libhdfs]
+    version node['hadoop']['package_versions'][libhdfs]
+  end
 end
 
 hadoop_conf_dir = "/etc/hadoop/#{node['hadoop']['conf_dir']}"

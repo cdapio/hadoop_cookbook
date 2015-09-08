@@ -29,11 +29,17 @@ pkg =
 package pkg do
   action :install
   only_if { (node['hadoop']['distribution'] == 'cdh' || hdp22?) && node['spark']['release']['install'].to_s == 'false' }
+  if node['hadoop']['package_versions'][pkg]
+    version node['hadoop']['package_versions'][pkg]
+  end
 end
 
 package 'spark-python' do
   action :install
   only_if { (node['hadoop']['distribution'] == 'cdh' || hdp22?) && node['spark']['release']['install'].to_s == 'false' }
+  if node['hadoop']['package_versions']['spark-python']
+    version node['hadoop']['package_versions']['spark-python']
+  end
 end
 
 # Spark MLib requires this
@@ -45,6 +51,9 @@ fortran_libs =
   end
 package fortran_libs do
   action :install
+  if node['hadoop']['package_versions'][fortran_libs]
+    version node['hadoop']['package_versions'][fortran_libs]
+  end
 end
 
 unless node['spark']['release']['install'].to_s == 'false'

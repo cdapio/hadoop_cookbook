@@ -21,4 +21,7 @@ include_recipe 'hadoop::hive'
 
 package 'hcatalog' do
   action :install
+  if node['hadoop']['package_versions']['hcatalog']
+    version node['hadoop']['package_versions']['hcatalog']
+  end
 end

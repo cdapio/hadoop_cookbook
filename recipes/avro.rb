@@ -22,4 +22,7 @@ include_recipe 'hadoop::repo'
 package 'avro-tools' do
   action :install
   only_if { node['hadoop']['distribution'] == 'cdh' }
+  if node['hadoop']['package_versions']['avro-tools']
+    version node['hadoop']['package_versions']['avro-tools']
+  end
 end

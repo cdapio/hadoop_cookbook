@@ -28,6 +28,9 @@ pkg =
 
 package pkg do
   action :install
+  if node['hadoop']['package_versions'][pkg]
+    version node['hadoop']['package_versions'][pkg]
+  end
 end
 
 flume_conf_dir = "/etc/flume/#{node['flume']['conf_dir']}"

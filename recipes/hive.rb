@@ -21,6 +21,9 @@ include_recipe 'hadoop::repo'
 
 package 'hive' do
   action :install
+  if node['hadoop']['package_versions']['hive']
+    version node['hadoop']['package_versions']['hive']
+  end
 end
 
 hive_conf_dir = "/etc/hive/#{node['hive']['conf_dir']}"

@@ -23,6 +23,9 @@ pkg = 'oozie'
 
 package pkg do
   action :nothing
+  if node['hadoop']['package_versions'][pkg]
+    version node['hadoop']['package_versions'][pkg]
+  end
 end
 
 # Hack to prevent auto-start of services, see COOK-26
@@ -59,7 +62,11 @@ jars.each do |jar|
   end
 end
 
-package 'unzip'
+package 'unzip' do
+  if node['hadoop']['package_versions']['unzip']
+    version node['hadoop']['package_versions']['unzip']
+  end
+end
 
 ### TODO: Use ark cookbook/resource for this
 extjs = 'ext-2.2.zip'

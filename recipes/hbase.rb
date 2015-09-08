@@ -23,6 +23,9 @@ include_recipe 'hadoop::_compression_libs'
 
 package 'hbase' do
   action :install
+  if node['hadoop']['package_versions']['hbase']
+    version node['hadoop']['package_versions']['hbase']
+  end
 end
 
 hbase_conf_dir = "/etc/hbase/#{node['hbase']['conf_dir']}"

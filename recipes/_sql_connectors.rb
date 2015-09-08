@@ -65,6 +65,9 @@ end
 pkgs.each do |p|
   package p do
     action :install
+    if node['hadoop']['package_versions'][p]
+      version node['hadoop']['package_versions'][p]
+    end
   end
 end
 
