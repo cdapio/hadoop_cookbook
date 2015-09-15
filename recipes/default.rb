@@ -92,7 +92,6 @@ end # End fair-scheduler.xml
 
 # Setup hadoop-env.sh mapred-env.sh yarn-env.sh
 %w(hadoop_env mapred_env yarn_env).each do |envfile|
-  # rubocop:disable Style/Next
   %w(hadoop hadoop_mapred yarn).each do |svc|
     # Keep next here, in case envfile isn't set, so we don't NPE on directory resource
     next unless node['hadoop'].key?(envfile) && node['hadoop'][envfile].key?("#{svc}_log_dir")
@@ -147,7 +146,6 @@ end # End fair-scheduler.xml
       end
     end
   end
-  # rubocop:enable Style/Next
 
   template "#{hadoop_conf_dir}/#{envfile.tr('_', '-')}.sh" do
     source 'generic-env.sh.erb'
@@ -231,7 +229,7 @@ jsvc_home =
     '/usr/libexec/bigtop-utils'
   else
     '/usr/lib/bigtop-utils'
-  fi
+  end
 
 # Create /etc/default/hadoop
 template '/etc/default/hadoop' do
