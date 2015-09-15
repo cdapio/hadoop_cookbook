@@ -1,6 +1,12 @@
 hadoop CHANGELOG
 ===============
 
+v2.0.8 (Sep 15, 2015)
+---------------------
+- Fix Hive init scripts, per @QuentinFra ( Issue: #220 )
+- Correct JSVC_HOME for HDP 2.0 ( Issues: #221 [COOK-70](https://issues.cask.co/browse/COOK-70) )
+- Support HDP 2.2.8.0 ( Issue: #222 )
+
 v2.0.7 (Aug 21, 2015)
 ---------------------
 - Fix Hive sql_connector jar on Ubuntu ( Issues: #216 [COOK-65](https://issues.cask.co/browse/COOK-65) )
