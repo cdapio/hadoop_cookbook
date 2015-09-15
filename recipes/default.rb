@@ -225,6 +225,14 @@ else
   end
 end # End hadoop.tmp.dir
 
+jsvc_home =
+  if node['hadoop']['distribution'] == 'hdp' && node['hadoop']['distribution_version'].to_f == 2.0 &&
+     node['hadoop']['distribution_version'].to_s != '2' # Only 2, means 2.3
+    '/usr/libexec/bigtop-utils'
+  else
+    '/usr/lib/bigtop-utils'
+  fi
+
 # Create /etc/default/hadoop
 template '/etc/default/hadoop' do
   source 'generic-env.sh.erb'
@@ -242,7 +250,7 @@ template '/etc/default/hadoop' do
     'hadoop_hdfs_home' => "#{hadoop_lib_dir}/hadoop-hdfs",
     'hadoop_mapred_home' => "#{hadoop_lib_dir}/hadoop-mapreduce",
     'hadoop_yarn_home' => "#{hadoop_lib_dir}/hadoop-yarn",
-    'jsvc_home' => '/usr/lib/bigtop-utils'
+    'jsvc_home' => jsvc_home
   }
 end
 
