@@ -121,6 +121,7 @@ end # End fair-scheduler.xml
         svc
       end
     # Prevent duplicate resources
+    # rubocop:disable Style/Next
     unless node['hadoop'][envfile]["#{svc}_log_dir"] == "/var/log/hadoop-#{log_dir}" || (
            hdp22? && node['hadoop'][envfile]["#{svc}_log_dir"] == "/var/log/hadoop/#{log_dir}")
       # Delete default directory, if we aren't set to it
@@ -145,6 +146,7 @@ end # End fair-scheduler.xml
         only_if { hdp22? }
       end
     end
+    # rubocop:enable Style/Next
   end
 
   template "#{hadoop_conf_dir}/#{envfile.tr('_', '-')}.sh" do
