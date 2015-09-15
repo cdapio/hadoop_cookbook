@@ -227,7 +227,7 @@ end # End hadoop.tmp.dir
 
 jsvc_home =
   if node['hadoop']['distribution'] == 'hdp' && node['hadoop']['distribution_version'].to_f == 2.0 &&
-     node['hadoop']['distribution_version'].to_s != '2' # Only 2, means 2.3
+     node['hadoop']['distribution_version'].to_s != '2' # Only '2' means latest 2.x release
     '/usr/libexec/bigtop-utils'
   else
     '/usr/lib/bigtop-utils'
