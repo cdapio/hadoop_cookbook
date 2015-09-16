@@ -24,7 +24,7 @@ For more information, read the [Wrapping this cookbook](https://github.com/caskd
 
 Attributes for this cookbook define the configuration files for Hadoop and its various services. Hadoop configuration files are XML files, with name/value property pairs. The attribute name determines which file the property is placed and the property name. The attribute value is the property value. The attribute `hadoop['core_site']['fs.defaultFS']` will configure a property named `fs.defaultFS` in `core-site.xml` in `hadoop['conf_dir']`. All attribute values are taken as-is and only minimal configuration checking is done on values. It is up to the user to provide a valid configuration for your cluster.
 
-Attribute Tree | File | Location 
+Attribute Tree | File | Location
 -------------- | ---- | --------
 flume['flume_conf'] | flume.conf | `flume['conf_dir']`
 hadoop['capacity_scheduler'] | capacity-scheduler.xml | `hadoop['conf_dir']`
@@ -54,6 +54,9 @@ oozie['oozie_site'] | oozie-site.xml | `oozie['conf_dir']`
 spark['log4j'] | log4j.properties | `spark['conf_dir']`
 spark['metrics'] | metrics.properties | `spark['conf_dir']`
 spark['spark_env'] | spark-env.sh | `spark['conf_dir']`
+storm['storm_env'] | storm-env.sh | `storm['conf_dir']`
+storm['storm_env'] | storm_env.ini | `storm['conf_dir']`
+storm['storm_conf'] | storm.yaml | `storm['conf_dir']`
 tez['tez_env'] | tez-env.sh | `tez['conf_dir']`
 tez['tez_site'] | tez-site.xml | `tez['conf_dir']`
 zookeeper['jaas'] | jaas.conf | `zookeeper['conf_dir']`
@@ -63,7 +66,7 @@ zookeeper['zoocfg'] | zoo.cfg | `zookeeper['conf_dir']`
 ## Distribution Attributes
 
 * `hadoop['distribution']` - Specifies which Hadoop distribution to use, currently supported: cdh, hdp, bigtop. Default `hdp`
-* `hadoop['distribution_version']` - Specifies which version of `hadoop['distribution']` to use. Default `2.0` if `hadoop['distribution']` is `hdp`, `5` if `hadoop['distribution']` is `cdh`, and `0.8.0` if `hadoop['distribution']` is `bigtop`.  It can also be set to `develop` when `hadoop['distribution']` is `bigtop` to allow installing from development repos without gpg validation. 
+* `hadoop['distribution_version']` - Specifies which version of `hadoop['distribution']` to use. Default `2.0` if `hadoop['distribution']` is `hdp`, `5` if `hadoop['distribution']` is `cdh`, and `0.8.0` if `hadoop['distribution']` is `bigtop`.  It can also be set to `develop` when `hadoop['distribution']` is `bigtop` to allow installing from development repos without gpg validation.
 
 ### APT-specific settings
 
@@ -83,6 +86,7 @@ zookeeper['zoocfg'] | zoo.cfg | `zookeeper['conf_dir']`
 * `oozie['conf_dir']` - The directory used inside `/etc/oozie` and used via the alternatives system. Default `conf.chef`
 * `tez['conf_dir']` - The directory used inside `/etc/tez` and used via the alternatives system. Default `conf.chef`
 * `spark['conf_dir']` - The directory used inside `/etc/spark` and used via the alternatives system. Default `conf.chef`
+* `storm['conf_dir']` - The directory used inside `/etc/storm` and used via the alternatives system. Default `conf.chef`
 * `zookeeper['conf_dir']` - The directory used inside `/etc/zookeeper` and used via the alternatives system. Default `conf.chef`
 
 ## Default Attributes
@@ -122,6 +126,10 @@ zookeeper['zoocfg'] | zoo.cfg | `zookeeper['conf_dir']`
 * `spark` - Sets up configuration and `spark-core` packages.
 * `spark_master` - Sets up a Spark Master.
 * `spark_worker` - Sets up a Spark Worker.
+* `storm` - Sets up `storm` package.
+* `storm_nimbus` - Setups a Storm Nimbus server.
+* `storm_supervisor` - Setups a Storm Supervisor server.
+* `storm_ui` - Setups a Storm UI server.
 * `tez` - Sets up configuration  and `tez` packages.
 * `zookeeper` - Sets up `zookeeper` package.
 * `zookeeper_server` - Sets up a ZooKeeper server.
