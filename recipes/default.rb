@@ -92,7 +92,6 @@ end # End fair-scheduler.xml
 
 # Setup hadoop-env.sh mapred-env.sh yarn-env.sh
 %w(hadoop_env mapred_env yarn_env).each do |envfile|
-  # rubocop:disable Style/Next
   %w(hadoop hadoop_mapred yarn).each do |svc|
     # Keep next here, in case envfile isn't set, so we don't NPE on directory resource
     next unless node['hadoop'].key?(envfile) && node['hadoop'][envfile].key?("#{svc}_log_dir")
@@ -122,6 +121,7 @@ end # End fair-scheduler.xml
         svc
       end
     # Prevent duplicate resources
+    # rubocop:disable Style/Next
     unless node['hadoop'][envfile]["#{svc}_log_dir"] == "/var/log/hadoop-#{log_dir}" || (
            hdp22? && node['hadoop'][envfile]["#{svc}_log_dir"] == "/var/log/hadoop/#{log_dir}")
       # Delete default directory, if we aren't set to it
@@ -146,8 +146,8 @@ end # End fair-scheduler.xml
         only_if { hdp22? }
       end
     end
+    # rubocop:enable Style/Next
   end
-  # rubocop:enable Style/Next
 
   template "#{hadoop_conf_dir}/#{envfile.tr('_', '-')}.sh" do
     source 'generic-env.sh.erb'
@@ -225,6 +225,14 @@ else
   end
 end # End hadoop.tmp.dir
 
+jsvc_home =
+  if node['hadoop']['distribution'] == 'hdp' && node['hadoop']['distribution_version'].to_f == 2.0 &&
+     node['hadoop']['distribution_version'].to_s != '2' # Only '2' means latest 2.x release
+    '/usr/libexec/bigtop-utils'
+  else
+    '/usr/lib/bigtop-utils'
+  end
+
 # Create /etc/default/hadoop
 template '/etc/default/hadoop' do
   source 'generic-env.sh.erb'
@@ -242,7 +250,7 @@ template '/etc/default/hadoop' do
     'hadoop_hdfs_home' => "#{hadoop_lib_dir}/hadoop-hdfs",
     'hadoop_mapred_home' => "#{hadoop_lib_dir}/hadoop-mapreduce",
     'hadoop_yarn_home' => "#{hadoop_lib_dir}/hadoop-yarn",
-    'jsvc_home' => '/usr/lib/bigtop-utils'
+    'jsvc_home' => jsvc_home
   }
 end
 
