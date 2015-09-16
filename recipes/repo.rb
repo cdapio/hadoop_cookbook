@@ -252,7 +252,11 @@ when 'bigtop'
       yum_platform_version = major_platform_version
     end
 
-    yum_base_url = "http://bigtop.s3.amazonaws.com/releases/#{bigtop_release}/redhat"
+    if bigtop_release.to_f >= 1.0
+      yum_base_url = "http://bigtop.s3.amazonaws.com/releases/#{bigtop_release}/centos"
+    else
+      yum_base_url = "http://bigtop.s3.amazonaws.com/releases/#{bigtop_release}/redhat"
+    end
     yum_repo_url = node['hadoop']['yum_repo_url'] ? node['hadoop']['yum_repo_url'] : "#{yum_base_url}/#{yum_platform_version}/#{node['kernel']['machine']}"
     yum_repo_key_url = node['hadoop']['yum_repo_key_url'] ? node['hadoop']['yum_repo_key_url'] : 'http://archive.apache.org/dist/bigtop/KEYS'
 
