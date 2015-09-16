@@ -139,7 +139,7 @@ when 'hdp'
       case hdp_update_version
       when '2.2.0.0'
         "2.x/GA/#{hdp_update_version}"
-      when '2.1.10.0', '2.2.1.0', '2.2.4.2'
+      when '2.1.10.0', '2.1.15.0', '2.2.1.0', '2.2.4.2', '2.2.6.0', '2.2.6.3', '2.2.8.0'
         "2.x/updates/#{hdp_update_version}"
       else
         hdp_update_version
