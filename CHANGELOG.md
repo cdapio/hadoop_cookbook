@@ -1,6 +1,10 @@
 hadoop CHANGELOG
 ===============
 
+v2.0.9 (Sep 16, 2015)
+---------------------
+- Support later HDP 2.1 and HDP 2.2 updates on Ubuntu ( Issue: #225 )
+
 v2.0.8 (Sep 15, 2015)
 ---------------------
 - Fix Hive init scripts, per @QuentinFra ( Issue: #220 )
