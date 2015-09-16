@@ -207,7 +207,7 @@ suites:
       - recipe[hadoop::zookeeper_server]
     attributes: { hadoop: { distribution: 'bigtop', distribution_version: '0.8.0' } }
   - name: bigtop100
-    excludes: debian-6.0.10, ubuntu-14.04
+    excludes: debian-6.0.10
     run_list:
       - recipe[java::default]
       - recipe[hadoop::default]

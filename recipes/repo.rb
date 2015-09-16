@@ -273,6 +273,16 @@ when 'bigtop'
     # for bigtop, we do not validate codename, to support developing against custom repositories
     codename = node['lsb']['codename']
 
+    # rubocop: disable Metrics/BlockNesting
+    case codename
+    when 'precise', 'quantal', 'raring', 'saucy', 'utopic', 'vivid', 'wily'
+      if bigtop_release.to_f >= 1.0
+        Chef::Log.warn('This version of Ubuntu is unsupported by Bigtop! Bug reports should include patches.')
+        codename = 'trusty'
+      end
+    end
+    # rubocop: enable Metrics/BlockNesting
+
     apt_domain_name = 'bigtop.s3.amazonaws.com'
     apt_base_url = "http://#{apt_domain_name}/releases/#{bigtop_release}/#{node['platform']}"
     apt_repo_url = node['hadoop']['apt_repo_url'] ? node['hadoop']['apt_repo_url'] : "#{apt_base_url}/#{codename}/#{node['kernel']['machine']}"
