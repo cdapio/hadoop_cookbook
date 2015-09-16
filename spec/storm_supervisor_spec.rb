@@ -32,6 +32,5 @@ describe 'hadoop::storm_supervisor' do
       expect(chef_run).to_not start_service(pkg)
       expect(chef_run).to_not stop_service(pkg)
     end
-
   end
 end

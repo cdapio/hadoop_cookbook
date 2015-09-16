@@ -30,11 +30,11 @@ describe 'hadoop::storm' do
     end
 
     it 'deletes rpm conf directory' do
-      expect(chef_run).to delete_directory(/\/usr\/hdp\/2.3.0.0-.*\/storm\/conf/)
+      expect(chef_run).to delete_directory(%r{/usr/hdp/2.3.0.0-.*/storm/conf})
     end
 
     it 'creates storm config symlink' do
-      link = chef_run.link(/\/usr\/hdp\/2.3.0.0-.*\/storm\/conf/)
+      link = chef_run.link(%r{/usr/hdp/2.3.0.0-.*/storm/conf})
       expect(link).to link_to('/etc/storm/conf.chef')
     end
 
@@ -55,7 +55,7 @@ describe 'hadoop::storm' do
     end
 
     it 'deletes rpm logs directory' do
-      expect(chef_run).to delete_directory(/\/usr\/hdp\/2.3.0.0-.*\/storm\/logs/)
+      expect(chef_run).to delete_directory(%r{/usr/hdp/2.3.0.0-.*/storm/logs})
     end
 
     it 'creates storm logs directory' do
@@ -67,7 +67,7 @@ describe 'hadoop::storm' do
     end
 
     it 'creates storm logs symlink' do
-      link = chef_run.link(/\/usr\/hdp\/2.3.0.0-.*\/storm\/logs/)
+      link = chef_run.link(%r{/usr/hdp/2.3.0.0-.*/storm/logs})
       expect(link).to link_to('/var/log/storm')
     end
 
