@@ -28,12 +28,12 @@ pkg =
 
 package pkg do
   action :install
-  only_if { (node['hadoop']['distribution'] == 'cdh' || hdp22?) && node['spark']['release']['install'].to_s == 'false' }
+  only_if { (node['hadoop']['distribution'] == 'cdh' || hdp22? || iop?) && node['spark']['release']['install'].to_s == 'false' }
 end
 
 package hadoop_package('spark-python') do
   action :install
-  only_if { (node['hadoop']['distribution'] == 'cdh' || hdp22?) && node['spark']['release']['install'].to_s == 'false' }
+  only_if { (node['hadoop']['distribution'] == 'cdh' || hdp22? || iop?) && node['spark']['release']['install'].to_s == 'false' }
 end
 
 # Spark MLib requires this

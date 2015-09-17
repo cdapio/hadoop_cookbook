@@ -56,14 +56,14 @@ end
 hadoop_log_dir =
   if node['hadoop'].key?('hadoop_env') && node['hadoop']['hadoop_env'].key?('hadoop_log_dir')
     node['hadoop']['hadoop_env']['hadoop_log_dir']
-  elsif hdp22?
+  elsif hdp22? || iop?
     '/var/log/hadoop/hdfs'
   else
     '/var/log/hadoop-hdfs'
   end
 
 hadoop_pid_dir =
-  if hdp22?
+  if hdp22? || iop?
     '/var/run/hadoop/hdfs'
   else
     '/var/run/hadoop-hdfs'

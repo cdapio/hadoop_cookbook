@@ -20,6 +20,7 @@ describe 'hadoop::repo' do
       ChefSpec::SoloRunner.new(platform: 'centos', version: 6.6) do |node|
         node.automatic['domain'] = 'example.com'
         node.override['hadoop']['distribution'] = 'cdh'
+        node.override['hadoop']['distribution_version'] = '5.4.2'
       end.converge(described_recipe)
     end
 
@@ -27,6 +28,23 @@ describe 'hadoop::repo' do
       expect(chef_run).to add_yum_repository('cloudera-cdh5')
     end
   end
+
+  context 'using IOP' do
+    let(:chef_run) do
+      ChefSpec::SoloRunner.new(platform: 'centos', version: 6.6) do |node|
+        node.automatic['domain'] = 'example.com'
+        node.override['hadoop']['distribution'] = 'iop'
+        node.override['hadoop']['distribution_version'] = '4.1.0.0'
+      end.converge(described_recipe)
+    end
+
+    %w(IOP-4.1.x IOP-UTILS-1.1.0.0).each do |repo|
+      it "add #{repo} yum_repository" do
+        expect(chef_run).to add_yum_repository(repo)
+      end
+    end
+  end
+
   context 'on Ubuntu 12.04' do
     let(:chef_run) do
       ChefSpec::SoloRunner.new(platform: 'ubuntu', version: 12.04) do |node|

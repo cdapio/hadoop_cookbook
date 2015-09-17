@@ -70,7 +70,7 @@ execute 'yarn-app-mapreduce-am-staging-dir' do
   action :nothing
 end
 
-# Copy MapReduce tarball to HDFS for HDP 2.2+
+# Copy MapReduce tarball to HDFS for HDP 2.2+ and IOP
 dfs = node['hadoop']['core_site']['fs.defaultFS']
 execute 'hdp22-mapreduce-tarball' do
   command <<-EOS
@@ -88,17 +88,34 @@ execute 'hdp22-mapreduce-tarball' do
   action :nothing
 end
 
+iop_version = node['hadoop']['distribution_version']
+execute 'iop-mapreduce-tarball' do
+  command <<-EOS
+  hdfs dfs -mkdir -p #{dfs}/iop/apps/#{iop_version}/mapreduce && \
+  hdfs dfs -put #{hadoop_lib_dir}/hadoop/mapreduce.tar.gz /iop/apps/#{iop_version}/mapreduce && \
+  hdfs dfs -chown -R hdfs:hadoop /iop && \
+  hdfs dfs -chmod -R 555 /iop/apps/#{iop_version}/mapreduce && \
+  hdfs dfs -chmod -R 444 /iop/apps/#{iop_version}/mapreduce/mapreduce.tar.gz
+  EOS
+  timeout 300
+  user 'hdfs'
+  group 'hdfs'
+  not_if "hdfs dfs -test -d #{dfs}/iop/apps/#{iop_version}/mapreduce", :user => 'hdfs'
+  only_if { iop? }
+  action :nothing
+end
+
 yarn_log_dir =
   if node['hadoop'].key?('yarn_env') && node['hadoop']['yarn_env'].key?('yarn_log_dir')
     node['hadoop']['yarn_env']['yarn_log_dir']
-  elsif hdp22?
+  elsif hdp22? || iop?
     '/var/log/hadoop/yarn'
   else
     '/var/log/hadoop-yarn'
   end
 
 yarn_pid_dir =
-  if hdp22?
+  if hdp22? || iop?
     '/var/run/hadoop/yarn'
   else
     '/var/run/hadoop-yarn'
