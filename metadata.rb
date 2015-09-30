@@ -7,8 +7,9 @@ long_description IO.read(File.join(File.dirname(__FILE__), 'README.md'))
 version          '2.0.9'
 
 depends 'yum', '>= 3.0'
+depends 'apt', '>=2.1.2'
 
-%w(apt selinux sysctl ulimit).each do |cb|
+%w(selinux sysctl ulimit).each do |cb|
   depends cb
 end
 
