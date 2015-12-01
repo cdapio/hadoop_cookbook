@@ -32,6 +32,7 @@ default['hbase']['conf_dir'] = node['hadoop']['conf_dir']
 default['hive']['conf_dir'] = node['hadoop']['conf_dir']
 default['oozie']['conf_dir'] = node['hadoop']['conf_dir']
 default['spark']['conf_dir'] = node['hadoop']['conf_dir']
+default['storm']['conf_dir'] = node['hadoop']['conf_dir']
 default['tez']['conf_dir'] = node['hadoop']['conf_dir']
 default['zookeeper']['conf_dir'] = node['hadoop']['conf_dir']
 
@@ -93,8 +94,12 @@ hdp_version =
     '2.2.6.0-2800'
   when '2.2.6.3'
     '2.2.6.3-1'
+  when '2.2.8.0'
+    '2.2.8.0-3150'
   when '2.3.0.0'
     '2.3.0.0-2557'
+  when '2.3.2.0'
+    '2.3.2.0-2950'
   else
     node['hadoop']['distribution_version']
   end
