@@ -89,7 +89,7 @@ _start() {
 
     mkdir -p `dirname ${PID_FILE}` `dirname ${LOG_FILE}`
     chown ${PKG_USER} `dirname ${PID_FILE}` `dirname ${LOG_FILE}`
-    su -s /bin/bash ${PKG_USER} -c "cd ${PKG_HOME}; ${SOURCE} exec nice -n ${NICENESS} ${EXE_FILE} ${EXE_ARGS}<% unless @options['args'][-1] == '&' %>;<% end %> echo \$! > ${PID_FILE}"
+    su -s /bin/bash ${PKG_USER} -c "cd ${PKG_HOME}; ${SOURCE} exec nice -n ${NICENESS} ${EXE_FILE} ${EXE_ARGS}<% unless @options['args'][-1] == '&' %>&<% end %> echo \$! > ${PID_FILE}"
 
     RETVAL=$?
     [ ${RETVAL} -eq ${RETVAL_SUCCESS} ] && touch ${LOCKFILE}
