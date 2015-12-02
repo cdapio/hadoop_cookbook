@@ -26,6 +26,12 @@ sysctl_param 'vm.swappiness' do
   value 0
 end
 
+# Prevent Linux from using Hadoop ports as client ports (COOK-79)
+ports = node['hadoop']['sysctl']['net.ipv4.ip_local_reserved_ports'].uniq.to_s.tr(' ','').tr('[','').tr(']','')
+sysctl_param 'net.ipv4.ip_local_reserved_ports' do
+  value ports
+end
+
 # Disable transparent_hugepage compaction
 # COOK-57 location can vary within CentOS
 %w(transparent_hugepage redhat_transparent_hugepage).each do |dir|
