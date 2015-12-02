@@ -20,11 +20,7 @@
 # This attributes file sets up the port reservations for sysctl for COOK-79. Since these values must be compiled into
 # a single value, everything is done in this one file, and is done at Chef compile time, versus in a recipe. This is
 # to attempt to ensure that the cookbook only gets a single value for this setting on any one cluster.
-#
-# The source for these ports is http://private-repo-1.hortonworks.com.s3.amazonaws.com/HDPDocuments/HDP2/HDP-2.0.9.0/bk_using_Ambari_book/content/reference_chap2_2x.html
 
-# net.ipv4.ip_local_reserved_ports setting (COOK-79)
-default['hadoop']['sysctl']['net.ipv4.ip_local_reserved_ports'] = []
 ports = []
 
 ###
@@ -62,8 +58,8 @@ addr_ports = {
   'dfs.journalnode.https-address' => 8481
 }
 
-addr_ports.each do |k,v|
-  if node['hadoop']['hdfs_site'].key?(k)
+addr_ports.each do |k, v|
+  if node['hadoop'].key?('hdfs_site') && node['hadoop']['hdfs_site'].key?(k)
     ports += [node['hadoop']['hdfs_site'][k].split(':')[1].to_i]
   else
     ports += [v]
@@ -98,7 +94,7 @@ addr_ports = {
   'yarn.timeline-service.webapp.https.address' => 8190
 }
 
-addr_ports.each do |k,v|
+addr_ports.each do |k, v|
   if node['hadoop']['yarn_site'].key?('k')
     ports += [node['hadoop']['yarn_site'][k].split(':')[1].to_i]
   else
@@ -121,7 +117,7 @@ addr_ports = {
   'hbase.thrift.info.port' => 9095
 }
 
-addr_ports.each do |k,v|
+addr_ports.each do |k, v|
   if node['hbase']['hbase_site'].key?(k)
     ports += [node['hbase']['hbase_site'][k].to_i]
   else
@@ -145,7 +141,7 @@ end
 # ZooKeeper
 ###
 
-if node['zookeeper'].key?('zoocfg') && node['zookeeper']['zoocfg'].key?('clientPort')
+if node['zookeeper']['zoocfg'].key?('clientPort')
   ports += [node['zookeeper']['zoocfg']['clientPort'].to_i]
 else
   ports += [2181]
@@ -164,4 +160,15 @@ end
 ###
 # Finally, set ports
 ###
-default['hadoop']['sysctl']['net.ipv4.ip_local_reserved_ports'] = ports
+
+ports = ports.uniq.sort.to_s.tr(' ', '').tr('[', '').tr(']', '') # De-dupe, Sort, and Stringify
+include_attribute 'sysctl'
+
+# net.ipv4.ip_local_reserved_ports setting (COOK-79)
+if node['sysctl']['params'].key?('net') && node['sysctl']['params']['net'].key?('ipv4') &&
+   node['sysctl']['params']['net']['ipv4'].key?('ip_local_reserved_ports')
+  orig = node['sysctl']['params']['net']['ipv4']['ip_local_reserved_ports']
+  default['sysctl']['params']['net']['ipv4']['ip_local_reserved_ports'] = "#{orig},#{ports}"
+else
+  default['sysctl']['params']['net']['ipv4']['ip_local_reserved_ports'] = ports
+end
