@@ -40,6 +40,9 @@ default['zookeeper']['conf_dir'] = node['hadoop']['conf_dir']
 default['hadoop']['limits']['nofile'] = '32768'
 default['hadoop']['limits']['nproc'] = '65536'
 
+# net.ipv4.ip_local_reserved_ports setting (COOK-79)
+default['hadoop']['sysctl']['net.ipv4.ip_local_reserved_ports'] = []
+
 ###
 # core-site.xml settings
 ###
