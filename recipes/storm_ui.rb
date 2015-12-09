@@ -84,15 +84,6 @@ template "/etc/default/#{pkg}" do
   }
 end
 
-file "#{storm_conf_dir}/storm.yaml" do
-  mode '0644'
-  owner 'root'
-  group 'root'
-  action :create
-  # CHEF-3953: Workaround ImmutableMash to YAML
-  content YAML.dump(node['storm']['storm_conf'].to_hash)
-end
-
 service pkg do
   status_command "service #{pkg} status"
   supports [:restart => true, :reload => false, :status => true]

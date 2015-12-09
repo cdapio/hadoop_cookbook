@@ -93,13 +93,12 @@ unless storm_conf_dir == "#{node['storm']['storm_env']['storm_home']}/conf"
   end
 end
 
-file "#{storm_conf_dir}/storm.yaml" do
+template "#{storm_conf_dir}/storm.yaml" do
+  source 'storm.yaml.erb'
   mode '0644'
   owner 'root'
   group 'root'
-  action :create
-  # CHEF-3953: Workaround ImmutableMash to YAML
-  content YAML.dump(node['storm']['storm_conf'].to_hash)
+  variables :storm_conf => node['storm']['storm_conf']
   action :create_if_missing
 end
 
