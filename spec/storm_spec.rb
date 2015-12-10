@@ -39,7 +39,7 @@ describe 'hadoop::storm' do
     end
 
     it 'creates storm config' do
-      expect(chef_run).to create_file_if_missing('/etc/storm/conf.chef/storm.yaml').with(
+      expect(chef_run).to create_template_if_missing('/etc/storm/conf.chef/storm.yaml').with(
         user: 'root',
         group: 'root',
         mode: '0644'
