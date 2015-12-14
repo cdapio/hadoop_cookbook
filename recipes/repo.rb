@@ -127,6 +127,7 @@ when 'hdp'
   when 'debian'
     apt_domain_name = 'public-repo-1.hortonworks.com'
     apt_base_url = "http://#{apt_domain_name}/HDP"
+    hdp_update_version = hdp_version if hdp_update_version.nil?
     # HDP supports Debian 6, Ubuntu 12. Starting with 2.3.2.0 Ubuntu 14 and Debian 7
     if node['platform'] == 'debian' && node['platform_version'] =~ /^7/ && Gem::Version.new(hdp_update_version) >= Gem::Version.new('2.3.2.0')
       os = "#{node['platform']}7"
@@ -137,7 +138,6 @@ when 'hdp'
     elsif node['platform'] == 'ubuntu'
       os = "#{node['platform']}12"
     end
-    hdp_update_version = hdp_version if hdp_update_version.nil?
     hdp_apt_repo_path =
       case hdp_update_version
       when '2.2.0.0'
