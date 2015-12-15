@@ -3,6 +3,7 @@
 [![Cookbook Version](http://img.shields.io/cookbook/v/hadoop.svg)](https://supermarket.chef.io/cookbooks/hadoop)
 [![Apache License 2.0](http://img.shields.io/badge/license-apache%202.0-green.svg)](http://opensource.org/licenses/Apache-2.0)
 [![Build Status](http://img.shields.io/travis/caskdata/hadoop_cookbook.svg)](http://travis-ci.org/caskdata/hadoop_cookbook)
+[![Code Climate](https://codeclimate.com/github/caskdata/hadoop_cookbook/badges/gpa.svg)](https://codeclimate.com/github/caskdata/hadoop_cookbook)
 
 # Requirements
 
