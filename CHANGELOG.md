@@ -1,6 +1,17 @@
 hadoop CHANGELOG
 ===============
 
+v2.1.0 (Dec 7, 2015)
+--------------------
+- Add support for Apache Storm ( Issue: #223 )
+- Support Bigtop 1.0.0 ( Issue: #224 )
+- Update minimum `apt` cookbook dependency ( Issue: #227 )
+- Support HDP 2.3.2.0 ( Issues: #228 [COOK-76](https://issues.cask.co/browse/COOK-76) )
+- Update Gemfile dependencies ( Issue: #229 )
+- Init scripts should use ampersand ( Issue: #230 )
+- Update foodcritic constraint ( Issue: #231 )
+- Reserve Hadoop ports from being used as local ports ( Issues: #233 [COOK-79](https://issues.cask.co/browse/COOK-79) )
+
 v2.0.9 (Sep 16, 2015)
 ---------------------
 - Support later HDP 2.1 and HDP 2.2 updates on Ubuntu ( Issue: #225 )
