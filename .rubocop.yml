@@ -11,6 +11,6 @@ SingleSpaceBeforeFirstArg:
 AsciiComments:
   Enabled: false
 Metrics/CyclomaticComplexity:
-  Max: 10
+  Max: 11
 Metrics/MethodLength:
-  Max: 22
+  Max: 24
