@@ -113,7 +113,7 @@ template "/etc/init.d/#{pkg}" do
     'name' => pkg,
     'process' => 'java',
     'binary' => "#{hadoop_lib_dir}/hive/bin/hive",
-    'args' => '--config ${CONF_DIR} --service metastore > ${LOG_FILE} 2>&1 < /dev/null & "\'echo $! \'"> ${PID_FILE}',
+    'args' => '--config ${CONF_DIR} --service metastore > ${LOG_FILE} 2>&1 < /dev/null &',
     'confdir' => '${HIVE_CONF_DIR}',
     'user' => 'hive',
     'home' => "#{hadoop_lib_dir}/hive",
