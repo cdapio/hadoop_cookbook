@@ -1,6 +1,16 @@
 hadoop CHANGELOG
 ===============
 
+v2.2.0 (Dec 16, 2015)
+---------------------
+- Add Code Climate badge ( Issue: #232 )
+- Syntax fix in metadata.rb per @mrjefftang ( Issue: #234 )
+- Fix up ImmutableMash/Array for older Chef per @mrjefftang ( Issue: #235 )
+- Support Ubuntu 14 and Debian 7 for HDP 2.3.2.0+ per @kriszentner ( Issue: #236 )
+- Support HDP 2.2.9.0 ( Issue: #237 )
+- Revert #230 - Init scripts should use ampersand ( Issue: #238 )
+- Fix Hive init scripts ( Issue: #239 )
+
 v2.1.0 (Dec 7, 2015)
 --------------------
 - Add support for Apache Storm ( Issue: #223 )
