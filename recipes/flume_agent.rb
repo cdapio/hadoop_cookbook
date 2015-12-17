@@ -28,6 +28,9 @@ pkg =
 
 package pkg do
   action :nothing
+  if node['hadoop']['package_versions'][pkg]
+    version node['hadoop']['package_versions'][pkg]
+  end
 end
 
 # Hack to prevent auto-start of services, see COOK-26

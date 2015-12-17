@@ -21,4 +21,7 @@ include_recipe 'hadoop::repo'
 
 package 'pig' do
   action :install
+  if node['hadoop']['package_versions']['pig']
+    version node['hadoop']['package_versions']['pig']
+  end
 end

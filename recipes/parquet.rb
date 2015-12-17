@@ -22,4 +22,7 @@ include_recipe 'hadoop::repo' if node['hadoop']['distribution'] == 'cdh'
 package 'parquet-format' do
   action :install
   only_if { node['hadoop']['distribution'] == 'cdh' }
+  if node['hadoop']['package_versions']['parquet-format']
+    version node['hadoop']['package_versions']['parquet-format']
+  end
 end

@@ -21,4 +21,7 @@ include_recipe 'hadoop::repo'
 
 package 'oozie-client' do
   action :install
+  if node['hadoop']['package_versions']['oozie-client']
+    version node['hadoop']['package_versions']['oozie-client']
+  end
 end

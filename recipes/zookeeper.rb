@@ -22,6 +22,9 @@ include_recipe 'hadoop::_zookeeper_checkconfig'
 
 package 'zookeeper' do
   action :install
+  if node['hadoop']['package_versions']['zookeeper']
+    version node['hadoop']['package_versions']['zookeeper']
+  end
 end
 
 zookeeper_conf_dir = "/etc/zookeeper/#{node['zookeeper']['conf_dir']}"
