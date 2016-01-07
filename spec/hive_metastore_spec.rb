@@ -65,23 +65,6 @@ describe 'hadoop::hive_metastore' do
   context 'using PostgreSQL on Ubuntu 12.04' do
     let(:chef_run) do
       ChefSpec::SoloRunner.new(platform: 'ubuntu', version: 12.04) do |node|
-        node.override['hive']['hive_site']['javax.jdo.option.ConnectionURL'] = 'jdbc:postgresql:localhost/hive'
-        node.automatic['domain'] = 'example.com'
-        stub_command(/test -L /).and_return(false)
-        stub_command(/update-alternatives --display /).and_return(false)
-        stub_command(%r{/sys/kernel/mm/(.*)transparent_hugepage/defrag}).and_return(false)
-      end.converge(described_recipe)
-    end
-
-    it 'creates postgresql-jdbc4.jar symlink' do
-      link = chef_run.link('/usr/lib/hive/lib/postgresql-jdbc4.jar')
-      expect(link).to link_to('/usr/share/java/postgresql-jdbc4.jar')
-    end
-  end
-
-  context 'using PostgreSQL on Ubuntu 12.04 HDP 2.2' do
-    let(:chef_run) do
-      ChefSpec::SoloRunner.new(platform: 'ubuntu', version: 12.04) do |node|
         node.override['hadoop']['distribution'] = 'hdp'
         node.override['hadoop']['distribution_version'] = '2.2.4.2'
         node.override['hive']['hive_site']['javax.jdo.option.ConnectionURL'] = 'jdbc:postgresql:localhost/hive'
@@ -94,6 +77,25 @@ describe 'hadoop::hive_metastore' do
 
     it 'creates postgresql-jdbc4.jar symlink' do
       link = chef_run.link('/usr/hdp/2.2.4.2-2/hive/lib/postgresql-jdbc4.jar')
+      expect(link).to link_to('/usr/share/java/postgresql-jdbc4.jar')
+    end
+  end
+
+  context 'using PostgreSQL on Ubuntu 12.04 HDP 2.1.15.0' do
+    let(:chef_run) do
+      ChefSpec::SoloRunner.new(platform: 'ubuntu', version: 12.04) do |node|
+        node.override['hadoop']['distribution'] = 'hdp'
+        node.override['hadoop']['distribution_version'] = '2.1.15.0'
+        node.override['hive']['hive_site']['javax.jdo.option.ConnectionURL'] = 'jdbc:postgresql:localhost/hive'
+        node.automatic['domain'] = 'example.com'
+        stub_command(/test -L /).and_return(false)
+        stub_command(/update-alternatives --display /).and_return(false)
+        stub_command(%r{/sys/kernel/mm/(.*)transparent_hugepage/defrag}).and_return(false)
+      end.converge(described_recipe)
+    end
+
+    it 'creates postgresql-jdbc4.jar symlink' do
+      link = chef_run.link('/usr/lib/hive/lib/postgresql-jdbc4.jar')
       expect(link).to link_to('/usr/share/java/postgresql-jdbc4.jar')
     end
   end
