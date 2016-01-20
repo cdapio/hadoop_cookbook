@@ -3,12 +3,12 @@ default['storm']['release']['install']       = false
 default['storm']['release']['install_path']  = '/opt'
 default['storm']['release']['version']       = '0.9.5'
 default['storm']['release']['checksum']      =
-case node['storm']['release']['version']
-when '0.9.5'
-  '2e8337126de8d1e180abe77fb81af7c971f8c4b2dad94e446ac86c0f02ba3fb2'
-when '0.10.0-beta1'
-  'e54b400b1e1a012149e74602e2441b355c433f27773e7191172342c8b595467d'
-end
+  case node['storm']['release']['version']
+  when '0.9.5'
+    '2e8337126de8d1e180abe77fb81af7c971f8c4b2dad94e446ac86c0f02ba3fb2'
+  when '0.10.0-beta1'
+    'e54b400b1e1a012149e74602e2441b355c433f27773e7191172342c8b595467d'
+  end
 
 # storm environment
 # default['storm']['storm_env']['JAVA_HOME'] = 'home'

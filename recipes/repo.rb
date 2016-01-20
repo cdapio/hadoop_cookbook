@@ -83,11 +83,11 @@ when 'hdp'
   case node['platform_family']
   when 'rhel'
     yum_base_url = 'http://public-repo-1.hortonworks.com/HDP'
-    if major_platform_version == 5
-      os = "centos#{major_platform_version}"
-    else
-      os = 'centos6'
-    end
+    os = if major_platform_version == 5
+           "centos#{major_platform_version}"
+         else
+           'centos6'
+         end
 
     yum_repo_url = node['hadoop']['yum_repo_url'] ? node['hadoop']['yum_repo_url'] : "#{yum_base_url}/#{os}/2.x/GA/#{hdp_version}"
     yum_repo_key_url = node['hadoop']['yum_repo_key_url'] ? node['hadoop']['yum_repo_key_url'] : "#{yum_base_url}/#{os}/#{key}/#{key}-Jenkins"
@@ -234,12 +234,12 @@ when 'bigtop'
   bigtop_release = node['hadoop']['distribution_version']
 
   # allow a developer mode for use when developing against bigtop, see https://issues.cask.co/browse/COOK-1
-  if bigtop_release.downcase == 'develop' && !(node['hadoop'].key?('yum_repo_url') || node['hadoop'].key?('apt_repo_url'))
+  if bigtop_release.casecmp('develop') && !(node['hadoop'].key?('yum_repo_url') || node['hadoop'].key?('apt_repo_url'))
     Chef::Application.fatal!("You must set node['hadoop']['yum_repo_url'] or node['hadoop']['apt_repo_url'] when specifying node['hadoop']['distribution_version'] == 'develop'")
   end
 
   # do not validate gpg repo keys when in develop mode
-  validate_repo_key = bigtop_release.downcase == 'develop' ? false : true
+  validate_repo_key = bigtop_release.casecmp('develop') ? false : true
   Chef::Log.warn('Allowing install of unsigned binaries') unless validate_repo_key
 
   case node['platform_family']
@@ -255,11 +255,11 @@ when 'bigtop'
       yum_platform_version = major_platform_version
     end
 
-    if bigtop_release.to_f >= 1.0
-      yum_base_url = "http://bigtop.s3.amazonaws.com/releases/#{bigtop_release}/centos"
-    else
-      yum_base_url = "http://bigtop.s3.amazonaws.com/releases/#{bigtop_release}/redhat"
-    end
+    yum_base_url = if bigtop_release.to_f >= 1.0
+                     "http://bigtop.s3.amazonaws.com/releases/#{bigtop_release}/centos"
+                   else
+                     "http://bigtop.s3.amazonaws.com/releases/#{bigtop_release}/redhat"
+                   end
     yum_repo_url = node['hadoop']['yum_repo_url'] ? node['hadoop']['yum_repo_url'] : "#{yum_base_url}/#{yum_platform_version}/#{node['kernel']['machine']}"
     yum_repo_key_url = node['hadoop']['yum_repo_key_url'] ? node['hadoop']['yum_repo_key_url'] : 'http://archive.apache.org/dist/bigtop/KEYS'
 
