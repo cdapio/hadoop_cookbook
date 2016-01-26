@@ -36,8 +36,9 @@ else
   default['tez']['tez_site']['tez.lib.uris'] = '${fs.default.name}/apps/tez/,${fs.default.name}/apps/tez/lib/'
 end
 
-if node['hadoop'].key?('hadoop_env') && node['hadoop']['hadoop_env'].key?('hadoop_classpath')
-  default['hadoop']['hadoop_env']['hadoop_classpath'] = "$HADOOP_CLASSPATH:#{default['hadoop']['hadoop_env']['hadoop_classpath']}:#{node['tez']['tez_env']['tez_conf_dir']}:#{node['tez']['tez_env']['tez_jars']}"
-else
-  default['hadoop']['hadoop_env']['hadoop_classpath'] = "$HADOOP_CLASSPATH:#{node['tez']['tez_env']['tez_conf_dir']}:#{node['tez']['tez_env']['tez_jars']}"
-end
+default['hadoop']['hadoop_env']['hadoop_classpath'] =
+  if node['hadoop'].key?('hadoop_env') && node['hadoop']['hadoop_env'].key?('hadoop_classpath')
+    "$HADOOP_CLASSPATH:#{default['hadoop']['hadoop_env']['hadoop_classpath']}:#{node['tez']['tez_env']['tez_conf_dir']}:#{node['tez']['tez_env']['tez_jars']}"
+  else
+    "$HADOOP_CLASSPATH:#{node['tez']['tez_env']['tez_conf_dir']}:#{node['tez']['tez_env']['tez_jars']}"
+  end
