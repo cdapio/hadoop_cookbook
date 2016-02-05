@@ -33,7 +33,7 @@ end
 if node['hadoop']['distribution'] == 'hdp' && node['hadoop']['distribution_version'].to_f >= 2.2
   case node['platform_family']
   when 'debian'
-    pkgs += ['liblzo2-2', 'liblzo2-dev', 'hadooplzo']
+    pkgs += ['liblzo2-2', 'liblzo2-dev', 'hadoop-lzo']
   when 'rhel'
     pkgs += ['lzo', 'lzo-devel', 'hadooplzo', 'hadooplzo-native']
   end
