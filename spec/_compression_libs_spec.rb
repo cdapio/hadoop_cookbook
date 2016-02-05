@@ -66,7 +66,7 @@ describe 'hadoop::_compression_libs' do
       end
     end
 
-    %w(liblzo2-2 liblzo2-dev hadooplzo).each do |pkg|
+    %w(liblzo2-2 liblzo2-dev hadoop-lzo).each do |pkg|
       it "does not install #{pkg} package" do
         expect(chef_run).not_to install_package(pkg)
       end
@@ -81,7 +81,7 @@ describe 'hadoop::_compression_libs' do
       end.converge(described_recipe)
     end
 
-    %w(libsnappy1 libsnappy-dev liblzo2-2 liblzo2-dev hadooplzo).each do |pkg|
+    %w(libsnappy1 libsnappy-dev liblzo2-2 liblzo2-dev hadoop-lzo).each do |pkg|
       it "installs #{pkg} package" do
         expect(chef_run).to install_package(pkg)
       end
@@ -102,7 +102,7 @@ describe 'hadoop::_compression_libs' do
       end
     end
 
-    %w(liblzo2-2 liblzo2-dev hadooplzo).each do |pkg|
+    %w(liblzo2-2 liblzo2-dev hadoop-lzo).each do |pkg|
       it "does not install #{pkg} package" do
         expect(chef_run).not_to install_package(pkg)
       end
