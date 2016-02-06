@@ -35,7 +35,7 @@ node.default['hadoop']['distribution_version'] =
   elsif node['hadoop']['distribution'] == 'cdh'
     '5.3.5'
   elsif node['hadoop']['distribution'] == 'bigtop'
-    '0.8.0'
+    '1.0.0'
   end
 
 case node['hadoop']['distribution']
@@ -234,12 +234,12 @@ when 'bigtop'
   bigtop_release = node['hadoop']['distribution_version']
 
   # allow a developer mode for use when developing against bigtop, see https://issues.cask.co/browse/COOK-1
-  if bigtop_release.casecmp('develop') && !(node['hadoop'].key?('yum_repo_url') || node['hadoop'].key?('apt_repo_url'))
+  if bigtop_release.casecmp('develop').zero? && !(node['hadoop'].key?('yum_repo_url') || node['hadoop'].key?('apt_repo_url'))
     Chef::Application.fatal!("You must set node['hadoop']['yum_repo_url'] or node['hadoop']['apt_repo_url'] when specifying node['hadoop']['distribution_version'] == 'develop'")
   end
 
   # do not validate gpg repo keys when in develop mode
-  validate_repo_key = bigtop_release.casecmp('develop') ? false : true
+  validate_repo_key = bigtop_release.casecmp('develop').zero? ? false : true
   Chef::Log.warn('Allowing install of unsigned binaries') unless validate_repo_key
 
   case node['platform_family']
@@ -255,11 +255,7 @@ when 'bigtop'
       yum_platform_version = major_platform_version
     end
 
-    yum_base_url = if bigtop_release.to_f >= 1.0
-                     "http://bigtop.s3.amazonaws.com/releases/#{bigtop_release}/centos"
-                   else
-                     "http://bigtop.s3.amazonaws.com/releases/#{bigtop_release}/redhat"
-                   end
+    yum_base_url = "http://bigtop-repos.s3.amazonaws.com/releases/#{bigtop_release}/centos"
     yum_repo_url = node['hadoop']['yum_repo_url'] ? node['hadoop']['yum_repo_url'] : "#{yum_base_url}/#{yum_platform_version}/#{node['kernel']['machine']}"
     yum_repo_key_url = node['hadoop']['yum_repo_key_url'] ? node['hadoop']['yum_repo_key_url'] : 'http://archive.apache.org/dist/bigtop/KEYS'
 
@@ -286,7 +282,7 @@ when 'bigtop'
     end
     # rubocop: enable Metrics/BlockNesting
 
-    apt_domain_name = 'bigtop.s3.amazonaws.com'
+    apt_domain_name = 'bigtop-repos.s3.amazonaws.com'
     apt_base_url = "http://#{apt_domain_name}/releases/#{bigtop_release}/#{node['platform']}"
     apt_repo_url = node['hadoop']['apt_repo_url'] ? node['hadoop']['apt_repo_url'] : "#{apt_base_url}/#{codename}/#{node['kernel']['machine']}"
     apt_repo_key_url = node['hadoop']['apt_repo_key_url'] ? node['hadoop']['apt_repo_key_url'] : 'http://archive.apache.org/dist/bigtop/KEYS'
