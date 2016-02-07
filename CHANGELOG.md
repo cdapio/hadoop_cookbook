@@ -1,5 +1,10 @@
 hadoop CHANGELOG
 ===============
+v2.2.1 (Feb 5, 2016)
+--------------------
+- Support for HDP 2.3.4.0 per @kriszentner ( Issue: #243 )
+- Style updates ( Issue: #244 )
+- Support for Bigtop 1.0.0 relocated repositories ( Issue: #245 )
 
 v2.2.0 (Dec 16, 2015)
 ---------------------
