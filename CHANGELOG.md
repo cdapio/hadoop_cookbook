@@ -1,5 +1,6 @@
 hadoop CHANGELOG
 ===============
+
 v2.2.1 (Feb 24, 2016)
 --------------------
 - Support for HDP 2.3.4.0 per @kriszentner ( Issue: #243 )
