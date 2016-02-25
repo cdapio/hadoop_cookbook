@@ -43,7 +43,7 @@ template "/etc/default/#{pkg}" do
   group 'root'
   action :create
   variables :options => {
-    'spark_home' => "#{hadoop_lib_dir}/hbase",
+    'spark_home' => "#{hadoop_lib_dir}/spark",
     'spark_pid_dir' => '/var/run/spark',
     'spark_log_dir' => spark_log_dir,
     'spark_ident_string' => 'spark',
