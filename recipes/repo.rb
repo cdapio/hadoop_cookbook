@@ -60,8 +60,8 @@ when 'hdp'
     hdp_update_version = '2.1.15.0'
     Chef::Log.warn("Short versions for node['hadoop']['distribution_version'] are deprecated! Please use full version!")
     node.override['hadoop']['distribution_version'] = hdp_update_version
-  # 2.3.0.0 does not have its own base version
-  when '2.2.1.0', '2.2.4.2', '2.2.4.4', '2.2.6.0', '2.2.6.3', '2.2.8.0', '2.2.9.0', '2.3.0.0', '2.3.2.0', '2.3.4.0'
+  # 2.3 and 2.4 do not have their own base version
+  when '2.2.1.0', '2.2.4.2', '2.2.4.4', '2.2.6.0', '2.2.6.3', '2.2.8.0', '2.2.9.0', '2.3.0.0', '2.3.2.0', '2.3.4.0', '2.3.4.7', '2.4.0.0'
     hdp_version = '2.2.0.0'
     hdp_update_version = node['hadoop']['distribution_version']
   when '2.2'
@@ -69,9 +69,14 @@ when 'hdp'
     hdp_update_version = '2.2.9.0'
     Chef::Log.warn("Short versions for node['hadoop']['distribution_version'] are deprecated! Please use full version!")
     node.override['hadoop']['distribution_version'] = hdp_update_version
-  when '2.3', '2'
+  when '2.3'
     hdp_version = '2.2.0.0'
-    hdp_update_version = '2.3.4.0'
+    hdp_update_version = '2.3.4.7'
+    Chef::Log.warn("Short versions for node['hadoop']['distribution_version'] are deprecated! Please use full version!")
+    node.override['hadoop']['distribution_version'] = hdp_update_version
+  when '2.4', '2'
+    hdp_version = '2.2.0.0'
+    hdp_update_version = '2.4.0.0'
     Chef::Log.warn("Short versions for node['hadoop']['distribution_version'] are deprecated! Please use full version!")
     node.override['hadoop']['distribution_version'] = hdp_update_version
   else
@@ -142,7 +147,7 @@ when 'hdp'
       case hdp_update_version
       when '2.2.0.0'
         "2.x/GA/#{hdp_update_version}"
-      when '2.1.10.0', '2.1.15.0', '2.2.1.0', '2.2.4.2', '2.2.6.0', '2.2.6.3', '2.2.8.0', '2.2.9.0', '2.3.0.0', '2.3.2.0', '2.3.4.0'
+      when '2.1.10.0', '2.1.15.0', '2.2.1.0', '2.2.4.2', '2.2.6.0', '2.2.6.3', '2.2.8.0', '2.2.9.0', '2.3.0.0', '2.3.2.0', '2.3.4.0', '2.3.4.7', '2.4.0.0'
         "2.x/updates/#{hdp_update_version}"
       else
         hdp_update_version
