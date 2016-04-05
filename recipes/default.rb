@@ -21,7 +21,7 @@ include_recipe 'hadoop::repo'
 include_recipe 'hadoop::_hadoop_checkconfig'
 include_recipe 'hadoop::_compression_libs'
 
-package 'hadoop-client' do
+package hadoop_package('hadoop-client') do
   action :install
 end
 
@@ -29,7 +29,7 @@ libhdfs =
   if node['platform_family'] == 'debian'
     'libhdfs0'
   else
-    'hadoop-libhdfs'
+    hadoop_package('hadoop-libhdfs')
   end
 
 package libhdfs do

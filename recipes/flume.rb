@@ -2,7 +2,7 @@
 # Cookbook Name:: hadoop
 # Recipe:: flume
 #
-# Copyright © 2013-2014 Continuuity, Inc.
+# Copyright © 2013-2016 Cask Data, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -23,7 +23,7 @@ pkg =
   if node['hadoop']['distribution'] == 'cdh'
     'flume-ng'
   else
-    'flume'
+    hadoop_package('flume')
   end
 
 package pkg do

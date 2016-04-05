@@ -19,7 +19,7 @@
 
 include_recipe 'hadoop::repo'
 
-package 'hive' do
+package hadoop_package('hive') do
   action :install
 end
 

@@ -79,6 +79,21 @@ module Hadoop
     end
 
     #
+    # Return correct package name on ODP-based distributions
+    #
+    # Given name: hadoop-mapreduce-historyserver
+    # ODP name: hadoop_2_4_0_0_169-mapreduce-historyserver
+    #
+    def hadoop_package(name)
+      return name unless hdp22?
+      return name if node['platform_family'] == 'debian'
+      fw = name.split('-').first
+      pv = hdp_version.tr('.', '_').tr('-', '_')
+      nn = "#{fw}_#{pv}"
+      name.gsub(fw, nn)
+    end
+
+    #
     # Return true if Kerberos is enabled
     #
     # rubocop: disable Metrics/AbcSize
