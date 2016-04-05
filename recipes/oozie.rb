@@ -19,7 +19,7 @@
 
 include_recipe 'hadoop::repo'
 include_recipe 'hadoop::oozie_client'
-pkg = 'oozie'
+pkg = hadoop_package('oozie')
 
 package pkg do
   action :nothing

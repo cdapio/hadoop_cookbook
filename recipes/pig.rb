@@ -2,7 +2,7 @@
 # Cookbook Name:: hadoop
 # Recipe:: pig
 #
-# Copyright © 2013-2014 Cask Data, Inc.
+# Copyright © 2013-2016 Cask Data, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -19,6 +19,6 @@
 
 include_recipe 'hadoop::repo'
 
-package 'pig' do
+package hadoop_package('pig') do
   action :install
 end

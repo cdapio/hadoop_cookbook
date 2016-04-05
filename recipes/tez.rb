@@ -19,7 +19,7 @@
 
 include_recipe 'hadoop::repo' if node['hadoop']['distribution'] == 'hdp'
 
-package 'tez' do
+package hadoop_package('tez') do
   action :install
   only_if { node['hadoop']['distribution'] == 'hdp' }
 end

@@ -3,6 +3,7 @@
 # Recipe:: storm
 #
 # Copyright © 2015 VAHNA
+# Copyright © 2015-2016 Cask Data, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -20,7 +21,7 @@
 include_recipe 'hadoop::repo'
 include_recipe 'hadoop::_storm_checkconfig'
 
-package 'storm' do
+package hadoop_package('storm') do
   action :install
   only_if { hdp22? && node['storm']['release']['install'] == false }
   node.override['storm']['storm_env']['storm_home'] = "#{hadoop_lib_dir}/storm"
@@ -131,7 +132,7 @@ directory storm_log_dir do
   mode '0755'
   recursive true
   action :create
-  only_if { node['storm'].key?('storm_conf') && node['storm']['storm_conf'].key?('storm.log.dir') }
+  # only_if { node['storm'].key?('storm_conf') && node['storm']['storm_conf'].key?('storm.log.dir') }
 end
 
 unless storm_log_dir == "#{node['storm']['storm_env']['storm_home']}/logs"

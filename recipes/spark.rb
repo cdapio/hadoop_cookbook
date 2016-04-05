@@ -23,7 +23,7 @@ pkg =
   if node['hadoop']['distribution'] == 'cdh'
     'spark-core'
   else
-    'spark'
+    hadoop_package('spark')
   end
 
 package pkg do
@@ -31,7 +31,7 @@ package pkg do
   only_if { (node['hadoop']['distribution'] == 'cdh' || hdp22?) && node['spark']['release']['install'].to_s == 'false' }
 end
 
-package 'spark-python' do
+package hadoop_package('spark-python') do
   action :install
   only_if { (node['hadoop']['distribution'] == 'cdh' || hdp22?) && node['spark']['release']['install'].to_s == 'false' }
 end

@@ -19,7 +19,7 @@
 
 include_recipe 'hadoop::repo'
 include_recipe 'hadoop::zookeeper'
-pkg = 'zookeeper-server'
+pkg = hadoop_package('zookeeper-server')
 
 # HDP 2.0.11.0 (maybe others) doesn't create zookeeper group
 group 'zookeeper' do
