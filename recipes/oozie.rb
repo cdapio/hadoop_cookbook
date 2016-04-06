@@ -2,7 +2,7 @@
 # Cookbook Name:: hadoop
 # Recipe:: oozie
 #
-# Copyright © 2013-2015 Cask Data, Inc.
+# Copyright © 2013-2016 Cask Data, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -136,8 +136,8 @@ template "#{oozie_conf_dir}/oozie-env.sh" do
   only_if { node['oozie'].key?('oozie_env') && !node['oozie']['oozie_env'].empty? }
 end # End oozie-env.sh
 
-service pkg do
-  status_command "service #{pkg} status"
+service 'oozie' do
+  status_command 'service oozie status'
   supports [:restart => true, :reload => false, :status => true]
   action :nothing
 end
