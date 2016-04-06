@@ -2,7 +2,7 @@
 # Cookbook Name:: hadoop
 # Recipe:: _compression_libs
 #
-# Copyright © 2013-2015 Cask Data, Inc.
+# Copyright © 2013-2016 Cask Data, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -30,7 +30,7 @@ when 'rhel'
 end
 
 # HDP 2.2+ has lzo
-if node['hadoop']['distribution'] == 'hdp' && node['hadoop']['distribution_version'].to_f >= 2.2
+if hdp22?
   case node['platform_family']
   when 'debian'
     pkgs += ['liblzo2-2', 'liblzo2-dev', 'hadooplzo']

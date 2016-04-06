@@ -2,7 +2,7 @@
 # Cookbook Name:: hadoop
 # Recipe:: flume_agent
 #
-# Copyright © 2013-2015 Cask Data, Inc.
+# Copyright © 2013-2016 Cask Data, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -23,7 +23,7 @@ pkg =
   if node['hadoop']['distribution'] == 'cdh'
     'flume-ng-agent'
   else
-    'flume-agent'
+    hadoop_package('flume-agent')
   end
 
 package pkg do

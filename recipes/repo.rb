@@ -60,8 +60,8 @@ when 'hdp'
     hdp_update_version = '2.1.15.0'
     Chef::Log.warn("Short versions for node['hadoop']['distribution_version'] are deprecated! Please use full version!")
     node.override['hadoop']['distribution_version'] = hdp_update_version
-  # 2.3.0.0 does not have its own base version
-  when '2.2.1.0', '2.2.4.2', '2.2.4.4', '2.2.6.0', '2.2.6.3', '2.2.8.0', '2.2.9.0', '2.3.0.0', '2.3.2.0', '2.3.4.0'
+  # 2.3 and 2.4 do not have their own base version
+  when '2.2.1.0', '2.2.4.2', '2.2.4.4', '2.2.6.0', '2.2.6.3', '2.2.8.0', '2.2.9.0', '2.3.0.0', '2.3.2.0', '2.3.4.0', '2.3.4.7', '2.4.0.0'
     hdp_version = '2.2.0.0'
     hdp_update_version = node['hadoop']['distribution_version']
   when '2.2'
@@ -69,9 +69,14 @@ when 'hdp'
     hdp_update_version = '2.2.9.0'
     Chef::Log.warn("Short versions for node['hadoop']['distribution_version'] are deprecated! Please use full version!")
     node.override['hadoop']['distribution_version'] = hdp_update_version
-  when '2.3', '2'
+  when '2.3'
     hdp_version = '2.2.0.0'
-    hdp_update_version = '2.3.4.0'
+    hdp_update_version = '2.3.4.7'
+    Chef::Log.warn("Short versions for node['hadoop']['distribution_version'] are deprecated! Please use full version!")
+    node.override['hadoop']['distribution_version'] = hdp_update_version
+  when '2.4', '2'
+    hdp_version = '2.2.0.0'
+    hdp_update_version = '2.4.0.0'
     Chef::Log.warn("Short versions for node['hadoop']['distribution_version'] are deprecated! Please use full version!")
     node.override['hadoop']['distribution_version'] = hdp_update_version
   else
@@ -83,11 +88,11 @@ when 'hdp'
   case node['platform_family']
   when 'rhel'
     yum_base_url = 'http://public-repo-1.hortonworks.com/HDP'
-    if major_platform_version == 5
-      os = "centos#{major_platform_version}"
-    else
-      os = 'centos6'
-    end
+    os = if major_platform_version == 5
+           "centos#{major_platform_version}"
+         else
+           'centos6'
+         end
 
     yum_repo_url = node['hadoop']['yum_repo_url'] ? node['hadoop']['yum_repo_url'] : "#{yum_base_url}/#{os}/2.x/GA/#{hdp_version}"
     yum_repo_key_url = node['hadoop']['yum_repo_key_url'] ? node['hadoop']['yum_repo_key_url'] : "#{yum_base_url}/#{os}/#{key}/#{key}-Jenkins"
@@ -142,7 +147,7 @@ when 'hdp'
       case hdp_update_version
       when '2.2.0.0'
         "2.x/GA/#{hdp_update_version}"
-      when '2.1.10.0', '2.1.15.0', '2.2.1.0', '2.2.4.2', '2.2.6.0', '2.2.6.3', '2.2.8.0', '2.2.9.0', '2.3.0.0', '2.3.2.0', '2.3.4.0'
+      when '2.1.10.0', '2.1.15.0', '2.2.1.0', '2.2.4.2', '2.2.6.0', '2.2.6.3', '2.2.8.0', '2.2.9.0', '2.3.0.0', '2.3.2.0', '2.3.4.0', '2.3.4.7', '2.4.0.0'
         "2.x/updates/#{hdp_update_version}"
       else
         hdp_update_version
@@ -234,12 +239,12 @@ when 'bigtop'
   bigtop_release = node['hadoop']['distribution_version']
 
   # allow a developer mode for use when developing against bigtop, see https://issues.cask.co/browse/COOK-1
-  if bigtop_release.downcase == 'develop' && !(node['hadoop'].key?('yum_repo_url') || node['hadoop'].key?('apt_repo_url'))
+  if bigtop_release.casecmp('develop').zero? && !(node['hadoop'].key?('yum_repo_url') || node['hadoop'].key?('apt_repo_url'))
     Chef::Application.fatal!("You must set node['hadoop']['yum_repo_url'] or node['hadoop']['apt_repo_url'] when specifying node['hadoop']['distribution_version'] == 'develop'")
   end
 
   # do not validate gpg repo keys when in develop mode
-  validate_repo_key = bigtop_release.downcase == 'develop' ? false : true
+  validate_repo_key = bigtop_release.casecmp('develop').zero? ? false : true
   Chef::Log.warn('Allowing install of unsigned binaries') unless validate_repo_key
 
   case node['platform_family']
@@ -255,11 +260,7 @@ when 'bigtop'
       yum_platform_version = major_platform_version
     end
 
-    if bigtop_release.to_f >= 1.0
-      yum_base_url = "http://bigtop.s3.amazonaws.com/releases/#{bigtop_release}/centos"
-    else
-      yum_base_url = "http://bigtop.s3.amazonaws.com/releases/#{bigtop_release}/redhat"
-    end
+    yum_base_url = "http://bigtop-repos.s3.amazonaws.com/releases/#{bigtop_release}/centos"
     yum_repo_url = node['hadoop']['yum_repo_url'] ? node['hadoop']['yum_repo_url'] : "#{yum_base_url}/#{yum_platform_version}/#{node['kernel']['machine']}"
     yum_repo_key_url = node['hadoop']['yum_repo_key_url'] ? node['hadoop']['yum_repo_key_url'] : 'http://archive.apache.org/dist/bigtop/KEYS'
 
@@ -286,7 +287,7 @@ when 'bigtop'
     end
     # rubocop: enable Metrics/BlockNesting
 
-    apt_domain_name = 'bigtop.s3.amazonaws.com'
+    apt_domain_name = 'bigtop-repos.s3.amazonaws.com'
     apt_base_url = "http://#{apt_domain_name}/releases/#{bigtop_release}/#{node['platform']}"
     apt_repo_url = node['hadoop']['apt_repo_url'] ? node['hadoop']['apt_repo_url'] : "#{apt_base_url}/#{codename}/#{node['kernel']['machine']}"
     apt_repo_key_url = node['hadoop']['apt_repo_key_url'] ? node['hadoop']['apt_repo_key_url'] : 'http://archive.apache.org/dist/bigtop/KEYS'

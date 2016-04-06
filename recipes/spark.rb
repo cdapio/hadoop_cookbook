@@ -23,7 +23,7 @@ pkg =
   if node['hadoop']['distribution'] == 'cdh'
     'spark-core'
   else
-    'spark'
+    hadoop_package('spark')
   end
 
 package pkg do
@@ -31,7 +31,7 @@ package pkg do
   only_if { (node['hadoop']['distribution'] == 'cdh' || hdp22?) && node['spark']['release']['install'].to_s == 'false' }
 end
 
-package 'spark-python' do
+package hadoop_package('spark-python') do
   action :install
   only_if { (node['hadoop']['distribution'] == 'cdh' || hdp22?) && node['spark']['release']['install'].to_s == 'false' }
 end
@@ -52,20 +52,20 @@ unless node['spark']['release']['install'].to_s == 'false'
   # Spark binary compatibility matrix
   case node['hadoop']['distribution']
   when 'cdh'
-    if node['hadoop']['distribution_version'].to_i == 4
-      spark_release = 'cdh4'
-    elsif node['hadoop']['distribution_version'].to_f == 5.0 || node['hadoop']['distribution_version'].to_f == 5.1
-      spark_release = 'hadoop2.3'
-    else
-      spark_release = 'hadoop2.4'
-    end
+    spark_release = if node['hadoop']['distribution_version'].to_i == 4
+                      'cdh4'
+                    elsif node['hadoop']['distribution_version'].to_f == 5.0 || node['hadoop']['distribution_version'].to_f == 5.1
+                      'hadoop2.3'
+                    else
+                      'hadoop2.4'
+                    end
   when 'hdp'
-    if node['hadoop']['distribution_version'] == '2' || node['hadoop']['distribution_version'].to_f == 2.1
-      spark_release = 'hadoop2.4'
-    else
-      ### TODO: HDP 2.0 is Hadoop 2.2... does 2.3 work?
-      spark_release = 'hadoop2.3'
-    end
+    spark_release = if node['hadoop']['distribution_version'] == '2' || node['hadoop']['distribution_version'].to_f == 2.1
+                      'hadoop2.4'
+                    else
+                      ### TODO: HDP 2.0 is Hadoop 2.2... does 2.3 work?
+                      'hadoop2.3'
+                    end
   end
 
   remote_file "#{node['spark']['release']['install_path']}/spark-#{node['spark']['release']['version']}-bin-#{spark_release}.tgz" do
@@ -145,15 +145,15 @@ template "#{spark_conf_dir}/spark-env.sh" do
   only_if { node['spark'].key?('spark_env') && !node['spark']['spark_env'].empty? }
 end # End spark-env.sh
 
-# Start spark-defaults.xml
-template "#{spark_conf_dir}/spark-defaults.xml" do
-  source 'generic-site.xml.erb'
+# Start spark-defaults.conf
+template "#{spark_conf_dir}/spark-defaults.conf" do
+  source 'generic.properties.erb'
   mode '0644'
   owner 'root'
   group 'root'
-  variables :options => node['spark']['spark_defaults']
+  variables :properties => node['spark']['spark_defaults']
   only_if { node['spark'].key?('spark_defaults') && !node['spark']['spark_defaults'].empty? }
-end # End spark-defaults.xml
+end # End spark-defaults.conf
 
 # Setup metrics.properties log4j.properties
 %w(metrics log4j).each do |propfile|

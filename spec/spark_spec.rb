@@ -45,7 +45,7 @@ describe 'hadoop::spark' do
 
     %w(
       spark-env.sh
-      spark-defaults.xml
+      spark-defaults.conf
     ).each do |file|
       it "creates #{file} from template" do
         expect(chef_run).to create_template("/etc/spark/conf.chef/#{file}")

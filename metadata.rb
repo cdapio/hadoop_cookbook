@@ -4,7 +4,7 @@ maintainer_email 'ops@cask.co'
 license          'Apache 2.0'
 description      'Installs/Configures Hadoop (HDFS/YARN/MRv2), HBase, Hive, Flume, Oozie, Pig, Spark, Storm, Tez, and ZooKeeper'
 long_description IO.read(File.join(File.dirname(__FILE__), 'README.md'))
-version          '2.2.0'
+version          '2.2.1'
 
 depends 'yum', '>= 3.0'
 depends 'apt', '>= 2.1.2'

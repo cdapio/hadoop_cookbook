@@ -20,7 +20,7 @@
 include_recipe 'hadoop::repo'
 include_recipe 'hadoop::_zookeeper_checkconfig'
 
-package 'zookeeper' do
+package hadoop_package('zookeeper') do
   action :install
 end
 

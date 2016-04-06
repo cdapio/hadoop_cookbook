@@ -28,17 +28,17 @@ ports = []
 ###
 
 # fs.defaultFS
-if node['hadoop']['core_site'].key?('fs.defaultFS')
-  # Embedded in URI? hdfs://hostname:port
-  if node['hadoop']['core_site']['fs.defaultFS'].split(':')[2]
-    ports += [node['hadoop']['core_site']['fs.defaultFS'].split(':')[2].to_i]
-  else
-    # Default port for hdfs:// is 8020
-    ports += [8020]
-  end
-else
-  ports += [8020]
-end
+ports += if node['hadoop']['core_site'].key?('fs.defaultFS')
+           # Embedded in URI? hdfs://hostname:port
+           if node['hadoop']['core_site']['fs.defaultFS'].split(':')[2]
+             [node['hadoop']['core_site']['fs.defaultFS'].split(':')[2].to_i]
+           else
+             # Default port for hdfs:// is 8020
+             [8020]
+           end
+         else
+           [8020]
+         end
 
 # These are all address:port pairs with no protocol prefix specified
 # eg. 0.0.0.0:50070
@@ -59,22 +59,22 @@ addr_ports = {
 }
 
 addr_ports.each do |k, v|
-  if node['hadoop'].key?('hdfs_site') && node['hadoop']['hdfs_site'].key?(k)
-    ports += [node['hadoop']['hdfs_site'][k].split(':')[1].to_i]
-  else
-    ports += [v]
-  end
+  ports += if node['hadoop'].key?('hdfs_site') && node['hadoop']['hdfs_site'].key?(k)
+             [node['hadoop']['hdfs_site'][k].split(':')[1].to_i]
+           else
+             [v]
+           end
 end
 
 ###
 # MapReduce
 ###
 
-if node['hadoop'].key?('mapred_site') && node['hadoop']['mapred_site'].key?('mapreduce.jobhistory.webapp.address')
-  ports += [node['hadoop']['mapred_site']['mapreduce.jobhistory.webapp.address'].split(':')[1].to_i]
-else
-  ports += [19_888]
-end
+ports += if node['hadoop'].key?('mapred_site') && node['hadoop']['mapred_site'].key?('mapreduce.jobhistory.webapp.address')
+           [node['hadoop']['mapred_site']['mapreduce.jobhistory.webapp.address'].split(':')[1].to_i]
+         else
+           [19_888]
+         end
 
 ###
 # YARN
@@ -95,11 +95,11 @@ addr_ports = {
 }
 
 addr_ports.each do |k, v|
-  if node['hadoop']['yarn_site'].key?('k')
-    ports += [node['hadoop']['yarn_site'][k].split(':')[1].to_i]
-  else
-    ports += [v]
-  end
+  ports += if node['hadoop']['yarn_site'].key?('k')
+             [node['hadoop']['yarn_site'][k].split(':')[1].to_i]
+           else
+             [v]
+           end
 end
 
 ###
@@ -118,11 +118,11 @@ addr_ports = {
 }
 
 addr_ports.each do |k, v|
-  if node['hbase']['hbase_site'].key?(k)
-    ports += [node['hbase']['hbase_site'][k].to_i]
-  else
-    ports += [v]
-  end
+  ports += if node['hbase']['hbase_site'].key?(k)
+             [node['hbase']['hbase_site'][k].to_i]
+           else
+             [v]
+           end
 end
 
 ###
@@ -141,11 +141,11 @@ end
 # ZooKeeper
 ###
 
-if node['zookeeper']['zoocfg'].key?('clientPort')
-  ports += [node['zookeeper']['zoocfg']['clientPort'].to_i]
-else
-  ports += [2181]
-end
+ports += if node['zookeeper']['zoocfg'].key?('clientPort')
+           [node['zookeeper']['zoocfg']['clientPort'].to_i]
+         else
+           [2181]
+         end
 
 # Ugliness to get peer/leader election ports
 1.upto(255) do |index|
