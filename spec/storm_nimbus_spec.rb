@@ -6,7 +6,7 @@ describe 'hadoop::storm_nimbus' do
       ChefSpec::SoloRunner.new(platform: 'centos', version: 6.6) do |node|
         node.automatic['domain'] = 'example.com'
         node.override['hadoop']['distribution'] = 'hdp'
-        node.override['hadoop']['distribution_version'] = '2.3.0.0'
+        node.override['hadoop']['distribution_version'] = '2.3.4.7'
         node.default['storm']['release']['install'] = false
         stub_command(/test -L /).and_return(false)
         stub_command(/update-alternatives --display /).and_return(false)

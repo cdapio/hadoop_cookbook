@@ -7,13 +7,15 @@ describe 'hadoop::hive' do
         node.automatic['domain'] = 'example.com'
         node.default['hive']['hive_site']['hive.exec.local.scratchdir'] = '/tmp/hive/scratch'
         node.default['hive']['hive_env']['hive_log_dir'] = '/data/log/hive'
+        node.override['hadoop']['distribution'] = 'hdp'
+        node.override['hadoop']['distribution_version'] = '2.3.4.7'
         stub_command(/test -L /).and_return(false)
         stub_command(/update-alternatives --display /).and_return(false)
       end.converge(described_recipe)
     end
 
     it 'installs hive package' do
-      expect(chef_run).to install_package('hive')
+      expect(chef_run).to install_package('hive_2_3_4_7_4')
     end
 
     %w(/etc/hive/conf.chef /var/lib/hive).each do |dir|

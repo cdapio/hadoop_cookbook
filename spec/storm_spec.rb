@@ -6,7 +6,7 @@ describe 'hadoop::storm' do
       ChefSpec::SoloRunner.new(platform: 'centos', version: 6.6) do |node|
         node.automatic['domain'] = 'example.com'
         node.override['hadoop']['distribution'] = 'hdp'
-        node.override['hadoop']['distribution_version'] = '2.4.0.0'
+        node.override['hadoop']['distribution_version'] = '2.3.4.7'
         node.default['storm']['release']['install'] = false
         stub_command(/test -L /).and_return(false)
         stub_command(/update-alternatives --display /).and_return(false)
@@ -14,7 +14,7 @@ describe 'hadoop::storm' do
     end
 
     it 'installs storm package' do
-      expect(chef_run).to install_package('storm_2_4_0_0_169')
+      expect(chef_run).to install_package('storm_2_3_4_7_4')
     end
 
     it 'deletes /etc/storm/conf directory' do
@@ -30,11 +30,11 @@ describe 'hadoop::storm' do
     end
 
     it 'deletes rpm conf directory' do
-      expect(chef_run).to delete_directory(%r{/usr/hdp/2.4.0.0-.*/storm/conf})
+      expect(chef_run).to delete_directory(%r{/usr/hdp/2.3.4.7-.*/storm/conf})
     end
 
     it 'creates storm config symlink' do
-      link = chef_run.link(%r{/usr/hdp/2.4.0.0-.*/storm/conf})
+      link = chef_run.link(%r{/usr/hdp/2.3.4.7-.*/storm/conf})
       expect(link).to link_to('/etc/storm/conf.chef')
     end
 
@@ -55,7 +55,7 @@ describe 'hadoop::storm' do
     end
 
     it 'deletes rpm logs directory' do
-      expect(chef_run).to delete_directory(%r{/usr/hdp/2.4.0.0-.*/storm/logs})
+      expect(chef_run).to delete_directory(%r{/usr/hdp/2.3.4.7-.*/storm/logs})
     end
 
     it 'creates storm logs directory' do
@@ -67,7 +67,7 @@ describe 'hadoop::storm' do
     end
 
     it 'creates storm logs symlink' do
-      link = chef_run.link(%r{/usr/hdp/2.4.0.0-.*/storm/logs})
+      link = chef_run.link(%r{/usr/hdp/2.3.4.7-.*/storm/logs})
       expect(link).to link_to('/var/log/storm')
     end
 

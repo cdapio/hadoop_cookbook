@@ -7,13 +7,16 @@ describe 'hadoop::oozie' do
         node.automatic['domain'] = 'example.com'
         node.default['oozie']['oozie_env']['oozie_log_dir'] = '/data/log/oozie'
         node.default['oozie']['oozie_site']['example_property'] = 'test'
+        node.override['hadoop']['distribution'] = 'hdp'
+        node.override['hadoop']['distribution_version'] = '2.3.4.7'
         stub_command(/test -L /).and_return(false)
         stub_command(/update-alternatives --display /).and_return(false)
       end.converge(described_recipe)
     end
-    pkg = 'oozie'
+    name = 'oozie'
+    pkg = 'oozie_2_3_4_7_4'
 
-    it "does not install #{pkg} package" do
+    it "does not install #{name} package" do
       expect(chef_run).not_to install_package(pkg)
     end
 
@@ -21,13 +24,13 @@ describe 'hadoop::oozie' do
       expect(chef_run).to run_ruby_block("package-#{pkg}")
     end
 
-    it "creates #{pkg} service resource, but does not run it" do
-      expect(chef_run).to_not disable_service(pkg)
-      expect(chef_run).to_not enable_service(pkg)
-      expect(chef_run).to_not reload_service(pkg)
-      expect(chef_run).to_not restart_service(pkg)
-      expect(chef_run).to_not start_service(pkg)
-      expect(chef_run).to_not stop_service(pkg)
+    it "creates #{name} service resource, but does not run it" do
+      expect(chef_run).to_not disable_service(name)
+      expect(chef_run).to_not enable_service(name)
+      expect(chef_run).to_not reload_service(name)
+      expect(chef_run).to_not restart_service(name)
+      expect(chef_run).to_not start_service(name)
+      expect(chef_run).to_not stop_service(name)
     end
 
     it 'creates oozie conf_dir' do

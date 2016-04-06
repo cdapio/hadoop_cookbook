@@ -41,11 +41,11 @@ describe 'hadoop::hive_metastore' do
     end
   end
 
-  context 'using MySQL on HDP 2.2' do
+  context 'using MySQL on HDP 2.3' do
     let(:chef_run) do
       ChefSpec::SoloRunner.new(platform: 'centos', version: 6.6) do |node|
         node.override['hadoop']['distribution'] = 'hdp'
-        node.override['hadoop']['distribution_version'] = '2.2.4.2'
+        node.override['hadoop']['distribution_version'] = '2.3.4.7'
         node.override['hive']['hive_site']['javax.jdo.option.ConnectionURL'] = 'jdbc:mysql:localhost/hive'
         node.automatic['domain'] = 'example.com'
         node.default['hive']['hive_env']['hive_log_dir'] = '/data/log/hive'
@@ -57,7 +57,7 @@ describe 'hadoop::hive_metastore' do
     end
 
     it 'creates mysql-connector-java.jar symlink' do
-      link = chef_run.link('/usr/hdp/2.2.4.2-2/hive/lib/mysql-connector-java.jar')
+      link = chef_run.link('/usr/hdp/2.3.4.7-4/hive/lib/mysql-connector-java.jar')
       expect(link).to link_to('/usr/share/java/mysql-connector-java.jar')
     end
   end
@@ -66,7 +66,7 @@ describe 'hadoop::hive_metastore' do
     let(:chef_run) do
       ChefSpec::SoloRunner.new(platform: 'ubuntu', version: 12.04) do |node|
         node.override['hadoop']['distribution'] = 'hdp'
-        node.override['hadoop']['distribution_version'] = '2.2.4.2'
+        node.override['hadoop']['distribution_version'] = '2.3.4.7'
         node.override['hive']['hive_site']['javax.jdo.option.ConnectionURL'] = 'jdbc:postgresql:localhost/hive'
         node.automatic['domain'] = 'example.com'
         stub_command(/test -L /).and_return(false)
@@ -76,7 +76,7 @@ describe 'hadoop::hive_metastore' do
     end
 
     it 'creates postgresql-jdbc4.jar symlink' do
-      link = chef_run.link('/usr/hdp/2.2.4.2-2/hive/lib/postgresql-jdbc4.jar')
+      link = chef_run.link('/usr/hdp/2.3.4.7-4/hive/lib/postgresql-jdbc4.jar')
       expect(link).to link_to('/usr/share/java/postgresql-jdbc4.jar')
     end
   end

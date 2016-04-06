@@ -10,13 +10,15 @@ describe 'hadoop::hbase' do
         node.default['hbase']['hbase_site']['hbase.rootdir'] = 'hdfs://localhost:8020/hbase'
         node.default['hbase']['hbase_env']['hbase_log_dir'] = '/data/log/hbase'
         node.default['hbase']['log4j']['log4j.threshold'] = 'ALL'
+        node.override['hadoop']['distribution'] = 'hdp'
+        node.override['hadoop']['distribution_version'] = '2.3.4.7'
         stub_command(/test -L /).and_return(false)
         stub_command(/update-alternatives --display /).and_return(false)
       end.converge(described_recipe)
     end
 
     it 'installs hbase package' do
-      expect(chef_run).to install_package('hbase')
+      expect(chef_run).to install_package('hbase_2_3_4_7_4')
     end
 
     it 'creates hbase conf_dir' do

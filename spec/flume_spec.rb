@@ -6,12 +6,14 @@ describe 'hadoop::flume' do
       ChefSpec::SoloRunner.new(platform: 'centos', version: 6.6) do |node|
         node.automatic['domain'] = 'example.com'
         node.default['flume']['flume_conf']['key'] = 'value'
+        node.override['hadoop']['distribution'] = 'hdp'
+        node.override['hadoop']['distribution_version'] = '2.3.4.7'
       end.converge(described_recipe)
     end
     conf_dir = '/etc/flume/conf.chef'
 
     it 'installs flume package' do
-      expect(chef_run).to install_package('flume')
+      expect(chef_run).to install_package('flume_2_3_4_7_4')
     end
 
     it "creates #{conf_dir} directory" do
