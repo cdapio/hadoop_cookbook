@@ -14,13 +14,15 @@ describe 'hadoop::default' do
         node.default['hadoop']['container_executor']['banned.users'] = 'root'
         node.default['hadoop']['hadoop_env']['hadoop_log_dir'] = '/data/log/hadoop-hdfs'
         node.default['hadoop']['yarn_env']['yarn_log_dir'] = '/var/log/hadoop-yarn'
+        node.override['hadoop']['distribution'] = 'hdp'
+        node.override['hadoop']['distribution_version'] = '2.3.4.7'
         stub_command(/update-alternatives --display /).and_return(false)
         stub_command(/test -L /).and_return(false)
       end.converge(described_recipe)
     end
 
     it 'installs hadoop-client package' do
-      expect(chef_run).to install_package('hadoop-client')
+      expect(chef_run).to install_package('hadoop_2_3_4_7_4-client')
     end
 
     it 'creates hadoop conf_dir' do
@@ -142,20 +144,24 @@ describe 'hadoop::default' do
     end
 
     it 'installs hadoop-libhdfs package' do
-      expect(chef_run).to install_package('hadoop-libhdfs')
+      expect(chef_run).to install_package('hadoop_2_3_4_7_4-libhdfs')
     end
 
     it 'creates /etc/default/hadoop from template' do
       expect(chef_run).to create_template('/etc/default/hadoop')
     end
+
+    it 'deletes /etc/hadoop/conf directory' do
+      expect(chef_run).to delete_directory('/etc/hadoop/conf')
+    end
   end
 
-  context 'on HDP 2.2' do
+  context 'on HDP 2.1' do
     let(:chef_run) do
       ChefSpec::SoloRunner.new(platform: 'centos', version: 6.6) do |node|
         node.automatic['domain'] = 'example.com'
         node.override['hadoop']['distribution'] = 'hdp'
-        node.override['hadoop']['distribution_version'] = '2.2.4.2'
+        node.override['hadoop']['distribution_version'] = '2.1.15.0'
         stub_command(/update-alternatives --display /).and_return(false)
         stub_command(/test -L /).and_return(false)
       end.converge(described_recipe)
@@ -166,22 +172,18 @@ describe 'hadoop::default' do
     #   expect(chef_run).to create_directory('/var/log/hadoop/hdfs')
     # end
 
-    it 'does not link /var/log/hadoop/hdfs' do
-      link = chef_run.link('/var/log/hadoop/hdfs')
-      expect(link).not_to link_to('/var/log/hadoop/hdfs')
-    end
-
-    it 'deletes /etc/hadoop/conf directory' do
-      expect(chef_run).to delete_directory('/etc/hadoop/conf')
+    it 'does not link /var/log/hadoop-hdfs' do
+      link = chef_run.link('/var/log/hadoop-hdfs')
+      expect(link).not_to link_to('/var/log/hadoop-hdfs')
     end
   end
 
-  context 'on HDP 2.2 with custom HADOOP_LOG_DIR' do
+  context 'on HDP 2.1 with custom HADOOP_LOG_DIR' do
     let(:chef_run) do
       ChefSpec::SoloRunner.new(platform: 'centos', version: 6.6) do |node|
         node.automatic['domain'] = 'example.com'
         node.override['hadoop']['distribution'] = 'hdp'
-        node.override['hadoop']['distribution_version'] = '2.2.4.2'
+        node.override['hadoop']['distribution_version'] = '2.1.15.0'
         node.override['hadoop']['hadoop_env']['hadoop_log_dir'] = '/data/logs/hdfs'
         stub_command(/update-alternatives --display /).and_return(false)
         stub_command(/test -L /).and_return(false)
@@ -192,12 +194,12 @@ describe 'hadoop::default' do
       expect(chef_run).to create_directory('/data/logs/hdfs')
     end
 
-    it 'deletes /var/log/hadoop/hdfs directory' do
-      expect(chef_run).to delete_directory('/var/log/hadoop/hdfs')
+    it 'deletes /var/log/hadoop-hdfs directory' do
+      expect(chef_run).to delete_directory('/var/log/hadoop-hdfs')
     end
 
-    it 'creates /var/log/hadoop/hdfs symlink' do
-      link = chef_run.link('/var/log/hadoop/hdfs')
+    it 'creates /var/log/hadoop-hdfs symlink' do
+      link = chef_run.link('/var/log/hadoop-hdfs')
       expect(link).to link_to('/data/logs/hdfs')
     end
   end
