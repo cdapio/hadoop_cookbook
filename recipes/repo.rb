@@ -2,7 +2,7 @@
 # Cookbook Name:: hadoop
 # Recipe:: repo
 #
-# Copyright © 2013-2015 Cask Data, Inc.
+# Copyright © 2013-2016 Cask Data, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -20,13 +20,8 @@
 major_platform_version = node['platform_version'].to_i
 key = 'RPM-GPG-KEY'
 
-# Ensure that we have the proper LWRPs available
-case node['platform_family']
-when 'rhel'
-  include_recipe 'yum'
-when 'debian'
-  include_recipe 'apt'
-end
+# Ensure apt caches are updated and apt resources available
+include_recipe 'apt' if node['platform_family'] == 'debian'
 
 # Set defaults for version, based on distribution
 node.default['hadoop']['distribution_version'] =
