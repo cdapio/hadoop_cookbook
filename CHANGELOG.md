@@ -1,8 +1,18 @@
 hadoop CHANGELOG
 ===============
 
-v2.2.1 (Feb 24, 2016)
+v2.3.0 (Apr 12, 2016)
 --------------------
+- Change spark-defaults from XML to .conf property file ( Issue: #241 )
+- Update default versions: HDP 2.3.4.7, CDH 5.6.0 ( Issue: #242 )
+- Support HDP 2.3.4.7 and 2.4.0.0 ( Issue: #250 )
+- Create hadoop_package helper for ODP-based distributions ( Issue: #251 )
+- Revert change to zookeeper_server recipe from #251 ( Issue: #252 )
+- Use oozie for service name, not pkg variable from #251 ( Issue: #253 )
+- Remove unecessary inclusion of `yum::default` ( Issue: #254 )
+
+v2.2.1 (Feb 24, 2016)
+---------------------
 - Support for HDP 2.3.4.0 per @kriszentner ( Issue: #243 )
 - Style updates ( Issues: #244 #247 )
 - Support for Bigtop 1.0.0 relocated repositories ( Issue: #245 )
