@@ -17,7 +17,7 @@ describe 'hadoop::parquet' do
     let(:chef_run) do
       ChefSpec::SoloRunner.new(platform: 'centos', version: 6.6) do |node|
         node.override['hadoop']['distribution'] = 'cdh'
-        node.override['hadoop']['distribution_version'] = '5.3.2'
+        node.default['hadoop']['distribution_version'] = '5.3.2'
         node.automatic['domain'] = 'example.com'
       end.converge(described_recipe)
     end

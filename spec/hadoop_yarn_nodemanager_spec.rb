@@ -4,8 +4,8 @@ describe 'hadoop::hadoop_yarn_nodemanager' do
   context 'on Centos 6.6' do
     let(:chef_run) do
       ChefSpec::SoloRunner.new(platform: 'centos', version: 6.6) do |node|
-        node.override['hadoop']['distribution'] = 'hdp'
-        node.override['hadoop']['distribution_version'] = '2.3.4.7'
+        node.default['hadoop']['distribution'] = 'hdp'
+        node.default['hadoop']['distribution_version'] = '2.3.4.7'
         node.automatic['domain'] = 'example.com'
         stub_command(/update-alternatives --display /).and_return(false)
         stub_command(%r{/sys/kernel/mm/(.*)transparent_hugepage/defrag}).and_return(false)
@@ -25,8 +25,8 @@ describe 'hadoop::hadoop_yarn_nodemanager' do
   context 'using HDP 2.1.15.0' do
     let(:chef_run) do
       ChefSpec::SoloRunner.new(platform: 'centos', version: 6.6) do |node|
-        node.override['hadoop']['distribution'] = 'hdp'
-        node.override['hadoop']['distribution_version'] = '2.1.15.0'
+        node.default['hadoop']['distribution'] = 'hdp'
+        node.default['hadoop']['distribution_version'] = '2.1.15.0'
         node.automatic['domain'] = 'example.com'
         stub_command(/update-alternatives --display /).and_return(false)
         stub_command(%r{/sys/kernel/mm/(.*)transparent_hugepage/defrag}).and_return(false)

@@ -5,7 +5,7 @@ describe 'hadoop::_compression_libs' do
     let(:chef_run) do
       ChefSpec::SoloRunner.new(platform: 'centos', version: 6.6) do |node|
         node.override['hadoop']['distributon'] = 'hdp'
-        node.override['hadoop']['distribution_version'] = '2.3.4.7'
+        node.default['hadoop']['distribution_version'] = '2.3.4.7'
       end.converge(described_recipe)
     end
 
@@ -19,8 +19,8 @@ describe 'hadoop::_compression_libs' do
   context 'using HDP 2.1.15.0' do
     let(:chef_run) do
       ChefSpec::SoloRunner.new(platform: 'centos', version: 6.6) do |node|
-        node.override['hadoop']['distribution'] = 'hdp'
-        node.override['hadoop']['distribution_version'] = '2.1.15.0'
+        node.default['hadoop']['distribution'] = 'hdp'
+        node.default['hadoop']['distribution_version'] = '2.1.15.0'
       end.converge(described_recipe)
     end
 
@@ -60,8 +60,8 @@ describe 'hadoop::_compression_libs' do
   context 'on Ubuntu 12.04' do
     let(:chef_run) do
       ChefSpec::SoloRunner.new(platform: 'ubuntu', version: 12.04) do |node|
-        node.override['hadoop']['distribution'] = 'hdp'
-        node.override['hadoop']['distribution_version'] = '2.3.4.7'
+        node.default['hadoop']['distribution'] = 'hdp'
+        node.default['hadoop']['distribution_version'] = '2.3.4.7'
       end.converge(described_recipe)
     end
 
@@ -75,8 +75,8 @@ describe 'hadoop::_compression_libs' do
   context 'using HDP 2.1.15.0' do
     let(:chef_run) do
       ChefSpec::SoloRunner.new(platform: 'ubuntu', version: 12.04) do |node|
-        node.override['hadoop']['distribution'] = 'hdp'
-        node.override['hadoop']['distribution_version'] = '2.1.15.0'
+        node.default['hadoop']['distribution'] = 'hdp'
+        node.default['hadoop']['distribution_version'] = '2.1.15.0'
       end.converge(described_recipe)
     end
 

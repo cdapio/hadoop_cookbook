@@ -14,8 +14,8 @@ describe 'hadoop::default' do
         node.default['hadoop']['container_executor']['banned.users'] = 'root'
         node.default['hadoop']['hadoop_env']['hadoop_log_dir'] = '/data/log/hadoop-hdfs'
         node.default['hadoop']['yarn_env']['yarn_log_dir'] = '/var/log/hadoop-yarn'
-        node.override['hadoop']['distribution'] = 'hdp'
-        node.override['hadoop']['distribution_version'] = '2.3.4.7'
+        node.default['hadoop']['distribution'] = 'hdp'
+        node.default['hadoop']['distribution_version'] = '2.3.4.7'
         stub_command(/update-alternatives --display /).and_return(false)
         stub_command(/test -L /).and_return(false)
       end.converge(described_recipe)
@@ -160,8 +160,8 @@ describe 'hadoop::default' do
     let(:chef_run) do
       ChefSpec::SoloRunner.new(platform: 'centos', version: 6.6) do |node|
         node.automatic['domain'] = 'example.com'
-        node.override['hadoop']['distribution'] = 'hdp'
-        node.override['hadoop']['distribution_version'] = '2.1.15.0'
+        node.default['hadoop']['distribution'] = 'hdp'
+        node.default['hadoop']['distribution_version'] = '2.1.15.0'
         stub_command(/update-alternatives --display /).and_return(false)
         stub_command(/test -L /).and_return(false)
       end.converge(described_recipe)
@@ -182,8 +182,8 @@ describe 'hadoop::default' do
     let(:chef_run) do
       ChefSpec::SoloRunner.new(platform: 'centos', version: 6.6) do |node|
         node.automatic['domain'] = 'example.com'
-        node.override['hadoop']['distribution'] = 'hdp'
-        node.override['hadoop']['distribution_version'] = '2.1.15.0'
+        node.default['hadoop']['distribution'] = 'hdp'
+        node.default['hadoop']['distribution_version'] = '2.1.15.0'
         node.override['hadoop']['hadoop_env']['hadoop_log_dir'] = '/data/logs/hdfs'
         stub_command(/update-alternatives --display /).and_return(false)
         stub_command(/test -L /).and_return(false)
