@@ -65,7 +65,7 @@ template "/etc/init.d/#{pkg}" do
     'process' => 'java',
     'binary' => "#{hadoop_lib_dir}/spark/bin/spark-class",
     'confdir' => '${SPARK_CONF_DIR}',
-    'args' => 'org.apache.spark.deploy.master.Master > ${LOG_FILE} < /dev/null &',
+    'args' => 'org.apache.spark.deploy.master.Master > ${LOG_FILE} 2>&1 < /dev/null &',
     'user' => 'spark',
     'home' => "#{hadoop_lib_dir}/spark",
     'pidfile' => "${SPARK_PID_DIR}/#{pkg}.pid",
