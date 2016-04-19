@@ -5,8 +5,8 @@ describe 'hadoop::storm' do
     let(:chef_run) do
       ChefSpec::SoloRunner.new(platform: 'centos', version: 6.6) do |node|
         node.automatic['domain'] = 'example.com'
-        node.override['hadoop']['distribution'] = 'hdp'
-        node.override['hadoop']['distribution_version'] = '2.3.4.7'
+        node.default['hadoop']['distribution'] = 'hdp'
+        node.default['hadoop']['distribution_version'] = '2.3.4.7'
         node.default['storm']['release']['install'] = false
         stub_command(/test -L /).and_return(false)
         stub_command(/update-alternatives --display /).and_return(false)
@@ -85,7 +85,7 @@ describe 'hadoop::storm' do
       ChefSpec::SoloRunner.new(platform: 'centos', version: 6.6) do |node|
         node.automatic['domain'] = 'example.com'
         node.override['hadoop']['distribution'] = 'cdh'
-        node.override['hadoop']['distribution_version'] = '5.3.2'
+        node.default['hadoop']['distribution_version'] = '5.3.2'
         node.override['storm']['release']['install'] = true
         node.override['storm']['release']['install_path'] = '/opt'
         node.override['storm']['release']['version'] = '0.9.5'

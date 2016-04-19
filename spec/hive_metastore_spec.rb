@@ -44,8 +44,8 @@ describe 'hadoop::hive_metastore' do
   context 'using MySQL on HDP 2.3' do
     let(:chef_run) do
       ChefSpec::SoloRunner.new(platform: 'centos', version: 6.6) do |node|
-        node.override['hadoop']['distribution'] = 'hdp'
-        node.override['hadoop']['distribution_version'] = '2.3.4.7'
+        node.default['hadoop']['distribution'] = 'hdp'
+        node.default['hadoop']['distribution_version'] = '2.3.4.7'
         node.override['hive']['hive_site']['javax.jdo.option.ConnectionURL'] = 'jdbc:mysql:localhost/hive'
         node.automatic['domain'] = 'example.com'
         node.default['hive']['hive_env']['hive_log_dir'] = '/data/log/hive'
@@ -65,8 +65,8 @@ describe 'hadoop::hive_metastore' do
   context 'using PostgreSQL on Ubuntu 12.04' do
     let(:chef_run) do
       ChefSpec::SoloRunner.new(platform: 'ubuntu', version: 12.04) do |node|
-        node.override['hadoop']['distribution'] = 'hdp'
-        node.override['hadoop']['distribution_version'] = '2.3.4.7'
+        node.default['hadoop']['distribution'] = 'hdp'
+        node.default['hadoop']['distribution_version'] = '2.3.4.7'
         node.override['hive']['hive_site']['javax.jdo.option.ConnectionURL'] = 'jdbc:postgresql:localhost/hive'
         node.automatic['domain'] = 'example.com'
         stub_command(/test -L /).and_return(false)
@@ -84,8 +84,8 @@ describe 'hadoop::hive_metastore' do
   context 'using PostgreSQL on Ubuntu 12.04 HDP 2.1.15.0' do
     let(:chef_run) do
       ChefSpec::SoloRunner.new(platform: 'ubuntu', version: 12.04) do |node|
-        node.override['hadoop']['distribution'] = 'hdp'
-        node.override['hadoop']['distribution_version'] = '2.1.15.0'
+        node.default['hadoop']['distribution'] = 'hdp'
+        node.default['hadoop']['distribution_version'] = '2.1.15.0'
         node.override['hive']['hive_site']['javax.jdo.option.ConnectionURL'] = 'jdbc:postgresql:localhost/hive'
         node.automatic['domain'] = 'example.com'
         stub_command(/test -L /).and_return(false)
