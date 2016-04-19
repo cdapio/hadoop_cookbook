@@ -79,7 +79,7 @@ template "/etc/init.d/#{pkg}" do
     'name' => pkg,
     'process' => 'java',
     'binary' => "#{hadoop_lib_dir}/spark/bin/spark-class",
-    'args' => 'org.apache.spark.deploy.worker.Worker spark://${STANDALONE_SPARK_MASTER_HOST}:${SPARK_MASTER_PORT} > ${LOG_FILE} < /dev/null &',
+    'args' => 'org.apache.spark.deploy.worker.Worker spark://${STANDALONE_SPARK_MASTER_HOST}:${SPARK_MASTER_PORT} > ${LOG_FILE} 2>&1 < /dev/null &',
     'confdir' => '${SPARK_CONF_DIR}',
     'user' => 'spark',
     'home' => "#{hadoop_lib_dir}/spark",

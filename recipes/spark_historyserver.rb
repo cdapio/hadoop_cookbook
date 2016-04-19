@@ -34,11 +34,11 @@ eventlog_dir =
   if node['spark']['spark_defaults'].key?('spark.eventLog.dir')
     node['spark']['spark_defaults']['spark.eventLog.dir']
   else
-    '/user/spark/applicationHistory'
+    'hdfs:///user/spark/applicationHistory'
   end
 
 execute 'hdfs-spark-eventlog-dir' do
-  command "hdfs dfs -mkdir -p #{dfs}#{eventlog_dir} && hdfs dfs -chown -R spark:spark #{dfs}#{eventlog_dir} && hdfs dfs -chmod 1777 #{dfs}#{eventlog_dir}"
+  command "hdfs dfs -mkdir -p #{eventlog_dir} && hdfs dfs -chown -R spark:spark #{eventlog_dir} && hdfs dfs -chmod 1777 #{eventlog_dir}"
   user 'hdfs'
   group 'hdfs'
   timeout 300
@@ -81,7 +81,7 @@ template "/etc/init.d/#{pkg}" do
     'name' => pkg,
     'process' => 'java',
     'binary' => "#{hadoop_lib_dir}/spark/bin/spark-class",
-    'args' => 'org.apache.spark.deploy.history.HistoryServer > ${LOG_FILE} < /dev/null &',
+    'args' => 'org.apache.spark.deploy.history.HistoryServer > ${LOG_FILE} 2>&1 < /dev/null &',
     'confdir' => '${SPARK_CONF_DIR}',
     'user' => 'spark',
     'home' => "#{hadoop_lib_dir}/spark",
