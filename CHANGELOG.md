@@ -1,8 +1,13 @@
 hadoop CHANGELOG
 ===============
 
+v2.3.1 (Apr 19, 2016)
+---------------------
+- Allow overriding distribution_version at default ( Issues: #256 [COOK-93](https://issues.cask.co/browse/COOK-93) )
+- Set SPARK_DIST_CLASSPATH and redirect STDERR to logs ( Issue: #257 )
+
 v2.3.0 (Apr 12, 2016)
---------------------
+---------------------
 - Change spark-defaults from XML to .conf property file ( Issue: #241 )
 - Update default versions: HDP 2.3.4.7, CDH 5.6.0 ( Issue: #242 )
 - Support HDP 2.3.4.7 and 2.4.0.0 ( Issue: #250 )
