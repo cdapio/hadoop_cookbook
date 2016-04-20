@@ -8,11 +8,12 @@ describe 'hadoop::default' do
         node.default['hadoop']['hdfs_site']['dfs.datanode.max.transfer.threads'] = '4096'
         node.default['hadoop']['hadoop_policy']['test.property'] = 'blue'
         node.default['hadoop']['hadoop_metrics']['something.something'] = 'dark.side'
+        node.default['hadoop']['hadoop_metrics2']['something2.something'] = 'dark.side'
         node.default['hadoop']['mapred_site']['mapreduce.framework.name'] = 'yarn'
         node.default['hadoop']['mapred_env']['my_test_variable'] = 'test'
         node.default['hadoop']['fair_scheduler']['defaults']['poolMaxJobsDefault'] = '1000'
         node.default['hadoop']['container_executor']['banned.users'] = 'root'
-        node.default['hadoop']['hadoop_env']['hadoop_log_dir'] = '/data/log/hadoop-hdfs'
+        node.default['hadoop']['hadoop_env']['hadoop_log_dir'] = '/var/log/hadoop-hdfs'
         node.default['hadoop']['yarn_env']['yarn_log_dir'] = '/var/log/hadoop-yarn'
         node.default['hadoop']['distribution'] = 'hdp'
         node.default['hadoop']['distribution_version'] = '2.3.4.7'
@@ -46,21 +47,6 @@ describe 'hadoop::default' do
       )
     end
 
-    it 'deletes /var/log/hadoop-hdfs' do
-      expect(chef_run).to delete_directory('/var/log/hadoop-hdfs')
-    end
-
-    it 'creates /data/log/hadoop-hdfs' do
-      expect(chef_run).to create_directory('/data/log/hadoop-hdfs').with(
-        mode: '0775'
-      )
-    end
-
-    it 'creates /var/log/hadoop-hdfs symlink' do
-      link = chef_run.link('/var/log/hadoop-hdfs')
-      expect(link).to link_to('/data/log/hadoop-hdfs')
-    end
-
     %w(
       capacity-scheduler.xml
       container-executor.cfg
@@ -68,6 +54,7 @@ describe 'hadoop::default' do
       fair-scheduler.xml
       hadoop-env.sh
       hadoop-metrics.properties
+      hadoop-metrics2.properties
       hadoop-policy.xml
       hdfs-site.xml
       log4j.properties
@@ -156,6 +143,32 @@ describe 'hadoop::default' do
     end
   end
 
+  context 'with custom HADOOP_LOG_DIR' do
+    let(:chef_run) do
+      ChefSpec::SoloRunner.new(platform: 'centos', version: 6.6) do |node|
+        node.automatic['domain'] = 'example.com'
+        node.default['hadoop']['distribution'] = 'hdp'
+        node.default['hadoop']['distribution_version'] = '2.3.4.7'
+        node.override['hadoop']['hadoop_env']['hadoop_log_dir'] = '/data/logs/hdfs'
+        stub_command(/update-alternatives --display /).and_return(false)
+        stub_command(/test -L /).and_return(false)
+      end.converge(described_recipe)
+    end
+
+    it 'creates /data/logs/hdfs for HADOOP_LOG_DIR' do
+      expect(chef_run).to create_directory('/data/logs/hdfs')
+    end
+
+    it 'deletes /var/log/hadoop/hdfs directory' do
+      expect(chef_run).to delete_directory('/var/log/hadoop/hdfs')
+    end
+
+    it 'creates /var/log/hadoop/hdfs symlink' do
+      link = chef_run.link('/var/log/hadoop/hdfs')
+      expect(link).to link_to('/data/logs/hdfs')
+    end
+  end
+
   context 'on HDP 2.1' do
     let(:chef_run) do
       ChefSpec::SoloRunner.new(platform: 'centos', version: 6.6) do |node|
@@ -165,6 +178,12 @@ describe 'hadoop::default' do
         stub_command(/update-alternatives --display /).and_return(false)
         stub_command(/test -L /).and_return(false)
       end.converge(described_recipe)
+    end
+
+    %w(hadoop-client hadoop-libhdfs).each do |pkg|
+      it "installs #{pkg} package" do
+        expect(chef_run).to install_package(pkg)
+      end
     end
 
     ### TODO: update this when default recipe changes to be more inline with others

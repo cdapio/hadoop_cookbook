@@ -39,6 +39,10 @@ describe 'hadoop::repo' do
         expect(chef_run).to add_apt_repository(repo)
       end
     end
+
+    it 'add hdp apt_preference' do
+      expect(chef_run).to add_apt_preference('hdp')
+    end
   end
 
   context 'using CDH 5' do
@@ -51,6 +55,10 @@ describe 'hadoop::repo' do
 
     it 'adds cloudera-cdh5 apt_repository' do
       expect(chef_run).to add_apt_repository('cloudera-cdh5')
+    end
+
+    it 'add cloudera-cdh5 apt_preference' do
+      expect(chef_run).to add_apt_preference('cloudera-cdh5')
     end
   end
 end
