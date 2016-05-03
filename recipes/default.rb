@@ -123,7 +123,11 @@ end # End fair-scheduler.xml
     # Prevent duplicate resources
     # rubocop:disable Style/Next
     unless node['hadoop'][envfile]["#{svc}_log_dir"] == "/var/log/hadoop-#{log_dir}" || (
-           hdp22? && node['hadoop'][envfile]["#{svc}_log_dir"] == "/var/log/hadoop/#{log_dir}")
+           hdp22? && (
+             (node['platform_family'] == 'debian' && node['hadoop'][envfile]["#{svc}_log_dir"] == "/var/log/hadoop-#{log_dir}") ||
+             (node['platform_family'] == 'rhel' && node['hadoop'][envfile]["#{svc}_log_dir"] == "/var/log/hadoop/#{log_dir}")
+           )
+    )
       # Delete default directory, if we aren't set to it
       directory "/var/log/hadoop-#{log_dir}" do
         action :delete
@@ -143,7 +147,7 @@ end # End fair-scheduler.xml
       # symlink HDP 2.2 log directory
       link "/var/log/hadoop/#{log_dir}" do
         to node['hadoop'][envfile]["#{svc}_log_dir"]
-        only_if { hdp22? }
+        only_if { hdp22? && node['platform_family'] == 'rhel' }
       end
     end
     # rubocop:enable Style/Next
