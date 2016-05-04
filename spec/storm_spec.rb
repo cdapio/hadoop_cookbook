@@ -8,6 +8,7 @@ describe 'hadoop::storm' do
         node.default['hadoop']['distribution'] = 'hdp'
         node.default['hadoop']['distribution_version'] = '2.3.4.7'
         node.default['storm']['release']['install'] = false
+        node.default['storm']['jaas']['client']['foo'] = 'bar'
         stub_command(/test -L /).and_return(false)
         stub_command(/update-alternatives --display /).and_return(false)
       end.converge(described_recipe)
@@ -15,6 +16,10 @@ describe 'hadoop::storm' do
 
     it 'installs storm package' do
       expect(chef_run).to install_package('storm_2_3_4_7_4')
+    end
+
+    it 'creates /etc/storm/conf.chef/jaas.conf from template' do
+      expect(chef_run).to create_template('/etc/storm/conf.chef/jaas.conf')
     end
 
     it 'deletes /etc/storm/conf directory' do

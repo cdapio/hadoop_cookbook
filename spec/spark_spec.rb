@@ -5,16 +5,23 @@ describe 'hadoop::spark' do
     let(:chef_run) do
       ChefSpec::SoloRunner.new(platform: 'centos', version: 6.6) do |node|
         node.automatic['domain'] = 'example.com'
-        node.default['spark']['release']['install'] = true
         node.default['spark']['spark_env']['spark_log_dir'] = '/data/log/spark'
         node.default['spark']['spark_site']['spark.eventLog.enabled'] = false
+        node.default['spark']['metrics']['something.something'] = 'dark.side'
+        node.default['spark']['log4j']['root.logger'] = 'Console'
+        node.default['hadoop']['distribution'] = 'hdp'
+        node.default['hadoop']['distribution_version'] = '2.3.4.7'
         stub_command(/test -L /).and_return(false)
         stub_command(/update-alternatives --display /).and_return(false)
       end.converge(described_recipe)
     end
 
-    it 'does not install spark-core package' do
-      expect(chef_run).not_to install_package('spark-core')
+    it 'installs spark package' do
+      expect(chef_run).to install_package('spark_2_3_4_7_4')
+    end
+
+    it 'installs spark-python package' do
+      expect(chef_run).to install_package('spark_2_3_4_7_4-python')
     end
 
     it 'installs libgfortran package' do
@@ -46,6 +53,8 @@ describe 'hadoop::spark' do
     %w(
       spark-env.sh
       spark-defaults.conf
+      metrics.properties
+      log4j.properties
     ).each do |file|
       it "creates #{file} from template" do
         expect(chef_run).to create_template("/etc/spark/conf.chef/#{file}")
@@ -58,6 +67,23 @@ describe 'hadoop::spark' do
 
     it 'runs execute[update spark-conf alternatives]' do
       expect(chef_run).to run_execute('update spark-conf alternatives')
+    end
+  end
+
+  context 'using HDP 2.1 and Spark release tarball' do
+    let(:chef_run) do
+      ChefSpec::SoloRunner.new(platform: 'centos', version: 6.6) do |node|
+        node.automatic['domain'] = 'example.com'
+        node.default['spark']['release']['install'] = true
+        node.default['spark']['spark_env']['spark_log_dir'] = '/data/log/spark'
+        node.default['spark']['spark_site']['spark.eventLog.enabled'] = false
+        stub_command(/test -L /).and_return(false)
+        stub_command(/update-alternatives --display /).and_return(false)
+      end.converge(described_recipe)
+    end
+
+    it 'does not install spark-core package' do
+      expect(chef_run).not_to install_package('spark-core')
     end
   end
 
@@ -74,6 +100,10 @@ describe 'hadoop::spark' do
 
     it 'installs spark-core package' do
       expect(chef_run).to install_package('spark-core')
+    end
+
+    it 'installs spark-python package' do
+      expect(chef_run).to install_package('spark-python')
     end
 
     it 'installs libgfortran3 package' do

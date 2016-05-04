@@ -37,8 +37,10 @@ describe 'hadoop::hadoop_hdfs_namenode' do
       )
     end
 
-    it 'creates hdfs-namenode-format execute resource, but does not run it' do
-      expect(chef_run).to_not run_execute('hdfs-namenode-format').with(user: 'hdfs')
+    %w(hdfs-namenode-format hdfs-namenode-bootstrap-standby hdfs-namenode-initialize-sharededits).each do |exec|
+      it "creates #{exec} execute resource, but does not run it" do
+        expect(chef_run).to_not run_execute(exec).with(user: 'hdfs')
+      end
     end
   end
 end
