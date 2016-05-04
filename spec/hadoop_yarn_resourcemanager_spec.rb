@@ -41,5 +41,9 @@ describe 'hadoop::hadoop_yarn_resourcemanager' do
     it 'creates yarn-app-mapreduce-am-staging-dir execute resource, but does not run it' do
       expect(chef_run).to_not run_execute('yarn-app-mapreduce-am-staging-dir').with(user: 'hdfs')
     end
+
+    it 'creates hdp22-mapreduce-tarball execute resource, but does not run it' do
+      expect(chef_run).to_not run_execute('hdp22-mapreduce-tarball').with(user: 'hdfs')
+    end
   end
 end

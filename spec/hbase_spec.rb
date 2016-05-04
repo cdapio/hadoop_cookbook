@@ -40,6 +40,10 @@ describe 'hadoop::hbase' do
       end
     end
 
+    it 'creates /etc/default/hbase from template' do
+      expect(chef_run).to create_template('/etc/default/hbase')
+    end
+
     it 'creates hbase HBASE_LOG_DIR' do
       expect(chef_run).to create_directory('/data/log/hbase').with(
         mode: '0755',
