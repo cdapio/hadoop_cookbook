@@ -2,7 +2,7 @@
 # Cookbook Name:: hadoop
 # Recipe:: zookeeper_server
 #
-# Copyright © 2013-2015 Cask Data, Inc.
+# Copyright © 2013-2016 Cask Data, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -61,7 +61,7 @@ node.default['zookeeper']['zoocfg']['clientPort'] = zookeeper_client_port
 
 directory zookeeper_data_dir do
   owner 'zookeeper'
-  group 'hadoop'
+  group 'zookeeper'
   mode '0755'
   recursive true
   action :create
@@ -69,7 +69,7 @@ end
 
 directory "#{zookeeper_data_dir}/version-2" do
   owner 'zookeeper'
-  group 'hadoop'
+  group 'zookeeper'
   mode '0755'
   recursive true
   action :create
@@ -78,7 +78,7 @@ end
 unless zookeeper_datalog_dir == zookeeper_data_dir
   directory zookeeper_datalog_dir do
     owner 'zookeeper'
-    group 'hadoop'
+    group 'zookeeper'
     mode '0755'
     recursive true
     action :create
@@ -87,7 +87,7 @@ unless zookeeper_datalog_dir == zookeeper_data_dir
 
   directory "#{zookeeper_datalog_dir}/version-2" do
     owner 'zookeeper'
-    group 'hadoop'
+    group 'zookeeper'
     mode '0755'
     recursive true
     action :create

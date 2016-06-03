@@ -1,6 +1,11 @@
 hadoop CHANGELOG
 ===============
 
+v2.3.2 (May 6, 2016)
+--------------------
+- Improve test coverage ( Issue: #258 )
+- HDP 2.2+ log directories are not modified on Ubuntu ( Issues: #259 [COOK-96](https://issues.cask.co/browse/COOK-96) )
+
 v2.3.1 (Apr 19, 2016)
 ---------------------
 - Allow overriding distribution_version at default ( Issues: #256 [COOK-93](https://issues.cask.co/browse/COOK-93) )
