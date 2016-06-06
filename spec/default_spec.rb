@@ -14,7 +14,7 @@ describe 'hadoop::default' do
         node.default['hadoop']['fair_scheduler']['defaults']['poolMaxJobsDefault'] = '1000'
         node.default['hadoop']['container_executor']['banned.users'] = 'root'
         node.default['hadoop']['hadoop_env']['hadoop_log_dir'] = '/var/log/hadoop-hdfs'
-        node.default['hadoop']['yarn_env']['yarn_log_dir'] = '/var/log/hadoop-yarn'
+        node.default['hadoop']['yarn_env']['foo'] = 'bar'
         node.default['hadoop']['distribution'] = 'hdp'
         node.default['hadoop']['distribution_version'] = '2.3.4.7'
         stub_command(/update-alternatives --display /).and_return(false)
@@ -39,12 +39,6 @@ describe 'hadoop::default' do
           mode: '1777'
         )
       end
-    end
-
-    it 'creates /var/log/hadoop-yarn' do
-      expect(chef_run).to create_directory('/var/log/hadoop-yarn').with(
-        mode: '0775'
-      )
     end
 
     %w(
@@ -110,9 +104,9 @@ describe 'hadoop::default' do
       )
     end
 
-    it 'renders file yarn-env.sh with YARN_LOG_DIR' do
+    it 'renders file yarn-env.sh with FOO=bar' do
       expect(chef_run).to render_file('/etc/hadoop/conf.chef/yarn-env.sh').with_content(
-        /YARN_LOG_DIR/
+        /FOO=.bar/
       )
     end
 
