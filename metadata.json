@@ -27,19 +27,29 @@
 
   },
   "conflicting": {
+    "apache_hadoop": ">= 0.0.0",
+    "apache_spark": ">= 0.0.0",
+    "apache_zookeeper": ">= 0.0.0",
     "hadoop_cluster": ">= 0.0.0",
     "hadoop_cluster_rpm": ">= 0.0.0",
     "hadoop_for_hbase": ">= 0.0.0",
+    "hadoop_spark": ">= 0.0.0",
     "hbase": ">= 0.0.0",
     "hbase_cluster": ">= 0.0.0",
     "hive": ">= 0.0.0",
     "pig": ">= 0.0.0",
     "spark": ">= 0.0.0",
+    "spark-jobserver": ">= 0.0.0",
+    "spark-platform": ">= 0.0.0",
     "storm": ">= 0.0.0",
     "storm-cluster": ">= 0.0.0",
+    "storm-platform": ">= 0.0.0",
     "tez": ">= 0.0.0",
     "zookeeper": ">= 0.0.0",
-    "zookeeper_cluster": ">= 0.0.0"
+    "zookeeperd": ">= 0.0.0",
+    "zookeeper_cluster": ">= 0.0.0",
+    "zookeeper-cluster": ">= 0.0.0",
+    "zookeeper-platform": ">= 0.0.0"
   },
   "providing": {
 
@@ -56,7 +66,7 @@
   "recipes": {
 
   },
-  "version": "2.3.2",
+  "version": "2.3.3",
   "source_url": "",
   "issues_url": ""
 }

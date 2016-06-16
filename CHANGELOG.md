@@ -1,6 +1,12 @@
 hadoop CHANGELOG
 ===============
 
+v2.3.3 (Jun 16, 2016)
+---------------------
+- Setting YARN_LOG_DIR is a redundant test, use text-based ( Issue: #261 )
+- ZooKeeper filesystem objects should use zookeeper group ( Issues: #262 [COOK-100](https://issues.cask.co/browse/COOK-100) )
+- Use upstream ulimit cookbook for testing ( Issue: #263 )
+
 v2.3.2 (May 6, 2016)
 --------------------
 - Improve test coverage ( Issue: #258 )
