@@ -62,7 +62,7 @@ end
 package 'unzip'
 
 ### TODO: Use ark cookbook/resource for this
-extjs = 'ext-2.2.zip'
+extjs = 'ext-2.3.0.zip'
 remote_file "#{oozie_data_dir}/#{extjs}" do
   source "http://dev.sencha.com/deploy/#{extjs}"
   mode '0644'
