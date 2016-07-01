@@ -10,6 +10,7 @@ if RUBY_VERSION.to_f < 2.0
   gem 'chef', '< 12.0'
   gem 'varia_model', '< 0.5.0'
   gem 'fauxhai', '< 3.5.0'
+  gem 'json', '< 2.0'
 else
   gem 'chef', '< 12.5' # Testing
 end
