@@ -26,7 +26,7 @@ module Hadoop
       case cmd
       when 'disable'
         Chef::Log.info('Disabling package auto-start')
-        ::File.open('/usr/sbin/policy-rc.d', 'w', 0755) { |f| f.write('exit 101') }
+        ::File.open('/usr/sbin/policy-rc.d', 'w', 0o755) { |f| f.write('exit 101') }
       when 'enable'
         Chef::Log.info('Enabling package auto-start')
         ::File.delete('/usr/sbin/policy-rc.d') if ::File.exist?('/usr/sbin/policy-rc.d')
