@@ -177,6 +177,25 @@ template "#{storm_conf_dir}/jaas.conf" do
   end
 end # End jaas.conf
 
+# Setup client_jaas.conf master_jaas.conf
+%w(client master).each do |type|
+  next unless node['storm'].key?("#{type}_jaas") && node['storm']["#{type}_jaas"].key?('client')
+  my_vars = {
+    # Only use client, for connecting to secure ZooKeeper
+    :client => node['storm']["#{type}_jaas"]['client']
+  }
+
+  template "#{storm_conf_dir}/#{type}_jaas.conf" do
+    source 'jaas.conf.erb'
+    mode '0644'
+    owner 'storm'
+    group 'storm'
+    action :create
+    variables my_vars
+    only_if { node['storm'].key?("#{type}_jaas") && node['storm']["#{type}_jaas"].key?('client') }
+  end
+end # End client_jaas.conf master_jaas.conf
+
 # Update alternatives to point to our configuration
 execute 'update storm-conf alternatives' do
   command "update-alternatives --install /etc/storm/conf storm-conf /etc/storm/#{node['storm']['conf_dir']} 50"

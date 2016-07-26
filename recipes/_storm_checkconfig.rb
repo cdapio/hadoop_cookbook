@@ -27,3 +27,14 @@ if node['storm'].key?('jaas')
     Chef::Application.fatal!("You must set node['storm']['jaas']['#{key}']['keytab'] and node['storm']['jaas']['#{key}']['principal'] with node['storm']['jaas'][key]['usekeytab']")
   end
 end
+
+%w(client master).each do |type|
+  next unless node['storm'].key?("#{type}_jaas")
+  %w(client server).each do |key| # These are JAAS keys, not files
+    next unless node['storm']["#{type}_jaas"].key?(key) && node['storm']["#{type}_jaas"][key].key?('usekeytab') &&
+                node['storm']["#{type}_jaas"][key]['usekeytab'].to_s == 'true'
+
+    next unless node['storm']["#{type}_jaas"][key]['keytab'].nil? || node['storm']["#{type}_jaas"][key]['principal'].nil?
+    Chef::Application.fatal!("You must set node['storm']['#{type}_jaas']['#{key}']['keytab'] and node['storm']['#{type}_jaas']['#{key}']['principal'] with node['storm']['#{type}_jaas'][key]['usekeytab']")
+  end
+end

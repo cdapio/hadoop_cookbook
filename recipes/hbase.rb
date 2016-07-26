@@ -114,6 +114,8 @@ if node['hbase'].key?('jaas') && node['hbase']['jaas'].key?('client')
     :client => node['hbase']['jaas']['client']
   }
 
+  log 'Single JAAS config deprecated. See COOK-106'
+
   template "#{hbase_conf_dir}/jaas.conf" do
     source 'jaas.conf.erb'
     mode '0644'
@@ -124,6 +126,25 @@ if node['hbase'].key?('jaas') && node['hbase']['jaas'].key?('client')
     only_if { node['hbase'].key?('jaas') && node['hbase']['jaas'].key?('client') }
   end
 end # End jaas.conf
+
+# Setup client_jaas.conf master_jaas.conf
+%w(client master).each do |type|
+  next unless node['hbase'].key?("#{type}_jaas") && node['hbase']["#{type}_jaas"].key?('client')
+  my_vars = {
+    # Only use client, for connecting to secure ZooKeeper
+    :client => node['hbase']["#{type}_jaas"]['client']
+  }
+
+  template "#{hbase_conf_dir}/#{type}_jaas.conf" do
+    source 'jaas.conf.erb'
+    mode '0644'
+    owner 'hbase'
+    group 'hbase'
+    action :create
+    variables my_vars
+    only_if { node['hbase'].key?("#{type}_jaas") && node['hbase']["#{type}_jaas"].key?('client') }
+  end
+end # End client_jaas.conf master_jaas.conf
 
 # limits.d settings
 ulimit_domain 'hbase' do

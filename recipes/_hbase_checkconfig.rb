@@ -52,3 +52,14 @@ if node['hbase'].key?('jaas')
     Chef::Application.fatal!("You must set node['hbase']['jaas']['#{key}']['keytab'] and node['hbase']['jaas']['#{key}']['principal'] with node['hbase']['jaas'][key]['usekeytab']")
   end
 end
+
+%w(client master).each do |type|
+  next unless node['hbase'].key?("#{type}_jaas")
+  %w(client server).each do |key| # These are JAAS keys, not files
+    next unless node['hbase']["#{type}_jaas"].key?(key) && node['hbase']["#{type}_jaas"][key].key?('usekeytab') &&
+                node['hbase']["#{type}_jaas"][key]['usekeytab'].to_s == 'true'
+
+    next unless node['hbase']["#{type}_jaas"][key]['keytab'].nil? || node['hbase']["#{type}_jaas"][key]['principal'].nil?
+    Chef::Application.fatal!("You must set node['hbase']['#{type}_jaas']['#{key}']['keytab'] and node['hbase']['#{type}_jaas']['#{key}']['principal'] with node['hbase']['#{type}_jaas'][key]['usekeytab']")
+  end
+end
