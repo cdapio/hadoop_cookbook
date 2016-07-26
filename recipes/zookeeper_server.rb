@@ -187,6 +187,7 @@ template "/etc/default/#{pkg}" do
   variables :options => {
     'zookeeper_home' => "#{hadoop_lib_dir}/zookeeper",
     'zookeeper_pid_dir' => '/var/run/zookeeper',
+    'zoopidfile' => "${ZOOKEEPER_PID_DIR}/#{pkg}.pid",
     'zookeeper_log_dir' => zookeeper_log_dir,
     'zookeeper_conf_dir' => zookeeper_conf_dir,
     'zoo_log_dir' => zookeeper_log_dir,
