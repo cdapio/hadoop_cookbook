@@ -37,3 +37,14 @@ if node['hive'].key?('jaas')
     Chef::Application.fatal!("You must set node['hive']['jaas']['#{key}']['keytab'] and node['hive']['jaas']['#{key}']['principal'] with node['hive']['jaas'][key]['usekeytab']")
   end
 end
+
+%w(client master).each do |type|
+  next unless node['hive'].key?("#{type}_jaas")
+  %w(client server).each do |key| # These are JAAS keys, not files
+    next unless node['hive']["#{type}_jaas"].key?(key) && node['hive']["#{type}_jaas"][key].key?('usekeytab') &&
+                node['hive']["#{type}_jaas"][key]['usekeytab'].to_s == 'true'
+
+    next unless node['hive']["#{type}_jaas"][key]['keytab'].nil? || node['hive']["#{type}_jaas"][key]['principal'].nil?
+    Chef::Application.fatal!("You must set node['hive']['#{type}_jaas']['#{key}']['keytab'] and node['hive']['#{type}_jaas']['#{key}']['principal'] with node['hive']['#{type}_jaas'][key]['usekeytab']")
+  end
+end

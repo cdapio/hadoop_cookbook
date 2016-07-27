@@ -11,6 +11,7 @@ This cookbook may work on earlier versions, but these are the minimal tested ver
 
 * Chef 11.4.0+
 * CentOS 6.4+
+* Debian 6.0+
 * Ubuntu 12.04+
 
 This cookbook assumes that you have a working Java installation. It has been tested using version `1.21.2` of the `java` cookbook, using Oracle Java 6. If you plan on using Hive with a database other than the embedded Derby, you will need to provide it and set it up prior to starting Hive Metastore service.

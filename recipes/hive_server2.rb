@@ -42,6 +42,25 @@ if node['hive'].key?('jaas')
   end
 end # End jaas.conf
 
+# Setup client_jaas.conf master_jaas.conf
+%w(client master).each do |type|
+  next unless node['hive'].key?("#{type}_jaas") && node['hive']["#{type}_jaas"].key?('client')
+  my_vars = {
+    # Only use client, for connecting to secure ZooKeeper
+    :client => node['hive']["#{type}_jaas"]['client']
+  }
+
+  template "#{hive_conf_dir}/#{type}_jaas.conf" do
+    source 'jaas.conf.erb'
+    mode '0644'
+    owner 'hive'
+    group 'hive'
+    action :create
+    variables my_vars
+    only_if { node['hive'].key?("#{type}_jaas") && node['hive']["#{type}_jaas"].key?('client') }
+  end
+end # End client_jaas.conf master_jaas.conf
+
 hive_log_dir =
   if node['hive'].key?('hive_env') && node['hive']['hive_env'].key?('hive_log_dir')
     node['hive']['hive_env']['hive_log_dir']

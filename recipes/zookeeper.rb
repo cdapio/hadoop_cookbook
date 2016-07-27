@@ -51,3 +51,25 @@ template "#{zookeeper_conf_dir}/jaas.conf" do
     node['zookeeper'].key?('jaas') && (!node['zookeeper']['jaas']['client'].empty? || !node['zookeeper']['jaas']['server'].empty)
   end
 end # End jaas.conf
+
+# Setup client_jaas.conf master_jaas.conf
+%w(client master).each do |type|
+  next unless node['zookeeper'].key?("#{type}_jaas")
+  my_vars = {
+    :client => node['zookeeper']["#{type}_jaas"]['client'],
+    :server => node['zookeeper']["#{type}_jaas"]['server']
+  }
+
+  template "#{zookeeper_conf_dir}/#{type}_jaas.conf" do
+    source 'jaas.conf.erb'
+    mode '0644'
+    owner 'root'
+    group 'root'
+    action :create
+    variables my_vars
+    only_if do
+      node['zookeeper'].key?("#{type}_jaas") && \
+        (!node['zookeeper']["#{type}_jaas"]['client'].empty? || !node['zookeeper']["#{type}_jaas"]['server'].empty)
+    end
+  end
+end # End client_jaas.conf master_jaas.conf
