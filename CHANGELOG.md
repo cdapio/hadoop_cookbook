@@ -1,7 +1,7 @@
 hadoop CHANGELOG
 ===============
 
-v2.4.0 (Jul 17, 2016)
+v2.4.0 (Jul 27, 2016)
 ---------------------
 - Update ext.js download URL to Cloudera, per @jeremyhahn ( Issue: #265 )
 - Restrict Gem versions on older Ruby ( Issue: #266 )
