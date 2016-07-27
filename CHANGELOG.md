@@ -1,6 +1,13 @@
 hadoop CHANGELOG
 ===============
 
+v2.4.0 (Jul 27, 2016)
+---------------------
+- Update ext.js download URL to Cloudera, per @jeremyhahn ( Issue: #265 )
+- Restrict Gem versions on older Ruby ( Issue: #266 )
+- Set ZOOPIDFILE ( Issues: #267 [COOK-105](https://issues.cask.co/browse/COOK-105) )
+- Split client and service JAAS files ( Issues: #268 [COOK-106](https://issues.cask.co/browse/COOK-106) )
+
 v2.3.3 (Jun 16, 2016)
 ---------------------
 - Setting YARN_LOG_DIR is a redundant test, use text-based ( Issue: #261 )
