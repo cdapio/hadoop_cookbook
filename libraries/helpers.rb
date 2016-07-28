@@ -98,14 +98,12 @@ module Hadoop
     #
     # Return true if Kerberos is enabled
     #
-    # rubocop: disable Metrics/AbcSize
     def hadoop_kerberos?
       node['hadoop']['core_site'].key?('hadoop.security.authorization') &&
         node['hadoop']['core_site'].key?('hadoop.security.authentication') &&
         node['hadoop']['core_site']['hadoop.security.authorization'].to_s == 'true' &&
         node['hadoop']['core_site']['hadoop.security.authentication'] == 'kerberos'
     end
-    # rubocop: enable Metrics/AbcSize
 
     #
     # Return parent directory for various Hadoop lib directories and homes
