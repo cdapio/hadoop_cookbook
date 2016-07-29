@@ -66,6 +66,8 @@ module Hadoop
         '2.3.4.7-4'
       when '2.4.0.0'
         '2.4.0.0-169'
+      when '2.4.2.0'
+        '2.4.2.0-258'
       else
         node['hadoop']['distribution_version']
       end
@@ -96,14 +98,12 @@ module Hadoop
     #
     # Return true if Kerberos is enabled
     #
-    # rubocop: disable Metrics/AbcSize
     def hadoop_kerberos?
       node['hadoop']['core_site'].key?('hadoop.security.authorization') &&
         node['hadoop']['core_site'].key?('hadoop.security.authentication') &&
         node['hadoop']['core_site']['hadoop.security.authorization'].to_s == 'true' &&
         node['hadoop']['core_site']['hadoop.security.authentication'] == 'kerberos'
     end
-    # rubocop: enable Metrics/AbcSize
 
     #
     # Return parent directory for various Hadoop lib directories and homes

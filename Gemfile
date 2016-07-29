@@ -23,6 +23,7 @@ gem 'rack', '< 2.0' if RUBY_VERSION.to_f < 2.2
 gem 'ridley', '~> 4.2.0'
 gem 'faraday', '< 0.9.2'
 gem 'rainbow', '<= 1.99.1'
+gem 'dep-selector-libgecode', '< 1.3.1'
 
 group :integration do
   gem 'test-kitchen'
