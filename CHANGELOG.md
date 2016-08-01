@@ -1,6 +1,10 @@
 hadoop CHANGELOG
 ===============
 
+v2.4.1 (Aug 1, 2016)
+--------------------
+- Support for HDP 2.4.2.0 ( Issue: #270 )
+
 v2.4.0 (Jul 27, 2016)
 ---------------------
 - Update ext.js download URL to Cloudera, per @jeremyhahn ( Issue: #265 )
