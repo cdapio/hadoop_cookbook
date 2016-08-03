@@ -8,7 +8,7 @@ gem 'rspec', '~> 3.0'
 
 if RUBY_VERSION.to_f < 2.1
   gem 'chef-zero', '< 4.6'
-  gem 'fauxhai', '< 3.7'
+  gem 'fauxhai', '< 3.7' unless RUBY_VERSION.to_f < 2.0
   gem 'ffi-yajl', '< 2.3'
   gem 'buff-ignore', '< 1.2'
 else
