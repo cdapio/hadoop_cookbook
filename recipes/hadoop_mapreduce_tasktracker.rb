@@ -42,22 +42,12 @@ mapred_local_dirs.split(',').each do |dir|
   end
 end
 
-package pkg do
-  action :nothing
+dpkg_autostart pkg do
+  allow false
 end
 
-# Hack to prevent auto-start of services, see COOK-26
-ruby_block "package-#{pkg}" do
-  block do
-    begin
-      policy_rcd('disable') if node['platform_family'] == 'debian'
-      resources("package[#{pkg}]").run_action(:install)
-    ensure
-      policy_rcd('enable') if node['platform_family'] == 'debian'
-    end
-  end
-  # Only CDH supports a TaskTracker package
-  only_if { node['hadoop']['distribution'] == 'cdh' }
+package pkg do
+  action :install
 end
 
 service pkg do

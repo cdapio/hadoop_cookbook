@@ -9,7 +9,7 @@ version          '2.4.1'
 depends 'yum', '>= 3.0'
 depends 'apt', '>= 2.1.2'
 
-%w(selinux sysctl ulimit).each do |cb|
+%w(dpkg_autostart selinux sysctl ulimit).each do |cb|
   depends cb
 end
 
