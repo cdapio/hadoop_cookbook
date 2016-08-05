@@ -16,12 +16,8 @@ describe 'hadoop::oozie' do
     name = 'oozie'
     pkg = 'oozie_2_3_4_7_4'
 
-    it "does not install #{name} package" do
-      expect(chef_run).not_to install_package(pkg)
-    end
-
-    it "runs package-#{pkg} ruby_block" do
-      expect(chef_run).to run_ruby_block("package-#{pkg}")
+    it "install #{name} package" do
+      expect(chef_run).to install_package(pkg)
     end
 
     it "creates #{name} service resource, but does not run it" do
@@ -78,6 +74,22 @@ describe 'hadoop::oozie' do
 
     it 'runs execute[update oozie-conf alternatives]' do
       expect(chef_run).to run_execute('update oozie-conf alternatives')
+    end
+  end
+
+  context 'on Centos 6.6 with HDP' do
+    let(:chef_run) do
+      ChefSpec::SoloRunner.new(platform: 'centos', version: 6.6) do |node|
+        node.automatic['domain'] = 'example.com'
+        stub_command(/update-alternatives --display /).and_return(false)
+        stub_command(%r{/sys/kernel/mm/(.*)transparent_hugepage/defrag}).and_return(false)
+        stub_command(/test -L /).and_return(false)
+      end.converge(described_recipe)
+    end
+    pkg = 'oozie'
+
+    it "install #{pkg} package" do
+      expect(chef_run).to install_package(pkg)
     end
   end
 end
