@@ -81,8 +81,8 @@ describe 'hadoop::oozie' do
     let(:chef_run) do
       ChefSpec::SoloRunner.new(platform: 'centos', version: 6.6) do |node|
         node.automatic['domain'] = 'example.com'
-        node.default['hadoop']['distribution'] = 'cdh'
-        node.default['hadoop']['distribution_version'] = '5.7.0'
+        node.override['hadoop']['distribution'] = 'cdh'
+        node.override['hadoop']['distribution_version'] = '5.7.0'
         stub_command(/update-alternatives --display /).and_return(false)
         stub_command(%r{/sys/kernel/mm/(.*)transparent_hugepage/defrag}).and_return(false)
         stub_command(/test -L /).and_return(false)
