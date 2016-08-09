@@ -44,10 +44,12 @@ end
 
 dpkg_autostart pkg do
   allow false
+  only_if { node['hadoop']['distribution'] == 'cdh' }
 end
 
 package pkg do
   action :install
+  only_if { node['hadoop']['distribution'] == 'cdh' }
 end
 
 service pkg do
