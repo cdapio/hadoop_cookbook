@@ -2,7 +2,7 @@
 # Cookbook Name:: hadoop
 # Library:: helpers
 #
-# Copyright © 2015 Cask Data, Inc.
+# Copyright © 2015-2016 Cask Data, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -19,22 +19,6 @@
 
 module Hadoop
   module Helpers
-    #
-    # Disable service auto-start on Debian-based platforms
-    #
-    def policy_rcd(cmd)
-      case cmd
-      when 'disable'
-        Chef::Log.info('Disabling package auto-start')
-        ::File.open('/usr/sbin/policy-rc.d', 'w', 0o755) { |f| f.write('exit 101') }
-      when 'enable'
-        Chef::Log.info('Enabling package auto-start')
-        ::File.delete('/usr/sbin/policy-rc.d') if ::File.exist?('/usr/sbin/policy-rc.d')
-      else
-        Chef::Application.fatal!('The policy_rc.d method only accepts "disable" or "enable" as arguments')
-      end
-    end
-
     #
     # Return HDP 2.2 version, including revision, used for building HDP 2.2+ on-disk paths
     #

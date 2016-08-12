@@ -16,6 +16,7 @@
   "dependencies": {
     "yum": ">= 3.0",
     "apt": ">= 2.1.2",
+    "dpkg_autostart": ">= 0.0.0",
     "selinux": ">= 0.0.0",
     "sysctl": ">= 0.0.0",
     "ulimit": ">= 0.0.0"

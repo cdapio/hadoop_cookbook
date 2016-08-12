@@ -13,12 +13,8 @@ describe 'hadoop::hadoop_mapreduce_jobtracker' do
     end
     pkg = 'hadoop-0.20-mapreduce-jobtracker'
 
-    it "does not install #{pkg} package" do
-      expect(chef_run).not_to install_package(pkg)
-    end
-
-    it "runs package-#{pkg} ruby_block" do
-      expect(chef_run).to run_ruby_block("package-#{pkg}")
+    it "install #{pkg} package" do
+      expect(chef_run).to install_package(pkg)
     end
 
     it "creates #{pkg} service resource, but does not run it" do

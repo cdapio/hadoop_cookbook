@@ -22,19 +22,11 @@ include_recipe 'hadoop::oozie_client'
 pkg = hadoop_package('oozie')
 
 package pkg do
-  action :nothing
+  action :install
 end
 
-# Hack to prevent auto-start of services, see COOK-26
-ruby_block "package-#{pkg}" do
-  block do
-    begin
-      policy_rcd('disable') if node['platform_family'] == 'debian'
-      resources("package[#{pkg}]").run_action(:install)
-    ensure
-      policy_rcd('enable') if node['platform_family'] == 'debian'
-    end
-  end
+package pkg do
+  action :install
 end
 
 oozie_conf_dir = "/etc/oozie/#{node['oozie']['conf_dir']}"
