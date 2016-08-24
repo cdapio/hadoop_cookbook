@@ -18,7 +18,7 @@ if RUBY_VERSION.to_f < 2.0
   gem 'json', '< 2.0'
   gem 'rubocop', '< 0.42'
   gem 'varia_model', '< 0.5.0'
-  gem 'foodcritic', '~> 6.0', '< 6.3'
+  gem 'foodcritic', '~> 4.0'
 else
   gem 'chef', '< 12.5'
   gem 'foodcritic', '~> 6.0'
