@@ -53,3 +53,6 @@ end
 ).each do |cb|
   conflicts cb
 end
+
+source_url 'https://github.com/caskdata/hadoop_cookbook' if respond_to?(:source_url)
+issues_url 'https://issues.cask.co/browse/COOK/component/10600' if respond_to?(:issues_url)
