@@ -85,7 +85,7 @@ when 'hdp'
   case node['platform_family']
   when 'rhel'
     yum_base_url = 'http://public-repo-1.hortonworks.com/HDP'
-    os = if major_platform_version == 5
+    os = if major_platform_version == 5 || hdp_version.to_f >= 2.3
            "centos#{major_platform_version}"
          else
            'centos6'
