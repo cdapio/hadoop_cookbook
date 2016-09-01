@@ -1,6 +1,13 @@
 hadoop CHANGELOG
 ===============
 
+v2.5.0 (Sep 1, 2016)
+--------------------
+- Remove `policy_rcd` and use `dpkg_autostart` cookbook ( Issue: #272 )
+- Update testing framework ( Issue: #273 )
+- Use major_platform_version for centos5 or HDP >= 2.3 ( Issue: #275 )
+- Support HDP 2.5 ( Issue: #276 )
+
 v2.4.1 (Aug 1, 2016)
 --------------------
 - Support for HDP 2.4.2.0 ( Issue: #270 )
