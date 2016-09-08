@@ -312,14 +312,9 @@ when 'bigtop'
   end
 
 when 'iop'
-  case node['hadoop']['distribution_version']
-  ### TODO: 4.0 support?
-  when '4.1.0.0'
-    iop_version = node['hadoop']['distribution_version']
-    iop_release = "#{node['hadoop']['distribution_version'].to_f}.x"
-  end
-
-  iop_utils_version = '1.1.0.0'
+  iop_version = node['hadoop']['distribution_version']
+  iop_release = "#{node['hadoop']['distribution_version'].to_f}.x"
+  iop_utils_version = '1.2.0.0'
 
   case node['platform_family']
   when 'rhel'

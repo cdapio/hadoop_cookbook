@@ -38,7 +38,7 @@ describe 'hadoop::repo' do
       end.converge(described_recipe)
     end
 
-    %w(IOP-4.1.x IOP-UTILS-1.1.0.0).each do |repo|
+    %w(IOP-4.1.x IOP-UTILS-1.2.0.0).each do |repo|
       it "add #{repo} yum_repository" do
         expect(chef_run).to add_yum_repository(repo)
       end
