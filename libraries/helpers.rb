@@ -73,12 +73,23 @@ module Hadoop
     # ODP name: hadoop_2_4_0_0_169-mapreduce-historyserver
     #
     def hadoop_package(name)
-      return name unless hdp22?
+      return name unless hdp22? || iop?
       return name if node['platform_family'] == 'debian'
       fw = name.split('-').first
-      pv = hdp_version.tr('.', '_').tr('-', '_')
+      pv =
+        if hdp22?
+          hdp_version.tr('.', '_').tr('-', '_')
+        else
+          node['hadoop']['distribution_version'].tr('.', '_')
+        end
       nn = "#{fw}_#{pv}"
       name.gsub(fw, nn)
+    end
+
+    # Return true if IOP
+    #
+    def iop?
+      node['hadoop']['distribution'] == 'iop'
     end
 
     #
@@ -97,6 +108,8 @@ module Hadoop
     def hadoop_lib_dir
       if hdp22?
         "/usr/hdp/#{hdp_version}"
+      elsif iop?
+        "/usr/iop/#{node['hadoop']['distribution_version']}"
       else
         '/usr/lib'
       end

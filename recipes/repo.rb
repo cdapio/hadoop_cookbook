@@ -33,6 +33,8 @@ node.default['hadoop']['distribution_version'] =
     '5.6.0'
   elsif node['hadoop']['distribution'] == 'bigtop'
     '1.0.0'
+  elsif node['hadoop']['distribution'] == 'iop'
+    '4.1.0.0'
   end
 
 case node['hadoop']['distribution']
@@ -308,6 +310,47 @@ when 'bigtop'
       pin_priority '700'
     end
   end
+
+when 'iop'
+  case node['hadoop']['distribution_version']
+  ### TODO: 4.0 support?
+  when '4.1.0.0'
+    iop_version = node['hadoop']['distribution_version']
+    iop_release = "#{node['hadoop']['distribution_version'].to_f}.x"
+  end
+
+  iop_utils_version = '1.1.0.0'
+
+  case node['platform_family']
+  when 'rhel'
+    # https://ibm-open-platform.ibm.com/repos/IOP/rhel/6/x86_64/4.1.x/GA/4.1.0.0/
+    yum_base_url = 'https://ibm-open-platform.ibm.com/repos/IOP'
+    os = 'rhel'
+    v = major_platform_version
+    m = node['kernel']['machine']
+    key = 'BI-GPG-KEY.public'
+
+    yum_repo_url = node['hadoop']['yum_repo_url'] ? node['hadoop']['yum_repo_url'] : "#{yum_base_url}/#{os}/#{v}/#{m}/#{iop_release}/GA/#{iop_version}"
+    yum_repo_key_url = node['hadoop']['yum_repo_key_url'] ? node['hadoop']['yum_repo_key_url'] : "#{yum_repo_url}/#{key}"
+
+    yum_repository 'iop' do
+      name "IOP-#{iop_release}"
+      description "IBM Open Platform Version - IOP-#{iop_release}"
+      url yum_repo_url
+      gpgkey yum_repo_key_url
+      action :add
+    end
+    yum_repository 'iop-utils' do
+      name "IOP-UTILS-#{iop_utils_version}"
+      description "IBM Open Platform Utils Version - IOP-UTILS-#{iop_utils_version}"
+      url "#{yum_base_url}-UTILS/#{os}/#{v}/#{m}/#{iop_utils_version.to_f}"
+      gpgkey yum_repo_key_url
+      action :add
+    end
+  else
+    Chef::Application.fatal!("IBM Open Platform only supports RHEL-family! You're on #{node['platform_family']}!")
+  end
+
 else
   # COOK-25 fail fast
   Chef::Application.fatal!("Invalid node['hadoop']['distribution'] (#{node['hadoop']['distribution']}) specified!")

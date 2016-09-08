@@ -195,7 +195,7 @@ template "/etc/default/#{pkg}" do
   }
 end
 
-binary = hdp22? ? "#{hadoop_lib_dir}/zookeeper/bin/#{pkg}" : "/usr/bin/#{pkg}"
+binary = hdp22? || iop? ? "#{hadoop_lib_dir}/zookeeper/bin/#{pkg}" : "/usr/bin/#{pkg}"
 
 template "/etc/init.d/#{pkg}" do
   source 'hadoop-init.erb'

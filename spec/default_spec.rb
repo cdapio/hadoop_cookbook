@@ -216,4 +216,44 @@ describe 'hadoop::default' do
       expect(link).to link_to('/data/logs/hdfs')
     end
   end
+
+  context 'on IOP 4.1' do
+    let(:chef_run) do
+      ChefSpec::SoloRunner.new(platform: 'centos', version: 6.6) do |node|
+        node.automatic['domain'] = 'example.com'
+        node.override['hadoop']['distribution'] = 'iop'
+        node.override['hadoop']['distribution_version'] = '4.1.0.0'
+        stub_command(/update-alternatives --display /).and_return(false)
+        stub_command(/test -L /).and_return(false)
+      end.converge(described_recipe)
+    end
+
+    it 'installs hadoop-client package' do
+      expect(chef_run).to install_package('hadoop_4_1_0_0-client')
+    end
+
+    it 'installs hadoop-libhdfs package' do
+      expect(chef_run).to install_package('hadoop_4_1_0_0-libhdfs')
+    end
+  end
+
+  context 'on CDH 5.6' do
+    let(:chef_run) do
+      ChefSpec::SoloRunner.new(platform: 'centos', version: 6.6) do |node|
+        node.automatic['domain'] = 'example.com'
+        node.override['hadoop']['distribution'] = 'cdh'
+        node.override['hadoop']['distribution_version'] = '5.6.0'
+        stub_command(/update-alternatives --display /).and_return(false)
+        stub_command(/test -L /).and_return(false)
+      end.converge(described_recipe)
+    end
+
+    it 'installs hadoop-client package' do
+      expect(chef_run).to install_package('hadoop-client')
+    end
+
+    it 'installs hadoop-libhdfs package' do
+      expect(chef_run).to install_package('hadoop-libhdfs')
+    end
+  end
 end
