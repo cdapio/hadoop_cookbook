@@ -293,8 +293,12 @@ end
 
 # Export hadoop environment variables
 template '/etc/profile.d/hadoop.sh' do
-  source 'hadoop-profile.sh.erb'
-  mode 0o755
+  source 'generic-env.sh.erb'
+  mode '0755'
   owner 'root'
   group 'root'
+  variables :options => {
+    'hadoop_conf_dir' => "/etc/hadoop/#{node['hadoop']['conf_dir']}",
+    'yarn_conf_dir' => "/etc/hadoop/#{node['hadoop']['conf_dir']}"
+  }
 end
