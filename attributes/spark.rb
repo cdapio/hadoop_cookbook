@@ -2,7 +2,7 @@
 # spark release
 default['spark']['release']['install']       = false
 default['spark']['release']['install_path']  = '/opt'
-default['spark']['release']['version'] = '1.1.0'
+default['spark']['release']['version'] = '1.6.0'
 default['spark']['release']['hadoop_version'] = 'hadoop2.6'
 
 # spark-env.sh
