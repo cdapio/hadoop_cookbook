@@ -161,3 +161,14 @@ execute 'update spark-conf alternatives' do
   command "update-alternatives --install /etc/spark/conf spark-conf /etc/spark/#{node['spark']['conf_dir']} 50"
   not_if "update-alternatives --display spark-conf | grep best | awk '{print $5}' | grep /etc/spark/#{node['spark']['conf_dir']}"
 end
+
+# Export spark environment variables
+my_vars = { :options => {'SPARK_CONF_DIR' => '/etc/spark/conf'} }
+
+template "/etc/profile.d/spark.sh" do
+  source 'generic-env.sh.erb'
+  mode 0755
+  owner 'root'
+  group 'root'
+  variables my_vars
+end
