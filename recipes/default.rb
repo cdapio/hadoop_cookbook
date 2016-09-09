@@ -292,9 +292,9 @@ execute 'update hadoop-conf alternatives' do
 end
 
 # Export hadoop environment variables
-template "/etc/profile.d/hadoop.sh" do
-  source "hadoop-profile.erb"
-  mode 0755
-  owner "root"
-  group "root"
+template '/etc/profile.d/hadoop.sh' do
+  source 'hadoop-profile.sh.erb'
+  mode 0o755
+  owner 'root'
+  group 'root'
 end
