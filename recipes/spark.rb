@@ -48,29 +48,10 @@ package fortran_libs do
 end
 
 unless node['spark']['release']['install'].to_s == 'false'
-
-  # Spark binary compatibility matrix
-  case node['hadoop']['distribution']
-  when 'cdh'
-    spark_release = if node['hadoop']['distribution_version'].to_i == 4
-                      'cdh4'
-                    elsif node['hadoop']['distribution_version'].to_f == 5.0 || node['hadoop']['distribution_version'].to_f == 5.1
-                      'hadoop2.3'
-                    else
-                      'hadoop2.4'
-                    end
-  when 'hdp'
-    spark_release = if node['hadoop']['distribution_version'] == '2' || node['hadoop']['distribution_version'].to_f == 2.1
-                      'hadoop2.4'
-                    else
-                      ### TODO: HDP 2.0 is Hadoop 2.2... does 2.3 work?
-                      'hadoop2.3'
-                    end
-  end
+  spark_release = node['spark']['release']['hadoop_version']
 
   remote_file "#{node['spark']['release']['install_path']}/spark-#{node['spark']['release']['version']}-bin-#{spark_release}.tgz" do
     source "http://d3kbcqa49mib13.cloudfront.net/spark-#{node['spark']['release']['version']}-bin-#{spark_release}.tgz"
-    checksum node['spark']['release']['checksum']
     not_if { ::File.exist?("#{node['spark']['release']['install_path']}/spark-#{node['spark']['release']['version']}-bin-#{spark_release}.tgz") }
     action :create_if_missing
   end
@@ -179,4 +160,13 @@ end
 execute 'update spark-conf alternatives' do
   command "update-alternatives --install /etc/spark/conf spark-conf /etc/spark/#{node['spark']['conf_dir']} 50"
   not_if "update-alternatives --display spark-conf | grep best | awk '{print $5}' | grep /etc/spark/#{node['spark']['conf_dir']}"
+end
+
+# Export spark environment variables
+template '/etc/profile.d/spark.sh' do
+  source 'generic-env.sh.erb'
+  mode '0755'
+  owner 'root'
+  group 'root'
+  variables :options => { 'spark_conf_dir' => "/etc/spark/#{node['spark']['conf_dir']}" }
 end
