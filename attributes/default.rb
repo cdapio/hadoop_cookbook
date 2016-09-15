@@ -23,6 +23,20 @@
 # Supported: cdh, hdp, bigtop, iop
 default['hadoop']['distribution'] = 'hdp'
 
+# Set defaults for version, based on distribution
+default['hadoop']['distribution_version'] =
+  if node['hadoop'].key?('distribution_version')
+    node['hadoop']['distribution_version']
+  elsif node['hadoop']['distribution'] == 'hdp'
+    '2.3.4.7'
+  elsif node['hadoop']['distribution'] == 'cdh'
+    '5.6.0'
+  elsif node['hadoop']['distribution'] == 'bigtop'
+    '1.0.0'
+  elsif node['hadoop']['distribution'] == 'iop'
+    '4.1.0.0'
+  end
+
 default['hadoop']['force_format'] = false
 
 # Default: conf.chef

@@ -23,20 +23,6 @@ key = 'RPM-GPG-KEY'
 # Ensure apt caches are updated and apt resources available
 include_recipe 'apt' if node['platform_family'] == 'debian'
 
-# Set defaults for version, based on distribution
-node.default['hadoop']['distribution_version'] =
-  if node['hadoop'].key?('distribution_version')
-    node['hadoop']['distribution_version']
-  elsif node['hadoop']['distribution'] == 'hdp'
-    '2.3.4.7'
-  elsif node['hadoop']['distribution'] == 'cdh'
-    '5.6.0'
-  elsif node['hadoop']['distribution'] == 'bigtop'
-    '1.0.0'
-  elsif node['hadoop']['distribution'] == 'iop'
-    '4.1.0.0'
-  end
-
 case node['hadoop']['distribution']
 when 'hdp'
   case node['hadoop']['distribution_version']
