@@ -14,7 +14,7 @@ This cookbook may work on earlier versions, but these are the minimal tested ver
 * Debian 6.0+
 * Ubuntu 12.04+
 
-This cookbook assumes that you have a working Java installation. It has been tested using version `1.21.2` of the `java` cookbook, using Oracle Java 6. If you plan on using Hive with a database other than the embedded Derby, you will need to provide it and set it up prior to starting Hive Metastore service.
+This cookbook assumes that you have a working Java installation. It has been tested using version `1.21.2` of the `java` cookbook, using Oracle JDK 7. If you plan on using Hive with a database other than the embedded Derby, you will need to provide it and set it up prior to starting Hive Metastore service.
 
 # Usage
 
@@ -153,8 +153,6 @@ rake metadata     # Create metadata.json from metadata.rb
 rake rubocop      # Ruby style guide linter
 rake share        # Share cookbook to community site
 ```
-
-This cookbook requires the `vagrant-omnibus` and `vagrant-berkshelf` Vagrant plugins to be installed.
 
 # License
 
