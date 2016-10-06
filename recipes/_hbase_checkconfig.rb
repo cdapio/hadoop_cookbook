@@ -43,23 +43,5 @@ if node['hbase'].key?('hbase_site') && node['hbase']['hbase_site'].key?('hbase.c
 end
 
 # If using JAAS, make sure it's configured fully
-if node['hbase'].key?('jaas')
-  %w(client server).each do |key|
-    next unless node['hbase']['jaas'].key?(key) && node['hbase']['jaas'][key].key?('usekeytab') &&
-                node['hbase']['jaas'][key]['usekeytab'].to_s == 'true'
-
-    next unless node['hbase']['jaas'][key]['keytab'].nil? || node['hbase']['jaas'][key]['principal'].nil?
-    Chef::Application.fatal!("You must set node['hbase']['jaas']['#{key}']['keytab'] and node['hbase']['jaas']['#{key}']['principal'] with node['hbase']['jaas'][key]['usekeytab']")
-  end
-end
-
-%w(client master).each do |type|
-  next unless node['hbase'].key?("#{type}_jaas")
-  %w(client server).each do |key| # These are JAAS keys, not files
-    next unless node['hbase']["#{type}_jaas"].key?(key) && node['hbase']["#{type}_jaas"][key].key?('usekeytab') &&
-                node['hbase']["#{type}_jaas"][key]['usekeytab'].to_s == 'true'
-
-    next unless node['hbase']["#{type}_jaas"][key]['keytab'].nil? || node['hbase']["#{type}_jaas"][key]['principal'].nil?
-    Chef::Application.fatal!("You must set node['hbase']['#{type}_jaas']['#{key}']['keytab'] and node['hbase']['#{type}_jaas']['#{key}']['principal'] with node['hbase']['#{type}_jaas'][key]['usekeytab']")
-  end
-end
+check_deprecated_jaas_config('hbase')
+check_jaas_config('hbase')

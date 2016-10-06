@@ -112,6 +112,40 @@ module Hadoop
         '/usr/lib'
       end
     end
+
+    #
+    # Check for deprecated JAAS configuration
+    #
+    def check_deprecated_jaas_config(service)
+      if node[service].key?('jaas')
+        %w(client server).each do |key|
+          next unless node[service]['jaas'].key?(key) &&
+                      node[service]['jaas'][key].key?('usekeytab') &&
+                      node[service]['jaas'][key]['usekeytab'].to_s == 'true'
+          next unless node[service]['jaas'][key]['keytab'].nil? ||
+                      node['hbase']['jaas'][key]['principal'].nil?
+          Chef::Application.fatal!("You must set node['#{service}']['jaas']['#{key}']['keytab'] and node['#{service}']['jaas']['#{key}']['principal'] with node['#{service}']['jaas'][key]['usekeytab']")
+        end
+        Chef::Log.warn("Using node['#{service}']['jaas'] is deprecated. Use node['#{service}']['client_jaas'] and node['#{service}']['master_jaas'], instead")
+      end
+    end
+
+    #
+    # Check for JAAS configuration
+    #
+    def check_jaas_config(service)
+      %w(client master).each do |type|
+        next unless node[service].key?("#{type}_jaas")
+        %w(client server).each do |key| # These are JAAS keys, not files
+          next unless node[service]["#{type}_jaas"].key?(key) &&
+                      node[service]["#{type}_jaas"][key].key?('usekeytab') &&
+                      node[service]["#{type}_jaas"][key]['usekeytab'].to_s == 'true'
+          next unless node[service]["#{type}_jaas"][key]['keytab'].nil? ||
+                      node[service]["#{type}_jaas"][key]['principal'].nil?
+          Chef::Application.fatal!("You must set node['#{service}']['#{type}_jaas']['#{key}']['keytab'] and node['#{service}']['#{type}_jaas']['#{key}']['principal'] with node['#{service}']['#{type}_jaas'][key]['usekeytab']")
+        end
+      end
+    end
   end
 end
 
