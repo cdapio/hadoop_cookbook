@@ -159,7 +159,7 @@ module Hadoop
         action :create
         variables(
           client: node[service]['jaas']['client'],
-          server: node[service]['jaas']['server'] if node[service]['jaas'].key?('server')
+          server: node[service]['jaas']['server'] || nil
         )
         only_if do
           node[service].key?('jaas') &&
@@ -188,7 +188,7 @@ module Hadoop
           action :create
           variables(
             client: node[service]["#{type}_jaas"]['client'],
-            server: node[service]["#{type}_jaas"]['server'] if node[service]["#{type}_jaas"],key?('server')
+            server: node[service]["#{type}_jaas"]['server'] || nil
           )
         end
       end
