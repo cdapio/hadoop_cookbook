@@ -149,7 +149,8 @@ module Hadoop
     # Write deprecated JAAS configuration
     #
     def write_deprecated_jaas_config(service)
-      return unless node[service]['jaas'].key?('client')
+      return unless node[service].key?('jaas') &&
+                    node[service]['jaas'].key?('client')
       conf_dir = "/etc/#{service}/#{node[service]['conf_dir']}"
       template "#{conf_dir}/jaas.conf" do
         source 'jaas.conf.erb'
