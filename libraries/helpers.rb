@@ -144,6 +144,27 @@ module Hadoop
         end
       end
     end
+
+    def write_jaas_config(service)
+      # Setup client_jaas.conf master_jaas.conf
+      %w(client master).each do |type|
+        next unless node[service].key?("#{type}_jaas") &&
+                    node[service]["#{type}_jaas"].key?('client')
+        conf_dir = "/etc/#{service}/#{node[service]['conf_dir']}"
+        template "#{conf_dir}/#{type}_jaas.conf" do
+          source 'jaas.conf.erb'
+          mode '0644'
+          owner service
+          group service
+          action :create
+          variables client: node[service]["#{type}_jaas"]['client']
+          only_if {
+            node[service].key?("#{type}_jaas") &&
+            node[service]["#{type}_jaas"].key?('client')
+          }
+        end
+      end # End client_jaas.conf master_jaas.conf
+    end
   end
 end
 
