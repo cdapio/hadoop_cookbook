@@ -125,7 +125,7 @@ module Hadoop
                     node['hbase']['jaas'][key]['principal'].nil?
         Chef::Application.fatal!("You must set node['#{service}']['jaas']['#{key}']['keytab'] and node['#{service}']['jaas']['#{key}']['principal'] with node['#{service}']['jaas'][key]['usekeytab']")
       end if node[service].key?('jaas')
-      Chef::Log.warn("Using node['#{service}']['jaas'] is deprecated. Use node['#{service}']['client_jaas'] and node['#{service}']['master_jaas'], instead")
+      Chef::Log.warn("Using node['#{service}']['jaas'] is deprecated. Use node['#{service}']['client_jaas'] and node['#{service}']['master_jaas'], instead") if node[service].key?('jaas')
     end
 
     #
