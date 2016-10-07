@@ -162,13 +162,6 @@ module Hadoop
           client: node[service]['jaas']['client'],
           server: node[service]['jaas']['server'] || nil
         )
-        only_if do
-          node[service].key?('jaas') &&
-            (
-              !node['storm']['jaas']['client'].empty? ||
-              !node['storm']['jaas']['server'].empty
-            )
-        end
       end
     end
 
