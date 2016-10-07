@@ -158,12 +158,8 @@ module Hadoop
           group service
           action :create
           variables client: node[service]["#{type}_jaas"]['client']
-          only_if {
-            node[service].key?("#{type}_jaas") &&
-            node[service]["#{type}_jaas"].key?('client')
-          }
         end
-      end # End client_jaas.conf master_jaas.conf
+      end
     end
   end
 end
