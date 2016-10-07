@@ -145,6 +145,35 @@ module Hadoop
       end
     end
 
+    #
+    # Write deprecated JAAS configuration
+    #
+    def write_deprecated_jaas_config(service)
+      return unless node[service]['jaas'].key?('client')
+      conf_dir = "/etc/#{service}/#{node[service]['conf_dir']}"
+      template "#{conf_dir}/jaas.conf" do
+        source 'jaas.conf.erb'
+        mode '0644'
+        owner 'root'
+        group 'root'
+        action :create
+        variables(
+          client: node[service]['jaas']['client'],
+          server: node[service]['jaas']['server'] if node[service]['jaas'].key?('server')
+        )
+        only_if do
+          node[service].key?('jaas') &&
+            (
+              !node['storm']['jaas']['client'].empty? ||
+              !node['storm']['jaas']['server'].empty
+            )
+        end
+      end
+    end
+
+    #
+    # Write JAAS configuration
+    #
     def write_jaas_config(service)
       # Setup client_jaas.conf master_jaas.conf
       %w(client master).each do |type|
@@ -157,7 +186,10 @@ module Hadoop
           owner service
           group service
           action :create
-          variables client: node[service]["#{type}_jaas"]['client']
+          variables(
+            client: node[service]["#{type}_jaas"]['client'],
+            server: node[service]["#{type}_jaas"]['server'] if node[service]["#{type}_jaas"],key?('server')
+          )
         end
       end
     end

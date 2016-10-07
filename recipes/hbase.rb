@@ -107,26 +107,7 @@ end # End hbase-env.sh
   end
 end # End hadoop-metrics.properties log4j.properties
 
-# Setup jaas.conf
-if node['hbase'].key?('jaas') && node['hbase']['jaas'].key?('client')
-  my_vars = {
-    # Only use client, for connecting to secure ZooKeeper
-    :client => node['hbase']['jaas']['client']
-  }
-
-  log 'Single JAAS config deprecated. See COOK-106'
-
-  template "#{hbase_conf_dir}/jaas.conf" do
-    source 'jaas.conf.erb'
-    mode '0644'
-    owner 'hbase'
-    group 'hbase'
-    action :create
-    variables my_vars
-    only_if { node['hbase'].key?('jaas') && node['hbase']['jaas'].key?('client') }
-  end
-end # End jaas.conf
-
+write_deprecated_jaas_config('hbase')
 write_jaas_config('hbase')
 
 # limits.d settings
