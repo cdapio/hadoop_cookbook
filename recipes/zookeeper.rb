@@ -17,7 +17,7 @@
 # limitations under the License.
 #
 
-include_recipe 'hadoop::repo'
+include_recipe 'hadoop::default'
 include_recipe 'hadoop::_zookeeper_checkconfig'
 
 package hadoop_package('zookeeper') do
