@@ -25,23 +25,7 @@ pkg = 'hive-server2'
 
 hive_conf_dir = "/etc/hive/#{node['hive']['conf_dir']}"
 
-# Setup jaas.conf
-if node['hive'].key?('jaas')
-  my_vars = {
-    # Only use client, for connecting to secure ZooKeeper
-    :client => node['hive']['jaas']['client']
-  }
-
-  template "#{hive_conf_dir}/jaas.conf" do
-    source 'jaas.conf.erb'
-    mode '0644'
-    owner 'hive'
-    group 'hive'
-    action :create
-    variables my_vars
-  end
-end # End jaas.conf
-
+write_deprecated_jaas_config('hive')
 write_jaas_config('hive')
 
 hive_log_dir =
