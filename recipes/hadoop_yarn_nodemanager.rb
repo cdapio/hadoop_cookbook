@@ -44,14 +44,14 @@ end
 yarn_log_dir =
   if node['hadoop'].key?('yarn_env') && node['hadoop']['yarn_env'].key?('yarn_log_dir')
     node['hadoop']['yarn_env']['yarn_log_dir']
-  elsif hdp22?
+  elsif hdp22? || iop?
     '/var/log/hadoop/yarn'
   else
     '/var/log/hadoop-yarn'
   end
 
 yarn_pid_dir =
-  if hdp22?
+  if hdp22? || iop?
     '/var/run/hadoop/yarn'
   else
     '/var/run/hadoop-yarn'

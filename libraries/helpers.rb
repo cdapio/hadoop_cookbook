@@ -26,16 +26,12 @@ module Hadoop
       case node['hadoop']['distribution_version']
       when '2.2.0.0'
         '2.2.0.0-2041'
-      when '2.2.1.0'
-        '2.2.1.0-2340'
       when '2.2.4.2'
         '2.2.4.2-2'
       when '2.2.4.4'
         '2.2.4.4-16'
       when '2.2.6.0'
         '2.2.6.0-2800'
-      when '2.2.6.3'
-        '2.2.6.3-1'
       when '2.2.8.0'
         '2.2.8.0-3150'
       when '2.2.9.0'
@@ -48,10 +44,16 @@ module Hadoop
         '2.3.4.0-3485'
       when '2.3.4.7'
         '2.3.4.7-4'
+      when '2.3.6.0'
+        '2.3.6.0-3796'
       when '2.4.0.0'
         '2.4.0.0-169'
       when '2.4.2.0'
         '2.4.2.0-258'
+      when '2.4.3.0'
+        '2.4.3.0-227'
+      when '2.5.0.0'
+        '2.5.0.0-1245'
       else
         node['hadoop']['distribution_version']
       end
@@ -71,12 +73,23 @@ module Hadoop
     # ODP name: hadoop_2_4_0_0_169-mapreduce-historyserver
     #
     def hadoop_package(name)
-      return name unless hdp22?
+      return name unless hdp22? || iop?
       return name if node['platform_family'] == 'debian'
       fw = name.split('-').first
-      pv = hdp_version.tr('.', '_').tr('-', '_')
+      pv =
+        if hdp22?
+          hdp_version.tr('.', '_').tr('-', '_')
+        else
+          node['hadoop']['distribution_version'].tr('.', '_')
+        end
       nn = "#{fw}_#{pv}"
       name.gsub(fw, nn)
+    end
+
+    # Return true if IOP
+    #
+    def iop?
+      node['hadoop']['distribution'] == 'iop'
     end
 
     #
@@ -95,6 +108,8 @@ module Hadoop
     def hadoop_lib_dir
       if hdp22?
         "/usr/hdp/#{hdp_version}"
+      elsif iop?
+        "/usr/iop/#{node['hadoop']['distribution_version']}"
       else
         '/usr/lib'
       end

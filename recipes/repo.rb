@@ -33,6 +33,8 @@ node.default['hadoop']['distribution_version'] =
     '5.6.0'
   elsif node['hadoop']['distribution'] == 'bigtop'
     '1.0.0'
+  elsif node['hadoop']['distribution'] == 'iop'
+    '4.1.0.0'
   end
 
 case node['hadoop']['distribution']
@@ -57,8 +59,8 @@ when 'hdp'
     hdp_update_version = '2.1.15.0'
     Chef::Log.warn("Short versions for node['hadoop']['distribution_version'] are deprecated! Please use full version!")
     node.override['hadoop']['distribution_version'] = hdp_update_version
-  # 2.3 and 2.4 do not have their own base version
-  when '2.2.1.0', '2.2.4.2', '2.2.4.4', '2.2.6.0', '2.2.6.3', '2.2.8.0', '2.2.9.0', '2.3.0.0', '2.3.2.0', '2.3.4.0', '2.3.4.7', '2.4.0.0', '2.4.2.0'
+  # 2.3, 2.4, and 2.5 do not have their own base version
+  when '2.2.1.0', '2.2.4.2', '2.2.4.4', '2.2.6.0', '2.2.6.3', '2.2.8.0', '2.2.9.0', '2.3.0.0', '2.3.2.0', '2.3.4.0', '2.3.4.7', '2.4.0.0', '2.4.2.0', '2.4.3.0', '2.5.0.0'
     hdp_version = '2.2.0.0'
     hdp_update_version = node['hadoop']['distribution_version']
   when '2.2'
@@ -71,9 +73,14 @@ when 'hdp'
     hdp_update_version = '2.3.4.7'
     Chef::Log.warn("Short versions for node['hadoop']['distribution_version'] are deprecated! Please use full version!")
     node.override['hadoop']['distribution_version'] = hdp_update_version
-  when '2.4', '2'
+  when '2.4'
     hdp_version = '2.2.0.0'
     hdp_update_version = '2.4.2.0'
+    Chef::Log.warn("Short versions for node['hadoop']['distribution_version'] are deprecated! Please use full version!")
+    node.override['hadoop']['distribution_version'] = hdp_update_version
+  when '2.5', '2'
+    hdp_version = '2.2.0.0'
+    hdp_update_version = '2.5.0.0'
     Chef::Log.warn("Short versions for node['hadoop']['distribution_version'] are deprecated! Please use full version!")
     node.override['hadoop']['distribution_version'] = hdp_update_version
   else
@@ -85,7 +92,7 @@ when 'hdp'
   case node['platform_family']
   when 'rhel'
     yum_base_url = 'http://public-repo-1.hortonworks.com/HDP'
-    os = if major_platform_version == 5
+    os = if major_platform_version == 5 || hdp_version.to_f >= 2.3
            "centos#{major_platform_version}"
          else
            'centos6'
@@ -144,7 +151,7 @@ when 'hdp'
       case hdp_update_version
       when '2.2.0.0'
         "2.x/GA/#{hdp_update_version}"
-      when '2.1.10.0', '2.1.15.0', '2.2.1.0', '2.2.4.2', '2.2.6.0', '2.2.6.3', '2.2.8.0', '2.2.9.0', '2.3.0.0', '2.3.2.0', '2.3.4.0', '2.3.4.7', '2.4.0.0', '2.4.2.0'
+      when '2.1.10.0', '2.1.15.0', '2.2.1.0', '2.2.4.2', '2.2.6.0', '2.2.6.3', '2.2.8.0', '2.2.9.0', '2.3.0.0', '2.3.2.0', '2.3.4.0', '2.3.4.7', '2.4.0.0', '2.4.2.0', '2.4.3.0', '2.5.0.0'
         "2.x/updates/#{hdp_update_version}"
       else
         hdp_update_version
@@ -303,6 +310,42 @@ when 'bigtop'
       pin_priority '700'
     end
   end
+
+when 'iop'
+  iop_version = node['hadoop']['distribution_version']
+  iop_release = "#{node['hadoop']['distribution_version'].to_f}.x"
+  iop_utils_version = '1.2.0.0'
+
+  case node['platform_family']
+  when 'rhel'
+    # https://ibm-open-platform.ibm.com/repos/IOP/rhel/6/x86_64/4.1.x/GA/4.1.0.0/
+    yum_base_url = 'https://ibm-open-platform.ibm.com/repos/IOP'
+    os = 'rhel'
+    v = major_platform_version
+    m = node['kernel']['machine']
+    key = 'BI-GPG-KEY.public'
+
+    yum_repo_url = node['hadoop']['yum_repo_url'] ? node['hadoop']['yum_repo_url'] : "#{yum_base_url}/#{os}/#{v}/#{m}/#{iop_release}/GA/#{iop_version}"
+    yum_repo_key_url = node['hadoop']['yum_repo_key_url'] ? node['hadoop']['yum_repo_key_url'] : "#{yum_repo_url}/#{key}"
+
+    yum_repository 'iop' do
+      name "IOP-#{iop_release}"
+      description "IBM Open Platform Version - IOP-#{iop_release}"
+      url yum_repo_url
+      gpgkey yum_repo_key_url
+      action :add
+    end
+    yum_repository 'iop-utils' do
+      name "IOP-UTILS-#{iop_utils_version}"
+      description "IBM Open Platform Utils Version - IOP-UTILS-#{iop_utils_version}"
+      url "#{yum_base_url}-UTILS/#{os}/#{v}/#{m}/#{iop_utils_version.to_f}"
+      gpgkey yum_repo_key_url
+      action :add
+    end
+  else
+    Chef::Application.fatal!("IBM Open Platform only supports RHEL-family! You're on #{node['platform_family']}!")
+  end
+
 else
   # COOK-25 fail fast
   Chef::Application.fatal!("Invalid node['hadoop']['distribution'] (#{node['hadoop']['distribution']}) specified!")

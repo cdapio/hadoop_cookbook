@@ -1,6 +1,20 @@
 hadoop CHANGELOG
 ===============
 
+v2.6.0 (Sep 9, 2016)
+--------------------
+- Support for IBM Open Platform ( Issue: #226 )
+- Support IOP 4.2.0.0 (and others) ( Issue: #278 )
+- HDP: Remove 2.2.1.0 and 2.2.6.3 and add 2.3.6.0 ( Issue: #279 )
+- Rename LICENSE to LICENCE.txt ( Issue: #280 )
+
+v2.5.0 (Sep 1, 2016)
+--------------------
+- Remove `policy_rcd` and use `dpkg_autostart` cookbook ( Issue: #272 )
+- Update testing framework ( Issue: #273 )
+- Use major_platform_version for centos5 or HDP >= 2.3 ( Issue: #275 )
+- Support HDP 2.5 ( Issue: #276 )
+
 v2.4.1 (Aug 1, 2016)
 --------------------
 - Support for HDP 2.4.2.0 ( Issue: #270 )
