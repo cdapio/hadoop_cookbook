@@ -38,9 +38,9 @@ directory hadoop_kms_conf_dir do
 end
 
 # Hadoop KMS doesn't read Hadoop's config, but we may need core-site, so we merge hadoop['core_site'], allowing overrides
-temp_merge1 = node['hadoop']['core_site'] || {}
-temp_merge2 = node['hadoop_kms']['core_site'] || {}
-node.default['hadoop_kms']['core_site'] = temp_merge1.merge(temp_merge2)
+merge1 = node['hadoop']['core_site'] || {}
+merge2 = node['hadoop_kms']['core_site'] || {}
+node.default['hadoop_kms']['core_site'] = merge1.merge(merge2)
 
 # Setup core-site.xml kms-acls.xml kms-site.xml
 %w(core_site kms_acls kms_site).each do |sitefile|
