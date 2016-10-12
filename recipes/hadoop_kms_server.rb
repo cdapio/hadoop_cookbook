@@ -21,7 +21,7 @@ include_recipe 'hadoop::hadoop_kms'
 pkg = 'hadoop-kms-server'
 
 hadoop_kms_log_dir =
-  if node['hadoop_kms'].key?('hadoop_kms_env') && node['hadoop_kms']['kms_env'].key?('kms_log')
+  if node['hadoop_kms'].key?('kms_env') && node['hadoop_kms']['kms_env'].key?('kms_log')
     node['hadoop_kms']['kms_env']['kms_log']
   else
     '/var/log/hadoop-kms'

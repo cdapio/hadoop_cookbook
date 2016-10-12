@@ -56,7 +56,7 @@ node.default['hadoop_kms']['core_site'] = temp_merge1.merge(temp_merge2)
 end # End core-site.xml kms-acls.xml kms-site.xml
 
 hadoop_kms_log_dir =
-  if node['hadoop_kms'].key?('hadoop_kms_env') && node['hadoop_kms']['kms_env'].key?('kms_log')
+  if node['hadoop_kms'].key?('kms_env') && node['hadoop_kms']['kms_env'].key?('kms_log')
     node['hadoop_kms']['kms_env']['kms_log']
   else
     '/var/log/hadoop-kms'
