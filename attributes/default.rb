@@ -28,6 +28,7 @@ default['hadoop']['force_format'] = false
 # Default: conf.chef
 default['hadoop']['conf_dir'] = 'conf.chef'
 default['flume']['conf_dir'] = node['hadoop']['conf_dir']
+default['hadoop_kms']['conf_dir'] = node['hadoop']['conf_dir']
 default['hbase']['conf_dir'] = node['hadoop']['conf_dir']
 default['hive']['conf_dir'] = node['hadoop']['conf_dir']
 default['oozie']['conf_dir'] = node['hadoop']['conf_dir']
