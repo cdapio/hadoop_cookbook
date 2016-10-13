@@ -3,6 +3,7 @@
 # Recipe:: storm_supervisor
 #
 # Copyright © 2015 VAHNA
+# Copyright © 2015-2016 Cask Data, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -16,7 +17,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-require 'yaml'
 
 include_recipe 'hadoop::storm'
 
@@ -57,17 +57,6 @@ template "/etc/init.d/#{pkg}" do
     'logfile' => "${STORM_LOG_DIR}/#{pkg}.log"
   }
 end
-
-# Start storm-env.sh
-template "#{storm_conf_dir}/#{pkg}-env.sh" do
-  source 'generic-env.sh.erb'
-  mode '0755'
-  owner 'root'
-  group 'root'
-  action :create
-  variables :options => node['storm']['storm_env']
-  only_if { node['storm'].key?('storm_env') && !node['storm']['storm_env'].empty? }
-end # End storm-env.sh
 
 # Create /etc/default configuration
 template "/etc/default/#{pkg}" do

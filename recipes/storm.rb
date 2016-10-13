@@ -94,6 +94,17 @@ unless storm_conf_dir == "#{node['storm']['storm_env']['storm_home']}/conf"
   end
 end
 
+# Start storm-env.sh
+template "#{storm_conf_dir}/#{pkg}-env.sh" do
+  source 'generic-env.sh.erb'
+  mode '0755'
+  owner 'root'
+  group 'root'
+  action :create
+  variables :options => node['storm']['storm_env']
+  only_if { node['storm'].key?('storm_env') && !node['storm']['storm_env'].empty? }
+end # End storm-env.sh
+
 template "#{storm_conf_dir}/storm.yaml" do
   source 'storm.yaml.erb'
   mode '0644'
