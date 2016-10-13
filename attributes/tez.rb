@@ -1,51 +1,29 @@
-default['tez']['tez_env']['tez_conf_dir'] = "/etc/tez/#{node['tez']['conf_dir']}"
+#
+# Cookbook Name:: hadoop
+# Attribute:: tez
+#
+# Copyright © 2013-2016 Cask Data, Inc.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#    http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
 
-hdp_version =
-  case node['hadoop']['distribution_version']
-  when '2.2.0.0'
-    '2.2.0.0-2041'
-  when '2.2.1.0'
-    '2.2.1.0-2340'
-  when '2.2.4.2'
-    '2.2.4.2-2'
-  when '2.2.4.4'
-    '2.2.4.4-16'
-  when '2.2.6.0'
-    '2.2.6.0-2800'
-  when '2.2.6.3'
-    '2.2.6.3-1'
-  when '2.2.8.0'
-    '2.2.8.0-3150'
-  when '2.2.9.0'
-    '2.2.9.0-3393'
-  when '2.3.0.0'
-    '2.3.0.0-2557'
-  when '2.3.2.0'
-    '2.3.2.0-2950'
-  when '2.3.4.0'
-    '2.3.4.0-3485'
-  when '2.3.4.7'
-    '2.3.4.7-4'
-  when '2.3.6.0'
-    '2.3.6.0-3796'
-  when '2.4.0.0'
-    '2.4.0.0-169'
-  when '2.4.2.0'
-    '2.4.2.0-258'
-  when '2.4.3.0'
-    '2.4.3.0-227'
-  when '2.5.0.0'
-    '2.5.0.0-1245'
-  else
-    node['hadoop']['distribution_version']
-  end
+default['tez']['tez_env']['tez_conf_dir'] = "/etc/tez/#{node['tez']['conf_dir']}"
+default['tez']['tez_env']['tez_jars'] = '/usr/lib/tez/*:/usr/lib/tez/lib/*'
+default['tez']['tez_site']['tez.lib.uris'] = '${fs.defaultFS}/apps/tez/,${fs.defaultFS}/apps/tez/lib/'
 
 if node['hadoop']['distribution'] == 'hdp' && node['hadoop']['distribution_version'].to_f >= 2.2
   default['tez']['tez_env']['tez_jars'] = '/usr/hdp/current/tez-client/*:/usr/hdp/current/tez-client/lib/*'
-  default['tez']['tez_site']['tez.lib.uris'] = "${fs.default.name}/hdp/apps/#{hdp_version}/tez/tez.tar.gz"
-else
-  default['tez']['tez_env']['tez_jars'] = '/usr/lib/tez/*:/usr/lib/tez/lib/*'
-  default['tez']['tez_site']['tez.lib.uris'] = '${fs.default.name}/apps/tez/,${fs.default.name}/apps/tez/lib/'
+  default['tez']['tez_site']['tez.lib.uris'] = '${fs.defaultFS}/hdp/apps/${hdp.version}/tez/tez.tar.gz'
 end
 
 default['hadoop']['hadoop_env']['hadoop_classpath'] =
