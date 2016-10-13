@@ -7,7 +7,7 @@ describe 'hadoop::zookeeper' do
         node.automatic['domain'] = 'example.com'
         node.default['hadoop']['distribution'] = 'hdp'
         node.default['hadoop']['distribution_version'] = '2.3.4.7'
-        node.default['zookeeper']['jaas']['client']['foo'] = 'bar'
+        node.default['zookeeper']['master_jaas']['client']['foo'] = 'bar'
         stub_command(/update-alternatives --display /).and_return(false)
       end.converge(described_recipe)
     end
@@ -16,8 +16,8 @@ describe 'hadoop::zookeeper' do
       expect(chef_run).to install_package('zookeeper_2_3_4_7_4')
     end
 
-    it 'creates /etc/zookeeper/conf.chef/jaas.conf from template' do
-      expect(chef_run).to create_template('/etc/zookeeper/conf.chef/jaas.conf')
+    it 'creates /etc/zookeeper/conf.chef/master_jaas.conf from template' do
+      expect(chef_run).to create_template('/etc/zookeeper/conf.chef/master_jaas.conf')
     end
   end
 

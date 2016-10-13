@@ -159,42 +159,8 @@ template "#{storm_conf_dir}/storm_env.ini" do
   only_if { node['storm'].key?('storm_env') && !node['storm']['storm_env'].empty? }
 end # End storm_env.ini
 
-# Setup jaas.conf
-my_vars = {}
-if node['storm'].key?('jaas')
-  my_vars[:client] = node['storm']['jaas']['client']
-  my_vars[:server] = node['storm']['jaas']['server']
-end
-template "#{storm_conf_dir}/jaas.conf" do
-  source 'jaas.conf.erb'
-  mode '0644'
-  owner 'root'
-  group 'root'
-  action :create
-  variables my_vars
-  only_if do
-    node['storm'].key?('jaas') && (!node['storm']['jaas']['client'].empty? || !node['storm']['jaas']['server'].empty)
-  end
-end # End jaas.conf
-
-# Setup client_jaas.conf master_jaas.conf
-%w(client master).each do |type|
-  next unless node['storm'].key?("#{type}_jaas") && node['storm']["#{type}_jaas"].key?('client')
-  my_vars = {
-    # Only use client, for connecting to secure ZooKeeper
-    :client => node['storm']["#{type}_jaas"]['client']
-  }
-
-  template "#{storm_conf_dir}/#{type}_jaas.conf" do
-    source 'jaas.conf.erb'
-    mode '0644'
-    owner 'storm'
-    group 'storm'
-    action :create
-    variables my_vars
-    only_if { node['storm'].key?("#{type}_jaas") && node['storm']["#{type}_jaas"].key?('client') }
-  end
-end # End client_jaas.conf master_jaas.conf
+write_deprecated_jaas_config('storm')
+write_jaas_config('storm')
 
 # Update alternatives to point to our configuration
 execute 'update storm-conf alternatives' do

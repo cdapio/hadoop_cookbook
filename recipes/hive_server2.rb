@@ -25,41 +25,8 @@ pkg = 'hive-server2'
 
 hive_conf_dir = "/etc/hive/#{node['hive']['conf_dir']}"
 
-# Setup jaas.conf
-if node['hive'].key?('jaas')
-  my_vars = {
-    # Only use client, for connecting to secure ZooKeeper
-    :client => node['hive']['jaas']['client']
-  }
-
-  template "#{hive_conf_dir}/jaas.conf" do
-    source 'jaas.conf.erb'
-    mode '0644'
-    owner 'hive'
-    group 'hive'
-    action :create
-    variables my_vars
-  end
-end # End jaas.conf
-
-# Setup client_jaas.conf master_jaas.conf
-%w(client master).each do |type|
-  next unless node['hive'].key?("#{type}_jaas") && node['hive']["#{type}_jaas"].key?('client')
-  my_vars = {
-    # Only use client, for connecting to secure ZooKeeper
-    :client => node['hive']["#{type}_jaas"]['client']
-  }
-
-  template "#{hive_conf_dir}/#{type}_jaas.conf" do
-    source 'jaas.conf.erb'
-    mode '0644'
-    owner 'hive'
-    group 'hive'
-    action :create
-    variables my_vars
-    only_if { node['hive'].key?("#{type}_jaas") && node['hive']["#{type}_jaas"].key?('client') }
-  end
-end # End client_jaas.conf master_jaas.conf
+write_deprecated_jaas_config('hive')
+write_jaas_config('hive')
 
 hive_log_dir =
   if node['hive'].key?('hive_env') && node['hive']['hive_env'].key?('hive_log_dir')
