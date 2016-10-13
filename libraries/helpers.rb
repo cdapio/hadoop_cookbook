@@ -116,6 +116,19 @@ module Hadoop
     end
 
     #
+    # Support deprecated Hadoop properties
+    #
+    def hadoop_deprecated_config(service, key, dprop, nprop, default = nil)
+      if node.key?(service) && node[service].key?(key) && node[service][key].key?(nprop)
+        node[service][key][nprop]
+      elsif node.key?(service) && node[service].key?(key) && node[service][key].key?(dprop)
+        node[service][key][dprop]
+      else
+        default
+      end
+    end
+
+    #
     # Check for deprecated JAAS configuration
     #
     def check_deprecated_jaas_config(service)
