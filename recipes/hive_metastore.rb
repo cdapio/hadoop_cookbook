@@ -65,7 +65,7 @@ unless scratch_dir == '/tmp/hive-${user.name}'
     timeout 300
     user 'hdfs'
     group 'hdfs'
-    not_if "hdfs dfs -test -d #{dfs}/#{scratch_dir}", :user => 'hdfs'
+    not_if "hdfs dfs -test -d #{dfs}/#{scratch_dir}", user: 'hdfs'
     action :nothing
   end
 end
@@ -75,7 +75,7 @@ execute 'hive-hdfs-warehousedir' do
   timeout 300
   user 'hdfs'
   group 'hdfs'
-  not_if "hdfs dfs -test -d #{dfs}/#{warehouse_dir}", :user => 'hdfs'
+  not_if "hdfs dfs -test -d #{dfs}/#{warehouse_dir}", user: 'hdfs'
   action :nothing
 end
 
@@ -93,7 +93,7 @@ template "/etc/default/#{pkg}" do
   owner 'root'
   group 'root'
   action :create
-  variables :options => {
+  variables options: {
     'hive_home' => "#{hadoop_lib_dir}/hive",
     'hive_pid_dir' => '/var/run/hive',
     'hive_log_dir' => hive_log_dir,
@@ -108,7 +108,7 @@ template "/etc/init.d/#{pkg}" do
   owner 'root'
   group 'root'
   action :create
-  variables :options => {
+  variables options: {
     'desc' => 'Hive MetaStore',
     'name' => pkg,
     'process' => 'java',
@@ -124,6 +124,6 @@ end
 
 service pkg do
   status_command "service #{pkg} status"
-  supports [:restart => true, :reload => false, :status => true]
+  supports [restart: true, reload: false, status: true]
   action :nothing
 end

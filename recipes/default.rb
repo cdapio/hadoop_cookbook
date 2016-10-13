@@ -54,7 +54,7 @@ end
     owner 'root'
     group 'root'
     action :create
-    variables :options => node['hadoop'][sitefile]
+    variables options: node['hadoop'][sitefile]
     only_if { node['hadoop'].key?(sitefile) && !node['hadoop'][sitefile].empty? }
   end
 end # End capacity-scheduler.xml core-site.xml hadoop-policy.xml hdfs-site.xml mapred-site.xml yarn-site.xml
@@ -160,7 +160,7 @@ end # End fair-scheduler.xml
     owner 'root'
     group 'root'
     action :create
-    variables :options => node['hadoop'][envfile]
+    variables options: node['hadoop'][envfile]
     only_if { node['hadoop'].key?(envfile) && !node['hadoop'][envfile].empty? }
   end
 end # End hadoop-env.sh yarn-env.sh
@@ -173,7 +173,7 @@ end # End hadoop-env.sh yarn-env.sh
     owner 'root'
     group 'root'
     action :create
-    variables :properties => node['hadoop'][propfile]
+    variables properties: node['hadoop'][propfile]
     only_if { node['hadoop'].key?(propfile) && !node['hadoop'][propfile].empty? }
   end
 end # End hadoop-metrics.properties hadoop-metrics2.properties log4j.properties
@@ -185,7 +185,7 @@ template "#{hadoop_conf_dir}/container-executor.cfg" do
   owner 'root'
   group 'root'
   action :create
-  variables :properties => node['hadoop']['container_executor']
+  variables properties: node['hadoop']['container_executor']
   only_if { node['hadoop'].key?('container_executor') && !node['hadoop']['container_executor'].empty? }
 end # End container-executor.cfg
 
@@ -245,7 +245,7 @@ template '/etc/default/hadoop' do
   owner 'root'
   group 'root'
   action :create
-  variables :options => {
+  variables options: {
     'hadoop_home_warn_suppress' => true,
     'hadoop_home' => "#{hadoop_lib_dir}/hadoop",
     'hadoop_prefix' => "#{hadoop_lib_dir}/hadoop",
@@ -297,7 +297,7 @@ template '/etc/profile.d/hadoop.sh' do
   mode '0755'
   owner 'root'
   group 'root'
-  variables :options => {
+  variables options: {
     'hadoop_conf_dir' => "/etc/hadoop/#{node['hadoop']['conf_dir']}",
     'yarn_conf_dir' => "/etc/hadoop/#{node['hadoop']['conf_dir']}"
   }

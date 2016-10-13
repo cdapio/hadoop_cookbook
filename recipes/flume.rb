@@ -41,7 +41,7 @@ directory flume_conf_dir do
 end
 
 # Setup flume.conf
-my_vars = { :properties => node['flume']['flume_conf'] }
+my_vars = { properties: node['flume']['flume_conf'] }
 
 template "#{flume_conf_dir}/flume.conf" do
   source 'generic.properties.erb'

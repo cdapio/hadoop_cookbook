@@ -80,7 +80,7 @@ template "#{oozie_conf_dir}/oozie-site.xml" do
   owner 'oozie'
   group 'oozie'
   action :create
-  variables :options => node['oozie']['oozie_site']
+  variables options: node['oozie']['oozie_site']
   only_if { node['oozie'].key?('oozie_site') && !node['oozie']['oozie_site'].empty? }
 end # End oozie-site.xml
 
@@ -120,13 +120,13 @@ template "#{oozie_conf_dir}/oozie-env.sh" do
   owner 'root'
   group 'root'
   action :create
-  variables :options => node['oozie']['oozie_env']
+  variables options: node['oozie']['oozie_env']
   only_if { node['oozie'].key?('oozie_env') && !node['oozie']['oozie_env'].empty? }
 end # End oozie-env.sh
 
 service 'oozie' do
   status_command 'service oozie status'
-  supports [:restart => true, :reload => false, :status => true]
+  supports [restart: true, reload: false, status: true]
   action :nothing
 end
 

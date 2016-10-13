@@ -49,7 +49,7 @@ template "/etc/default/#{pkg}" do
   owner 'root'
   group 'root'
   action :create
-  variables :options => {
+  variables options: {
     'yarn_pid_dir' => yarn_pid_dir,
     'yarn_log_dir' => yarn_log_dir,
     'yarn_ident_string' => 'yarn',
@@ -63,7 +63,7 @@ template "/etc/init.d/#{pkg}" do
   owner 'root'
   group 'root'
   action :create
-  variables :options => {
+  variables options: {
     'desc' => 'Hadoop YARN Proxy Server',
     'name' => pkg,
     'process' => 'java',
@@ -79,6 +79,6 @@ end
 
 service pkg do
   status_command "service #{pkg} status"
-  supports [:restart => true, :reload => false, :status => true]
+  supports [restart: true, reload: false, status: true]
   action :nothing
 end

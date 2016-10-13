@@ -34,7 +34,7 @@ template "/etc/default/#{pkg}" do
   owner 'root'
   group 'root'
   action :create
-  variables :options => {
+  variables options: {
     'kms_user' => 'kms',
     'kms_config' => '/etc/hadoop-kms/conf',
     'kms_log' => hadoop_kms_log_dir,
@@ -52,7 +52,7 @@ template "/etc/init.d/#{pkg}" do
   owner 'root'
   group 'root'
   action :create
-  variables :options => {
+  variables options: {
     'desc' => 'Hadoop Key Management Service Server',
     'name' => pkg,
     'process' => 'java',
@@ -68,6 +68,6 @@ end
 
 service pkg do
   status_command "service #{pkg} status"
-  supports [:restart => true, :reload => false, :status => true]
+  supports [restart: true, reload: false, status: true]
   action :nothing
 end

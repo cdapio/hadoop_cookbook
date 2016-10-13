@@ -99,7 +99,7 @@ template "#{storm_conf_dir}/storm.yaml" do
   mode '0644'
   owner 'root'
   group 'root'
-  variables :storm_conf => node['storm']['storm_conf']
+  variables storm_conf: node['storm']['storm_conf']
   action :create_if_missing
 end
 
@@ -155,7 +155,7 @@ template "#{storm_conf_dir}/storm_env.ini" do
   owner 'root'
   group 'root'
   action :create
-  variables :options => node['storm']['storm_env']
+  variables options: node['storm']['storm_env']
   only_if { node['storm'].key?('storm_env') && !node['storm']['storm_env'].empty? }
 end # End storm_env.ini
 

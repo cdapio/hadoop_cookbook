@@ -49,7 +49,7 @@ execute 'yarn-remote-app-log-dir' do
   timeout 300
   user 'hdfs'
   group 'hdfs'
-  not_if "hdfs dfs -test -d #{remote_log_dir}", :user => 'hdfs'
+  not_if "hdfs dfs -test -d #{remote_log_dir}", user: 'hdfs'
   action :nothing
 end
 
@@ -83,7 +83,7 @@ execute 'hdp22-mapreduce-tarball' do
   timeout 300
   user 'hdfs'
   group 'hdfs'
-  not_if "hdfs dfs -test -d #{dfs}/hdp/apps/#{hdp_version}/mapreduce", :user => 'hdfs'
+  not_if "hdfs dfs -test -d #{dfs}/hdp/apps/#{hdp_version}/mapreduce", user: 'hdfs'
   only_if { hdp22? }
   action :nothing
 end
@@ -100,7 +100,7 @@ execute 'iop-mapreduce-tarball' do
   timeout 300
   user 'hdfs'
   group 'hdfs'
-  not_if "hdfs dfs -test -d #{dfs}/iop/apps/#{iop_version}/mapreduce", :user => 'hdfs'
+  not_if "hdfs dfs -test -d #{dfs}/iop/apps/#{iop_version}/mapreduce", user: 'hdfs'
   only_if { iop? }
   action :nothing
 end
@@ -128,7 +128,7 @@ template "/etc/default/#{pkg}" do
   owner 'root'
   group 'root'
   action :create
-  variables :options => {
+  variables options: {
     'yarn_pid_dir' => yarn_pid_dir,
     'yarn_log_dir' => yarn_log_dir,
     'yarn_ident_string' => 'yarn',
@@ -142,7 +142,7 @@ template "/etc/init.d/#{pkg}" do
   owner 'root'
   group 'root'
   action :create
-  variables :options => {
+  variables options: {
     'desc' => 'Hadoop YARN ResourceManager',
     'name' => pkg,
     'process' => 'java',
@@ -158,6 +158,6 @@ end
 
 service pkg do
   status_command "service #{pkg} status"
-  supports [:restart => true, :reload => false, :status => true]
+  supports [restart: true, reload: false, status: true]
   action :nothing
 end

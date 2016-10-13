@@ -36,7 +36,7 @@ template "/etc/default/#{pkg}" do
   owner 'root'
   group 'root'
   action :create
-  variables :options => {
+  variables options: {
     'hbase_home' => "#{hadoop_lib_dir}/hbase",
     'hbase_pid_dir' => '/var/run/hbase',
     'hbase_log_dir' => hbase_log_dir,
@@ -51,7 +51,7 @@ template "/etc/init.d/#{pkg}" do
   owner 'root'
   group 'root'
   action :create
-  variables :options => {
+  variables options: {
     'desc' => 'HBase RegionServer',
     'name' => pkg,
     'process' => 'java',
@@ -67,6 +67,6 @@ end
 
 service pkg do
   status_command "service #{pkg} status"
-  supports [:restart => true, :reload => false, :status => true]
+  supports [restart: true, reload: false, status: true]
   action :nothing
 end

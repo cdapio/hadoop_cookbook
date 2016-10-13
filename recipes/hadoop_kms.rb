@@ -50,7 +50,7 @@ node.default['hadoop_kms']['core_site'] = merge1.merge(merge2)
     owner 'root'
     group 'root'
     action :create
-    variables :options => node['hadoop_kms'][sitefile]
+    variables options: node['hadoop_kms'][sitefile]
     only_if { node['hadoop_kms'].key?(sitefile) && !node['hadoop_kms'][sitefile].empty? }
   end
 end # End core-site.xml kms-acls.xml kms-site.xml
@@ -91,7 +91,7 @@ template "#{hadoop_kms_conf_dir}/kms-env.sh" do
   owner 'hdfs'
   group 'hdfs'
   action :create
-  variables :options => node['hadoop_kms']['kms_env']
+  variables options: node['hadoop_kms']['kms_env']
   only_if { node['hadoop_kms'].key?('kms_env') && !node['hadoop_kms']['kms_env'].empty? }
 end # End kms-env.sh
 
@@ -102,7 +102,7 @@ template "#{hadoop_kms_conf_dir}/kms-log4j.properties" do
   owner 'root'
   group 'root'
   action :create
-  variables :properties => node['hadoop_kms']['log4j']
+  variables properties: node['hadoop_kms']['log4j']
   only_if { node['hadoop_kms'].key?('log4j') && !node['hadoop_kms']['log4j'].empty? }
 end # End kms-log4j.properties
 
