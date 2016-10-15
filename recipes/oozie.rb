@@ -25,10 +25,6 @@ package pkg do
   action :install
 end
 
-package pkg do
-  action :install
-end
-
 oozie_conf_dir = "/etc/oozie/#{node['oozie']['conf_dir']}"
 oozie_data_dir = '/var/lib/oozie'
 
