@@ -2,7 +2,7 @@
 # Cookbook Name:: hadoop
 # Recipe:: hadoop_hdfs_namenode
 #
-# Copyright © 2013-2015 Cask Data, Inc.
+# Copyright © 2013-2016 Cask Data, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -23,13 +23,7 @@ include_recipe 'hadoop::_system_tuning'
 pkg = 'hadoop-hdfs-namenode'
 
 dfs_name_dirs =
-  if node['hadoop'].key?('hdfs_site') && node['hadoop']['hdfs_site'].key?('dfs.namenode.name.dir')
-    node['hadoop']['hdfs_site']['dfs.namenode.name.dir']
-  elsif node['hadoop'].key?('hdfs_site') && node['hadoop']['hdfs_site'].key?('dfs.name.dir')
-    node['hadoop']['hdfs_site']['dfs.name.dir']
-  else
-    'file:///tmp/hadoop-hdfs/dfs/name'
-  end
+  hadoop_config('hadoop', 'hdfs_site', 'dfs.namenode.name.dir', 'dfs.name.dir', 'file:///tmp/hadoop-hdfs/dfs/name')
 
 node.default['hadoop']['hdfs_site']['dfs.namenode.name.dir'] = dfs_name_dirs
 

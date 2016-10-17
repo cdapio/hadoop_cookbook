@@ -120,6 +120,19 @@ module Hadoop
     end
 
     #
+    # Return Hadoop configuration item value using deprecated properties or a specified default
+    #
+    def hadoop_config(service, key, property, deprecated_property = nil, default_value = nil)
+      if node.key?(service) && node[service].key?(key) && node[service][key].key?(property)
+        node[service][key][property]
+      elsif node.key?(service) && node[service].key?(key) && node[service][key].key?(deprecated_property)
+        node[service][key][deprecated_property]
+      else
+        default_value
+      end
+    end
+
+    #
     # Check for deprecated JAAS configuration
     #
     def check_deprecated_jaas_config(service)

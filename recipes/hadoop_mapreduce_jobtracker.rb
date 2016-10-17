@@ -2,7 +2,7 @@
 # Cookbook Name:: hadoop
 # Recipe:: hadoop_mapreduce_jobtracker
 #
-# Copyright © 2013-2015 Cask Data, Inc.
+# Copyright © 2013-2016 Cask Data, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -27,13 +27,7 @@ pkg = 'hadoop-0.20-mapreduce-jobtracker'
 # mapreduce.cluster.temp.dir = #{hadoop_tmp_dir}/mapred/temp
 
 mapred_local_dirs =
-  if node['hadoop'].key?('mapred_site') && node['hadoop']['mapred_site'].key?('mapreduce.cluster.local.dir')
-    node['hadoop']['mapred_site']['mapreduce.cluster.local.dir']
-  elsif node['hadoop'].key?('mapred_site') && node['hadoop']['mapred_site'].key?('mapred.local.dir')
-    node['hadoop']['mapred_site']['mapred.local.dir']
-  else
-    'file:///tmp/hadoop-mapred/local'
-  end
+  hadoop_config('hadoop', 'mapred_site', 'mapreduce.cluster.local.dir', 'mapred.local.dir', 'file:///tmp/hadoop-mapred/local')
 
 node.default['hadoop']['mapred_site']['mapreduce.cluster.local.dir'] = mapred_local_dirs
 

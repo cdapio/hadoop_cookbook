@@ -2,7 +2,7 @@
 # Cookbook Name:: hadoop
 # Recipe:: hadoop_hdfs_secondarynamenode
 #
-# Copyright © 2013-2015 Cask Data, Inc.
+# Copyright © 2013-2016 Cask Data, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -23,22 +23,10 @@ include_recipe 'hadoop::_system_tuning'
 pkg = 'hadoop-hdfs-secondarynamenode'
 
 fs_checkpoint_dirs =
-  if node['hadoop'].key?('hdfs_site') && node['hadoop']['hdfs_site'].key?('dfs.namenode.checkpoint.dir')
-    node['hadoop']['hdfs_site']['dfs.namenode.checkpoint.dir']
-  elsif node['hadoop'].key?('hdfs_site') && node['hadoop']['hdfs_site'].key?('fs.checkpoint.dir')
-    node['hadoop']['hdfs_site']['fs.checkpoint.dir']
-  else
-    'file:///tmp/hadoop-hdfs/dfs/namesecondary'
-  end
+  hadoop_config('hadoop', 'hdfs_site', 'dfs.namenode.checkpoint.dir', 'fs.checkpoint.dir', 'file:///tmp/hadoop-hdfs/dfs/namesecondary')
 
 fs_checkpoint_edits_dirs =
-  if node['hadoop'].key?('hdfs_site') && node['hadoop']['hdfs_site'].key?('dfs.namenode.checkpoint.edits.dir')
-    node['hadoop']['hdfs_site']['dfs.namenode.checkpoint.edits.dir']
-  elsif node['hadoop'].key?('hdfs_site') && node['hadoop']['hdfs_site'].key?('fs.checkpoint.edits.dir')
-    node['hadoop']['hdfs_site']['fs.checkpoint.edits.dir']
-  else
-    fs_checkpoint_dirs
-  end
+  hadoop_config('hadoop', 'hdfs_site', 'dfs.namenode.checkpoint.edits.dir', 'fs.checkpoint.edits.dir', fs_checkpoint_dirs)
 
 node.default['hadoop']['hdfs_site']['dfs.namenode.checkpoint.dir'] = fs_checkpoint_dirs
 node.default['hadoop']['hdfs_site']['dfs.namenode.checkpoint.edits.dir'] = fs_checkpoint_edits_dirs
