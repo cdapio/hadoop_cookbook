@@ -17,8 +17,14 @@
 # limitations under the License.
 #
 
-include_recipe 'hadoop::default'
+include_recipe 'hadoop::repo'
 include_recipe 'hadoop::_zookeeper_checkconfig'
+
+# HDP 2.2+ zookeeper debian packages have a missing package dependency on hdp-select
+package 'hdp-select' do
+  action :install
+  only_if { node['platform_family'] == 'debian' && hdp22? }
+end
 
 package hadoop_package('zookeeper') do
   action :install
