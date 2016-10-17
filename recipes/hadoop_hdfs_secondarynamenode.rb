@@ -23,10 +23,10 @@ include_recipe 'hadoop::_system_tuning'
 pkg = 'hadoop-hdfs-secondarynamenode'
 
 fs_checkpoint_dirs =
-  hadoop_deprecated_config('hadoop', 'hdfs_site', 'fs.checkpoint.dir', 'dfs.namenode.checkpoint.dir', 'file:///tmp/hadoop-hdfs/dfs/namesecondary')
+  hadoop_config('hadoop', 'hdfs_site', 'dfs.namenode.checkpoint.dir', 'fs.checkpoint.dir', 'file:///tmp/hadoop-hdfs/dfs/namesecondary')
 
 fs_checkpoint_edits_dirs =
-  hadoop_deprecated_config('hadoop', 'hdfs_site', 'fs.checkpoint.edits.dir', 'dfs.namenode.checkpoint.edits.dir', fs_checkpoint_dirs)
+  hadoop_config('hadoop', 'hdfs_site', 'dfs.namenode.checkpoint.edits.dir', 'fs.checkpoint.edits.dir', fs_checkpoint_dirs)
 
 node.default['hadoop']['hdfs_site']['dfs.namenode.checkpoint.dir'] = fs_checkpoint_dirs
 node.default['hadoop']['hdfs_site']['dfs.namenode.checkpoint.edits.dir'] = fs_checkpoint_edits_dirs

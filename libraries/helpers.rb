@@ -116,15 +116,15 @@ module Hadoop
     end
 
     #
-    # Support deprecated Hadoop properties
+    # Return Hadoop configuration item value using deprecated properties or a specified default
     #
-    def hadoop_deprecated_config(service, key, dprop, nprop, default = nil)
-      if node.key?(service) && node[service].key?(key) && node[service][key].key?(nprop)
-        node[service][key][nprop]
-      elsif node.key?(service) && node[service].key?(key) && node[service][key].key?(dprop)
-        node[service][key][dprop]
+    def hadoop_config(service, key, property, deprecated_property = nil, default_value = nil)
+      if node.key?(service) && node[service].key?(key) && node[service][key].key?(property)
+        node[service][key][property]
+      elsif node.key?(service) && node[service].key?(key) && node[service][key].key?(deprecated_property)
+        node[service][key][deprecated_property]
       else
-        default
+        default_value
       end
     end
 

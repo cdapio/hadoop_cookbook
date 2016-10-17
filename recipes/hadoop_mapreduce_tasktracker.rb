@@ -22,7 +22,7 @@ include_recipe 'hadoop::_system_tuning'
 pkg = 'hadoop-0.20-mapreduce-tasktracker'
 
 mapred_local_dirs =
-  hadoop_deprecated_config('hadoop', 'mapred_site', 'mapred.local.dir', 'mapreduce.cluster.local.dir', 'file:///tmp/hadoop-mapred/local')
+  hadoop_config('hadoop', 'mapred_site', 'mapreduce.cluster.local.dir', 'mapred.local.dir', 'file:///tmp/hadoop-mapred/local')
 
 node.default['hadoop']['mapred_site']['mapreduce.cluster.local.dir'] = mapred_local_dirs
 

@@ -23,7 +23,7 @@ include_recipe 'hadoop::_system_tuning'
 pkg = 'hadoop-hdfs-namenode'
 
 dfs_name_dirs =
-  hadoop_deprecated_config('hadoop', 'hdfs_site', 'dfs.name.dir', 'dfs.namenode.name.dir', 'file:///tmp/hadoop-hdfs/dfs/name')
+  hadoop_config('hadoop', 'hdfs_site', 'dfs.namenode.name.dir', 'dfs.name.dir', 'file:///tmp/hadoop-hdfs/dfs/name')
 
 node.default['hadoop']['hdfs_site']['dfs.namenode.name.dir'] = dfs_name_dirs
 
