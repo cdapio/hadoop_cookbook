@@ -2,7 +2,7 @@
 # Cookbook Name:: hadoop
 # Attribute:: default
 #
-# Copyright © 2013-2015 Cask Data, Inc.
+# Copyright © 2013-2016 Cask Data, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -96,10 +96,8 @@ else
   default['hadoop']['yarn_site']['yarn.nodemanager.aux-services.mapreduce_shuffle.class'] = 'org.apache.hadoop.mapred.ShuffleHandler'
 end
 
-###
-# MR settings for HDP 2.2+
-###
-hdp_version =
+# MapReduce settings
+full_version =
   case node['hadoop']['distribution_version']
   when '2.2.0.0'
     '2.2.0.0-2041'
@@ -139,25 +137,27 @@ hdp_version =
     node['hadoop']['distribution_version']
   end
 
-iop_version = node['hadoop']['distribution_version']
+default['hadoop']['hadoop_env']['hadoop_opts'] = '-Djava.net.preferIPv4Stack=true ${HADOOP_OPTS}'
+default['hadoop']['mapred_env']['hadoop_opts'] = '-Djava.net.preferIPv4Stack=true ${HADOOP_OPTS}'
 
-if node['hadoop']['distribution'] == 'hdp' && node['hadoop']['distribution_version'].to_f >= 2.2
-  default['hadoop']['hadoop_env']['hadoop_opts'] = "-Dhdp.version=#{hdp_version} -Djava.net.preferIPv4Stack=true ${HADOOP_OPTS}"
-  default['hadoop']['mapred_env']['hadoop_opts'] = "-Dhdp.version=#{hdp_version} -Djava.net.preferIPv4Stack=true ${HADOOP_OPTS}"
-  default['hadoop']['mapred_site']['mapreduce.admin.map.child.java.opts'] = '-server -Djava.net.preferIPv4Stack=true -Dhdp.version=${hdp.version}'
-  default['hadoop']['mapred_site']['mapreduce.admin.user.env'] = 'LD_LIBRARY_PATH=/usr/hdp/${hdp.version}/hadoop/lib/native:/usr/hdp/${hdp.version}/hadoop/lib/native/Linux-amd64-64'
-  default['hadoop']['mapred_site']['mapreduce.application.framework.path'] = '/hdp/apps/${hdp.version}/mapreduce/mapreduce.tar.gz#mr-framework'
-  default['hadoop']['mapred_site']['mapreduce.application.classpath'] = '$PWD/mr-framework/hadoop/share/hadoop/mapreduce/*:$PWD/mr-framework/hadoop/share/hadoop/mapreduce/lib/*:$PWD/mr-framework/hadoop/share/hadoop/common/*:$PWD/mr-framework/hadoop/share/hadoop/common/lib/*:$PWD/mr-framework/hadoop/share/hadoop/yarn/*:$PWD/mr-framework/hadoop/share/hadoop/yarn/lib/*:$PWD/mr-framework/hadoop/share/hadoop/hdfs/*:$PWD/mr-framework/hadoop/share/hadoop/hdfs/lib/*:/usr/hdp/${hdp.version}/hadoop/lib/hadoop-lzo-0.6.0.${hdp.version}.jar:/etc/hadoop/conf/secure'
-  default['hadoop']['mapred_site']['yarn.app.mapreduce.am.admin-command-opts'] = '-Dhdp.version=${hdp.version}'
-elsif node['hadoop']['distribution'] == 'iop'
-  default['hadoop']['hadoop_env']['hadoop_opts'] = "-Diop.version=#{iop_version} -Djava.net.preferIPv4Stack=true ${HADOOP_OPTS}"
-  default['hadoop']['mapred_env']['hadoop_opts'] = "-Diop.version=#{iop_version} -Djava.net.preferIPv4Stack=true ${HADOOP_OPTS}"
-  default['hadoop']['mapred_site']['mapreduce.admin.map.child.java.opts'] = '-server -Djava.net.preferIPv4Stack=true -Diop.version=${iop.version}'
-  default['hadoop']['mapred_site']['mapreduce.admin.user.env'] = 'LD_LIBRARY_PATH=/usr/iop/${iop.version}/hadoop/lib/native'
-  default['hadoop']['mapred_site']['mapreduce.application.framework.path'] = '/iop/apps/${iop.version}/mapreduce/mapreduce.tar.gz#mr-framework'
-  default['hadoop']['mapred_site']['mapreduce.application.classpath'] = '$PWD/mr-framework/hadoop/share/hadoop/mapreduce/*:$PWD/mr-framework/hadoop/share/hadoop/mapreduce/lib/*:$PWD/mr-framework/hadoop/share/hadoop/common/*:$PWD/mr-framework/hadoop/share/hadoop/common/lib/*:$PWD/mr-framework/hadoop/share/hadoop/yarn/*:$PWD/mr-framework/hadoop/share/hadoop/yarn/lib/*:$PWD/mr-framework/hadoop/share/hadoop/hdfs/*:$PWD/mr-framework/hadoop/share/hadoop/hdfs/lib/*:/usr/iop/${iop.version}/hadoop/lib/hadoop-lzo-0.5.1.jar:/etc/hadoop/conf/secure'
-  default['hadoop']['mapred_site']['yarn.app.mapreduce.am.admin-command-opts'] = '-Diop.version=${iop.version}'
-else
-  default['hadoop']['hadoop_env']['hadoop_opts'] = '-Djava.net.preferIPv4Stack=true ${HADOOP_OPTS}'
-  default['hadoop']['mapred_env']['hadoop_opts'] = '-Djava.net.preferIPv4Stack=true ${HADOOP_OPTS}'
+if node['hadoop']['distribution'] == 'iop' ||
+   (
+     node['hadoop']['distribution'] == 'hdp' &&
+     node['hadoop']['distribution_version'].to_f >= 2.2
+   )
+
+  distro = node['hadoop']['distribution']
+  lzo_jar = distro == 'hdp' ? 'hadoop-lzo-0.6.0.${hdp.version}.jar' : 'hadoop-lzo-0.5.1.jar'
+  default['hadoop']['hadoop_env']['hadoop_opts'] += " -D#{distro}.version=#{full_version}"
+  default['hadoop']['mapred_env']['hadoop_opts'] += " -D#{distro}.version=#{full_version}"
+  default['hadoop']['mapred_site']['mapreduce.admin.map.child.java.opts'] =
+    "-server -Djava.net.preferIPv4Stack=true -D#{distro}.version=${#{distro}.version}"
+  default['hadoop']['mapred_site']['mapreduce.admin.user.env'] =
+    "LD_LIBRARY_PATH=/usr/#{distro}/${#{distro}.version}/hadoop/lib/native:/usr/#{distro}/${#{distro}.version}/hadoop/lib/native/Linux-amd64-64"
+  default['hadoop']['mapred_site']['mapreduce.application.framework.path'] =
+    "/#{distro}/apps/${#{distro}.version}/mapreduce/mapreduce.tar.gz#mr-framework"
+  default['hadoop']['mapred_site']['mapreduce.application.classpath'] =
+    "$PWD/mr-framework/hadoop/share/hadoop/mapreduce/*:$PWD/mr-framework/hadoop/share/hadoop/mapreduce/lib/*:$PWD/mr-framework/hadoop/share/hadoop/common/*:$PWD/mr-framework/hadoop/share/hadoop/common/lib/*:$PWD/mr-framework/hadoop/share/hadoop/yarn/*:$PWD/mr-framework/hadoop/share/hadoop/yarn/lib/*:$PWD/mr-framework/hadoop/share/hadoop/hdfs/*:$PWD/mr-framework/hadoop/share/hadoop/hdfs/lib/*:/usr/#{distro}/${#{distro}.version}/hadoop/lib/#{lzo_jar}:/etc/hadoop/conf/secure"
+  default['hadoop']['mapred_site']['yarn.app.mapreduce.am.admin-command-opts'] =
+    "-D#{distro}.version=${#{distro}.version}"
 end
