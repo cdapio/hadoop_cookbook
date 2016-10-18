@@ -1,6 +1,19 @@
 hadoop CHANGELOG
 ===============
 
+v2.7.0 (Oct 17, 2016)
+---------------------
+- Pull in code from forks ( Issue #282 )
+- Use correct License file ( Issue #283 )
+- Set distribution defaults in attributes instead of recipes ( Issue #284 )
+- Updated codeclimate configuration ( Issue #285 )
+- Updated README ( Issue #286 )
+- Support HDP 2.4.3.0, and fix issues with 2.2.1.0, 2.2.6.3, 2.3.6.0 ( Issues #287 #295 )
+- Refactoring JAAS configuration, Mapreduce, and Tez ( Issues #288 #293 #292)
+- Workaround for a missing dependency in HDP Zookeeper Ubuntu packages ( Issue #289 )
+- Update Rubocop configurations ( Issue #290 )
+- Create library function for Hadoop properties ( Issue #294 )
+
 v2.6.0 (Sep 9, 2016)
 --------------------
 - Support for IBM Open Platform ( Issue: #226 )
