@@ -48,13 +48,16 @@ a.out
 .watchr
 .rspec
 .rubocop.yml
+.codeclimate.yml
 spec/*
 spec/fixtures/*
 test/*
 features/*
 files/default/tests/*
+Gemfile
 Guardfile
 Procfile
+Rakefile
 Thorfile
 
 # SCM #
