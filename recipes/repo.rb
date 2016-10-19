@@ -319,6 +319,7 @@ when 'iop'
       description "IBM Open Platform Version - IOP-#{iop_release}"
       url yum_repo_url
       gpgkey yum_repo_key_url
+      gpgcheck false
       action :add
     end
     yum_repository 'iop-utils' do
@@ -326,6 +327,7 @@ when 'iop'
       description "IBM Open Platform Utils Version - IOP-UTILS-#{iop_utils_version}"
       url "#{yum_base_url}-UTILS/#{os}/#{v}/#{m}/#{iop_utils_version.to_f}"
       gpgkey yum_repo_key_url
+      gpgcheck false
       action :add
     end
   else
