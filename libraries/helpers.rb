@@ -79,11 +79,12 @@ module Hadoop
     def hadoop_package(name)
       return name unless hdp22? || iop?
       return name if node['platform_family'] == 'debian'
-      if name == 'spark-core'
-        fw = name
-      else
-        fw = name.split('-').first
-      end
+      fw =
+        if name == 'spark-core'
+          name
+        else
+          name.split('-').first
+        end
       pv =
         if hdp22?
           hdp_version.tr('.', '_').tr('-', '_')
