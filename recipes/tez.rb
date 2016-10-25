@@ -49,7 +49,7 @@ execute 'tez-hdfs-appdir' do
   timeout 300
   user 'hdfs'
   group 'hdfs'
-  not_if "hdfs dfs -test -d #{dest}", :user => 'hdfs'
+  not_if "hdfs dfs -test -d #{dest}", user: 'hdfs'
   action :nothing
 end
 
@@ -65,7 +65,7 @@ end
 
 # Setup tez-site.xml
 if node['tez'].key?('tez_site')
-  my_vars = { :options => node['tez']['tez_site'] }
+  my_vars = { options: node['tez']['tez_site'] }
 
   template "#{tez_conf_dir}/tez-site.xml" do
     source 'generic-site.xml.erb'
@@ -79,7 +79,7 @@ end # End tez-site.xml
 
 # Setup tez-env.sh
 if node['tez'].key?('tez_env')
-  my_vars = { :options => node['tez']['tez_env'] }
+  my_vars = { options: node['tez']['tez_env'] }
 
   template "#{tez_conf_dir}/tez-env.sh" do
     source 'generic-env.sh.erb'
@@ -106,7 +106,7 @@ if node.recipe?('hadoop::hive') && node['hive']['hive_site']['hive.execution.eng
     timeout 300
     user 'hdfs'
     group 'hdfs'
-    not_if "hdfs dfs -test -d #{dfs}/apps/hive/install", :user => 'hdfs'
+    not_if "hdfs dfs -test -d #{dfs}/apps/hive/install", user: 'hdfs'
     action :nothing
   end
 end

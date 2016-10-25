@@ -46,7 +46,7 @@ execute 'mapreduce-jobhistory-intermediate-done-dir' do
   timeout 300
   user 'hdfs'
   group 'hdfs'
-  not_if "hdfs dfs -test -d #{jhs_intermediate_done_dir}", :user => 'hdfs'
+  not_if "hdfs dfs -test -d #{jhs_intermediate_done_dir}", user: 'hdfs'
   action :nothing
 end
 
@@ -55,7 +55,7 @@ execute 'mapreduce-jobhistory-done-dir' do
   timeout 300
   user 'hdfs'
   group 'hdfs'
-  not_if "hdfs dfs -test -d #{jhs_done_dir}", :user => 'hdfs'
+  not_if "hdfs dfs -test -d #{jhs_done_dir}", user: 'hdfs'
   action :nothing
 end
 
@@ -83,7 +83,7 @@ template "/etc/default/#{pkg}" do
   owner 'root'
   group 'root'
   action :create
-  variables :options => {
+  variables options: {
     'hadoop_mapred_pid_dir' => hadoop_pid_dir,
     'hadoop_mapred_log_dir' => hadoop_log_dir,
     'hadoop_mapred_ident_string' => 'mapred',
@@ -98,7 +98,7 @@ template "/etc/init.d/#{pkg}" do
   owner 'root'
   group 'root'
   action :create
-  variables :options => {
+  variables options: {
     'desc' => 'Hadoop MapReduce JobHistory Server',
     'name' => pkg,
     'process' => 'java',
@@ -114,6 +114,6 @@ end
 
 service pkg do
   status_command "service #{pkg} status"
-  supports [:restart => true, :reload => false, :status => true]
+  supports [restart: true, reload: false, status: true]
   action :nothing
 end

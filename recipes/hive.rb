@@ -64,7 +64,7 @@ template "#{hive_conf_dir}/hive-site.xml" do
   owner 'root'
   group 'root'
   action :create
-  variables :options => node['hive']['hive_site']
+  variables options: node['hive']['hive_site']
   only_if { node['hive'].key?('hive_site') && !node['hive']['hive_site'].empty? }
 end # End hive-site.xml
 
@@ -105,7 +105,7 @@ template "#{hive_conf_dir}/hive-env.sh" do
   owner 'hive'
   group 'hive'
   action :create
-  variables :options => node['hive']['hive_env']
+  variables options: node['hive']['hive_env']
   only_if { node['hive'].key?('hive_env') && !node['hive']['hive_env'].empty? }
 end # End hive-env.sh
 
@@ -116,7 +116,7 @@ execute 'hive-hdfs-homedir' do
   timeout 300
   user 'hdfs'
   group 'hdfs'
-  not_if "hdfs dfs -test -d #{dfs}/user/hive", :user => 'hdfs'
+  not_if "hdfs dfs -test -d #{dfs}/user/hive", user: 'hdfs'
   action :nothing
 end
 

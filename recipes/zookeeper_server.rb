@@ -102,7 +102,7 @@ template "#{zookeeper_conf_dir}/zoo.cfg" do
   group 'root'
   mode '0644'
   action :create
-  variables :properties => node['zookeeper']['zoocfg']
+  variables properties: node['zookeeper']['zoocfg']
   only_if { node['zookeeper'].key?('zoocfg') && !node['zookeeper']['zoocfg'].empty? }
 end # End zoo.cfg
 
@@ -122,7 +122,7 @@ template "#{zookeeper_data_dir}/myid" do
   group 'root'
   mode '0644'
   action :create
-  variables :myid => myid
+  variables myid: myid
   not_if { myid.nil? }
 end # End zoo.cfg
 
@@ -162,7 +162,7 @@ template "#{zookeeper_conf_dir}/zookeeper-env.sh" do
   owner 'root'
   group 'root'
   action :create
-  variables :options => node['zookeeper']['zookeeper_env']
+  variables options: node['zookeeper']['zookeeper_env']
   only_if { node['zookeeper'].key?('zookeeper_env') && !node['zookeeper']['zookeeper_env'].empty? }
 end # End zookeeper-env.sh
 
@@ -173,7 +173,7 @@ template "#{zookeeper_conf_dir}/log4j.properties" do
   owner 'root'
   group 'root'
   action :create
-  variables :properties => node['zookeeper']['log4j']
+  variables properties: node['zookeeper']['log4j']
   only_if { node['zookeeper'].key?('log4j') && !node['zookeeper']['log4j'].empty? }
 end # End log4j.properties
 
@@ -184,7 +184,7 @@ template "/etc/default/#{pkg}" do
   owner 'root'
   group 'root'
   action :create
-  variables :options => {
+  variables options: {
     'zookeeper_home' => "#{hadoop_lib_dir}/zookeeper",
     'zookeeper_pid_dir' => '/var/run/zookeeper',
     'zoopidfile' => "${ZOOKEEPER_PID_DIR}/#{pkg}.pid",
@@ -203,7 +203,7 @@ template "/etc/init.d/#{pkg}" do
   owner 'root'
   group 'root'
   action :create
-  variables :options => {
+  variables options: {
     'desc' => 'ZooKeeper Server',
     'name' => pkg,
     'process' => 'java',
@@ -219,7 +219,7 @@ end
 
 service pkg do
   status_command "service #{pkg} status"
-  supports [:restart => true, :reload => false, :status => true]
+  supports [restart: true, reload: false, status: true]
   action :nothing
 end
 

@@ -44,7 +44,7 @@ template "/etc/init.d/#{pkg}" do
   owner 'root'
   group 'root'
   action :create
-  variables :options => {
+  variables options: {
     'desc' => 'Storm Nimbus Server',
     'name' => pkg,
     'process' => 'java',
@@ -65,7 +65,7 @@ template "#{storm_conf_dir}/#{pkg}-env.sh" do
   owner 'root'
   group 'root'
   action :create
-  variables :options => node['storm']['storm_env']
+  variables options: node['storm']['storm_env']
   only_if { node['storm'].key?('storm_env') && !node['storm']['storm_env'].empty? }
 end # End storm-env.sh
 
@@ -76,7 +76,7 @@ template "/etc/default/#{pkg}" do
   owner 'root'
   group 'root'
   action :create
-  variables :options => {
+  variables options: {
     'storm_home' => storm_home_dir,
     'storm_pid_dir' => '/var/run/storm',
     'storm_log_dir' => storm_log_dir,
@@ -86,6 +86,6 @@ end
 
 service pkg do
   status_command "service #{pkg} status"
-  supports [:restart => true, :reload => false, :status => true]
+  supports [restart: true, reload: false, status: true]
   action :nothing
 end

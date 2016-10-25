@@ -35,6 +35,6 @@ package pkg do
 end
 
 service 'flume-agent' do
-  supports [:restart => true, :reload => false, :status => true]
+  supports [restart: true, reload: false, status: true]
   action :nothing
 end

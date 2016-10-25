@@ -37,7 +37,7 @@ end
 
 # Setup hbase-policy.xml hbase-site.xml
 %w(hbase_policy hbase_site).each do |sitefile|
-  my_vars = { :options => node['hbase'][sitefile] }
+  my_vars = { options: node['hbase'][sitefile] }
 
   template "#{hbase_conf_dir}/#{sitefile.tr('_', '-')}.xml" do
     source 'generic-site.xml.erb'
@@ -51,7 +51,7 @@ end
 end # End hbase-policy.xml hbase-site.xml
 
 # Setup hbase-env.sh
-my_vars = { :options => node['hbase']['hbase_env'] }
+my_vars = { options: node['hbase']['hbase_env'] }
 
 hbase_log_dir =
   if node['hbase'].key?('hbase_env') && node['hbase']['hbase_env'].key?('hbase_log_dir')
@@ -94,7 +94,7 @@ end # End hbase-env.sh
 
 # Setup hadoop-metrics.properties log4j.properties
 %w(hadoop_metrics log4j).each do |propfile|
-  my_vars = { :properties => node['hbase'][propfile] }
+  my_vars = { properties: node['hbase'][propfile] }
 
   template "#{hbase_conf_dir}/#{propfile.tr('_', '-')}.properties" do
     source 'generic.properties.erb'
@@ -129,7 +129,7 @@ template '/etc/default/hbase' do
   owner 'root'
   group 'root'
   action :create
-  variables :options => {
+  variables options: {
     'hbase_home' => "#{hadoop_lib_dir}/hbase",
     'hbase_pid_dir' => '/var/run/hbase',
     'hbase_log_dir' => hbase_log_dir,

@@ -45,4 +45,4 @@ rescue LoadError
 end
 
 # default tasks are quick, commit tests
-task :default => %w(foodcritic rubocop chefspec)
+task default: %w(foodcritic rubocop chefspec)
