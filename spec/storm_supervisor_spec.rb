@@ -17,7 +17,6 @@ describe 'hadoop::storm_supervisor' do
     %W(
       /etc/default/#{pkg}
       /etc/init.d/#{pkg}
-      /etc/storm/conf.chef/#{pkg}-env.sh
     ).each do |file|
       it "creates #{file} from template" do
         expect(chef_run).to create_template(file)
