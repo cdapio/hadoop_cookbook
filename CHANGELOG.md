@@ -3,8 +3,8 @@ hadoop CHANGELOG
 
 v2.7.1 (Oct 25, 2016)
 ---------------------
-- Add non-cookbook files to chefignore ( Issue #298)
 - Switch to new Ruby hash syntax ( Issue #297)
+- Add non-cookbook files to chefignore ( Issue #298)
 - Support for Spark on IOP ( Issue #299 )
 
 v2.7.0 (Oct 17, 2016)
