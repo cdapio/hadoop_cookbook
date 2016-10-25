@@ -319,7 +319,7 @@ when 'iop'
       description "IBM Open Platform Version - IOP-#{iop_release}"
       url yum_repo_url
       gpgkey yum_repo_key_url
-      # disable gpgcheck because the repository is unsigned 
+      # disable gpgcheck because the repository is unsigned
       gpgcheck false
       action :add
     end
