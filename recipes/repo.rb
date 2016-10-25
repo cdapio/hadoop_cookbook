@@ -326,6 +326,8 @@ when 'iop'
       description "IBM Open Platform Utils Version - IOP-UTILS-#{iop_utils_version}"
       url "#{yum_base_url}-UTILS/#{os}/#{v}/#{m}/#{iop_utils_version.to_f}"
       gpgkey yum_repo_key_url
+      # disable gpgcheck because the Hadoop-lzo package is unsigned
+      gpgcheck false
       action :add
     end
   else

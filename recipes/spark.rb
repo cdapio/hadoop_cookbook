@@ -22,6 +22,8 @@ include_recipe 'hadoop::repo' if node['spark']['release']['install'].to_s == 'fa
 pkg =
   if node['hadoop']['distribution'] == 'cdh'
     'spark-core'
+  elsif iop?
+    hadoop_package('spark-core')
   else
     hadoop_package('spark')
   end
