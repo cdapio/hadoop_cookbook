@@ -56,12 +56,12 @@ when 'hdp'
     node.override['hadoop']['distribution_version'] = hdp_update_version
   when '2.3'
     hdp_version = '2.2.0.0'
-    hdp_update_version = '2.3.4.7'
+    hdp_update_version = '2.3.6.0'
     Chef::Log.warn("Short versions for node['hadoop']['distribution_version'] are deprecated! Please use full version!")
     node.override['hadoop']['distribution_version'] = hdp_update_version
   when '2.4'
     hdp_version = '2.2.0.0'
-    hdp_update_version = '2.4.2.0'
+    hdp_update_version = '2.4.3.0'
     Chef::Log.warn("Short versions for node['hadoop']['distribution_version'] are deprecated! Please use full version!")
     node.override['hadoop']['distribution_version'] = hdp_update_version
   when '2.5', '2'
