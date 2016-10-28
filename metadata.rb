@@ -13,7 +13,7 @@ depends 'apt', '>= 2.1.2'
   depends cb
 end
 
-recommends 'java', '~> 1.40'
+recommends 'java', '~> 1.40' # ~FC053
 
 %w(
   amazon
