@@ -6,15 +6,18 @@ gem 'chefspec', '~> 4.0'
 gem 'rspec', '~> 3.0'
 
 if RUBY_VERSION.to_f < 2.2
-  gem 'fauxhai', '< 3.10'
   gem 'rack', '< 2.0'
+  if RUBY_VERSION.to_f < 2.1
+    gem 'fauxhai', '< 3.5'
+  else
+    gem 'fauxhai', '< 3.10'
+  end
 end
 
 if RUBY_VERSION.to_f < 2.1
   gem 'buff-ignore', '< 1.2'
   gem 'chef-zero', '< 4.6'
   gem 'fauxhai', '< 3.5'
-  gem 'ffi-yajl', '< 2.3'
   gem 'dep_selector', '< 1.0.4'
   gem 'net-http-persistent', '< 3.0'
 end
