@@ -243,7 +243,7 @@ when 'bigtop'
     case major_platform_version
     when 5, 6
       yum_platform_version = major_platform_version
-    when 2014 # Amazon linux, point to redhat/6 bigtop repo
+    when 2014, 2015, 2016 # Amazon Linux, point to redhat/6 bigtop repo
       yum_platform_version = 6
     else
       Chef::Log.warn('Unsupported platform detected, use at your own risk')
