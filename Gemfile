@@ -17,6 +17,7 @@ end
 if RUBY_VERSION.to_f < 2.1
   gem 'buff-ignore', '< 1.2'
   gem 'chef-zero', '< 4.6'
+  gem 'ffi-yajl', '< 2.3'
   gem 'dep_selector', '< 1.0.4'
   gem 'net-http-persistent', '< 3.0'
 end
