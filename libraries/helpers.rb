@@ -141,14 +141,16 @@ module Hadoop
     # Check for deprecated JAAS configuration
     #
     def check_deprecated_jaas_config(service)
-      %w(client server).each do |key|
-        next unless node[service]['jaas'].key?(key) &&
-                    node[service]['jaas'][key].key?('usekeytab') &&
-                    node[service]['jaas'][key]['usekeytab'].to_s == 'true'
-        next unless node[service]['jaas'][key]['keytab'].nil? ||
-                    node['hbase']['jaas'][key]['principal'].nil?
-        Chef::Application.fatal!("You must set node['#{service}']['jaas']['#{key}']['keytab'] and node['#{service}']['jaas']['#{key}']['principal'] with node['#{service}']['jaas'][key]['usekeytab']")
-      end if node[service].key?('jaas')
+      if node[service].key?('jaas')
+        %w(client server).each do |key|
+          next unless node[service]['jaas'].key?(key) &&
+                      node[service]['jaas'][key].key?('usekeytab') &&
+                      node[service]['jaas'][key]['usekeytab'].to_s == 'true'
+          next unless node[service]['jaas'][key]['keytab'].nil? ||
+                      node['hbase']['jaas'][key]['principal'].nil?
+          Chef::Application.fatal!("You must set node['#{service}']['jaas']['#{key}']['keytab'] and node['#{service}']['jaas']['#{key}']['principal'] with node['#{service}']['jaas'][key]['usekeytab']")
+        end
+      end
       Chef::Log.warn("Using node['#{service}']['jaas'] is deprecated. Use node['#{service}']['client_jaas'] and node['#{service}']['master_jaas'], instead") if node[service].key?('jaas')
     end
 
