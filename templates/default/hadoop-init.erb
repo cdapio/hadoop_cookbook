@@ -37,12 +37,12 @@
 [ -f /etc/default/hadoop ] && . /etc/default/hadoop
 
 # Autodetect JAVA_HOME if not defined
+[ -f /etc/profile.d/jdk.sh ] && . /etc/profile.d/jdk.sh
 if [ -e /usr/libexec/bigtop-detect-javahome ]; then
   . /usr/libexec/bigtop-detect-javahome
 elif [ -e /usr/lib/bigtop-utils/bigtop-detect-javahome ]; then
   . /usr/lib/bigtop-utils/bigtop-detect-javahome
 fi
-[ -f /etc/profile.d/jdk.sh ] && . /etc/profile.d/jdk.sh
 
 RETVAL_SUCCESS=0
 
