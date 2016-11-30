@@ -36,8 +36,9 @@
 . /lib/lsb/init-functions
 [ -f /etc/default/hadoop ] && . /etc/default/hadoop
 
-# Autodetect JAVA_HOME if not defined
+# Source java cookbook's profile file, if it exists
 [ -f /etc/profile.d/jdk.sh ] && . /etc/profile.d/jdk.sh
+# Autodetect JAVA_HOME if not defined
 if [ -e /usr/libexec/bigtop-detect-javahome ]; then
   . /usr/libexec/bigtop-detect-javahome
 elif [ -e /usr/lib/bigtop-utils/bigtop-detect-javahome ]; then
