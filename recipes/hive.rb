@@ -109,6 +109,19 @@ template "#{hive_conf_dir}/hive-env.sh" do
   only_if { node['hive'].key?('hive_env') && !node['hive']['hive_env'].empty? }
 end # End hive-env.sh
 
+# Setup beeline-log4j.properties hive-exec-log4j.properties hive-log4j.properties
+%w(beeline_log4j hive_exec_log4j hive_log4j).each do |propfile|
+  template "#{hive_conf_dir}/#{propfile.tr('_', '-')}.properties" do
+    source 'generic.properties.erb'
+    mode '0644'
+    owner 'hive'
+    group 'hive'
+    action :create
+    variables properties: node['hive'][propfile]
+    only_if { node['hive'].key?(propfile) && !node['hive'][propfile].empty? }
+  end
+end # beeline-log4j.properties hive-exec-log4j.properties hive-log4j.properties
+
 # Create Hive user's home in HDFS
 dfs = node['hadoop']['core_site']['fs.defaultFS']
 execute 'hive-hdfs-homedir' do
