@@ -1,6 +1,15 @@
 hadoop CHANGELOG
 ===============
 
+v2.8.0 (Dec 6, 2016)
+--------------------
+- Updates to testing configurations ( Issues: #301 #302 #304 )
+- Update HDP versions when short versions given ( Issue: #303 )
+- Support 2015 and 2016 Amazon Linux AMIs ( Issue: #305 )
+- Use Java cookbook jdk.sh before BigTop tools ( Issues: #306 [COOK-107](https://issues.cask.co/browse/COOK-107) )
+- Hive logging support ( Issues: #307 [COOK-111](https://issues.cask.co/browse/COOK-111) )
+- Fix hadoop-mapreduce-historyserver stop ( Issue: #308 )
+
 v2.7.1 (Oct 25, 2016)
 ---------------------
 - Switch to new Ruby hash syntax ( Issue #297)
