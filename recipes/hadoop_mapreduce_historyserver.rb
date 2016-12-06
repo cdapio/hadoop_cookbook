@@ -107,7 +107,7 @@ template "/etc/init.d/#{pkg}" do
     'confdir' => '${HADOOP_CONF_DIR}',
     'user' => 'mapred',
     'home' => "#{hadoop_lib_dir}/hadoop",
-    'pidfile' => "${HADOOP_MAPRED_PID_DIR}/#{pkg}.pid",
+    'pidfile' => '${HADOOP_MAPRED_PID_DIR}/mapred-mapred-historyserver.pid',
     'logfile' => "${HADOOP_MAPRED_LOG_DIR}/#{pkg}.log"
   }
 end
