@@ -58,6 +58,8 @@ module Hadoop
         '2.4.3.0-227'
       when '2.5.0.0'
         '2.5.0.0-1245'
+      when '2.5.3.0'
+        '2.5.3.0-37'
       else
         node['hadoop']['distribution_version']
       end
