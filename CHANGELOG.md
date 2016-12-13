@@ -1,6 +1,11 @@
 hadoop CHANGELOG
 ===============
 
+v2.9.0 (Dec 13, 2016)
+---------------------
+- Update CDH/HDP default versions ( Issue: #310 )
+- Support HDP 2.5.3.0 ( Issue: #311 )
+
 v2.8.0 (Dec 6, 2016)
 --------------------
 - Updates to testing configurations ( Issues: #301 #302 #304 )
