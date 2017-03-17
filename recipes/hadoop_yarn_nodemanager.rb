@@ -2,7 +2,7 @@
 # Cookbook Name:: hadoop
 # Recipe:: hadoop_yarn_nodemanager
 #
-# Copyright © 2013-2015 Cask Data, Inc.
+# Copyright © 2013-2017 Cask Data, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -21,19 +21,6 @@ include_recipe 'hadoop::default'
 include_recipe 'hadoop::_system_tuning'
 pkg = 'hadoop-yarn-nodemanager'
 
-%w(yarn.nodemanager.local-dirs yarn.nodemanager.log-dirs).each do |opt|
-  next unless node['hadoop'].key?('yarn_site') && node['hadoop']['yarn_site'].key?(opt)
-  node['hadoop']['yarn_site'][opt].split(',').each do |dir|
-    directory dir.gsub('file://', '') do
-      owner 'yarn'
-      group 'yarn'
-      mode '0755'
-      action :create
-      recursive true
-    end
-  end
-end
-
 # Ensure permissions for secure Hadoop... this *should* be no-op
 file "#{hadoop_lib_dir}/hadoop-yarn/bin/container-executor" do
   owner 'root'
@@ -49,13 +36,39 @@ yarn_log_dir =
   else
     '/var/log/hadoop-yarn'
   end
-
 yarn_pid_dir =
   if hdp22? || iop?
     '/var/run/hadoop/yarn'
   else
     '/var/run/hadoop-yarn'
   end
+nm_local_dirs =
+  if node['hadoop'].key?('yarn_site') && node['hadoop']['yarn_site'].key?('yarn.nodemanager.local-dirs')
+    node['hadoop']['yarn_site']['yarn.nodemanager.local-dirs']
+  else
+    'file:///tmp/hadoop-yarn/nm-local-dir'
+  end
+nm_log_dirs =
+  if node['hadoop'].key?('yarn_site') && node['hadoop']['yarn_site'].key?('yarn.nodemanager.log-dirs')
+    node['hadoop']['yarn_site']['yarn.nodemanager.log-dirs']
+  else
+    "#{yarn_log_dir}/userlogs"
+  end
+
+node.default['hadoop']['yarn_site']['yarn.nodemanager.local-dirs'] = nm_local_dirs
+node.default['hadoop']['yarn_site']['yarn.nodemanager.log-dirs'] = nm_log_dirs
+
+%w(yarn.nodemanager.local-dirs yarn.nodemanager.log-dirs).each do |opt|
+  node['hadoop']['yarn_site'][opt].split(',').each do |dir|
+    directory dir.gsub('file://', '') do
+      owner 'yarn'
+      group 'yarn'
+      mode '0755'
+      action :create
+      recursive true
+    end
+  end
+end
 
 # Create /etc/default configuration
 template "/etc/default/#{pkg}" do
