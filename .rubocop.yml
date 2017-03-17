@@ -20,3 +20,5 @@ Metrics/ModuleLength:
   Enabled: false
 Metrics/PerceivedComplexity:
   Enabled: false
+Style/FrozenStringLiteralComment:
+  Enabled: false
