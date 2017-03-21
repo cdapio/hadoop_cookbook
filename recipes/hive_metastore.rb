@@ -2,7 +2,7 @@
 # Cookbook Name:: hadoop
 # Recipe:: hive_metastore
 #
-# Copyright © 2013-2015 Cask Data, Inc.
+# Copyright © 2013-2017 Cask Data, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -37,6 +37,18 @@ jars = node['hadoop']['sql_jars']
 jars.each do |jar|
   link "#{hadoop_lib_dir}/hive/lib/#{jar}.jar" do
     to "#{java_share_dir}/#{jar}.jar"
+  end
+end
+
+derby_dir =
+  if hive_sql == 'derby'
+    node['hive']['hive_site']['javax.jdo.option.ConnectionURL'][2].split(';').find { |o| /^databaseName/ =~ o }
+  end
+
+if derby_dir
+  directory ::File.dirname(derby_dir.split('=')[1]) do
+    action :create
+    not_if { derby_dir.nil? } # sssh, foodcritic
   end
 end
 
