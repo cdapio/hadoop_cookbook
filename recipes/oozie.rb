@@ -35,17 +35,17 @@ oozie_sql =
     'derby'
   end
 
-derby_dir =
-  if oozie_sql == 'derby' && node['oozie'].key?('oozie_site') &&
-     node['oozie']['oozie_site'].key?('oozie.service.JPAService.jdbc.url')
-    node['oozie']['oozie_site']['oozie.service.JPAService.jdbc.url'][2].split(';').find { |o| /^databaseName/ =~ o }
+derby_db =
+  if oozie_sql == 'derby' && node['oozie'].key?('oozie_site') && node['oozie']['oozie_site'].key?('oozie.service.JPAService.jdbc.url')
+    node['oozie']['oozie_site']['oozie.service.JPAService.jdbc.url'].split(':')[2].split(';').find { |o| /^databaseName/ =~ o }.split('=')
+  elsif node['oozie'].key?('oozie_site') && node['oozie']['oozie_site'].key?('oozie.db.schema.name')
+    "#{oozie_data_dir}/#{oozie.db.schema.name}-db"
+  else
+    "#{oozie_data_dir}/oozie-db"
   end
 
-if derby_dir
-  directory ::File.dirname(derby_dir.split('=')[1]) do
-    action :create
-    not_if { derby_dir.nil? } # sssh, foodcritic
-  end
+directory ::File.dirname(derby_db) do
+  action :create
 end
 
 node.default['hadoop']['sql_connector'] = oozie_sql

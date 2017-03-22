@@ -40,16 +40,16 @@ jars.each do |jar|
   end
 end
 
-derby_dir =
-  if hive_sql == 'derby'
-    node['hive']['hive_site']['javax.jdo.option.ConnectionURL'][2].split(';').find { |o| /^databaseName/ =~ o }
+derby_db =
+  if hive_sql == 'derby' && node['hive'].key?('hive_site') && node['hive']['hive_site'].key?('javax.jdo.option.ConnectionURL')
+    node['hive']['hive_site']['javax.jdo.option.ConnectionURL'].split(':')[2].split(';').find { |o| /^databaseName/ =~ o }.split('=')[1]
+  else
+    # We set this to our default, because the Hive default uses the current working directory
+    '/var/lib/hive/metastore/metastore_db'
   end
 
-if derby_dir
-  directory ::File.dirname(derby_dir.split('=')[1]) do
-    action :create
-    not_if { derby_dir.nil? } # sssh, foodcritic
-  end
+directory ::File.dirname(derby_db) do
+  action :create
 end
 
 # Hive HDFS directories
