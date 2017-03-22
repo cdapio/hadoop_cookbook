@@ -39,7 +39,7 @@ derby_db =
   if oozie_sql == 'derby' && node['oozie'].key?('oozie_site') && node['oozie']['oozie_site'].key?('oozie.service.JPAService.jdbc.url')
     node['oozie']['oozie_site']['oozie.service.JPAService.jdbc.url'].split(':')[2].split(';').find { |o| /^databaseName/ =~ o }.split('=')
   elsif node['oozie'].key?('oozie_site') && node['oozie']['oozie_site'].key?('oozie.db.schema.name')
-    "#{oozie_data_dir}/#{oozie.db.schema.name}-db"
+    "#{oozie_data_dir}/#{node['oozie']['oozie_site']['oozie.db.schema.name']}-db"
   else
     "#{oozie_data_dir}/oozie-db"
   end
