@@ -48,6 +48,8 @@ a.out
 .watchr
 .rspec
 .rubocop.yml
+.rubocop_todo.yml
+.kitchen.yml
 .codeclimate.yml
 spec/*
 spec/fixtures/*
@@ -82,8 +84,9 @@ tmp
 
 # Cookbooks #
 #############
-CONTRIBUTING
+CONTRIBUTING*
 CHANGELOG*
+chefignore
 
 # Strainer #
 ############
