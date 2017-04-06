@@ -135,6 +135,8 @@ full_version =
     '2.5.0.0-1245'
   when '2.5.3.0'
     '2.5.3.0-37'
+  when '2.6.0.3'
+    '2.6.0.3-8'
   else
     node['hadoop']['distribution_version']
   end
