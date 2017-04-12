@@ -2,7 +2,7 @@
 # Cookbook Name:: hadoop
 # Recipe:: hadoop_hdfs_datanode
 #
-# Copyright © 2013-2016 Cask Data, Inc.
+# Copyright © 2013-2017 Cask Data, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -36,6 +36,16 @@ dfs_data_dirs.split(',').each do |dir|
     mode dfs_data_dir_perm
     owner 'hdfs'
     group 'hdfs'
+    action :create
+    recursive true
+  end
+end
+
+if node['hadoop']['hdfs_site'].key?('dfs.domain.socket.path')
+  directory ::File.dirname(node['hadoop']['hdfs_site']['dfs.domain.socket.path']).gsub('file://', '') do
+    mode '0750'
+    owner 'hdfs'
+    group 'hadoop'
     action :create
     recursive true
   end
