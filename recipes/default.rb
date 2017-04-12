@@ -2,7 +2,7 @@
 # Cookbook Name:: hadoop
 # Recipe:: default
 #
-# Copyright © 2013-2015 Cask Data, Inc.
+# Copyright © 2013-2017 Cask Data, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -121,7 +121,7 @@ end # End fair-scheduler.xml
         svc
       end
     default_log_dir =
-      if hdp22? && node['platform_family'] == 'rhel'
+      if hdp22? && platform_family?('amazon', 'rhel')
         "/var/log/hadoop/#{log_dir}"
       else
         "/var/log/hadoop-#{log_dir}"
@@ -148,7 +148,7 @@ end # End fair-scheduler.xml
       # symlink HDP 2.2 log directory
       link "/var/log/hadoop/#{log_dir}" do
         to node['hadoop'][envfile]["#{svc}_log_dir"]
-        only_if { hdp22? && node['platform_family'] == 'rhel' }
+        only_if { hdp22? && platform_family?('amazon', 'rhel') }
       end
     end
     # rubocop:enable Style/Next
