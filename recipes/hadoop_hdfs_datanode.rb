@@ -41,7 +41,7 @@ dfs_data_dirs.split(',').each do |dir|
   end
 end
 
-if node['hadoop']['hdfs_site'].key?('dfs.domain.socket.path')
+if node['hadoop']['hdfs_site'].key?('dfs.domain.socket.path') # ~FC023
   directory ::File.dirname(node['hadoop']['hdfs_site']['dfs.domain.socket.path']).gsub('file://', '') do
     mode '0750'
     owner 'hdfs'
