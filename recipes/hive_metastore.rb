@@ -2,7 +2,7 @@
 # Cookbook Name:: hadoop
 # Recipe:: hive_metastore
 #
-# Copyright © 2013-2015 Cask Data, Inc.
+# Copyright © 2013-2017 Cask Data, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -38,6 +38,18 @@ jars.each do |jar|
   link "#{hadoop_lib_dir}/hive/lib/#{jar}.jar" do
     to "#{java_share_dir}/#{jar}.jar"
   end
+end
+
+derby_db =
+  if hive_sql == 'derby' && node['hive'].key?('hive_site') && node['hive']['hive_site'].key?('javax.jdo.option.ConnectionURL')
+    node['hive']['hive_site']['javax.jdo.option.ConnectionURL'].split(':')[2].split(';').find { |o| /^databaseName/ =~ o }.split('=')[1]
+  else
+    # We set this to our default, because the Hive default uses the current working directory
+    '/var/lib/hive/metastore/metastore_db'
+  end
+
+directory ::File.dirname(derby_db) do
+  action :create
 end
 
 # Hive HDFS directories

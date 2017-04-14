@@ -2,7 +2,7 @@
 # Cookbook Name:: hadoop
 # Recipe:: oozie
 #
-# Copyright © 2013-2016 Cask Data, Inc.
+# Copyright © 2013-2017 Cask Data, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -34,6 +34,19 @@ oozie_sql =
   else
     'derby'
   end
+
+derby_db =
+  if oozie_sql == 'derby' && node['oozie'].key?('oozie_site') && node['oozie']['oozie_site'].key?('oozie.service.JPAService.jdbc.url')
+    node['oozie']['oozie_site']['oozie.service.JPAService.jdbc.url'].split(':')[2].split(';').find { |o| /^databaseName/ =~ o }.split('=')
+  elsif node['oozie'].key?('oozie_site') && node['oozie']['oozie_site'].key?('oozie.db.schema.name')
+    "#{oozie_data_dir}/#{node['oozie']['oozie_site']['oozie.db.schema.name']}-db"
+  else
+    "#{oozie_data_dir}/oozie-db"
+  end
+
+directory ::File.dirname(derby_db) do
+  action :create
+end
 
 node.default['hadoop']['sql_connector'] = oozie_sql
 include_recipe 'hadoop::_sql_connectors'
