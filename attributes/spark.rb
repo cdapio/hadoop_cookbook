@@ -5,6 +5,9 @@ default['spark']['release']['install_path']  = '/opt'
 default['spark']['release']['version'] = '1.6.0'
 default['spark']['release']['hadoop_version'] = 'hadoop2.6'
 
+# spark conf
+default['spark']['conf_dir'] = '/opt/spark/conf'
+
 # spark-env.sh
 default['spark']['spark_env']['standalone_spark_master_host'] = node['fqdn']
 default['spark']['spark_env']['spark_master_ip']              = node['fqdn']
