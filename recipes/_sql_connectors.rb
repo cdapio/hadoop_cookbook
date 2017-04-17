@@ -2,7 +2,7 @@
 # Cookbook Name:: hadoop
 # Recipe:: _sql_connectors
 #
-# Copyright © 2015 Cask Data, Inc.
+# Copyright © 2015-2017 Cask Data, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -37,7 +37,7 @@ if node['hadoop'].key?('sql_connector')
       jars = pkgs
     end
   when 'postgresql'
-    if node['platform_family'] == 'rhel'
+    if platform_family?('rhel', 'amazon')
       if node['platform_version'].to_i == '5'
         Chef::Log.warn('You must download and install JDBC connectors, manually')
         pkgs = nil

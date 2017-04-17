@@ -81,7 +81,7 @@ when 'hdp'
   hdp_utils_version = '1.1.0.20'
 
   case node['platform_family']
-  when 'rhel'
+  when 'rhel', 'amazon'
     yum_base_url = 'http://public-repo-1.hortonworks.com/HDP'
     os = if major_platform_version == 5 || hdp_version.to_f >= 2.3
            "centos#{major_platform_version}"
@@ -180,7 +180,7 @@ when 'cdh'
   end
   Chef::Log.warn("Short versions for node['hadoop']['distribution_version'] are deprecated! Please use full version!") if node['hadoop']['distribution_version'].to_s == '5'
   case node['platform_family']
-  when 'rhel'
+  when 'rhel', 'amazon'
     yum_base_url = "http://archive.cloudera.com/cdh#{cdh_release}/redhat"
     yum_repo_url = node['hadoop']['yum_repo_url'] ? node['hadoop']['yum_repo_url'] : "#{yum_base_url}/#{major_platform_version}/#{node['kernel']['machine']}/cdh/#{node['hadoop']['distribution_version']}"
     yum_repo_key_url = node['hadoop']['yum_repo_key_url'] ? node['hadoop']['yum_repo_key_url'] : "#{yum_base_url}/#{major_platform_version}/#{node['kernel']['machine']}/cdh/#{key}-cloudera"
@@ -243,7 +243,7 @@ when 'bigtop'
   Chef::Log.warn('Allowing install of unsigned binaries') unless validate_repo_key
 
   case node['platform_family']
-  when 'rhel'
+  when 'rhel', 'amazon'
 
     case major_platform_version
     when 5, 6
@@ -308,7 +308,7 @@ when 'iop'
   iop_utils_version = '1.2.0.0'
 
   case node['platform_family']
-  when 'rhel'
+  when 'rhel', 'amazon'
     # https://ibm-open-platform.ibm.com/repos/IOP/rhel/6/x86_64/4.1.x/GA/4.1.0.0/
     yum_base_url = 'https://ibm-open-platform.ibm.com/repos/IOP'
     os = 'rhel'
