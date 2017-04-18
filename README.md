@@ -5,7 +5,7 @@
 [![Build Status](http://img.shields.io/travis/caskdata/hadoop_cookbook.svg)](http://travis-ci.org/caskdata/hadoop_cookbook)
 [![Code Climate](https://codeclimate.com/github/caskdata/hadoop_cookbook/badges/gpa.svg)](https://codeclimate.com/github/caskdata/hadoop_cookbook)
 
-# Requirements
+## Requirements
 
 This cookbook may work on earlier versions, but these are the minimal tested versions.
 
@@ -16,13 +16,13 @@ This cookbook may work on earlier versions, but these are the minimal tested ver
 
 This cookbook assumes that you have a working Java installation. It has been tested using version `1.21.2` of the `java` cookbook, using Oracle JDK 7. If you plan on using Hive with a database other than the embedded Derby, you will need to provide it and set it up prior to starting Hive Metastore service.
 
-# Usage
+## Usage
 
 This cookbook is designed to be used with a wrapper cookbook or a role with settings for configuring Hadoop. The services should work out of the box on a single host, but little validation is done that you have made a working Hadoop configuration. The cookbook is attribute-driven and is suitable for use via either `chef-client` or `chef-solo` since it does not use any server-based functionality. The cookbook defines service definitions for each Hadoop service, but it does not enable or start them, by default.
 
 For more information, read the [Wrapping this cookbook](https://github.com/caskdata/hadoop_cookbook/wiki/Wrapping-this-cookbook) wiki entry.
 
-# Attributes
+## Attributes
 
 Attributes for this cookbook define the configuration files for Hadoop and its various services. Hadoop configuration files are XML files, with name/value property pairs. The attribute name determines which file the property is placed and the property name. The attribute value is the property value. The attribute `hadoop['core_site']['fs.defaultFS']` will configure a property named `fs.defaultFS` in `core-site.xml` in `hadoop['conf_dir']`. All attribute values are taken as-is and only minimal configuration checking is done on values. It is up to the user to provide a valid configuration for your cluster.
 
@@ -65,22 +65,22 @@ zookeeper['jaas'] | jaas.conf | `zookeeper['conf_dir']`
 zookeeper['log4j'] | log4j.properties | `zookeeper['conf_dir']`
 zookeeper['zoocfg'] | zoo.cfg | `zookeeper['conf_dir']`
 
-## Distribution Attributes
+### Distribution Attributes
 
 * `hadoop['distribution']` - Specifies which Hadoop distribution to use, currently supported: cdh, hdp, bigtop. Default `hdp`
 * `hadoop['distribution_version']` - Specifies which version of `hadoop['distribution']` to use. Default `2.0` if `hadoop['distribution']` is `hdp`, `5` if `hadoop['distribution']` is `cdh`, and `0.8.0` if `hadoop['distribution']` is `bigtop`.  It can also be set to `develop` when `hadoop['distribution']` is `bigtop` to allow installing from development repos without gpg validation.
 
-### APT-specific settings
+#### APT-specific settings
 
 * `hadoop['apt_repo_url']` - Provide an alternate apt installation source location. If you change this attribute, you are expected to provide a path to a working repo for the `hadoop['distribution']` used. Default: `nil`
 * `hadoop['apt_repo_key_url']` - Provide an alternative apt repository key source location. Default `nil`
 
-### RPM-specific settings
+#### RPM-specific settings
 
 * `hadoop['yum_repo_url']` - Provide an alternate yum installation source location. If you change this attribute, you are expected to provide a path to a working repo for the `hadoop['distribution']` used. Default: `nil`
 * `hadoop['yum_repo_key_url']` - Provide an alternative yum repository key source location. Default `nil`
 
-## Global Configuration Attributes
+### Global Configuration Attributes
 
 * `hadoop['conf_dir']` - The directory used inside `/etc/hadoop` and used via the alternatives system. Default `conf.chef`
 * `hbase['conf_dir']` - The directory used inside `/etc/hbase` and used via the alternatives system. Default `conf.chef`
@@ -91,14 +91,14 @@ zookeeper['zoocfg'] | zoo.cfg | `zookeeper['conf_dir']`
 * `storm['conf_dir']` - The directory used inside `/etc/storm` and used via the alternatives system. Default `conf.chef`
 * `zookeeper['conf_dir']` - The directory used inside `/etc/zookeeper` and used via the alternatives system. Default `conf.chef`
 
-## Default Attributes
+### Default Attributes
 
 * `hadoop['core_site']['fs.defaultFS']` - Sets URI to HDFS NameNode. Default `hdfs://localhost`
 * `hadoop['yarn_site']['yarn.resourcemanager.hostname']` - Sets hostname of YARN ResourceManager. Default `localhost`
 * `hive['hive_site']['javax.jdo.option.ConnectionURL']` - Sets JDBC URL. Default `jdbc:derby:;databaseName=/var/lib/hive/metastore/metastore_db;create=true`
 * `hive['hive_site']['javax.jdo.option.ConnectionDriverName']` - Sets JDBC Driver. Default `org.apache.derby.jdbc.EmbeddedDriver`
 
-# Recipes
+## Recipes
 
 * `default.rb` - Sets up configuration and `hadoop-client` packages.
 * `hadoop_hdfs_checkconfig` - Ensures the HDFS configuration meets required parameters.
@@ -136,11 +136,11 @@ zookeeper['zoocfg'] | zoo.cfg | `zookeeper['conf_dir']`
 * `zookeeper` - Sets up `zookeeper` package.
 * `zookeeper_server` - Sets up a ZooKeeper server.
 
-# Author
+## Author
 
 Author:: Cask Data, Inc. (<ops@cask.co>)
 
-# Testing
+## Testing
 
 This cookbook has several ways to test it. It includes code tests, which are done using `foodcritic`, `rubocop`, and `chefspec`.
 It, also, includes functionality testing, provided by `kitchen`.
@@ -154,7 +154,7 @@ rake rubocop      # Ruby style guide linter
 rake share        # Share cookbook to community site
 ```
 
-# License
+## License
 
 Licensed under the Apache License, Version 2.0 (the "License"); you may not use this software except in compliance with the License. You may obtain a copy of the License at
 
