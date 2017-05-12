@@ -1,5 +1,5 @@
 #
-# Cookbook Name:: hadoop
+# Cookbook:: hadoop
 # Attribute:: zzz_system_tuning
 #
 # Copyright © 2013-2015 Cask Data, Inc.

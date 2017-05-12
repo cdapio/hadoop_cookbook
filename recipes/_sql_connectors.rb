@@ -1,5 +1,5 @@
 #
-# Cookbook Name:: hadoop
+# Cookbook:: hadoop
 # Recipe:: _sql_connectors
 #
 # Copyright © 2015-2017 Cask Data, Inc.

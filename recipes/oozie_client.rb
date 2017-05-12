@@ -1,5 +1,5 @@
 #
-# Cookbook Name:: hadoop
+# Cookbook:: hadoop
 # Recipe:: oozie_client
 #
 # Copyright © 2013-2016 Cask Data, Inc.

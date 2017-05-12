@@ -1,5 +1,5 @@
 #
-# Cookbook Name:: hadoop
+# Cookbook:: hadoop
 # Recipe:: storm_ui
 #
 # Copyright © 2015 VAHNA

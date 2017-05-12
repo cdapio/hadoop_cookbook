@@ -1,5 +1,5 @@
 #
-# Cookbook Name:: hadoop
+# Cookbook:: hadoop
 # Recipe:: hadoop_yarn_nodemanager
 #
 # Copyright © 2013-2017 Cask Data, Inc.

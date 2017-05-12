@@ -1,5 +1,5 @@
 #
-# Cookbook Name:: hadoop
+# Cookbook:: hadoop
 # Recipe:: zookeeper_server
 #
 # Copyright © 2013-2016 Cask Data, Inc.

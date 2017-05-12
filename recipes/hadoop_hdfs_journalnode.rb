@@ -1,5 +1,5 @@
 #
-# Cookbook Name:: hadoop
+# Cookbook:: hadoop
 # Recipe:: hadoop_hdfs_journalnode
 #
 # Copyright © 2013-2015 Cask Data, Inc.
