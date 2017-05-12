@@ -51,6 +51,9 @@ hbase['log4j'] | log4j.properties | `hbase['conf_dir']`
 hive['hive_env'] | hive-env.sh | `hive['conf_dir']`
 hive['hive_site'] | hive-site.xml | `hive['conf_dir']`
 hive['jaas'] | jaas.conf | `hive['conf_dir']`
+hive2['hive_env'] | hive-env.sh | `hive2['conf_dir']`
+hive2['hive_site'] | hive-site.xml | `hive2['conf_dir']`
+hive2['jaas'] | jaas.conf | `hive2['conf_dir']`
 oozie['oozie_env'] | oozie-env.sh | `oozie['conf_dir']`
 oozie['oozie_site'] | oozie-site.xml | `oozie['conf_dir']`
 spark['log4j'] | log4j.properties | `spark['conf_dir']`
