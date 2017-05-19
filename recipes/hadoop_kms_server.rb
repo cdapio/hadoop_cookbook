@@ -1,5 +1,5 @@
 #
-# Cookbook Name:: hadoop
+# Cookbook:: hadoop
 # Recipe:: hadoop_kms_server
 #
 # Copyright © 2015-2016 Cask Data, Inc.

@@ -1,5 +1,5 @@
 #
-# Cookbook Name:: hadoop
+# Cookbook:: hadoop
 # Recipe:: hive_server
 #
 # Copyright © 2013-2015 Cask Data, Inc.

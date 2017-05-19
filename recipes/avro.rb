@@ -1,5 +1,5 @@
 #
-# Cookbook Name:: hadoop
+# Cookbook:: hadoop
 # Recipe:: avro
 #
 # Copyright © 2013-2014 Cask Data, Inc.

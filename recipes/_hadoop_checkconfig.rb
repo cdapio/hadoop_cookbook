@@ -1,5 +1,5 @@
 #
-# Cookbook Name:: hadoop
+# Cookbook:: hadoop
 # Recipe:: _hadoop_checkconfig
 #
 # Copyright © 2015 Cask Data, Inc.

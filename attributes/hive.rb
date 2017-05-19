@@ -1,5 +1,5 @@
 #
-# Cookbook Name:: hadoop
+# Cookbook:: hadoop
 # Attribute:: hive
 #
 # Copyright © 2013-2016 Cask Data, Inc.

@@ -1,5 +1,5 @@
 #
-# Cookbook Name:: hadoop
+# Cookbook:: hadoop
 # Recipe:: spark_master
 #
 # Copyright © 2013-2015 Cask Data, Inc.
