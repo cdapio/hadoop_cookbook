@@ -1,6 +1,16 @@
 hadoop CHANGELOG
 ================
 
+v2.11.1 (Jun 19, 2017)
+----------------------
+
+- Add HDP 2.5.5.0 ( Issue: #328 )
+- Update cookbook headers ( Issue: #329 )
+- Support installing Slider ( Issue: #330 )
+- Support Hive2 installation and configuration ( Issue: #331 )
+- Support Spark 2.x (spark2) package ( Issue: #332 )
+- Add HDP 2.6.1 ( Issue: #333 )
+
 v2.11.0 (Apr 18, 2017)
 ----------------------
 
