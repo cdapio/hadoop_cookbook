@@ -1,6 +1,11 @@
 hadoop CHANGELOG
 ================
 
+v2.11.2 (Jun 20, 2017)
+----------------------
+
+- Create hadoop log directory ( Issue: #335 )
+
 v2.11.1 (Jun 19, 2017)
 ----------------------
 
