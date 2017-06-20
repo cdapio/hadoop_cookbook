@@ -145,6 +145,14 @@ end # End fair-scheduler.xml
       link "/var/log/hadoop-#{log_dir}" do
         to node['hadoop'][envfile]["#{svc}_log_dir"]
       end
+      # hdp 2.6.1 no longer creates /var/log/hadoop
+      directory '/var/log/hadoop' do
+        mode '0775'
+        owner 'hdfs'
+        group 'hadoop'
+        action :create
+        only_if { hdp22? && platform_family?('amazon', 'rhel') }
+      end
       # symlink HDP 2.2 log directory
       link "/var/log/hadoop/#{log_dir}" do
         to node['hadoop'][envfile]["#{svc}_log_dir"]
