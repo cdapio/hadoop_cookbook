@@ -5,6 +5,7 @@ gem 'berkshelf', '~> 3.0'
 gem 'chefspec', '~> 4.0'
 gem 'rspec', '~> 3.0'
 
+# rubocop: disable Lint/UnneededDisable
 # rubocop: disable Bundler/DuplicatedGem
 
 if RUBY_VERSION.to_f < 2.0
