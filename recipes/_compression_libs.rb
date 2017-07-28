@@ -25,10 +25,10 @@ pkgs = []
 case node['platform_family']
 when 'debian'
   pkgs += if node['platform_version'] >= '16'
-    ['libsnappy1v5', 'libsnappy-dev']
-  else
-    ['libsnappy1', 'libsnappy-dev']
-  end
+            ['libsnappy1v5', 'libsnappy-dev']
+          else
+            ['libsnappy1', 'libsnappy-dev']
+          end
 when 'rhel', 'amazon'
   pkgs += ['snappy', 'snappy-devel']
 end
