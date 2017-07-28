@@ -1,6 +1,12 @@
 hadoop CHANGELOG
 ================
 
+v2.11.3 (Jul 28, 2017)
+----------------------
+
+- Use correct libsnappy package on Ubuntu 16, per @gwohletz ( Issues: #337 [COOK-126](https://issues.cask.co/browse/COOK-126) )
+- Cleanup Gemfile ( Issue: #338 )
+
 v2.11.2 (Jun 20, 2017)
 ----------------------
 
