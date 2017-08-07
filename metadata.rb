@@ -8,8 +8,9 @@ version          '2.11.3'
 
 depends 'yum', '>= 3.0'
 depends 'apt', '>= 2.1.2'
+depends 'sysctl', '< 0.10.0'
 
-%w(dpkg_autostart selinux sysctl ulimit).each do |cb|
+%w(dpkg_autostart selinux ulimit).each do |cb|
   depends cb
 end
 
