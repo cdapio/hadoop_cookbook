@@ -1,6 +1,11 @@
 hadoop CHANGELOG
 ================
 
+v2.11.4 (Aug 7, 2017)
+---------------------
+
+- Constrain sysctl due to its Chef version dependency ( Issues: #341 )
+
 v2.11.3 (Jul 28, 2017)
 ----------------------
 
