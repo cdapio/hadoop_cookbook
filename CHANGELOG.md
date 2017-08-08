@@ -1,6 +1,11 @@
 hadoop CHANGELOG
 ================
 
+v2.11.5 (Aug 7, 2017)
+---------------------
+
+- Support sysctl cookbook 0.10.0 on Chef 12.5+ ( Issues: #340 )
+
 v2.11.4 (Aug 7, 2017)
 ---------------------
 
