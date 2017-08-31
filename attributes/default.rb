@@ -111,8 +111,8 @@ if node['hadoop']['distribution'] == 'iop' ||
   distro = node['hadoop']['distribution']
   lzo_jar = distro == 'hdp' ? 'hadoop-lzo-0.6.0.${hdp.version}.jar' : 'hadoop-lzo-0.5.1.jar'
   # %{_FULL_VERSION} will be interpolated in the default recipe, when helper libraries are available
-  default['hadoop']['hadoop_env']['hadoop_opts'] += " -D#{distro}.version=%{_FULL_VERSION}"
-  default['hadoop']['mapred_env']['hadoop_opts'] += " -D#{distro}.version=%{_FULL_VERSION}"
+  default['hadoop']['hadoop_env']['hadoop_opts'] += " -D#{distro}.version=%<_FULL_VERSION>s"
+  default['hadoop']['mapred_env']['hadoop_opts'] += " -D#{distro}.version=%<_FULL_VERSION>s"
   default['hadoop']['mapred_site']['mapreduce.admin.map.child.java.opts'] =
     "-server -Djava.net.preferIPv4Stack=true -D#{distro}.version=${#{distro}.version}"
   default['hadoop']['mapred_site']['mapreduce.admin.user.env'] =
