@@ -162,6 +162,14 @@ end # End fair-scheduler.xml
     # rubocop:enable Style/Next
   end
 
+  # Evaluate any Delayed Interpolation tokens in *-env attributes
+  delayed_attrs = { _FULL_VERSION: hdp_version }
+  if node['hadoop'].key?(envfile) && !node['hadoop'][envfile].empty?
+    node['hadoop'][envfile].each do |k, v|
+      node.default['hadoop'][envfile][k] = v % delayed_attrs
+    end
+  end
+
   template "#{hadoop_conf_dir}/#{envfile.tr('_', '-')}.sh" do
     source 'generic-env.sh.erb'
     mode '0755'

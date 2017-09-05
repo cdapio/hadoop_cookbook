@@ -86,6 +86,18 @@ describe 'hadoop::default' do
       )
     end
 
+    it 'renders file hadoop-env.sh with HADOOP_OPTS containing the correct hdp.version' do
+      expect(chef_run).to render_file('/etc/hadoop/conf.chef/hadoop-env.sh').with_content(
+        /HADOOP_OPTS.*2.3.4.7-4/
+      )
+    end
+
+    it 'renders file mapred-env.sh with HADOOP_OPTS containing the correct hdp.version' do
+      expect(chef_run).to render_file('/etc/hadoop/conf.chef/mapred-env.sh').with_content(
+        /HADOOP_OPTS.*2.3.4.7-4/
+      )
+    end
+
     it 'renders file hadoop-policy.xml with test.property' do
       expect(chef_run).to render_file('/etc/hadoop/conf.chef/hadoop-policy.xml').with_content(
         /test.property/
