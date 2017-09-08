@@ -34,4 +34,9 @@ elsif Chef::VERSION.to_f < 12.14
   cookbook 'yum', '< 5.0'
 end
 
+group :integration do
+  cookbook 'java'
+  cookbook 'hadoop_test', path: './test/fixtures/cookbooks/hadoop_test'
+end
+
 metadata

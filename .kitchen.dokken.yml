@@ -1,0 +1,65 @@
+driver:
+  name: dokken
+  privileged: true
+  chef_version: <%= ENV['CHEF_VERSION'] || 'current' %>
+
+transport:
+  name: dokken
+
+provisioner:
+  name: dokken
+  # These three lines enforce Chef 13 compatibility
+  client_rb:
+    treat_deprecation_warnings_as_errors: true
+    resource_cloning: false
+
+platforms:
+  - name: centos-6
+    driver:
+      chef_version: '12.21.3'
+      hostname: 'localhost.localdomain'
+      image: dokken/centos-6
+      pid_one_command: /sbin/init
+      platform: rhel
+  - name: centos-7
+    driver:
+      image: dokken/centos-7
+      intermediate_instructions:
+        - RUN /usr/bin/yum install -y systemd-sysv
+      pid_one_command: /usr/lib/systemd/systemd
+      platform: rhel
+  - name: ubuntu-12.04
+    driver:
+      chef_version: '12.21.3'
+      image: dokken/ubuntu-12.04
+      intermediate_instructions:
+        - RUN /usr/bin/apt-get update
+      pid_one_command: /sbin/init
+  - name: ubuntu-14.04
+    driver:
+      image: dokken/ubuntu-14.04
+      intermediate_instructions:
+        - RUN /usr/bin/apt-get update
+      pid_one_command: /sbin/init
+  - name: ubuntu-16.04
+    driver:
+      image: dokken/ubuntu-16.04
+      intermediate_instructions:
+        - RUN /usr/bin/apt-get update
+      pid_one_command: /bin/systemd
+
+suites:
+  - name: default
+    run_list:
+      - recipe[java::default]
+      - recipe[hadoop_test::default]
+    attributes:
+      hadoop:
+        hdfs_site:
+         'dfs.datanode.max.transfer.threads': 4096
+      hive:
+        hive_site:
+         'hive.support.concurrency': true
+         'hive.zookeeper.quorum': 'localhost'
+      java:
+        jdk_version: 7

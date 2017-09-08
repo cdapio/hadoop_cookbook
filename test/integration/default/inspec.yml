@@ -1,0 +1,6 @@
+name: hadoop-simple
+title: Integration tests for HDFS and YARN basic functionality
+summary: This InSpec profile contains integration tests for Hadoop HDFS and YARN
+version: 0.0.1
+supports:
+  - os-family: linux
