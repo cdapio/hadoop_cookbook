@@ -29,6 +29,7 @@ when 'debian'
           else
             ['libsnappy1', 'libsnappy-dev']
           end
+  pkgs += ['libsnappy1'] if node['hadoop']['distribution'] == 'hdp'
 when 'rhel', 'amazon'
   pkgs += ['snappy', 'snappy-devel']
 end
