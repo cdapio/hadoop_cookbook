@@ -8,7 +8,7 @@ describe 'hadoop::repo' do
       end.converge(described_recipe)
     end
 
-    %w(HDP-2.x Updates-HDP-2.x HDP-UTILS-1.1.0.20).each do |repo|
+    %w(HDP-2.x Updates-HDP-2.x HDP-UTILS-1.1.0.21).each do |repo|
       it "add #{repo} yum_repository" do
         expect(chef_run).to add_yum_repository(repo)
       end

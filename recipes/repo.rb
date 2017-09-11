@@ -82,7 +82,7 @@ when 'hdp'
     Chef::Application.fatal!('This cookbook only supports HDP 2.x')
   end
 
-  hdp_utils_version = '1.1.0.20'
+  hdp_utils_version = '1.1.0.21'
 
   case node['platform_family']
   when 'rhel', 'amazon'
