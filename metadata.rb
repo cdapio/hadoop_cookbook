@@ -13,12 +13,18 @@ depends 'apt', '>= 2.1.2'
   depends cb
 end
 
+# RHEL-like distributions
 %w(
-  amazon
   centos
-  debian
   redhat
   scientific
+).each do |os|
+  supports os, '>= 6.0'
+end
+
+%w(
+  amazon
+  debian
   ubuntu
 ).each do |os|
   supports os

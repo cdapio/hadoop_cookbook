@@ -2,7 +2,7 @@
 # Cookbook:: hadoop
 # Recipe:: repo
 #
-# Copyright © 2013-2016 Cask Data, Inc.
+# Copyright © 2013-2017 Cask Data, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -87,7 +87,7 @@ when 'hdp'
   case node['platform_family']
   when 'rhel', 'amazon'
     yum_base_url = 'http://public-repo-1.hortonworks.com/HDP'
-    os = if major_platform_version == 5 || hdp_update_version.to_f >= 2.3
+    os = if hdp_update_version.to_f >= 2.3
            "centos#{major_platform_version}"
          else
            'centos6'
