@@ -87,7 +87,7 @@ when 'hdp'
   case node['platform_family']
   when 'rhel', 'amazon'
     yum_base_url = 'http://public-repo-1.hortonworks.com/HDP'
-    os = if major_platform_version == 5 || hdp_version.to_f >= 2.3
+    os = if major_platform_version == 5 || hdp_update_version.to_f >= 2.3
            "centos#{major_platform_version}"
          else
            'centos6'
@@ -96,22 +96,17 @@ when 'hdp'
     yum_repo_url = node['hadoop']['yum_repo_url'] ? node['hadoop']['yum_repo_url'] : "#{yum_base_url}/#{os}/2.x/GA/#{hdp_version}"
     yum_repo_key_url = node['hadoop']['yum_repo_key_url'] ? node['hadoop']['yum_repo_key_url'] : "#{yum_base_url}/#{os}/#{key}/#{key}-Jenkins"
 
-    yum_repository 'hdp' do
-      name 'HDP-2.x'
-      description 'Hortonworks Data Platform Version - HDP-2.x'
-      url yum_repo_url
-      gpgkey yum_repo_key_url
-      action :add
-    end
     if hdp_update_version.nil?
-      yum_repository 'hdp-updates' do
-        name 'Updates-HDP-2.x'
-        description 'Updates for Hortonworks Data Platform Version - HDP-2.x'
-        url "#{yum_base_url}/#{os}/2.x/updates"
+      # We are on one of the GA versions; configure the GA repo
+      yum_repository 'hdp' do
+        name 'HDP-2.x'
+        description 'Hortonworks Data Platform Version - HDP-2.x'
+        url yum_repo_url
         gpgkey yum_repo_key_url
         action :add
       end
     else
+      # We are on an update version; configure the update repo only
       yum_repository 'hdp-updates' do
         name 'Updates-HDP-2.x'
         description 'Updates for Hortonworks Data Platform Version - HDP-2.x'
