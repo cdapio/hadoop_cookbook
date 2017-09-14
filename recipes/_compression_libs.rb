@@ -46,8 +46,7 @@ elsif iop?
   pkgs += ['lzo', 'lzo-devel', 'hadoop-lzo', 'hadoop-lzo-native']
 end
 
-pkgs.each do |pkg|
-  package pkg do
-    action :install
-  end
+package "compression libs packages" do
+  package_name pkgs
+  action :install
 end
