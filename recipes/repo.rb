@@ -93,11 +93,11 @@ when 'hdp'
            'centos6'
          end
 
-    yum_repo_url = node['hadoop']['yum_repo_url'] ? node['hadoop']['yum_repo_url'] : "#{yum_base_url}/#{os}/2.x/GA/#{hdp_version}"
-    yum_repo_key_url = node['hadoop']['yum_repo_key_url'] ? node['hadoop']['yum_repo_key_url'] : "#{yum_base_url}/#{os}/#{key}/#{key}-Jenkins"
-
     if hdp_update_version.nil?
       # We are on one of the GA versions; configure the GA repo
+      yum_repo_url = node['hadoop']['yum_repo_url'] ? node['hadoop']['yum_repo_url'] : "#{yum_base_url}/#{os}/2.x/GA/#{hdp_version}"
+      yum_repo_key_url = node['hadoop']['yum_repo_key_url'] ? node['hadoop']['yum_repo_key_url'] : "#{yum_repo_url}/#{key}/#{key}-Jenkins"
+
       yum_repository 'hdp' do
         name 'HDP-2.x'
         description 'Hortonworks Data Platform Version - HDP-2.x'
@@ -107,10 +107,13 @@ when 'hdp'
       end
     else
       # We are on an update version; configure the update repo only
+      yum_repo_url = node['hadoop']['yum_repo_url'] ? node['hadoop']['yum_repo_url'] : "#{yum_base_url}/#{os}/2.x/updates/#{hdp_update_version}"
+      yum_repo_key_url = node['hadoop']['yum_repo_key_url'] ? node['hadoop']['yum_repo_key_url'] : "#{yum_repo_url}/#{key}/#{key}-Jenkins"
+
       yum_repository 'hdp-updates' do
         name 'Updates-HDP-2.x'
         description 'Updates for Hortonworks Data Platform Version - HDP-2.x'
-        url "#{yum_base_url}/#{os}/2.x/updates/#{hdp_update_version}"
+        url yum_repo_url
         gpgkey yum_repo_key_url
         action :add
       end
