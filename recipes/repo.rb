@@ -95,8 +95,10 @@ when 'hdp'
 
     if hdp_update_version.nil?
       # We are on one of the GA versions; configure the GA repo
+      # rubocop:disable Metrics/BlockNesting
       yum_repo_url = node['hadoop']['yum_repo_url'] ? node['hadoop']['yum_repo_url'] : "#{yum_base_url}/#{os}/2.x/GA/#{hdp_version}"
       yum_repo_key_url = node['hadoop']['yum_repo_key_url'] ? node['hadoop']['yum_repo_key_url'] : "#{yum_repo_url}/#{key}/#{key}-Jenkins"
+      # rubocop:enable Metrics/BlockNesting
 
       yum_repository 'hdp' do
         name 'HDP-2.x'
@@ -107,8 +109,10 @@ when 'hdp'
       end
     else
       # We are on an update version; configure the update repo only
+      # rubocop:disable Metrics/BlockNesting
       yum_repo_url = node['hadoop']['yum_repo_url'] ? node['hadoop']['yum_repo_url'] : "#{yum_base_url}/#{os}/2.x/updates/#{hdp_update_version}"
       yum_repo_key_url = node['hadoop']['yum_repo_key_url'] ? node['hadoop']['yum_repo_key_url'] : "#{yum_repo_url}/#{key}/#{key}-Jenkins"
+      # rubocop:enable Metrics/BlockNesting
 
       yum_repository 'hdp-updates' do
         name 'Updates-HDP-2.x'
