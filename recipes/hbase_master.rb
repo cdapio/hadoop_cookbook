@@ -2,7 +2,7 @@
 # Cookbook:: hadoop
 # Recipe:: hbase_master
 #
-# Copyright © 2013-2015 Cask Data, Inc.
+# Copyright © 2013-2017 Cask Data, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -19,7 +19,7 @@
 
 include_recipe 'hadoop::hbase'
 include_recipe 'hadoop::_hbase_checkconfig'
-include_recipe 'hadoop::_system_tuning'
+include_recipe 'hadoop::_system_tuning' if node['hadoop']['system_tuning_enabled']
 pkg = 'hbase-master'
 
 # HBase can use a local directory or an HDFS directory for its rootdir...

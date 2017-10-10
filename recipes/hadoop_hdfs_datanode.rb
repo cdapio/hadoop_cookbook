@@ -19,7 +19,7 @@
 
 include_recipe 'hadoop::default'
 include_recipe 'hadoop::_hadoop_hdfs_checkconfig'
-include_recipe 'hadoop::_system_tuning'
+include_recipe 'hadoop::_system_tuning' if node['hadoop']['system_tuning_enabled']
 pkg = 'hadoop-hdfs-datanode'
 
 dfs_data_dirs =
