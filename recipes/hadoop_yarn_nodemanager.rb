@@ -18,7 +18,7 @@
 #
 
 include_recipe 'hadoop::default'
-include_recipe 'hadoop::_system_tuning'
+include_recipe 'hadoop::_system_tuning' if node['hadoop']['system_tuning_enabled']
 pkg = 'hadoop-yarn-nodemanager'
 
 # Ensure permissions for secure Hadoop... this *should* be no-op

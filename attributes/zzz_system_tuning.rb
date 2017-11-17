@@ -2,7 +2,7 @@
 # Cookbook:: hadoop
 # Attribute:: zzz_system_tuning
 #
-# Copyright © 2013-2015 Cask Data, Inc.
+# Copyright © 2013-2017 Cask Data, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -16,6 +16,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
+
+# Set this to false to disable running the _system_tuning recipe. This may be desirable when running in a container.
+default['hadoop']['system_tuning_enabled'] = true
 
 # This attributes file sets up the port reservations for sysctl for COOK-79. Since these values must be compiled into
 # a single value, everything is done in this one file, and is done at Chef compile time, versus in a recipe. This is
