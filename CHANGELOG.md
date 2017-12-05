@@ -1,6 +1,14 @@
 hadoop CHANGELOG
 ================
 
+v2.13.0 (Dec 5, 2017)
+---------------------
+
+- Update HDP GPG key location per docs (Issue: #352)
+- Add capability to skip system_tuning recipe (Issue: #353)
+- Update testing framework to modern Chef standards (Issue: #354)
+- Add support for HDP 2.6.3 (Issue: #355)
+
 v2.12.0 (Sep 12, 2017)
 ----------------------
 
