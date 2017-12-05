@@ -81,7 +81,7 @@ template "/etc/default/#{pkg}" do
     'yarn_pid_dir' => yarn_pid_dir,
     'yarn_log_dir' => yarn_log_dir,
     'yarn_ident_string' => 'yarn',
-    'yarn_conf_dir' => '/etc/hadoop/conf'
+    'yarn_conf_dir' => '/etc/hadoop/conf',
   }
 end
 
@@ -101,7 +101,7 @@ template "/etc/init.d/#{pkg}" do
     'user' => 'yarn',
     'home' => "#{hadoop_lib_dir}/hadoop",
     'pidfile' => '${YARN_PID_DIR}/yarn-yarn-nodemanager.pid',
-    'logfile' => "${YARN_LOG_DIR}/#{pkg}.log"
+    'logfile' => "${YARN_LOG_DIR}/#{pkg}.log",
   }
 end
 

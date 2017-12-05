@@ -100,7 +100,7 @@ template "/etc/default/#{pkg}" do
     'hadoop_privileged_nfs_log_dir' => hadoop_log_dir,
     'hadoop_secure_dn_user' => 'hdfs',
     'hadoop_secure_dn_pid_dir' => hadoop_pid_dir,
-    'hadoop_secure_dn_log_dir' => hadoop_log_dir
+    'hadoop_secure_dn_log_dir' => hadoop_log_dir,
   }
 end
 
@@ -120,7 +120,7 @@ template "/etc/init.d/#{pkg}" do
     'user' => 'hdfs',
     'home' => "#{hadoop_lib_dir}/hadoop",
     'pidfile' => "${HADOOP_PID_DIR}/#{pkg}.pid",
-    'logfile' => "${HADOOP_LOG_DIR}/#{pkg}.log"
+    'logfile' => "${HADOOP_LOG_DIR}/#{pkg}.log",
   }
 end
 

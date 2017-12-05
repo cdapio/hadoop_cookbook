@@ -191,7 +191,7 @@ template "/etc/default/#{pkg}" do
     'zookeeper_log_dir' => zookeeper_log_dir,
     'zookeeper_conf_dir' => zookeeper_conf_dir,
     'zoo_log_dir' => zookeeper_log_dir,
-    'zoocfgdir' => zookeeper_conf_dir
+    'zoocfgdir' => zookeeper_conf_dir,
   }
 end
 
@@ -213,7 +213,7 @@ template "/etc/init.d/#{pkg}" do
     'user' => 'zookeeper',
     'home' => "#{hadoop_lib_dir}/zookeeper",
     'pidfile' => "${ZOOKEEPER_PID_DIR}/#{pkg}.pid",
-    'logfile' => "${ZOOKEEPER_LOG_DIR}/#{pkg}.log"
+    'logfile' => "${ZOOKEEPER_LOG_DIR}/#{pkg}.log",
   }
 end
 

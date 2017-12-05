@@ -88,7 +88,7 @@ template "/etc/default/#{pkg}" do
     'hadoop_mapred_log_dir' => hadoop_log_dir,
     'hadoop_mapred_ident_string' => 'mapred',
     'hadoop_mapred_home' => "#{hadoop_lib_dir}/hadoop-mapreduce",
-    'hadoop_log_dir' => hadoop_log_dir
+    'hadoop_log_dir' => hadoop_log_dir,
   }
 end
 
@@ -108,7 +108,7 @@ template "/etc/init.d/#{pkg}" do
     'user' => 'mapred',
     'home' => "#{hadoop_lib_dir}/hadoop",
     'pidfile' => '${HADOOP_MAPRED_PID_DIR}/mapred-mapred-historyserver.pid',
-    'logfile' => "${HADOOP_MAPRED_LOG_DIR}/#{pkg}.log"
+    'logfile' => "${HADOOP_MAPRED_LOG_DIR}/#{pkg}.log",
   }
 end
 

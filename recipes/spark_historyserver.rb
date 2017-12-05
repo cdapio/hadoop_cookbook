@@ -66,7 +66,7 @@ template "/etc/default/#{pkg}" do
     'spark_ident_string' => 'spark',
     'spark_history_server_log_dir' => eventlog_dir,
     'spark_history_opts' => '$SPARK_HISTORY_OPTS -Dspark.history.fs.logDirectory=${SPARK_HISTORY_SERVER_LOG_DIR}',
-    'spark_conf_dir' => '/etc/spark/conf'
+    'spark_conf_dir' => '/etc/spark/conf',
   }
 end
 
@@ -86,7 +86,7 @@ template "/etc/init.d/#{pkg}" do
     'user' => 'spark',
     'home' => "#{hadoop_lib_dir}/spark",
     'pidfile' => "${SPARK_PID_DIR}/#{pkg}.pid",
-    'logfile' => "${SPARK_LOG_DIR}/#{pkg}.log"
+    'logfile' => "${SPARK_LOG_DIR}/#{pkg}.log",
   }
 end
 

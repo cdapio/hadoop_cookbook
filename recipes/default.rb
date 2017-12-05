@@ -271,7 +271,7 @@ template '/etc/default/hadoop' do
     'hadoop_hdfs_home' => "#{hadoop_lib_dir}/hadoop-hdfs",
     'hadoop_mapred_home' => "#{hadoop_lib_dir}/hadoop-mapreduce",
     'hadoop_yarn_home' => "#{hadoop_lib_dir}/hadoop-yarn",
-    'jsvc_home' => jsvc_home
+    'jsvc_home' => jsvc_home,
   }
 end
 
@@ -315,6 +315,6 @@ template '/etc/profile.d/hadoop.sh' do
   group 'root'
   variables options: {
     'hadoop_conf_dir' => "/etc/hadoop/#{node['hadoop']['conf_dir']}",
-    'yarn_conf_dir' => "/etc/hadoop/#{node['hadoop']['conf_dir']}"
+    'yarn_conf_dir' => "/etc/hadoop/#{node['hadoop']['conf_dir']}",
   }
 end

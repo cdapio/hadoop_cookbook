@@ -54,7 +54,7 @@ template "/etc/init.d/#{pkg}" do
     'user' => 'storm',
     'home' => storm_home_dir,
     'pidfile' => "${STORM_PID_DIR}/#{pkg}.pid",
-    'logfile' => "${STORM_LOG_DIR}/#{pkg}.log"
+    'logfile' => "${STORM_LOG_DIR}/#{pkg}.log",
   }
 end
 
@@ -80,7 +80,7 @@ template "/etc/default/#{pkg}" do
     'storm_home' => storm_home_dir,
     'storm_pid_dir' => '/var/run/storm',
     'storm_log_dir' => storm_log_dir,
-    'storm_conf_dir' => storm_conf_dir
+    'storm_conf_dir' => storm_conf_dir,
   }
 end
 

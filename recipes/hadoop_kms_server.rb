@@ -42,7 +42,7 @@ template "/etc/default/#{pkg}" do
     'kms_catalina_home' => '/usr/lib/bigtop-tomcat',
     'catalina_pid' => '/var/run/hadoop-kms/hadoop-kms-kms.pid',
     'catalina_base' => '/var/lib/hadoop-kms/tomcat-deployment',
-    'catalina_tmpdir' => '/var/run/hadoop-kms'
+    'catalina_tmpdir' => '/var/run/hadoop-kms',
   }
 end
 
@@ -62,7 +62,7 @@ template "/etc/init.d/#{pkg}" do
     'user' => 'kms',
     'home' => "#{hadoop_lib_dir}/hadoop-kms",
     'pidfile' => '${CATALINA_PID}',
-    'logfile' => "${KMS_LOG}/#{pkg}.log"
+    'logfile' => "${KMS_LOG}/#{pkg}.log",
   }
 end
 

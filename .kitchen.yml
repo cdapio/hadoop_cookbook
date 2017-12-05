@@ -1,49 +1,45 @@
 ---
 driver:
   name: vagrant
-  customize:
-    cpus: 2
-    memory: 4096
+  # customize:
+  #   cpus: 2
+  #   memory: 4096
 
 provisioner:
-  name: chef_solo
+  name: chef_zero
   require_chef_omnibus: true
 
+verifier:
+  name: inspec
+
 platforms:
-  - name: centos-6.6
-    attributes:
-      hadoop:
-        hdfs_site:
-         'dfs.datanode.max.transfer.threads': 4096
-      hive:
-        hive_site:
-         'hive.support.concurrency': true
-         'hive.zookeeper.quorum': 'localhost'
+  - name: centos-6.7
+  - name: centos-7.3
   - name: debian-6.0.10
     run_list:
     - apt::default
-    attributes:
-      hadoop:
-        hdfs_site:
-         'dfs.datanode.max.transfer.threads': 4096
-      hive:
-        hive_site:
-         'hive.support.concurrency': true
-         'hive.zookeeper.quorum': 'localhost'
   - name: ubuntu-12.04
     run_list:
     - apt::default
-    attributes:
-      hadoop:
-        hdfs_site:
-         'dfs.datanode.max.transfer.threads': 4096
-      hive:
-        hive_site:
-         'hive.support.concurrency': true
-         'hive.zookeeper.quorum': 'localhost'
   - name: ubuntu-14.04
     run_list:
     - apt::default
+  - name: ubuntu-16.04
+    run_list:
+    - apt::default
+
+suites:
+  - name: default
+    run_list:
+      - recipe[java::default]
+      - recipe[hadoop::default]
+      - recipe[hadoop::hbase]
+      - recipe[hadoop::hive]
+      - recipe[hadoop::oozie]
+      - recipe[hadoop::pig]
+      - recipe[hadoop::spark]
+      - recipe[hadoop::storm]
+      - recipe[hadoop::zookeeper]
     attributes:
       hadoop:
         hdfs_site:
@@ -52,180 +48,5 @@ platforms:
         hive_site:
          'hive.support.concurrency': true
          'hive.zookeeper.quorum': 'localhost'
-
-suites:
-  - name: cdh4
-    run_list:
-      - recipe[java::default]
-      - recipe[hadoop::default]
-      - recipe[hadoop::hadoop_hdfs_namenode]
-      - recipe[hadoop::hadoop_hdfs_secondarynamenode]
-      - recipe[hadoop::hadoop_hdfs_datanode]
-      - recipe[hadoop::hadoop_mapreduce_historyserver]
-      - recipe[hadoop::hadoop_yarn_resourcemanager]
-      - recipe[hadoop::hadoop_yarn_nodemanager]
-      - recipe[hadoop::hadoop_yarn_resourcemanager]
-      - recipe[hadoop::hbase_master]
-      - recipe[hadoop::hbase_regionserver]
-      - recipe[hadoop::hbase_rest]
-      - recipe[hadoop::hbase_thrift]
-      - recipe[hadoop::hive_metastore]
-      - recipe[hadoop::hive_server]
-      - recipe[hadoop::hive_server2]
-      - recipe[hadoop::oozie]
-      - recipe[hadoop::oozie_client]
-      - recipe[hadoop::pig]
-      - recipe[hadoop::zookeeper]
-      - recipe[hadoop::zookeeper_server]
-    attributes: { hadoop: { distribution: 'cdh', distribution_version: 4 } }
-  - name: cdh5
-    run_list:
-      - recipe[java::default]
-      - recipe[hadoop::default]
-      - recipe[hadoop::hadoop_hdfs_namenode]
-      - recipe[hadoop::hadoop_hdfs_secondarynamenode]
-      - recipe[hadoop::hadoop_hdfs_datanode]
-      - recipe[hadoop::hadoop_mapreduce_historyserver]
-      - recipe[hadoop::hadoop_yarn_resourcemanager]
-      - recipe[hadoop::hadoop_yarn_nodemanager]
-      - recipe[hadoop::hadoop_yarn_resourcemanager]
-      - recipe[hadoop::hbase_master]
-      - recipe[hadoop::hbase_regionserver]
-      - recipe[hadoop::hbase_rest]
-      - recipe[hadoop::hbase_thrift]
-      - recipe[hadoop::hive_metastore]
-      - recipe[hadoop::hive_server]
-      - recipe[hadoop::hive_server2]
-      - recipe[hadoop::oozie]
-      - recipe[hadoop::oozie_client]
-      - recipe[hadoop::pig]
-      - recipe[hadoop::spark_master]
-      - recipe[hadoop::spark_worker]
-      - recipe[hadoop::spark_historyserver]
-      - recipe[hadoop::zookeeper]
-      - recipe[hadoop::zookeeper_server]
-    attributes: { hadoop: { distribution: 'cdh', distribution_version: 5 } }
-  - name: hdp20
-    run_list:
-      - recipe[java::default]
-      - recipe[hadoop::default]
-      - recipe[hadoop::hadoop_hdfs_namenode]
-      - recipe[hadoop::hadoop_hdfs_secondarynamenode]
-      - recipe[hadoop::hadoop_hdfs_datanode]
-      - recipe[hadoop::hadoop_mapreduce_historyserver]
-      - recipe[hadoop::hadoop_yarn_resourcemanager]
-      - recipe[hadoop::hadoop_yarn_nodemanager]
-      - recipe[hadoop::hadoop_yarn_resourcemanager]
-      - recipe[hadoop::hbase_master]
-      - recipe[hadoop::hbase_regionserver]
-      - recipe[hadoop::hbase_rest]
-      - recipe[hadoop::hbase_thrift]
-      - recipe[hadoop::hive_metastore]
-      - recipe[hadoop::hive_server]
-      - recipe[hadoop::hive_server2]
-      - recipe[hadoop::oozie]
-      - recipe[hadoop::oozie_client]
-      - recipe[hadoop::pig]
-      - recipe[hadoop::zookeeper]
-      - recipe[hadoop::zookeeper_server]
-    attributes: { hadoop: { distribution: 'hdp', distribution_version: '2.0' } }
-  - name: hdp21
-    run_list:
-      - recipe[java::default]
-      - recipe[hadoop::default]
-      - recipe[hadoop::hadoop_hdfs_namenode]
-      - recipe[hadoop::hadoop_hdfs_secondarynamenode]
-      - recipe[hadoop::hadoop_hdfs_datanode]
-      - recipe[hadoop::hadoop_mapreduce_historyserver]
-      - recipe[hadoop::hadoop_yarn_resourcemanager]
-      - recipe[hadoop::hadoop_yarn_nodemanager]
-      - recipe[hadoop::hadoop_yarn_resourcemanager]
-      - recipe[hadoop::hbase_master]
-      - recipe[hadoop::hbase_regionserver]
-      - recipe[hadoop::hbase_rest]
-      - recipe[hadoop::hbase_thrift]
-      - recipe[hadoop::hive_metastore]
-      - recipe[hadoop::hive_server]
-      - recipe[hadoop::hive_server2]
-      - recipe[hadoop::oozie]
-      - recipe[hadoop::oozie_client]
-      - recipe[hadoop::pig]
-      - recipe[hadoop::zookeeper]
-      - recipe[hadoop::zookeeper_server]
-    attributes: { hadoop: { distribution: 'hdp', distribution_version: '2.1' } }
-  - name: hdp22
-    run_list:
-      - recipe[java::default]
-      - recipe[hadoop::default]
-      - recipe[hadoop::hadoop_hdfs_namenode]
-      - recipe[hadoop::hadoop_hdfs_secondarynamenode]
-      - recipe[hadoop::hadoop_hdfs_datanode]
-      - recipe[hadoop::hadoop_mapreduce_historyserver]
-      - recipe[hadoop::hadoop_yarn_resourcemanager]
-      - recipe[hadoop::hadoop_yarn_nodemanager]
-      - recipe[hadoop::hadoop_yarn_resourcemanager]
-      - recipe[hadoop::hbase_master]
-      - recipe[hadoop::hbase_regionserver]
-      - recipe[hadoop::hbase_rest]
-      - recipe[hadoop::hbase_thrift]
-      - recipe[hadoop::hive_metastore]
-      - recipe[hadoop::hive_server]
-      - recipe[hadoop::hive_server2]
-      - recipe[hadoop::oozie]
-      - recipe[hadoop::oozie_client]
-      - recipe[hadoop::pig]
-      - recipe[hadoop::zookeeper]
-      - recipe[hadoop::zookeeper_server]
-    attributes: { hadoop: { distribution: 'hdp', distribution_version: '2.2' } }
-  - name: bigtop100
-    excludes: debian-6.0.10
-    run_list:
-      - recipe[java::default]
-      - recipe[hadoop::default]
-      - recipe[hadoop::hadoop_hdfs_namenode]
-      - recipe[hadoop::hadoop_hdfs_secondarynamenode]
-      - recipe[hadoop::hadoop_hdfs_datanode]
-      - recipe[hadoop::hadoop_mapreduce_historyserver]
-      - recipe[hadoop::hadoop_yarn_resourcemanager]
-      - recipe[hadoop::hadoop_yarn_nodemanager]
-      - recipe[hadoop::hadoop_yarn_resourcemanager]
-      - recipe[hadoop::hbase_master]
-      - recipe[hadoop::hbase_regionserver]
-      - recipe[hadoop::hbase_rest]
-      - recipe[hadoop::hbase_thrift]
-      - recipe[hadoop::hive_metastore]
-      - recipe[hadoop::hive_server]
-      - recipe[hadoop::hive_server2]
-      - recipe[hadoop::oozie]
-      - recipe[hadoop::oozie_client]
-      - recipe[hadoop::pig]
-      - recipe[hadoop::zookeeper]
-      - recipe[hadoop::zookeeper_server]
-    attributes: { hadoop: { distribution: 'bigtop', distribution_version: '1.0.0' } }
-  - name: tuning
-    run_list:
-      - recipe[hadoop::_system_tuning]
-  - name: iop4100
-    run_list:
-      - recipe[java::default]
-      - recipe[hadoop::default]
-      - recipe[hadoop::hadoop_hdfs_namenode]
-      - recipe[hadoop::hadoop_hdfs_secondarynamenode]
-      - recipe[hadoop::hadoop_hdfs_datanode]
-      - recipe[hadoop::hadoop_mapreduce_historyserver]
-      - recipe[hadoop::hadoop_yarn_resourcemanager]
-      - recipe[hadoop::hadoop_yarn_nodemanager]
-      - recipe[hadoop::hadoop_yarn_resourcemanager]
-      - recipe[hadoop::hbase_master]
-      - recipe[hadoop::hbase_regionserver]
-      - recipe[hadoop::hbase_rest]
-      - recipe[hadoop::hbase_thrift]
-      - recipe[hadoop::hive_metastore]
-      - recipe[hadoop::hive_server]
-      - recipe[hadoop::hive_server2]
-      - recipe[hadoop::oozie]
-      - recipe[hadoop::oozie_client]
-      - recipe[hadoop::pig]
-      - recipe[hadoop::zookeeper]
-      - recipe[hadoop::zookeeper_server]
-    attributes: { hadoop: { distribution: 'iop', distribution_version: '4.1.0.0' } }
+      java:
+        jdk_version: 7

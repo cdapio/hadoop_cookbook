@@ -87,7 +87,7 @@ template "/etc/default/#{pkg}" do
     'hbase_pid_dir' => '/var/run/hbase',
     'hbase_log_dir' => hbase_log_dir,
     'hbase_ident_string' => 'hbase',
-    'hbase_conf_dir' => '/etc/hbase/conf'
+    'hbase_conf_dir' => '/etc/hbase/conf',
   }
 end
 
@@ -107,7 +107,7 @@ template "/etc/init.d/#{pkg}" do
     'user' => 'hbase',
     'home' => "#{hadoop_lib_dir}/hbase",
     'pidfile' => "${HBASE_PID_DIR}/hbase-#{pkg}.pid",
-    'logfile' => "${HBASE_LOG_DIR}/#{pkg}.log"
+    'logfile' => "${HBASE_LOG_DIR}/#{pkg}.log",
   }
 end
 

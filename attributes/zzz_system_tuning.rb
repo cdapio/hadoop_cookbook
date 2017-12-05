@@ -58,7 +58,7 @@ addr_ports = {
   'dfs.namenode.backup.http-address' => 50_105,
   'dfs.journalnode.rpc-address' => 8485,
   'dfs.journalnode.http-address' => 8480,
-  'dfs.journalnode.https-address' => 8481
+  'dfs.journalnode.https-address' => 8481,
 }
 
 addr_ports.each do |k, v|
@@ -94,7 +94,7 @@ addr_ports = {
   'yarn.nodemanager.webapp.address' => 8042,
   'yarn.timeline-service.address' => 10_200,
   'yarn.timeline-service.webapp.address' => 8188,
-  'yarn.timeline-service.webapp.https.address' => 8190
+  'yarn.timeline-service.webapp.https.address' => 8190,
 }
 
 addr_ports.each do |k, v|
@@ -117,7 +117,7 @@ addr_ports = {
   'hbase.rest.port' => 8080,
   'hbase.rest.info.port' => 8085,
   'hbase.thrift.port' => 9090,
-  'hbase.thrift.info.port' => 9095
+  'hbase.thrift.info.port' => 9095,
 }
 
 addr_ports.each do |k, v|

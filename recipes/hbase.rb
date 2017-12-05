@@ -134,7 +134,7 @@ template '/etc/default/hbase' do
     'hbase_pid_dir' => '/var/run/hbase',
     'hbase_log_dir' => hbase_log_dir,
     'hbase_ident_string' => 'hbase',
-    'hbase_conf_dir' => '/etc/hbase/conf'
+    'hbase_conf_dir' => '/etc/hbase/conf',
   }
 end
 
