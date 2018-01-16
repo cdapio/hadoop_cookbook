@@ -26,7 +26,7 @@ dfs_data_dirs =
   hadoop_config('hadoop', 'hdfs_site', 'dfs.datanode.data.dir', 'dfs.data.dir', 'file:///tmp/hadoop-hdfs/dfs/data')
 
 dfs_data_dir_perm =
-  hadoop_config('hadoop', 'hdfs_site', 'dfs.datanode.data.dir.perm', 'dfs.data.dir.perm', '0700')
+  hadoop_config('hadoop', 'hdfs_site', 'dfs.datanode.data.dir.perm', 'dfs.data.dir.perm', '700')
 
 node.default['hadoop']['hdfs_site']['dfs.datanode.data.dir'] = dfs_data_dirs
 node.default['hadoop']['hdfs_site']['dfs.datanode.data.dir.perm'] = dfs_data_dir_perm
