@@ -72,6 +72,8 @@ module Hadoop
         '2.6.2.0-205'
       when '2.6.3.0'
         '2.6.3.0-235'
+      when '2.6.4.0'
+        '2.6.4.0-91'
       else
         node['hadoop']['distribution_version']
       end
