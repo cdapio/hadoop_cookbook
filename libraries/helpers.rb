@@ -17,8 +17,37 @@
 # limitations under the License.
 #
 
+require 'net/http'
+
 module Hadoop
   module Helpers
+    #
+    # Given an HDP version (2.6.1.0), return the corresponding build number (129)
+    #
+    def hdp_build_number(version)
+      repo_os_path = value_for_platform_family(
+        %w[rhel amazon] => "centos#{node['platform_version'].to_i}",
+        'debian' => "#{node['platform']}#{node['platform_version'].to_i}"
+      )
+      base_url = "http://public-repo-1.hortonworks.com/HDP/#{repo_os_path}/2.x/updates"
+      build_id_url = File.join([base_url, version, 'build.id'])
+
+      uri = URI.parse(build_id_url)
+      req = Net::HTTP::Get.new(uri.path)
+
+      response = Net::HTTP.start(uri.host, uri.port) do |http|
+        http.request(req)
+      end
+
+      case response.code
+      when '200'
+        build_hash = Hash[response.body.split("\n").map { |str| str.split(': ') }]
+        build_hash['BUILD_NUMBER'] if build_hash.key?('BUILD_NUMBER')
+      end
+    rescue StandardError => e
+      nil
+    end
+
     #
     # Return HDP 2.2 version, including revision, used for building HDP 2.2+ on-disk paths
     #
@@ -75,7 +104,13 @@ module Hadoop
       when '2.6.4.0'
         '2.6.4.0-91'
       else
-        node['hadoop']['distribution_version']
+        # fetch build number from HDP public repository
+        build_number = hdp_build_number(node['hadoop']['distribution_version'])
+        if build_number.nil?
+          node['hadoop']['distribution_version']
+        else
+          [node['hadoop']['distribution_version'], build_number].join('-')
+        end
       end
     end
 
