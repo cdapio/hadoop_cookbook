@@ -26,7 +26,7 @@ module Hadoop
     #
     def hdp_build_number(version)
       repo_os_path = value_for_platform_family(
-        %w[rhel amazon] => "centos#{node['platform_version'].to_i}",
+        %w(rhel amazon) => "centos#{node['platform_version'].to_i}",
         'debian' => "#{node['platform']}#{node['platform_version'].to_i}"
       )
       base_url = "http://public-repo-1.hortonworks.com/HDP/#{repo_os_path}/2.x/updates"
@@ -44,7 +44,7 @@ module Hadoop
         build_hash = Hash[response.body.split("\n").map { |str| str.split(': ') }]
         build_hash['BUILD_NUMBER'] if build_hash.key?('BUILD_NUMBER')
       end
-    rescue StandardError => e
+    rescue StandardError
       nil
     end
 
