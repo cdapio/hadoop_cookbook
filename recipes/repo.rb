@@ -121,6 +121,17 @@ when 'hdp'
         gpgkey yum_repo_key_url
         action :add
       end
+
+      # HDP 2.6.4.0 has moved hadooplzo to a separate repo
+      yum_repository 'hdp-updates' do
+        name 'HDP-GPL-2.x'
+        description 'Hortonworks Data Platform Version - HDP-GPL-2.x'
+        url "#{yum_base_url}-GPL/#{os}/2.x/updates/#{hdp_update_version}"
+        gpgkey yum_repo_key_url
+        action :add
+        only_if { Gem::Version.new(hdp_update_version) >= Gem::Version.new('2.6.4.0') }
+      end
+
     end
     yum_repository 'hdp-utils' do
       name "HDP-UTILS-#{hdp_utils_version}"
@@ -169,6 +180,18 @@ when 'hdp'
       components ['main']
       action :add
     end
+
+    # HDP 2.6.4.0 has moved hadooplzo to a separate repo
+    apt_repository 'hdp-gpl' do
+      uri "#{apt_base_url}-GPL/#{os}/2.x/updates/#{hdp_update_version}"
+      key apt_repo_key_url
+      distribution 'HDP-GPL'
+      trusted true
+      components ['main']
+      action :add
+      only_if { Gem::Version.new(hdp_update_version) >= Gem::Version.new('2.6.4.0') }
+    end
+
     apt_repository 'hdp-utils' do
       uri "#{apt_base_url}-UTILS-#{hdp_utils_version}/repos/#{os}"
       key apt_repo_key_url
