@@ -1,6 +1,12 @@
 hadoop CHANGELOG
 ================
 
+v2.14.0 (May 4, 2018)
+---------------------
+- add TESTING.md ( Issue: #356 )
+- add support for HDP 2.6.4.0 ( Issues: #358 #359 )
+- add helper to fetch HDP build number from public repository ( Issues: #360 )
+
 v2.13.0 (Dec 5, 2017)
 ---------------------
 

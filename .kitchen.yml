@@ -49,4 +49,4 @@ suites:
          'hive.support.concurrency': true
          'hive.zookeeper.quorum': 'localhost'
       java:
-        jdk_version: 7
+        jdk_version: '7'
