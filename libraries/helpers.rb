@@ -2,7 +2,7 @@
 # Cookbook:: hadoop
 # Library:: helpers
 #
-# Copyright © 2015-2016 Cask Data, Inc.
+# Copyright © 2015-2018 Cask Data, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -17,8 +17,49 @@
 # limitations under the License.
 #
 
+require 'net/http'
+
 module Hadoop
   module Helpers
+    #
+    # Given an HDP version (2.6.1.0), return its build number (129)
+    #
+    def hdp_build_number(version)
+      repo_path = [
+        'http://public-repo-1.hortonworks.com/HDP',
+        hdp_repo_os_path,
+        '2.x/updates',
+        version,
+        'build.id',
+      ]
+      build_id_url = File.join(repo_path)
+
+      uri = URI.parse(build_id_url)
+      req = Net::HTTP::Get.new(uri.path)
+
+      response = Net::HTTP.start(uri.host, uri.port) do |http|
+        http.request(req)
+      end
+
+      case response.code
+      when '200'
+        build_h = Hash[response.body.split("\n").map { |str| str.split(': ') }]
+        build_h['BUILD_NUMBER'] if build_h.key?('BUILD_NUMBER')
+      end
+    rescue StandardError
+      nil
+    end
+
+    #
+    # Returns the HDP Repo path component for this OS, ie centos7, ubuntu14
+    #
+    def hdp_repo_os_path
+      value_for_platform_family(
+        %w(rhel amazon) => "centos#{node['platform_version'].to_i}",
+        'debian' => "#{node['platform']}#{node['platform_version'].to_i}"
+      )
+    end
+
     #
     # Return HDP 2.2 version, including revision, used for building HDP 2.2+ on-disk paths
     #
@@ -75,7 +116,9 @@ module Hadoop
       when '2.6.4.0'
         '2.6.4.0-91'
       else
-        node['hadoop']['distribution_version']
+        # fetch build number from HDP public repository
+        build_number = hdp_build_number(node['hadoop']['distribution_version'])
+        [node['hadoop']['distribution_version'], build_number].compact.join('-')
       end
     end
 
