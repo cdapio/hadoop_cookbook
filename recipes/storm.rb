@@ -164,6 +164,6 @@ write_jaas_config('storm')
 
 # Update alternatives to point to our configuration
 execute 'update storm-conf alternatives' do
-  command "update-alternatives --install /etc/storm/conf storm-conf /etc/storm/#{node['storm']['conf_dir']} 50"
-  not_if "update-alternatives --display storm-conf | grep best | awk '{print $5}' | grep /etc/storm/#{node['storm']['conf_dir']}"
+  command "$(which update-alternatives) --install /etc/storm/conf storm-conf /etc/storm/#{node['storm']['conf_dir']} 50"
+  not_if "$(which update-alternatives) --display storm-conf | grep best | awk '{print $5}' | grep /etc/storm/#{node['storm']['conf_dir']}"
 end

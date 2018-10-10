@@ -142,6 +142,6 @@ end
 
 # Update alternatives to point to our configuration
 execute 'update hive2-conf alternatives' do
-  command "update-alternatives --install /etc/hive2/conf hive2-conf /etc/hive2/#{node['hive2']['conf_dir']} 50"
-  not_if "update-alternatives --display hive2-conf | grep best | awk '{print $5}' | grep /etc/hive2/#{node['hive2']['conf_dir']}"
+  command "$(which update-alternatives) --install /etc/hive2/conf hive2-conf /etc/hive2/#{node['hive2']['conf_dir']} 50"
+  not_if "$(which update-alternatives) --display hive2-conf | grep best | awk '{print $5}' | grep /etc/hive2/#{node['hive2']['conf_dir']}"
 end

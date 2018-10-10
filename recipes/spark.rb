@@ -160,8 +160,8 @@ end
 
 # Update alternatives to point to our configuration
 execute 'update spark-conf alternatives' do
-  command "update-alternatives --install /etc/spark/conf spark-conf /etc/spark/#{node['spark']['conf_dir']} 50"
-  not_if "update-alternatives --display spark-conf | grep best | awk '{print $5}' | grep /etc/spark/#{node['spark']['conf_dir']}"
+  command "$(which update-alternatives) --install /etc/spark/conf spark-conf /etc/spark/#{node['spark']['conf_dir']} 50"
+  not_if "$(which update-alternatives) --display spark-conf | grep best | awk '{print $5}' | grep /etc/spark/#{node['spark']['conf_dir']}"
 end
 
 # Export spark environment variables

@@ -93,8 +93,8 @@ end # End tez-env.sh
 
 # Update alternatives to point to our configuration
 execute 'update tez-conf alternatives' do
-  command "update-alternatives --install /etc/tez/conf tez-conf /etc/tez/#{node['tez']['conf_dir']} 50"
-  not_if "update-alternatives --display tez-conf | grep best | awk '{print $5}' | grep /etc/tez/#{node['tez']['conf_dir']}"
+  command "$(which update-alternatives) --install /etc/tez/conf tez-conf /etc/tez/#{node['tez']['conf_dir']} 50"
+  not_if "$(which update-alternatives) --display tez-conf | grep best | awk '{print $5}' | grep /etc/tez/#{node['tez']['conf_dir']}"
 end
 
 if node.recipe?('hadoop::hive') && node['hive']['hive_site']['hive.execution.engine'] == 'tez'

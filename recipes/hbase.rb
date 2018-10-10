@@ -147,6 +147,6 @@ end
 
 # Update alternatives to point to our configuration
 execute 'update hbase-conf alternatives' do
-  command "update-alternatives --install /etc/hbase/conf hbase-conf /etc/hbase/#{node['hbase']['conf_dir']} 50"
-  not_if "update-alternatives --display hbase-conf | grep best | awk '{print $5}' | grep /etc/hbase/#{node['hbase']['conf_dir']}"
+  command "$(which update-alternatives) --install /etc/hbase/conf hbase-conf /etc/hbase/#{node['hbase']['conf_dir']} 50"
+  not_if "$(which update-alternatives) --display hbase-conf | grep best | awk '{print $5}' | grep /etc/hbase/#{node['hbase']['conf_dir']}"
 end

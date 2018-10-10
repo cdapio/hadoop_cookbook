@@ -108,6 +108,6 @@ end # End kms-log4j.properties
 
 # Update alternatives to point to our configuration
 execute 'update hadoop-kms-conf alternatives' do
-  command "update-alternatives --install /etc/hadoop-kms/conf hadoop-kms-conf /etc/hadoop-kms/#{node['hadoop_kms']['conf_dir']} 50"
-  not_if "update-alternatives --display hadoop-kms-conf | grep best | awk '{print $5}' | grep /etc/hadoop-kms/#{node['hadoop_kms']['conf_dir']}"
+  command "$(which update-alternatives) --install /etc/hadoop-kms/conf hadoop-kms-conf /etc/hadoop-kms/#{node['hadoop_kms']['conf_dir']} 50"
+  not_if "$(which update-alternatives) --display hadoop-kms-conf | grep best | awk '{print $5}' | grep /etc/hadoop-kms/#{node['hadoop_kms']['conf_dir']}"
 end
