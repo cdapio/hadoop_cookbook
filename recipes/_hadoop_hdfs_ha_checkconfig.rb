@@ -37,7 +37,7 @@ dfs_nameservices.each do |ns|
   namenodes.each do |nn|
     %w(rpc-address http-address).each do |k|
       if node['hadoop']['hdfs_site'].key?("dfs\.namenode\.#{k}\.#{ns}\.#{nn}")
-        Chef::Log.info("Set dfs.namenode.#{k}.#{ns}.#{nn} to #{node['hadoop']['hdfs_site']['dfs.namenode.#{k}.#{ns}.#{nn}']}")
+        Chef::Log.info("Set dfs.namenode.#{k}.#{ns}.#{nn} to #{node['hadoop']['hdfs_site'][['dfs.namenode', k, ns, nn].join('.')]}")
       else
         Chef::Application.fatal!("You must set node['hadoop']['hdfs_site']['dfs.namenode.#{k}.#{ns}.#{nn}']")
       end
@@ -45,7 +45,7 @@ dfs_nameservices.each do |ns|
   end # End namenode checks
   # Start proxy provider check
   if node['hadoop']['hdfs_site'].key?("dfs\.client\.failover\.proxy\.provider\.#{ns}")
-    Chef::Log.info("Using #{node['hadoop']['hdfs_site']['dfs.client.failover.proxy.provider.#{ns}']} for node['hadoop']['hdfs_site']['dfs.client.failover.proxy.provider.#{ns}']")
+    Chef::Log.info("Using #{node['hadoop']['hdfs_site'][['dfs.client.failover.proxy.provider', ns].join('.')]} for node['hadoop']['hdfs_site']['dfs.client.failover.proxy.provider.#{ns}']")
   else
     node.default['hadoop']['hdfs_site']["dfs\.client\.failover\.proxy\.provider\.#{ns}"] = \
       'org.apache.hadoop.hdfs.server.namenode.ha.ConfiguredFailoverProxyProvider'

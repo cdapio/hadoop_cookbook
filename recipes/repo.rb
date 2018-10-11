@@ -272,7 +272,7 @@ when 'bigtop'
   end
 
   # do not validate gpg repo keys when in develop mode
-  validate_repo_key = bigtop_release.casecmp('develop') == 0 ? false : true
+  validate_repo_key = !(bigtop_release.casecmp('develop') == 0)
   Chef::Log.warn('Allowing install of unsigned binaries') unless validate_repo_key
 
   case node['platform_family']

@@ -1,4 +1,3 @@
-#
 
 describe directory('/etc/hadoop/conf.chef') do
   it { should exist }
