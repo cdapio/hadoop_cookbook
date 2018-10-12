@@ -23,6 +23,7 @@ platforms:
       platform: rhel
   - name: centos-7
     driver:
+      chef_version: '13'
       image: dokken/centos-7
       intermediate_instructions:
         - RUN /usr/bin/yum install -y systemd-sysv
@@ -37,12 +38,14 @@ platforms:
       pid_one_command: /sbin/init
   - name: ubuntu-14.04
     driver:
+      chef_version: '13'
       image: dokken/ubuntu-14.04
       intermediate_instructions:
         - RUN /usr/bin/apt-get update
       pid_one_command: /sbin/init
   - name: ubuntu-16.04
     driver:
+      chef_version: '13'
       image: dokken/ubuntu-16.04
       intermediate_instructions:
         - RUN /usr/bin/apt-get update
