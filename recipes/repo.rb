@@ -196,6 +196,7 @@ when 'hdp'
       uri "#{apt_base_url}-UTILS-#{hdp_utils_version}/repos/#{os}"
       key apt_repo_key_url
       distribution 'HDP-UTILS'
+      trusted true
       components ['main']
       action :add
     end
